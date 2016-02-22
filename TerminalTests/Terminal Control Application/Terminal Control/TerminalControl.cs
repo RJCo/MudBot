@@ -33,25 +33,30 @@ namespace WalburySoftware
         private string _username = "";
         private string _password = "";
         private string _hostname = "";
+        private int _port = 23; // default to telnet
         private string _identifyFile = "";
         private AuthType _authType = AuthType.Password;
         private ConnectionMethod _connectionMethod;
         private TerminalPane _terminalPane;
         #endregion
+
         #region Constructors
-        public TerminalControl(string UserName, string Password, string Hostname, ConnectionMethod Method)
+        public TerminalControl(string UserName, string Password, string Hostname, int Port, ConnectionMethod Method)
         {
             this._connectionMethod = Method;
             this._hostname = Hostname;
             this._password = Password;
             this._username = UserName;
+            this._port = Port;
 
             this.InitializeTerminalPane();
         }
+
         public TerminalControl()
         {
             this.InitializeTerminalPane();
         }
+
         private void InitializeTerminalPane()
         {
             if (GApp._frame == null)
@@ -122,7 +127,7 @@ namespace WalburySoftware
                 {
                     connParam = new TelnetTerminalParam(this.Host);
                     connParam.Encoding = EncodingType.ISO8859_1;
-                    connParam.Port = 23;
+                    connParam.Port = _port;
                     connParam.RenderProfile = new RenderProfile();
                     connParam.TerminalType = TerminalType.XTerm;
 
@@ -134,7 +139,7 @@ namespace WalburySoftware
                     ((SSHTerminalParam)connParam).AuthType = this.AuthType;
                     ((SSHTerminalParam)connParam).IdentityFile = this.IdentifyFile;
                     connParam.Encoding = EncodingType.ISO8859_1;
-                    connParam.Port = 22;
+                    connParam.Port = _port;
                     connParam.RenderProfile = new RenderProfile();
                     connParam.TerminalType = TerminalType.XTerm;
 
@@ -162,6 +167,7 @@ namespace WalburySoftware
                 return;
             }
         }
+
         public void Close()
         {
             if (this.TerminalPane.Connection != null)
@@ -170,15 +176,18 @@ namespace WalburySoftware
                 this.TerminalPane.Detach();
             }
         }
+
         public void SendText(string command)
         {
             //GApp.GetConnectionCommandTarget().Connection.WriteChars(command.ToCharArray());
             this.TerminalPane.Connection.WriteChars(command.ToCharArray());
         }
+
         public string GetLastLine()
         {
             return new string(this.TerminalPane.Document.LastLine.Text);
         }
+
         /// <summary>
         /// Wait until some data is recieved
         /// </summary>
@@ -187,6 +196,7 @@ namespace WalburySoftware
             while (this.TerminalPane.Connection.ReceivedDataSize == 0)
             { }
         }
+
         /// <summary>
         /// Create New Log
         /// </summary>
@@ -203,6 +213,7 @@ namespace WalburySoftware
             this.TerminalPane.Connection.ResetLog((Poderosa.ConnectionParam.LogType)logType, File, append);
             //this.TerminalPane.Connection.ResetLog(Poderosa.ConnectionParam.LogType.Default, File, append);
         }
+
         public void CommentLog(string comment)
         {
             DateTime dt = new DateTime();
@@ -220,6 +231,7 @@ namespace WalburySoftware
             this.TerminalPane.Connection.BinaryLogger.Comment(s);
 
         }
+
         public void SetPaneColors(Color TextColor, Color BackColor)
         {
             RenderProfile prof = this.TerminalPane.ConnectionTag.RenderProfile;
@@ -228,6 +240,7 @@ namespace WalburySoftware
             
             this.TerminalPane.ApplyRenderProfile(prof);
         }
+
         public void CopySelectedTextToClipboard()
         {
             //GApp.GlobalCommandTarget.Copy();
@@ -239,6 +252,7 @@ namespace WalburySoftware
                 Clipboard.SetDataObject(t, false);
             
         }
+
         public void PasteTextFromClipboard()
         {
             //GApp.GetConnectionCommandTarget().Paste();
@@ -250,6 +264,7 @@ namespace WalburySoftware
             
         }
         #endregion
+
         #region Properties
         public AuthType AuthType
         {
@@ -262,6 +277,7 @@ namespace WalburySoftware
                 this._authType = value; ;
             }
         }
+
         public string IdentifyFile
         {
             get
@@ -273,6 +289,7 @@ namespace WalburySoftware
                 this._identifyFile = value;
             }
         }
+
         public TerminalPane TerminalPane
         {
             get
@@ -280,6 +297,7 @@ namespace WalburySoftware
                 return this._terminalPane;
             }
         }
+
         public string UserName
         {
             get
@@ -291,6 +309,7 @@ namespace WalburySoftware
                 this._username = value;
             }
         }
+
         public string Password
         {
             get
@@ -302,6 +321,7 @@ namespace WalburySoftware
                 this._password = value;
             }
         }
+
         public string Host
         {
             get
@@ -313,6 +333,12 @@ namespace WalburySoftware
                 this._hostname = value;
             }
         }
+
+        public int Port {
+            get { return this._port; }
+            set { this._port = value; }
+        }
+
         public ConnectionMethod Method
         {
             get
@@ -324,6 +350,7 @@ namespace WalburySoftware
                 this._connectionMethod = value;
             }
         }
+
         public static int ScrollBackBuffer
         {
             get
@@ -336,6 +363,7 @@ namespace WalburySoftware
              }
         }
         #endregion
+
         #region overrides
         protected override void OnKeyDown(KeyEventArgs e)
         {

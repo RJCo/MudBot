@@ -40,7 +40,7 @@ namespace Poderosa.Communication
 			_keycheck = keycheck;
 		}
 		protected override string GetHostDescription() {
-			return "SSH Server";
+			return "Server";
 		}
 
 		protected override void Negotiate() {
