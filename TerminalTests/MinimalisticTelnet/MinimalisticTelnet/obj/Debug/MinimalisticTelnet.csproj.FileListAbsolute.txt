@@ -1,0 +1,12 @@
+C:\Users\rjc.SIAM\Downloads\MinimalisticTelnet\MinimalisticTelnet\MinimalisticTelnet\bin\Debug\MinimalisticTelnet.exe
+C:\Users\rjc.SIAM\Downloads\MinimalisticTelnet\MinimalisticTelnet\MinimalisticTelnet\bin\Debug\MinimalisticTelnet.pdb
+C:\Users\rjc.SIAM\Downloads\MinimalisticTelnet\MinimalisticTelnet\MinimalisticTelnet\obj\Debug\MinimalisticTelnet.csprojResolveAssemblyReference.cache
+C:\Users\rjc.SIAM\Downloads\MinimalisticTelnet\MinimalisticTelnet\MinimalisticTelnet\obj\Debug\MinimalisticTelnet.exe
+C:\Users\rjc.SIAM\Downloads\MinimalisticTelnet\MinimalisticTelnet\MinimalisticTelnet\obj\Debug\MinimalisticTelnet.pdb
+C:\Users\rjc.SIAM\Downloads\MinimalisticTelnet\MinimalisticTelnet\obj\Debug\MinimalisticTelnet.exe
+C:\Users\rjc.SIAM\Downloads\MinimalisticTelnet\MinimalisticTelnet\obj\Debug\MinimalisticTelnet.pdb
+C:\Users\rjc.SIAM\Downloads\MinimalisticTelnet\MinimalisticTelnet\bin\Debug\MinimalisticTelnet.exe
+C:\Users\rjc.SIAM\Downloads\MinimalisticTelnet\MinimalisticTelnet\bin\Debug\MinimalisticTelnet.pdb
+C:\Users\rjc.SIAM\Downloads\MinimalisticTelnet\MinimalisticTelnet\obj\Debug\MinimalisticTelnet.csprojResolveAssemblyReference.cache
+E:\Dropbox\MajorMUD\TerminalProgramTests\MinimalisticTelnet\MinimalisticTelnet\obj\Debug\MinimalisticTelnet.exe
+E:\Dropbox\MajorMUD\TerminalProgramTests\MinimalisticTelnet\MinimalisticTelnet\obj\Debug\MinimalisticTelnet.pdb
