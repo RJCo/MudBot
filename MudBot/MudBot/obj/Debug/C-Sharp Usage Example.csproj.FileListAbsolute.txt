@@ -22,3 +22,14 @@ E:\Dropbox\MudBot-GitHub\TerminalTests\Terminal Control Application\C-Sharp Usag
 E:\Dropbox\MudBot-GitHub\TerminalTests\Terminal Control Application\C-Sharp Usage Example\obj\Debug\C_Sharp_Usage_Example.Form1.resources
 E:\Dropbox\MudBot-GitHub\TerminalTests\Terminal Control Application\C-Sharp Usage Example\obj\Debug\C_Sharp_Usage_Example.Properties.Resources.resources
 E:\Dropbox\MudBot-GitHub\TerminalTests\Terminal Control Application\C-Sharp Usage Example\obj\Debug\C-Sharp Usage Example.csproj.GenerateResource.Cache
+E:\Dropbox\MudBot-GitHub\MudBot\C-Sharp Usage Example\obj\Debug\C-Sharp Usage Example.exe
+E:\Dropbox\MudBot-GitHub\MudBot\C-Sharp Usage Example\obj\Debug\C-Sharp Usage Example.pdb
+E:\Dropbox\MudBot-GitHub\MudBot\C-Sharp Usage Example\bin\Debug\C-Sharp Usage Example.exe
+E:\Dropbox\MudBot-GitHub\MudBot\C-Sharp Usage Example\bin\Debug\C-Sharp Usage Example.pdb
+E:\Dropbox\MudBot-GitHub\MudBot\C-Sharp Usage Example\bin\Debug\TerminalControl.dll
+E:\Dropbox\MudBot-GitHub\MudBot\C-Sharp Usage Example\bin\Debug\TerminalControl.pdb
+E:\Dropbox\MudBot-GitHub\MudBot\C-Sharp Usage Example\obj\Debug\C-Sharp Usage Example.csprojResolveAssemblyReference.cache
+E:\Dropbox\MudBot-GitHub\MudBot\C-Sharp Usage Example\obj\Debug\C_Sharp_Usage_Example.DebugForm.resources
+E:\Dropbox\MudBot-GitHub\MudBot\C-Sharp Usage Example\obj\Debug\C_Sharp_Usage_Example.MudBot.resources
+E:\Dropbox\MudBot-GitHub\MudBot\C-Sharp Usage Example\obj\Debug\C_Sharp_Usage_Example.Properties.Resources.resources
+E:\Dropbox\MudBot-GitHub\MudBot\C-Sharp Usage Example\obj\Debug\C-Sharp Usage Example.csproj.GenerateResource.Cache

@@ -7,11 +7,14 @@ using System.Text;
 using System.Windows.Forms;
 using Poderosa.Terminal;
 
-namespace C_Sharp_Usage_Example
+namespace MudBot
 {
-    public partial class Form1 : Form
+    public partial class MudBot : Form
     {
-        public Form1()
+        DebugForm dform = null;
+        
+
+        public MudBot()
         {
             InitializeComponent();
         }
@@ -27,13 +30,25 @@ namespace C_Sharp_Usage_Example
 
             this.terminalControl.SetPaneColors(Color.Blue, Color.Black);
             this.terminalControl.Focus();
+
+            terminalControl.SetLog(WalburySoftware.LogType.Default, @"C:\logfile.txt", true);
+
+            this.terminalControl.TextChanged += terminalControl_TextChanged;
+        }
+
+        private void terminalControl_TextChanged(object sender, EventArgs e) {
+            var tb = sender as WalburySoftware.TerminalControl;
+            terminalControl.CommentLog(tb.Text);
+
+            if (dform != null && tb != null) {
+                dform.UpdateDebug(tb.Text);
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             if (this.terminalControl.TerminalPane.ConnectionTag == null) // it will be null if you're not connected to anything
                 return;
-
 
             Poderosa.Forms.EditRenderProfile dlg = new Poderosa.Forms.EditRenderProfile(this.terminalControl.TerminalPane.ConnectionTag.RenderProfile);
             
@@ -42,7 +57,14 @@ namespace C_Sharp_Usage_Example
 
             this.terminalControl.TerminalPane.ConnectionTag.RenderProfile = dlg.Result;
             this.terminalControl.TerminalPane.ApplyRenderProfile(dlg.Result);
-            
+        }
+
+        private void DebugButton_Click(object sender, EventArgs e) {
+            if (dform == null) {
+                dform = new DebugForm();
+                dform.Closed += (sendr, args) => dform = null;
+                dform.Show();
+            }
         }
         
     }

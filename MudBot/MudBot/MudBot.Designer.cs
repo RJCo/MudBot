@@ -1,6 +1,6 @@
-namespace C_Sharp_Usage_Example
+namespace MudBot
 {
-    partial class Form1
+    partial class MudBot
     {
         /// <summary>
         /// Required designer variable.
@@ -35,6 +35,7 @@ namespace C_Sharp_Usage_Example
             this.PorttextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.terminalControl = new WalburySoftware.TerminalControl();
+            this.DebugButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -108,11 +109,22 @@ namespace C_Sharp_Usage_Example
             this.terminalControl.Text = "terminalControl";
             this.terminalControl.UserName = "";
             // 
-            // Form1
+            // DebugButton
+            // 
+            this.DebugButton.Location = new System.Drawing.Point(387, 33);
+            this.DebugButton.Name = "DebugButton";
+            this.DebugButton.Size = new System.Drawing.Size(75, 23);
+            this.DebugButton.TabIndex = 11;
+            this.DebugButton.Text = "Debug";
+            this.DebugButton.UseVisualStyleBackColor = true;
+            this.DebugButton.Click += new System.EventHandler(this.DebugButton_Click);
+            // 
+            // MudBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(646, 440);
+            this.Controls.Add(this.DebugButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PorttextBox);
             this.Controls.Add(this.button2);
@@ -120,8 +132,8 @@ namespace C_Sharp_Usage_Example
             this.Controls.Add(this.servertextBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.terminalControl);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "MudBot";
+            this.Text = "MudBot";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -136,6 +148,7 @@ namespace C_Sharp_Usage_Example
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox PorttextBox;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button DebugButton;
     }
 }
 
