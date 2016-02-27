@@ -96,3 +96,52 @@ E:\Dropbox\MudBot-GitHub\TerminalTests\Terminal Control Application\Terminal Con
 E:\Dropbox\MudBot-GitHub\TerminalTests\Terminal Control Application\Terminal Control\obj\Debug\Terminal Control.csproj.GenerateResource.Cache
 E:\Dropbox\MudBot-GitHub\TerminalTests\Terminal Control Application\Terminal Control\obj\Debug\TerminalControl.dll
 E:\Dropbox\MudBot-GitHub\TerminalTests\Terminal Control Application\Terminal Control\obj\Debug\TerminalControl.pdb
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\bin\Debug\TerminalControl.dll
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\bin\Debug\TerminalControl.pdb
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Terminal Control.csprojResolveAssemblyReference.cache
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.AboutBox.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.ChangeLogDialog.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.ChangePassphrase.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.Credits.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.LocalShellLoginDialog.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.EditDisplayDialog.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.EditEnvVariable.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.EditEscapeSequenceColor.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.EditRenderProfile.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.EnvVariableList.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.GDialogBar.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.GFontDialog.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.GFrame.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Granados.strings.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Granados.strings_ja.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.IconList.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.icons.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.InputBox.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.KeyGenWizard.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.LineFeedStyleDialog.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.LoginDialog.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.LogNoteForm.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.MacroList.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.MacroEnv.MacroTraceWindow.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.MainForm.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.ModuleProperty.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.MultiPaneControl.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.OptionDialog.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.SendingLargeText.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.SerialConfigForm.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.SerialLoginDialog.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.ServerInfo.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.SSHShortcutLoginDialog.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.strings.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.strings_ja.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.TabBar.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\WalburySoftware.TerminalControl.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Terminal.rulechars.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Terminal.strings.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Terminal.strings_ja.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.ThreeButtonMessageBox.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.WelcomeDialog.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Poderosa.Forms.XModemDialog.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\Terminal Control.csproj.GenerateResource.Cache
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\TerminalControl.dll
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\Terminal Control\obj\Debug\TerminalControl.pdb

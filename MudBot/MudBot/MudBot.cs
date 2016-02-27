@@ -31,17 +31,17 @@ namespace MudBot
             this.terminalControl.SetPaneColors(Color.Blue, Color.Black);
             this.terminalControl.Focus();
 
-            terminalControl.SetLog(WalburySoftware.LogType.Default, @"C:\logfile.txt", true);
+            //terminalControl.SetLog(WalburySoftware.LogType.Default, @"C:\logfile.txt", true);
 
-            this.terminalControl.TextChanged += terminalControl_TextChanged;
+            this.terminalControl.TerminalPane.TextChanged += terminalControl_TextChanged;
+            //this.terminalControl.TerminalPane.
         }
 
         private void terminalControl_TextChanged(object sender, EventArgs e) {
             var tb = sender as WalburySoftware.TerminalControl;
-            terminalControl.CommentLog(tb.Text);
 
             if (dform != null && tb != null) {
-                dform.UpdateDebug(tb.Text);
+                dform.UpdateDebug(tb.GetLastLine());
             }
         }
 

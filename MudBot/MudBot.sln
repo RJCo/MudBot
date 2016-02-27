@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Terminal Control", "Terminal Control\Terminal Control.csproj", "{60BE1158-C079-4603-8BC4-1658133E8EE5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MudBot", "MudBot\MudBot.csproj", "{5C515301-3B05-4FCA-B273-F981C2EB029C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventEngines", "EventEngines\EventEngines.csproj", "{D3B6B46F-865C-476B-B14B-D074DA72DF08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +23,10 @@ Global
 		{5C515301-3B05-4FCA-B273-F981C2EB029C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C515301-3B05-4FCA-B273-F981C2EB029C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C515301-3B05-4FCA-B273-F981C2EB029C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3B6B46F-865C-476B-B14B-D074DA72DF08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3B6B46F-865C-476B-B14B-D074DA72DF08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3B6B46F-865C-476B-B14B-D074DA72DF08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3B6B46F-865C-476B-B14B-D074DA72DF08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

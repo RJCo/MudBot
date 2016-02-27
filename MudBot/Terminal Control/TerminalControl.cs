@@ -386,6 +386,7 @@ namespace WalburySoftware
         }
         #endregion
     }
+
     #region enums
     public enum ConnectionMethod
     {
@@ -402,28 +403,25 @@ namespace WalburySoftware
         /// </summary>
         SSH2
     }
+
     public enum LogType
     {
         /// <summary>
-        /// <ja>ログはとりません。</ja>
         /// <en>The log is not recorded.</en>
         /// </summary>
         [EnumValue(Description = "Enum.LogType.None")]
         None,
         /// <summary>
-        /// <ja>テキストモードのログです。これが標準です。</ja>
         /// <en>The log is a plain text file. This is standard.</en>
         /// </summary>
         [EnumValue(Description = "Enum.LogType.Default")]
         Default,
         /// <summary>
-        /// <ja>バイナリモードのログです。</ja>
         /// <en>The log is a binary file.</en>
         /// </summary>
         [EnumValue(Description = "Enum.LogType.Binary")]
         Binary,
         /// <summary>
-        /// <ja>XMLで保存します。また内部的なバグ追跡においてこのモードでのログ採取をお願いすることがあります。</ja>
         /// <en>The log is an XML file. We may ask you to record the log in this type for debugging.</en>
         /// </summary>
         [EnumValue(Description = "Enum.LogType.Xml")]

@@ -20,3 +20,14 @@ E:\Dropbox\MudBot-GitHub\MudBot\MudBot\obj\Debug\MudBot.DebugForm.resources
 E:\Dropbox\MudBot-GitHub\MudBot\MudBot\obj\Debug\MudBot.MudBot.resources
 E:\Dropbox\MudBot-GitHub\MudBot\MudBot\obj\Debug\C_Sharp_Usage_Example.Properties.Resources.resources
 E:\Dropbox\MudBot-GitHub\MudBot\MudBot\obj\Debug\MudBot.csproj.GenerateResource.Cache
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\MudBot\obj\Debug\C-Sharp Usage Example.exe
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\MudBot\obj\Debug\C-Sharp Usage Example.pdb
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\MudBot\bin\Debug\C-Sharp Usage Example.exe
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\MudBot\bin\Debug\C-Sharp Usage Example.pdb
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\MudBot\bin\Debug\TerminalControl.dll
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\MudBot\bin\Debug\TerminalControl.pdb
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\MudBot\obj\Debug\MudBot.csprojResolveAssemblyReference.cache
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\MudBot\obj\Debug\MudBot.DebugForm.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\MudBot\obj\Debug\MudBot.MudBot.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\MudBot\obj\Debug\C_Sharp_Usage_Example.Properties.Resources.resources
+C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\MudBot\obj\Debug\MudBot.csproj.GenerateResource.Cache
