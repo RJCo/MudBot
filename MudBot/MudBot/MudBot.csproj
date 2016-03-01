@@ -8,8 +8,8 @@
     <ProjectGuid>{5C515301-3B05-4FCA-B273-F981C2EB029C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>C_Sharp_Usage_Example</RootNamespace>
-    <AssemblyName>C-Sharp Usage Example</AssemblyName>
+    <RootNamespace>MudBot</RootNamespace>
+    <AssemblyName>MudBot</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -50,6 +50,9 @@
     <Compile Include="DebugForm.Designer.cs">
       <DependentUpon>DebugForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Locations\Exits.cs" />
+    <Compile Include="Locations\Path.cs" />
+    <Compile Include="Locations\Room.cs" />
     <Compile Include="MudBot.cs">
       <SubType>Form</SubType>
     </Compile>

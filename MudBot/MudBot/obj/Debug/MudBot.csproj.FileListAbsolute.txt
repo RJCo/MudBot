@@ -31,3 +31,5 @@ C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\MudBot\obj\Debug\MudBot.DebugForm
 C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\MudBot\obj\Debug\MudBot.MudBot.resources
 C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\MudBot\obj\Debug\C_Sharp_Usage_Example.Properties.Resources.resources
 C:\Users\rjc.SIAM\Dropbox\MudBot-GitHub\MudBot\MudBot\obj\Debug\MudBot.csproj.GenerateResource.Cache
+C:\Users\mpf.SIAM\Documents\GitHub\MudBot\MudBot\MudBot\obj\Debug\C-Sharp Usage Example.exe
+C:\Users\mpf.SIAM\Documents\GitHub\MudBot\MudBot\MudBot\obj\Debug\C-Sharp Usage Example.pdb
