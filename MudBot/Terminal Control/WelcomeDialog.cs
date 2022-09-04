@@ -152,10 +152,6 @@ namespace Poderosa.Forms
             {
                 _cid = CID.NewConnection;
             }
-            else if (_optCygwin.Checked)
-            {
-                _cid = CID.NewCygwinConnection;
-            }
             else if (_optConvert.Checked)
             {
                 StartConvert();

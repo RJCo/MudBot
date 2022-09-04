@@ -17,9 +17,6 @@ namespace Poderosa.Config
         NOP = 0,
         // File
         NewConnection,
-        NewSerialConnection,
-        NewCygwinConnection,
-        NewSFUConnection,
         OpenShortcut,
         ReceiveFile,
         SendFile,
@@ -53,16 +50,13 @@ namespace Poderosa.Config
         CommentLog,
         ResetTerminal,
         SendBreak,
-        SerialConfig,
         AreYouThere,
 #if DEBUG
         DumpText,
 #endif
         // Tools
         OptionDialog,
-        KeyGen,
         Portforwarding,
-        ChangePassphrase,
         MacroConfig,
         StopMacro,
         // Window
@@ -339,9 +333,6 @@ namespace Poderosa.Config
             _keyToEntry.Clear();
             _entries.Clear();
             AddKeyMap(Category.File, Target.Global, CID.NewConnection, "Command.NewConnection", Keys.Alt, Keys.N);
-            AddKeyMap(Category.File, Target.Global, CID.NewSerialConnection, "Command.NewSerialConnection", Keys.None, Keys.None);
-            AddKeyMap(Category.File, Target.Global, CID.NewCygwinConnection, "Command.NewCygwinConnection", Keys.None, Keys.None);
-            AddKeyMap(Category.File, Target.Global, CID.NewSFUConnection, "Command.NewSFUConnection", Keys.None, Keys.None);
             AddKeyMap(Category.File, Target.Global, CID.OpenShortcut, "Command.OpenShortcut", Keys.Alt, Keys.O);
             AddKeyMap(Category.File, Target.Global, CID.ReceiveFile, "Command.ReceiveFile", Keys.None, Keys.None);
             AddKeyMap(Category.File, Target.Global, CID.SendFile, "Command.SendFile", Keys.None, Keys.None);
@@ -373,15 +364,12 @@ namespace Poderosa.Config
             AddKeyMap(Category.Console, Target.Connection, CID.CommentLog, "Command.CommentLog", Keys.None, Keys.None);
             AddKeyMap(Category.Console, Target.Connection, CID.ResetTerminal, "Command.ResetTerminal", Keys.None, Keys.None);
             AddKeyMap(Category.Console, Target.Connection, CID.SendBreak, "Command.SendBreak", Keys.None, Keys.None);
-            AddKeyMap(Category.Console, Target.Connection, CID.SerialConfig, "Command.SerialConfig", Keys.None, Keys.None);
             AddKeyMap(Category.Console, Target.Connection, CID.AreYouThere, "Command.AreYouThere", Keys.None, Keys.None);
 #if DEBUG
             AddKeyMap(Category.Console, Target.Connection, CID.DumpText, "Command.DumpText", Keys.Alt | Keys.Shift, Keys.D);
 #endif
             AddKeyMap(Category.Tool, Target.Global, CID.OptionDialog, "Command.OptionDialog", Keys.Alt, Keys.T);
-            AddKeyMap(Category.Tool, Target.Global, CID.KeyGen, "Command.KeyGenSSH", Keys.None, Keys.None);
             AddKeyMap(Category.Tool, Target.Global, CID.Portforwarding, "Command.Portforwarding", Keys.None, Keys.None);
-            AddKeyMap(Category.Tool, Target.Global, CID.ChangePassphrase, "Command.ChangePassphrase", Keys.None, Keys.None);
             AddKeyMap(Category.Tool, Target.Global, CID.MacroConfig, "Command.MacroConfig", Keys.Alt, Keys.M);
             AddKeyMap(Category.Tool, Target.Global, CID.StopMacro, "Command.StopMacro", Keys.None, Keys.None);
             AddKeyMap(Category.Window, Target.Global, CID.CloseAll, "Command.CloseAll", Keys.None, Keys.None);

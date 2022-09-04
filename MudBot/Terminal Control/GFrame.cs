@@ -56,12 +56,8 @@ namespace Poderosa.Forms
         private GMainMenuItem _menuFile;
         private GMenuItem _menuOpenShortcut;
         private GMenuItem _menuNewConnection;
-        private GMenuItem _menuCygwinNewConnection;
-        private GMenuItem _menuSFUNewConnection;
         private GMainMenuItem _menuTool;
         private GMenuItem _menuSaveShortcut;
-        private GMenuItem _menuKeyGen;
-        private GMenuItem _menuChangePassphrase;
         private GMenuItem _menuBarTool1;
         private GMenuItem _menuMacro;
         private GMenuItem _menuBarTool2;
@@ -79,7 +75,6 @@ namespace Poderosa.Forms
         private GMenuItem _menuSendSpecial;
         private GMenuItem _menuSendBreak;
         private GMenuItem _menuAreYouThere;
-        private GMenuItem _menuSerialConfig;
         private GMenuItem _menuResetTerminal;
         private GMenuItem _menuEncoding;
         private GMenuItem _menuSuspendLog;
@@ -112,7 +107,6 @@ namespace Poderosa.Forms
         private GMenuItem _menuMoveTabToNext;
         private GMenuItem _menuExpandPane;
         private GMenuItem _menuShrinkPane;
-        private GMenuItem _menuSerialNewConnection;
         private GMainMenuItem _menuEdit;
         private GMenuItem _menuCopy;
         private GMenuItem _menuPaste;
@@ -197,9 +191,6 @@ namespace Poderosa.Forms
             _menu = new MenuStrip();
             _menuFile = new GMainMenuItem();
             _menuNewConnection = new GMenuItem();
-            _menuSerialNewConnection = new GMenuItem();
-            _menuCygwinNewConnection = new GMenuItem();
-            _menuSFUNewConnection = new GMenuItem();
             _menuBarFile1 = new GMenuItem();
             _menuOpenShortcut = new GMenuItem();
             _menuSaveShortcut = new GMenuItem();
@@ -237,7 +228,6 @@ namespace Poderosa.Forms
             _menuSendSpecial = new GMenuItem();
             _menuSendBreak = new GMenuItem();
             _menuAreYouThere = new GMenuItem();
-            _menuSerialConfig = new GMenuItem();
             _menuResetTerminal = new GMenuItem();
             _menuBarConsole2 = new GMenuItem();
             _menuSuspendLog = new GMenuItem();
@@ -246,8 +236,6 @@ namespace Poderosa.Forms
             _menuBarConsole3 = new GMenuItem();
             _menuServerInfo = new GMenuItem();
             _menuTool = new GMainMenuItem();
-            _menuKeyGen = new GMenuItem();
-            _menuChangePassphrase = new GMenuItem();
             _menuBarTool1 = new GMenuItem();
             _menuMacro = new GMenuItem();
             _menuBarTool2 = new GMenuItem();
@@ -309,44 +297,25 @@ namespace Poderosa.Forms
             // _menuFile
             // 
             _menuFile.MergeIndex = 0;
-            _menuFile.DropDownItems.AddRange(new ToolStripMenuItem[] {
-                                                                                      _menuNewConnection,
-                                                                                      _menuSerialNewConnection,
-                                                                                      _menuCygwinNewConnection,
-                                                                                      _menuSFUNewConnection,
-                                                                                      _menuBarFile1,
-                                                                                      _menuOpenShortcut,
-                                                                                      _menuSaveShortcut,
-                                                                                      _menuBarFile2,
-                                                                                      _menuReceiveFile,
-                                                                                      _menuSendFile,
-                                                                                      _menuBarBeforeMRU,
-                                                                                      _menuBarAfterMRU,
-                                                                                      _menuQuit});
+            _menuFile.DropDownItems.AddRange(new ToolStripMenuItem[]
+            {
+                _menuNewConnection,
+                _menuBarFile1,
+                _menuOpenShortcut,
+                _menuSaveShortcut,
+                _menuBarFile2,
+                _menuReceiveFile,
+                _menuSendFile,
+                _menuBarBeforeMRU,
+                _menuBarAfterMRU,
+                _menuQuit
+            });
             // 
             // _menuNewConnection
             // 
             _menuNewConnection.MergeIndex = 0;
             _menuNewConnection.Click += new EventHandler(OnMenu);
             _menuNewConnection.CID = (int)CID.NewConnection;
-            // 
-            // _menuSerialNewConnection
-            // 
-            _menuSerialNewConnection.MergeIndex = 1;
-            _menuSerialNewConnection.Click += new EventHandler(OnMenu);
-            _menuSerialNewConnection.CID = (int)CID.NewSerialConnection;
-            // 
-            // _menuCygwinNewConnection
-            // 
-            _menuCygwinNewConnection.MergeIndex = 2;
-            _menuCygwinNewConnection.Click += new EventHandler(OnMenu);
-            _menuCygwinNewConnection.CID = (int)CID.NewCygwinConnection;
-            // 
-            // _menuSFUNewConnection
-            // 
-            _menuSFUNewConnection.MergeIndex = 3;
-            _menuSFUNewConnection.Click += new EventHandler(OnMenu);
-            _menuSFUNewConnection.CID = (int)CID.NewSFUConnection;
             // 
             // _menuBarFile1
             // 
@@ -605,7 +574,6 @@ namespace Poderosa.Forms
             _menuSendSpecial.DropDownItems.AddRange(new ToolStripMenuItem[] {
                                                                                          _menuSendBreak,
                                                                                          _menuAreYouThere,
-                                                                                         _menuSerialConfig,
                                                                                          _menuResetTerminal
             });
 
@@ -624,12 +592,7 @@ namespace Poderosa.Forms
             _menuAreYouThere.MergeIndex = 1;
             _menuAreYouThere.Click += new EventHandler(OnMenu);
             _menuAreYouThere.CID = (int)CID.AreYouThere;
-            // 
-            // _menuSerialConfig
-            // 
-            _menuSerialConfig.MergeIndex = 2;
-            _menuSerialConfig.Click += new EventHandler(OnMenu);
-            _menuSerialConfig.CID = (int)CID.SerialConfig;
+
             // 
             // _menuResetTerminal
             // 
@@ -693,32 +656,12 @@ namespace Poderosa.Forms
             // 
             _menuTool.MergeIndex = 3;
             _menuTool.DropDownItems.AddRange(new ToolStripMenuItem[] {
-                                                                                      _menuKeyGen,
-                                                                                      _menuChangePassphrase,
                                                                                       _menuLaunchPortforwarding,
                                                                                       _menuBarTool1,
                                                                                       _menuMacro,
                                                                                       _menuBarTool2,
                                                                                       _menuOption});
 
-            // 
-            // _menuKeyGen
-            // 
-            _menuKeyGen.MergeIndex = 0;
-            _menuKeyGen.Click += new EventHandler(OnMenu);
-            _menuKeyGen.CID = (int)CID.KeyGen;
-            // 
-            // _menuChangePassphrase
-            // 
-            _menuChangePassphrase.MergeIndex = 1;
-            _menuChangePassphrase.Click += new EventHandler(OnMenu);
-            _menuChangePassphrase.CID = (int)CID.ChangePassphrase;
-            // 
-            // _menuLaunchPortforwarding
-            // 
-            _menuLaunchPortforwarding.MergeIndex = 2;
-            _menuLaunchPortforwarding.Click += new EventHandler(OnMenu);
-            _menuLaunchPortforwarding.CID = (int)CID.Portforwarding;
             // 
             // _menuBarTool1
             // 
@@ -1030,15 +973,13 @@ namespace Poderosa.Forms
 
         }
         #endregion
+
         #region 
         private void InitMenuText()
         {
             #region Poderosa string bullshit
             _menuFile.Text = "Menu._menuFile";
             _menuNewConnection.Text = "Menu._menuNewConnection";
-            _menuSerialNewConnection.Text = "Menu._menuSerialNewConnection";
-            _menuCygwinNewConnection.Text = "Menu._menuCygwinNewConnection";
-            _menuSFUNewConnection.Text = "Menu._menuSFUNewConnection";
             _menuOpenShortcut.Text = "Menu._menuOpenShortcut";
             _menuSaveShortcut.Text = "Menu._menuSaveShortcut";
             _menuReceiveFile.Text = "Menu._menuReceiveFile";
@@ -1065,7 +1006,6 @@ namespace Poderosa.Forms
             _menuSendSpecial.Text = "Menu._menuSendSpecial";
             _menuSendBreak.Text = "Menu._menuSendBreak";
             _menuAreYouThere.Text = "Menu._menuAreYouThere";
-            _menuSerialConfig.Text = "Menu._menuSerialConfig";
             _menuResetTerminal.Text = "Menu._menuResetTerminal";
             _menuSuspendLog.Text = "Menu._menuSuspendLog";
             _menuCommentLog.Text = "Menu._menuCommentLog";
@@ -1074,8 +1014,6 @@ namespace Poderosa.Forms
             _menuServerInfo.Text = "Menu._menuServerInfo";
             _menuRenameTab.Text = "Menu._menuRenameTab";
             _menuTool.Text = "Menu._menuTool";
-            _menuKeyGen.Text = "Menu._menuKeyGen";
-            _menuChangePassphrase.Text = "Menu._menuChangePassphrase";
             _menuLaunchPortforwarding.Text = "Menu._menuLaunchPortforwarding";
             _menuMacro.Text = "Menu._menuMacro";
             _menuOption.Text = "Menu._menuOption";
@@ -1212,6 +1150,7 @@ namespace Poderosa.Forms
             }
         }
         #endregion
+
         #region properties
         public override ContextMenuStrip ContextMenuStrip
         {
@@ -1282,6 +1221,7 @@ namespace Poderosa.Forms
             }
         }
         #endregion
+
         #region
         public void AdjustTitle(ConnectionTag tag)
         {
