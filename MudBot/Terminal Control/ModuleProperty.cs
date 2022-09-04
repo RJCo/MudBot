@@ -265,7 +265,9 @@ namespace Poderosa.Forms
                 GApp.Options.DefaultFileDir = GUtil.FileToDir(dlg.FileName);
                 _path.Text = dlg.FileName;
                 if (_title.Text.Length == 0)
+                {
                     _title.Text = Path.GetFileName(dlg.FileName); //ファイル名本体をデフォルトのタイトルにする
+                }
             }
         }
         private void OnOK(object sender, EventArgs args)
@@ -276,7 +278,9 @@ namespace Poderosa.Forms
                 GUtil.Warning(this, String.Format("Message.ModuleProperty.FileNotExist", _path.Text));
             }
             else if (_title.Text.Length > 30)
+            {
                 GUtil.Warning(this, "Message.ModuleProperty.TooLongTitle");
+            }
             else
             {
                 if (_shortcut.Key != _prevShortCut)
@@ -299,11 +303,19 @@ namespace Poderosa.Forms
 
         private string Concat(string[] v)
         {
-            if (v == null) return "";
+            if (v == null)
+            {
+                return "";
+            }
+
             StringBuilder b = new StringBuilder();
             foreach (string t in v)
             {
-                if (b.Length > 0) b.Append(';');
+                if (b.Length > 0)
+                {
+                    b.Append(';');
+                }
+
                 b.Append(t);
             }
             return b.ToString();

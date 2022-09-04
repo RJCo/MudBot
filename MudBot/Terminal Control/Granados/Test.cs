@@ -16,7 +16,7 @@ using System.Threading;
 
 namespace Granados.SSHCTest
 {
-    class Reader : ISSHConnectionEventReceiver, ISSHChannelEventReceiver
+    internal class Reader : ISSHConnectionEventReceiver, ISSHChannelEventReceiver
     {
         public SSHConnection _conn;
         public bool _ready;
@@ -94,12 +94,12 @@ namespace Granados.SSHCTest
         public SSHChannel _pf;
     }
 
-    class Test
+    internal class Test
     {
         private static SSHConnection _conn;
 
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             /*
 			string cn = System.Threading.Thread.CurrentThread.CurrentUICulture.Name;

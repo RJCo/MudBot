@@ -237,9 +237,13 @@ namespace Poderosa.Forms
             col.Tag = sample;
             col.TabIndex = tabindex++;
             if (index == -1)
+            {
                 _foreColorBox = col;
+            }
             else
+            {
                 _colorBoxes[index] = col;
+            }
 
             Controls.Add(num);
             Controls.Add(sample);

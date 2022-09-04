@@ -125,7 +125,9 @@ namespace Poderosa.Forms
                 return true;
             }
             else
+            {
                 return base.ProcessDialogKey(k);
+            }
         }
 
         public string ResultText
@@ -168,7 +170,10 @@ namespace Poderosa.Forms
         private void InsertText(string t)
         {
             for (int i = 0; i < t.Length; i++)
+            {
                 Win32.SendMessage(_textBox.Handle, Win32.WM_CHAR, new IntPtr((int)t[i]), IntPtr.Zero);
+            }
+
             _textBox.Focus();
         }
     }

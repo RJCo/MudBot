@@ -189,13 +189,21 @@ namespace Poderosa.Forms
             DialogResult = DialogResult.None;
             string n = _nameBox.Text;
             if (n.Length == 0)
+            {
                 GUtil.Warning(this, "The variable name must not be empty.");
+            }
             else if (n.IndexOf('=') != -1 || n.IndexOf(' ') != -1)
+            {
                 GUtil.Warning(this, "The variable name must not contain '=' or space.");
+            }
             else if (_isNew && _parent.HasVariable(n))
+            {
                 GUtil.Warning(this, "An identical name already exists.");
+            }
             else //success
+            {
                 DialogResult = DialogResult.OK;
+            }
         }
     }
 }

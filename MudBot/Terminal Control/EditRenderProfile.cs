@@ -332,9 +332,13 @@ namespace Poderosa.Forms
         {
             int sz = (int)(fsz + 0.5);
             if (GApp.Options.Language == Language.English || ascii == japanese)
+            {
                 _fontDescription.Text = String.Format("{0},{1}pt", ascii, sz); //Singleをintにキャストすると切り捨てだが、四捨五入にしてほしいので0.5を足してから切り捨てる
+            }
             else
+            {
                 _fontDescription.Text = String.Format("{0}/{1},{2}pt", ascii, japanese, sz);
+            }
         }
 
         private void InitUI()

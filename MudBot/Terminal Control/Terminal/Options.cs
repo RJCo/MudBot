@@ -99,8 +99,10 @@ namespace Poderosa.Config
         public CommonOptions()
         {
             _esColorSet = new EscapesequenceColorSet();
-            if (_configAttributes == null) InitConfigAttributes();
-
+            if (_configAttributes == null)
+            {
+                InitConfigAttributes();
+            }
         }
         public Language Language
         {
@@ -269,7 +271,10 @@ namespace Poderosa.Config
             set
             {
                 if (value < 1 || value > 99)
+                {
                     throw new InvalidOptionException("Message.Options.WheelAmountRange");
+                }
+
                 _wheelAmount = value;
             }
         }
@@ -283,7 +288,10 @@ namespace Poderosa.Config
             set
             {
                 if (value < 0 || value > 9999)
+                {
                     throw new InvalidOptionException("Message.Options.BufferSizeRange");
+                }
+
                 _terminalBufferSize = value;
             }
         }
@@ -292,7 +300,11 @@ namespace Poderosa.Config
         {
             get
             {
-                if (_font == null) _font = GUtil.CreateFont(_fontName, _fontSize);
+                if (_font == null)
+                {
+                    _font = GUtil.CreateFont(_fontName, _fontSize);
+                }
+
                 return _font;
             }
             set
@@ -306,7 +318,11 @@ namespace Poderosa.Config
         {
             get
             {
-                if (_japaneseFont == null) _japaneseFont = GUtil.CreateFont(_japaneseFontName, _fontSize);
+                if (_japaneseFont == null)
+                {
+                    _japaneseFont = GUtil.CreateFont(_japaneseFontName, _fontSize);
+                }
+
                 return _japaneseFont;
             }
             set
@@ -700,7 +716,10 @@ namespace Poderosa.Config
                 attr.ExportTo(this, node);
             }
             if (!_esColorSet.IsDefault)
+            {
                 node["escape-sequence-color"] = _esColorSet.Format();
+            }
+
             parent.AddChild(node);
         }
         public virtual void Load(ConfigNode parent)
@@ -713,10 +732,15 @@ namespace Poderosa.Config
                     attr.ImportFrom(this, node);
                 }
                 string es = node["escape-sequence-color"];
-                if (es != null) _esColorSet.Load(es);
+                if (es != null)
+                {
+                    _esColorSet.Load(es);
+                }
             }
             else
+            {
                 Init();
+            }
         }
 
         public virtual void Init()

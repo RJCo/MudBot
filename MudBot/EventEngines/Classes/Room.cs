@@ -1,6 +1,6 @@
 ﻿namespace EventEngines
 {
-    class Room
+    internal class Room
     {
     }
 }

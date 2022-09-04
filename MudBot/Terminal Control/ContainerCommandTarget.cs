@@ -8,7 +8,6 @@ using Poderosa.Connection;
 using Poderosa.ConnectionParam;
 using Poderosa.Debugging;
 using Poderosa.Forms;
-using Poderosa.LocalShell;
 using Poderosa.Terminal;
 using Poderosa.Toolkit;
 using System;
@@ -37,50 +36,45 @@ namespace Poderosa
 
         public CommandResult NewConnectionWithDialog(TCPTerminalParam param)
         {
-            if (!CheckPaneCount()) return CommandResult.Denied;
+            if (!CheckPaneCount())
+            {
+                return CommandResult.Denied;
+            }
 
             ConnectionHistory hst = GApp.ConnectionHistory;
             LoginDialog dlg = new LoginDialog();
             if (param != null)
+            {
                 dlg.ApplyParam(param);
+            }
             else
+            {
                 dlg.ApplyParam(hst.TopTCPParam);
+            }
 
             if (GCUtil.ShowModalDialog(_frame, dlg) == DialogResult.OK)
-            { //ダイアログを出さないなら無条件で接続を開く
+            {
                 AddNewTerminal(dlg.Result);
                 return CommandResult.Success;
             }
             else
+            {
                 return CommandResult.Cancelled;
+            }
         }
 
         public CommandResult NewConnection(TerminalParam p)
         {
-            if (!CheckPaneCount()) return CommandResult.Denied;
+            if (!CheckPaneCount())
+            {
+                return CommandResult.Denied;
+            }
 
             ConnectionTag con = null;
             if (p is TCPTerminalParam)
             {
                 TCPTerminalParam param = (TCPTerminalParam)p;
-                if (param.IsSSH)
-                {
-                    SSHShortcutLoginDialog dlg = new SSHShortcutLoginDialog((SSHTerminalParam)param);
-                    if (GCUtil.ShowModalDialog(_frame, dlg) == DialogResult.OK)
-                        con = dlg.Result;
-                }
-                else
-                    con = CommunicationUtil.CreateNewConnection(param);
-            }
-            else if (p is SerialTerminalParam)
-            {
-                SerialTerminalParam param = (SerialTerminalParam)p;
-                con = CommunicationUtil.CreateNewSerialConnection(_frame, param);
-            }
-            else if (p is LocalShellTerminalParam)
-            {
-                LocalShellTerminalParam param = (LocalShellTerminalParam)p;
-                con = CommunicationUtil.CreateNewLocalShellConnection(_frame, param);
+                con = CommunicationUtil.CreateNewConnection(param);
             }
 
             if (con != null)
@@ -89,117 +83,28 @@ namespace Poderosa
                 return CommandResult.Success;
             }
             else
+            {
                 return CommandResult.Cancelled;
-        }
-        public CommandResult NewSerialConnectionWithDialog(SerialTerminalParam param)
-        {
-            if (!CheckPaneCount()) return CommandResult.Denied;
-
-            SerialLoginDialog dlg = new SerialLoginDialog();
-            if (param != null)
-                dlg.ApplyParam(param);
-            else
-                dlg.ApplyParam(GApp.ConnectionHistory.TopSerialParam);
-
-            if (GCUtil.ShowModalDialog(_frame, dlg) == DialogResult.OK)
-            {
-                ConnectionTag con = dlg.Result;
-                if (con != null)
-                {
-                    AddNewTerminal(con);
-                    return CommandResult.Success;
-                }
             }
-
-            return CommandResult.Cancelled;
-
-
-            //XModemReceiver xmodem = new XModemReceiver(GEnv.Connections.ActiveTag, "C:\\IOPort\\xmodemresult.txt");
-            //XModemSender xmodem = new XModemSender(GEnv.Connections.ActiveTag, "C:\\IOPort\\xslt.cs");
-            //xmodem.Start();
-
-            //return CommandResult.Success;
         }
-        public CommandResult NewCygwinConnectionWithDialog(CygwinTerminalParam param)
-        {
-            if (!CheckPaneCount()) return CommandResult.Denied;
 
-            if (CygwinUtil.GuessRootDirectory().Length == 0) return CommandResult.Failed;
-
-            LocalShellLoginDialog dlg = new LocalShellLoginDialog();
-            if (param != null)
-                dlg.ApplyParam(param);
-            else
-                dlg.ApplyParam(GApp.ConnectionHistory.TopCygwinParam);
-
-            CommandResult res = CommandResult.Cancelled;
-            if (GCUtil.ShowModalDialog(_frame, dlg) == DialogResult.OK)
-            {
-                ConnectionTag con = dlg.Result;
-                if (con != null)
-                {
-                    AddNewTerminal(con);
-                    res = CommandResult.Success;
-                }
-            }
-            dlg.Dispose();
-
-            return res;
-        }
-        public CommandResult NewSFUConnectionWithDialog(SFUTerminalParam param)
-        {
-            if (!CheckPaneCount()) return CommandResult.Denied;
-
-            if (SFUUtil.GuessRootDirectory().Length == 0) return CommandResult.Failed;
-
-            LocalShellLoginDialog dlg = new LocalShellLoginDialog();
-            if (param != null)
-                dlg.ApplyParam(param);
-            else
-                dlg.ApplyParam(GApp.ConnectionHistory.TopSFUParam);
-
-            if (GCUtil.ShowModalDialog(_frame, dlg) == DialogResult.OK)
-            {
-                ConnectionTag con = dlg.Result;
-                if (con != null)
-                {
-                    AddNewTerminal(con);
-                    return CommandResult.Success;
-                }
-            }
-
-            return CommandResult.Cancelled;
-        }
         public ConnectionTag SilentNewConnection(TerminalParam p)
         {
-            if (!CheckPaneCount()) return null;
+            if (!CheckPaneCount())
+            {
+                return null;
+            }
 
             ConnectionTag con = null;
-            if (p is SSHTerminalParam)
-            {
-                SSHTerminalParam tp = (SSHTerminalParam)p;
-                con = CommunicationUtil.CreateNewConnection(tp, null);
-            }
-            else if (p is TelnetTerminalParam)
+            if (p is TelnetTerminalParam)
             {
                 TelnetTerminalParam tp = (TelnetTerminalParam)p;
                 con = CommunicationUtil.CreateNewConnection(tp);
-            }
-            else if (p is SerialTerminalParam)
-            {
-                SerialTerminalParam tp = (SerialTerminalParam)p;
-                con = CommunicationUtil.CreateNewSerialConnection(_frame, tp);
-            }
-            else if (p is LocalShellTerminalParam)
-            {
-                LocalShellTerminalParam tp = (LocalShellTerminalParam)p;
-                con = CommunicationUtil.CreateNewLocalShellConnection(_frame, tp);
             }
 
             if (con != null)
             {
                 AddNewTerminal(con);
-
             }
             return con;
         }
@@ -223,7 +128,9 @@ namespace Poderosa
                 return false;
             }
             else
+            {
                 return true;
+            }
         }
         public CommandResult EmulateUsingLog()
         {
@@ -269,7 +176,11 @@ namespace Poderosa
         {
             try
             {
-                if (GApp.Frame.WindowState == FormWindowState.Minimized) GApp.Frame.WindowState = FormWindowState.Normal;
+                if (GApp.Frame.WindowState == FormWindowState.Minimized)
+                {
+                    GApp.Frame.WindowState = FormWindowState.Normal;
+                }
+
                 ConfigNode cn = DOMNodeConverter.Read(XMLUtil.FileToDOM(filename).DocumentElement);
                 TerminalParam param = TerminalParam.CreateFromConfigNode(cn);
                 param.FeedLogOption();
@@ -287,7 +198,11 @@ namespace Poderosa
             XmlReader r = null;
             try
             {
-                if (GApp.Frame.WindowState == FormWindowState.Minimized) GApp.Frame.WindowState = FormWindowState.Normal;
+                if (GApp.Frame.WindowState == FormWindowState.Minimized)
+                {
+                    GApp.Frame.WindowState = FormWindowState.Normal;
+                }
+
                 ConfigNode cn = DOMNodeConverter.Read(XMLUtil.FileToDOM(filename).DocumentElement);
                 TerminalParam param = TerminalParam.CreateFromConfigNode(cn);
                 param.FeedLogOption();
@@ -299,7 +214,10 @@ namespace Poderosa
             }
             finally
             {
-                if (r != null) r.Close();
+                if (r != null)
+                {
+                    r.Close();
+                }
             }
             return null;
         }
@@ -308,7 +226,11 @@ namespace Poderosa
         {
             Connections cc = GEnv.Connections;
             TerminalConnection a = cc.ActiveConnection;
-            if (a == null) return CommandResult.Ignored;
+            if (a == null)
+            {
+                return CommandResult.Ignored;
+            }
+
             ActivateConnection(cc.PrevConnection(cc.FindTag(a)).Connection);
             return CommandResult.Success;
         }
@@ -316,7 +238,11 @@ namespace Poderosa
         {
             Connections cc = GEnv.Connections;
             TerminalConnection a = cc.ActiveConnection;
-            if (a == null) return CommandResult.Ignored;
+            if (a == null)
+            {
+                return CommandResult.Ignored;
+            }
+
             ActivateConnection(cc.NextConnection(cc.FindTag(a)).Connection);
             return CommandResult.Success;
         }
@@ -340,25 +266,43 @@ namespace Poderosa
                 return CommandResult.Success;
             }
             else
+            {
                 return CommandResult.Ignored;
+            }
         }
 
 
         public CommandResult ToggleFreeSelectionMode()
         {
             ConnectionTag ct = GEnv.Connections.ActiveTag;
-            if (ct == null) return CommandResult.Ignored;
+            if (ct == null)
+            {
+                return CommandResult.Ignored;
+            }
+
             IPoderosaTerminalPane p = ct.AttachedPane;
-            if (p == null) return CommandResult.Failed;
+            if (p == null)
+            {
+                return CommandResult.Failed;
+            }
+
             p.ToggleFreeSelectionMode();
             return CommandResult.Success;
         }
         public CommandResult ToggleAutoSelectionMode()
         {
             ConnectionTag ct = GEnv.Connections.ActiveTag;
-            if (ct == null) return CommandResult.Ignored;
+            if (ct == null)
+            {
+                return CommandResult.Ignored;
+            }
+
             IPoderosaTerminalPane p = ct.AttachedPane;
-            if (p == null) return CommandResult.Failed;
+            if (p == null)
+            {
+                return CommandResult.Failed;
+            }
+
             p.ToggleAutoSelectionMode();
             return CommandResult.Success;
         }
@@ -366,7 +310,12 @@ namespace Poderosa
         public CommandResult CloseAll()
         {
             if (GApp.Options.AskCloseOnExit && GEnv.Connections.LiveConnectionsExist)
-                if (GUtil.AskUserYesNo(_frame, "There is active connection. Do you wish to disconnect and exit?", MessageBoxIcon.Exclamation) == DialogResult.No) return CommandResult.Cancelled;
+            {
+                if (GUtil.AskUserYesNo(_frame, "There is active connection. Do you wish to disconnect and exit?", MessageBoxIcon.Exclamation) == DialogResult.No)
+                {
+                    return CommandResult.Cancelled;
+                }
+            }
 
             GEnv.Connections.CloseAllConnections();
             _frame.RemoveAllConnections();
@@ -397,7 +346,10 @@ namespace Poderosa
 
         public CommandResult CopyToFile()
         {
-            if (GEnv.TextSelection.IsEmpty) return CommandResult.Ignored;
+            if (GEnv.TextSelection.IsEmpty)
+            {
+                return CommandResult.Ignored;
+            }
 
             SaveFileDialog dlg = new SaveFileDialog
             {
@@ -424,7 +376,9 @@ namespace Poderosa
                 }
             }
             else
+            {
                 return CommandResult.Cancelled;
+            }
         }
 
         public CommandResult QuitApp()
@@ -439,7 +393,11 @@ namespace Poderosa
             if (con == GEnv.Connections.ActiveConnection)
             {
                 IPoderosaTerminalPane p = GEnv.Connections.FindTag(con).AttachedPane;
-                if (p != null && !p.AsControl().Focused) p.AsControl().Focus();
+                if (p != null && !p.AsControl().Focused)
+                {
+                    p.AsControl().Focus();
+                }
+
                 return CommandResult.Success;
             }
 
@@ -449,7 +407,10 @@ namespace Poderosa
         internal CommandResult ActivateConnection2(ConnectionTag ct)
         {
             //Debug.WriteLine("Activating " + GEnv.Connections.IndexOf(ct));
-            if (_activationBlockFlag || ct == null) return CommandResult.Ignored;
+            if (_activationBlockFlag || ct == null)
+            {
+                return CommandResult.Ignored;
+            }
 
             _activationBlockFlag = true;
             GEnv.TextSelection.Clear();
@@ -462,13 +423,20 @@ namespace Poderosa
         {
             ConnectionTag tag = GEnv.Connections.ActiveTag;
             if (tag == null || tag.AttachedPane == null)
+            {
                 return CommandResult.Ignored;
+            }
+
             return CommandResult.Success;
         }
 
         public CommandResult SetFrameStyle(GFrameStyle fs)
         {
-            if (fs == GApp.Options.FrameStyle) return CommandResult.Ignored;
+            if (fs == GApp.Options.FrameStyle)
+            {
+                return CommandResult.Ignored;
+            }
+
             GEnv.TextSelection.Clear();
 
             ContainerOptions opt = (ContainerOptions)GApp.Options.Clone();
@@ -482,7 +450,10 @@ namespace Poderosa
             foreach (ConnectionTag ct in GEnv.Connections)
             {
                 ct.RenderProfile = null;
-                if (ct.AttachedPane != null) ct.AttachedPane.ApplyRenderProfile(prof);
+                if (ct.AttachedPane != null)
+                {
+                    ct.AttachedPane.ApplyRenderProfile(prof);
+                }
             }
             return CommandResult.Success;
         }
@@ -516,14 +487,19 @@ namespace Poderosa
             if (_frame.XModemDialog != null)
             {
                 if (_frame.XModemDialog.Receiving)
+                {
                     return CommandResult.Ignored;
+                }
                 else
                 {
                     GUtil.Warning(GEnv.Frame, "Now sending a file.");
                     return CommandResult.Failed;
                 }
             }
-            if (GEnv.Connections.ActiveTag == null) return CommandResult.Failed;
+            if (GEnv.Connections.ActiveTag == null)
+            {
+                return CommandResult.Failed;
+            }
 
             XModemDialog dlg = new XModemDialog
             {
@@ -541,14 +517,19 @@ namespace Poderosa
             if (_frame.XModemDialog != null)
             {
                 if (!_frame.XModemDialog.Receiving)
+                {
                     return CommandResult.Ignored;
+                }
                 else
                 {
                     GUtil.Warning(GEnv.Frame, "Now receiving a file.");
                     return CommandResult.Failed;
                 }
             }
-            if (GEnv.Connections.ActiveTag == null) return CommandResult.Failed;
+            if (GEnv.Connections.ActiveTag == null)
+            {
+                return CommandResult.Failed;
+            }
 
             XModemDialog dlg = new XModemDialog
             {
@@ -577,7 +558,9 @@ namespace Poderosa
                 return CommandResult.Success;
             }
             else
+            {
                 return CommandResult.Ignored;
+            }
         }
 
         public CommandResult ShowAboutBox()
@@ -585,7 +568,10 @@ namespace Poderosa
             AboutBox dlg = new AboutBox();
             GCUtil.ShowModalDialog(_frame, dlg);
             if (dlg.CreditButtonClicked)
+            {
                 GCUtil.ShowModalDialog(_frame, new Credits());
+            }
+
             return CommandResult.Success;
         }
 
@@ -595,7 +581,10 @@ namespace Poderosa
             DialogResult r = GCUtil.ShowModalDialog(_frame, dlg);
             if (r == DialogResult.OK)
             {
-                if (dlg.CID != CID.NOP) GApp.GlobalCommandTarget.Exec(dlg.CID);
+                if (dlg.CID != CID.NOP)
+                {
+                    GApp.GlobalCommandTarget.Exec(dlg.CID);
+                }
             }
             return CommandResult.Success;
         }
@@ -624,7 +613,9 @@ namespace Poderosa
                     return CommandResult.Failed;
                 }
                 else
+                {
                     return CommandResult.Success;
+                }
             }
             catch (Exception ex)
             {
@@ -636,7 +627,11 @@ namespace Poderosa
 
         public override CommandResult SetConnectionLocation(ConnectionTag ct, TerminalPane pane)
         {
-            if (ct.AttachedPane == pane) return CommandResult.Ignored;
+            if (ct.AttachedPane == pane)
+            {
+                return CommandResult.Ignored;
+            }
+
             _frame.PaneContainer.SetConnectionLocation(ct, pane);
             return CommandResult.Success;
         }
@@ -647,14 +642,22 @@ namespace Poderosa
             {
                 int n = (int)(ent.CID - CID.ActivateConnection0);
                 if (n < GEnv.Connections.Count)
+                {
                     return ActivateConnection2(GEnv.Connections.TagAt(n));
+                }
                 else
+                {
                     return CommandResult.Ignored;
+                }
             }
             else if (ent.Category == Commands.Category.Macro)
+            {
                 return ExecMacro(((Commands.MacroEntry)ent).Index);
+            }
             else
+            {
                 return Exec(ent.CID);
+            }
         }
 
         public CommandResult ExecMacro(int index)
@@ -665,7 +668,9 @@ namespace Poderosa
                 return CommandResult.Success;
             }
             else
+            {
                 return CommandResult.Ignored;
+            }
         }
         #endregion
 
@@ -704,12 +709,6 @@ namespace Poderosa
                     return SetFrameStyle(GFrameStyle.DivVertical3);
                 case CID.NewConnection:
                     return NewConnectionWithDialog(null);
-                case CID.NewSerialConnection:
-                    return NewSerialConnectionWithDialog(null);
-                case CID.NewCygwinConnection:
-                    return NewCygwinConnectionWithDialog(null);
-                case CID.NewSFUConnection:
-                    return NewSFUConnectionWithDialog(null);
                 case CID.OpenShortcut:
                     return OpenShortCutWithDialog();
                 case CID.Copy:
@@ -763,7 +762,9 @@ namespace Poderosa
                 default:
                     int n = id - CID.ExecMacro;
                     if (n >= 0 && n < 100)
+                    {
                         return ExecMacro(n);
+                    }
                     else
                     {
                         Debug.WriteLine("unknown connection command " + id);
@@ -790,9 +791,13 @@ namespace Poderosa
         public void DoDelayedExec()
         {
             if (_delayed_command_id == CID.OpenShortcut)
+            {
                 OpenShortCut(_delayed_string_data);
+            }
             else
+            {
                 Exec(_delayed_command_id);
+            }
         }
         #endregion
     }
@@ -806,11 +811,19 @@ namespace Poderosa
 
         public CommandResult Reproduce()
         {
-            if (!GApp.GlobalCommandTarget.CheckPaneCount()) return CommandResult.Failed;
+            if (!GApp.GlobalCommandTarget.CheckPaneCount())
+            {
+                return CommandResult.Failed;
+            }
+
             try
             {
                 ConnectionTag con = _connection.Reproduce();
-                if (con == null) return CommandResult.Failed; //接続失敗時はこの中でメッセージが出ている
+                if (con == null)
+                {
+                    return CommandResult.Failed; //接続失敗時はこの中でメッセージが出ている
+                }
+
                 if (_connection.IsClosed)
                 { //再接続
                     ConnectionTag old = GEnv.Connections.FindTag(_connection);
@@ -827,7 +840,10 @@ namespace Poderosa
                     GApp.GlobalCommandTarget.ActivateConnection(con.Connection);
                 }
                 else
+                {
                     GApp.GlobalCommandTarget.AddNewTerminal(con);
+                }
+
                 return CommandResult.Success;
             }
             catch (Exception ex)
@@ -872,7 +888,10 @@ namespace Poderosa
         {
             LineFeedStyleDialog dlg = new LineFeedStyleDialog(_connection);
             if (GCUtil.ShowModalDialog(GApp.Frame, dlg) == DialogResult.OK)
+            {
                 _connection.Param.LineFeedRule = dlg.LineFeedRule;
+            }
+
             return CommandResult.Success;
         }
         public CommandResult SetLogSuspended(bool suspended)
@@ -907,12 +926,18 @@ namespace Poderosa
             {
                 tag.RenderProfile = dlg.Result;
                 GApp.ConnectionHistory.ReplaceIdenticalParam(tag.Connection.Param);
-                if (tag.AttachedPane != null) tag.AttachedPane.ApplyRenderProfile(dlg.Result);
+                if (tag.AttachedPane != null)
+                {
+                    tag.AttachedPane.ApplyRenderProfile(dlg.Result);
+                }
+
                 GApp.Frame.AdjustMRUMenu();
                 return CommandResult.Success;
             }
             else
+            {
                 return CommandResult.Cancelled;
+            }
         }
 
         public CommandResult ChangeLogWithDialog()
@@ -924,7 +949,9 @@ namespace Poderosa
                 return CommandResult.Success;
             }
             else
+            {
                 return CommandResult.Cancelled;
+            }
         }
 
         public CommandResult CommentLog()
@@ -936,7 +963,9 @@ namespace Poderosa
                 return CommandResult.Success;
             }
             else
+            {
                 return CommandResult.Cancelled;
+            }
         }
 
         public CommandResult ShowServerInfo()
@@ -965,33 +994,14 @@ namespace Poderosa
                     return CommandResult.Success;
                 }
                 else
+                {
                     return CommandResult.Cancelled;
+                }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.StackTrace);
                 GUtil.Warning(GApp.Frame, ex.Message);
-                return CommandResult.Failed;
-            }
-        }
-
-        public CommandResult SerialConfig()
-        {
-            SerialTerminalConnection stc = _connection as SerialTerminalConnection;
-            if (stc == null) return CommandResult.Failed;
-
-            try
-            {
-                SerialConfigForm f = new SerialConfigForm();
-                f.ApplyParam(stc);
-                if (GCUtil.ShowModalDialog(GApp.Frame, f) == DialogResult.OK)
-                    return CommandResult.Success;
-                else
-                    return CommandResult.Cancelled;
-            }
-            catch (NotSupportedException)
-            {
-                GUtil.Warning(GApp.Frame, "[Serial Configuration] is available to only serial connection.");
                 return CommandResult.Failed;
             }
         }
@@ -1028,27 +1038,41 @@ namespace Poderosa
                 }
             }
             else
+            {
                 return CommandResult.Cancelled;
+            }
         }
 
         public override CommandResult Paste()
         {
             string value = (string)Clipboard.GetDataObject().GetData("Text");
-            if (value == null || value.Length == 0) return CommandResult.Ignored;
+            if (value == null || value.Length == 0)
+            {
+                return CommandResult.Ignored;
+            }
 
             ConnectionTag ct = GEnv.Connections.FindTag(_connection);
-            if (ct.ModalTerminalTask != null) return CommandResult.Denied;
+            if (ct.ModalTerminalTask != null)
+            {
+                return CommandResult.Denied;
+            }
 
             if (value.Length > 0x1000)
             {
                 SendingLargeText dlg = new SendingLargeText(new PasteProcessor(ct, value));
                 if (GCUtil.ShowModalDialog(GApp.Frame, dlg) == DialogResult.OK)
+                {
                     return CommandResult.Success;
+                }
                 else
+                {
                     return CommandResult.Cancelled;
+                }
             }
             else
+            {
                 return PasteMain(value);
+            }
         }
 
         public CommandResult PasteFromFile()
@@ -1061,7 +1085,9 @@ namespace Poderosa
             };
             ConnectionTag ct = GEnv.Connections.FindTag(_connection);
             if (ct.ModalTerminalTask != null)
+            {
                 return CommandResult.Denied;
+            }
 
             if (GCUtil.ShowModalDialog(GApp.Frame, dlg) == DialogResult.OK)
             {
@@ -1074,9 +1100,13 @@ namespace Poderosa
                         SendingLargeText dlg2 = new SendingLargeText(new PasteProcessor(ct, re));
                         re.Close();
                         if (GCUtil.ShowModalDialog(GApp.Frame, dlg2) == DialogResult.OK)
+                        {
                             return CommandResult.Success;
+                        }
                         else
+                        {
                             return CommandResult.Cancelled;
+                        }
                     }
                     else
                     {
@@ -1094,7 +1124,9 @@ namespace Poderosa
                 }
             }
             else
+            {
                 return CommandResult.Cancelled;
+            }
         }
         public CommandResult Exec(CID id)
         {
@@ -1138,8 +1170,6 @@ namespace Poderosa
                     return SendBreak();
                 case CID.AreYouThere:
                     return AreYouThere();
-                case CID.SerialConfig:
-                    return SerialConfig();
                 case CID.ResetTerminal:
                     return ResetTerminal();
 #if DEBUG

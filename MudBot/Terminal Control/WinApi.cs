@@ -310,34 +310,34 @@ namespace WalburySoftware
         #endregion
         #endregion
         #region stuff for process communication i'm not even using
-        const uint PROCESS_ALL_ACCESS = (uint)(0x000F0000L | 0x00100000L | 0xFFF);
-        const uint MEM_COMMIT = 0x1000;
-        const uint MEM_RELEASE = 0x8000;
-        const uint PAGE_READWRITE = 0x04;
+        private const uint PROCESS_ALL_ACCESS = (uint)(0x000F0000L | 0x00100000L | 0xFFF);
+        private const uint MEM_COMMIT = 0x1000;
+        private const uint MEM_RELEASE = 0x8000;
+        private const uint PAGE_READWRITE = 0x04;
 
         [DllImport("user32.dll")]
-        static extern bool SendMessage(IntPtr hWnd, Int32 msg, Int32 wParam, IntPtr lParam);
+        private static extern bool SendMessage(IntPtr hWnd, Int32 msg, Int32 wParam, IntPtr lParam);
 
         [DllImport("user32")]
-        static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, out int lpwdProcessID);
+        private static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, out int lpwdProcessID);
 
         [DllImport("kernel32")]
-        static extern IntPtr OpenProcess(uint dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+        private static extern IntPtr OpenProcess(uint dwDesiredAccess, bool bInheritHandle, int dwProcessId);
 
         [DllImport("kernel32")]
-        static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress, int dwSize, uint flAllocationType, uint flProtect);
+        private static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress, int dwSize, uint flAllocationType, uint flProtect);
 
         [DllImport("kernel32")]
-        static extern bool VirtualFreeEx(IntPtr hProcess, IntPtr lpAddress, int dwSize, uint dwFreeType);
+        private static extern bool VirtualFreeEx(IntPtr hProcess, IntPtr lpAddress, int dwSize, uint dwFreeType);
 
         [DllImport("kernel32")]
-        static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, ref string buffer, int dwSize, IntPtr lpNumberOfBytesWritten);
+        private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, ref string buffer, int dwSize, IntPtr lpNumberOfBytesWritten);
 
         [DllImport("kernel32")]
-        static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, IntPtr lpBuffer, int dwSize, IntPtr lpNumberOfBytesRead);
+        private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, IntPtr lpBuffer, int dwSize, IntPtr lpNumberOfBytesRead);
 
         [DllImport("kernel32")]
-        static extern bool CloseHandle(IntPtr hObject);
+        private static extern bool CloseHandle(IntPtr hObject);
         #endregion
         #region time.h stuff
         [DllImport("MSVCRT.DLL")]

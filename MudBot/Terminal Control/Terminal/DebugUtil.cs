@@ -18,7 +18,10 @@ namespace Poderosa.Toolkit
             for (int i = 0; i < length; i++)
             {
                 bld.Append(data[offset + i].ToString("X2"));
-                if ((i % 4) == 3) bld.Append(' ');
+                if ((i % 4) == 3)
+                {
+                    bld.Append(' ');
+                }
             }
             return bld.ToString();
         }

@@ -1,6 +1,6 @@
 ﻿namespace EventEngines
 {
-    class StatsEngine
+    internal class StatsEngine
     {
     }
 }

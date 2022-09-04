@@ -125,9 +125,13 @@ namespace Poderosa.Forms
         private void OnLineProcessed(int i)
         {
             if (i == -1) // finish
+            {
                 Win32.SendMessage(Handle, GConst.WMG_SENDLINE_PROGRESS, IntPtr.Zero, new IntPtr(-1));
+            }
             else
+            {
                 Win32.SendMessage(Handle, GConst.WMG_SENDLINE_PROGRESS, IntPtr.Zero, new IntPtr(i));
+            }
         }
 
         private void OnCancel(object sender, EventArgs args)

@@ -15,11 +15,9 @@ namespace Poderosa.UI
     internal class ColorPaletteDialog : Form
     {
         private bool _isClosing;
-
-        byte max = 40;
-        Panel[] panel = new Panel[40];
-
-        Color[] color = new Color[40]
+        private byte max = 40;
+        private Panel[] panel = new Panel[40];
+        private Color[] color = new Color[40]
         {
 			//row 1
 			Color.FromArgb(0,0,0), Color.FromArgb(153,51,0), Color.FromArgb(51,51,0), Color.FromArgb(0,51,0),
@@ -41,8 +39,7 @@ namespace Poderosa.UI
 			Color.FromArgb(255,153,204), Color.FromArgb(255,204,153), Color.FromArgb(255,255,153), Color.FromArgb(204,255,204),
             Color.FromArgb(204,255,255), Color.FromArgb(153,204,255), Color.FromArgb(204,153,255), Color.FromArgb(255,255,255)
         };
-
-        string[] colorName = new string[40]
+        private string[] colorName = new string[40]
         {
             "Black", "Brown", "Olive Green", "Dark Green", "Dark Teal", "Dark Blue", "Indigo", "Gray-80%",
             "Dark Red", "Orange", "Dark Yellow", "Green", "Teal", "Blue", "Blue-Gray", "Gray-50%",
@@ -50,10 +47,9 @@ namespace Poderosa.UI
             "Pink", "Gold", "Yellow", "Bright Green", "Turquoise", "Sky Blue", "Plum", "Gray-25%",
             "Rose", "Tan", "Light Yellow", "Light Green", "Light Turquoise", "Pale Blue", "Lavender", "White"
         };
-
-        Button moreColorsButton = new Button();
-        Button cancelButton = new Button();
-        Color selectedColor;
+        private Button moreColorsButton = new Button();
+        private Button cancelButton = new Button();
+        private Color selectedColor;
 
         public ColorPaletteDialog(int x, int y)
         {
@@ -88,7 +84,7 @@ namespace Poderosa.UI
             get { return selectedColor; }
         }
 
-        void BuildPalette()
+        private void BuildPalette()
         {
             byte pwidth = 16;
             byte pheight = 16;
@@ -110,7 +106,9 @@ namespace Poderosa.UI
                 Controls.Add(panel[i]);
 
                 if (x < (7 * (pwidth + pdistance)))
+                {
                     x += pwidth + pdistance;
+                }
                 else
                 {
                     x = border;
@@ -126,7 +124,7 @@ namespace Poderosa.UI
             }
         }
 
-        void moreColorsButton_Click(object sender, EventArgs e)
+        private void moreColorsButton_Click(object sender, EventArgs e)
         {
             ColorDialog colDialog = new ColorDialog
             {
@@ -134,34 +132,37 @@ namespace Poderosa.UI
             };
             DialogResult = colDialog.ShowDialog();
             if (DialogResult == DialogResult.OK)
+            {
                 selectedColor = colDialog.Color;
+            }
+
             colDialog.Dispose();
 
             _isClosing = true;
             Close();
         }
 
-        void cancelButton_Click(object sender, EventArgs e)
+        private void cancelButton_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        void OnMouseEnterPanel(object sender, EventArgs e)
+        private void OnMouseEnterPanel(object sender, EventArgs e)
         {
             DrawPanel(sender, 1);
         }
 
-        void OnMouseLeavePanel(object sender, EventArgs e)
+        private void OnMouseLeavePanel(object sender, EventArgs e)
         {
             DrawPanel(sender, 0);
         }
 
-        void OnMouseDownPanel(object sender, MouseEventArgs e)
+        private void OnMouseDownPanel(object sender, MouseEventArgs e)
         {
             DrawPanel(sender, 2);
         }
 
-        void OnMouseUpPanel(object sender, MouseEventArgs e)
+        private void OnMouseUpPanel(object sender, MouseEventArgs e)
         {
             Panel panel = (Panel)sender;
             selectedColor = panel.BackColor;
@@ -170,7 +171,7 @@ namespace Poderosa.UI
             Close();
         }
 
-        void DrawPanel(object sender, byte state)
+        private void DrawPanel(object sender, byte state)
         {
             Panel panel = (Panel)sender;
 
@@ -207,7 +208,7 @@ namespace Poderosa.UI
             g.DrawLine(pen2, p3, p4);
         }
 
-        void OnPanelPaint(Object sender, PaintEventArgs e)
+        private void OnPanelPaint(Object sender, PaintEventArgs e)
         {
             DrawPanel(sender, 0);
         }

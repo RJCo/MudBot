@@ -1,15 +1,15 @@
 ﻿namespace MudBot.Locations
 {
-    class Room
+    internal class Room
     {
-        int MapID;
-        int RoomID;
-        string Name;
-        int ShopID;
-        int NpcID;
-        int CommandID;
-        string Lair;
-        string Placed;
+        private int MapID;
+        private int RoomID;
+        private string Name;
+        private int ShopID;
+        private int NpcID;
+        private int CommandID;
+        private string Lair;
+        private string Placed;
 
         private enum Commands
         {

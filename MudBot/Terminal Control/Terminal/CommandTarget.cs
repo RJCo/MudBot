@@ -34,11 +34,16 @@ namespace Poderosa
             {
                 string t = GEnv.TextSelection.GetSelectedText();
                 if (t.Length > 0)
+                {
                     CopyToClipboard(t);
+                }
+
                 return CommandResult.Success;
             }
             else
+            {
                 return CommandResult.Ignored;
+            }
         }
         public CommandResult CopyAsLook()
         {
@@ -46,11 +51,16 @@ namespace Poderosa
             {
                 string t = GEnv.TextSelection.GetSelectedTextAsLook();
                 if (t.Length > 0)
+                {
                     CopyToClipboard(t);
+                }
+
                 return CommandResult.Success;
             }
             else
+            {
                 return CommandResult.Ignored;
+            }
         }
         private void CopyToClipboard(string data)
         {
@@ -101,10 +111,15 @@ namespace Poderosa
 
         public CommandResult Disconnect()
         {
-            if (_connection.IsClosed) return CommandResult.Ignored;
+            if (_connection.IsClosed)
+            {
+                return CommandResult.Ignored;
+            }
 
             if (GEnv.Options.CloseOnDisconnect)
+            {
                 Close();
+            }
             else
             {
                 _connection.Disconnect();
@@ -128,7 +143,10 @@ namespace Poderosa
             bool active = _connection == GEnv.Connections.ActiveConnection;
             ConnectionTag ct = GEnv.Connections.FindTag(_connection);
             //Debug.WriteLine("ct==null? " + (ct==null));
-            if (ct == null) return CommandResult.Ignored;
+            if (ct == null)
+            {
+                return CommandResult.Ignored;
+            }
 
             TerminalPane pane = ct.AttachedPane;
             ct.IsTerminated = true;
@@ -137,9 +155,15 @@ namespace Poderosa
             GEnv.Connections.Remove(_connection);
             if (next != null)
             {
-                if (pane != null) pane.Attach(next);
+                if (pane != null)
+                {
+                    pane.Attach(next);
+                }
+
                 if (active)
+                {
                     GEnv.Frame.ActivateConnection(next); //もともとアクティブでない接続が切れたときは変更しない
+                }
             }
             else
             {
@@ -152,13 +176,18 @@ namespace Poderosa
             }
 
             if (GEnv.Options.QuitAppWithLastPane && GEnv.Connections.Count == 0)
+            {
                 GEnv.Frame.AsForm().Close();
+            }
 
             return CommandResult.Success;
         }
         public CommandResult Resize(int width, int height)
         {
-            if (_connection.IsClosed) return CommandResult.Ignored;
+            if (_connection.IsClosed)
+            {
+                return CommandResult.Ignored;
+            }
             // this line was aborting up the resize event
             // What is it for?
             //if(GEnv.Connections.FindTag(_connection).ModalTerminalTask!=null) return CommandResult.Denied;
@@ -172,7 +201,9 @@ namespace Poderosa
             ConnectionTag tag = GEnv.Connections.FindTag(_connection);
             GEnv.Frame.ActivateConnection(tag);
             if (tag.Pane == null)
+            {
                 return CommandResult.Failed;
+            }
             else
             {
                 tag.Pane.AsControl().Focus();
@@ -234,14 +265,25 @@ namespace Poderosa
         public CommandResult ToggleFreeSelectionMode()
         {
             TerminalPane p = GEnv.Connections.FindTag(_connection).Pane;
-            if (p == null) return CommandResult.Ignored;
+            if (p == null)
+            {
+                return CommandResult.Ignored;
+            }
+
             p.ToggleFreeSelectionMode();
             return CommandResult.Success;
         }
         public CommandResult AreYouThere()
         {
-            if (_connection.IsClosed) return CommandResult.Ignored;
-            if (GEnv.Connections.FindTag(_connection).ModalTerminalTask != null) return CommandResult.Denied;
+            if (_connection.IsClosed)
+            {
+                return CommandResult.Ignored;
+            }
+
+            if (GEnv.Connections.FindTag(_connection).ModalTerminalTask != null)
+            {
+                return CommandResult.Denied;
+            }
 
             try
             {
@@ -256,8 +298,15 @@ namespace Poderosa
         }
         public CommandResult SendBreak()
         {
-            if (_connection.IsClosed) return CommandResult.Ignored;
-            if (GEnv.Connections.FindTag(_connection).ModalTerminalTask != null) return CommandResult.Denied;
+            if (_connection.IsClosed)
+            {
+                return CommandResult.Ignored;
+            }
+
+            if (GEnv.Connections.FindTag(_connection).ModalTerminalTask != null)
+            {
+                return CommandResult.Denied;
+            }
 
             try
             {
@@ -281,10 +330,17 @@ namespace Poderosa
         public virtual CommandResult Paste()
         {
             string value = (string)Clipboard.GetDataObject().GetData("Text");
-            if (value == null || value.Length == 0) return CommandResult.Ignored;
+            if (value == null || value.Length == 0)
+            {
+                return CommandResult.Ignored;
+            }
 
             ConnectionTag tag = GEnv.Connections.FindTag(_connection);
-            if (tag.ModalTerminalTask != null) return CommandResult.Denied;
+            if (tag.ModalTerminalTask != null)
+            {
+                return CommandResult.Denied;
+            }
+
             return PasteMain(value);
         }
 

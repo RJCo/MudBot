@@ -300,9 +300,13 @@ namespace Poderosa.UI
 
                 // check the menuitem status
                 if (Enabled)
+                {
                     textBrush = _textBrush;
+                }
                 else
+                {
                     textBrush = _textDisabledBrush;
+                }
 
                 // Draw the text
                 e.Graphics.DrawString(Text, Consts.menuFont, textBrush, rect, sf);
@@ -339,10 +343,12 @@ namespace Poderosa.UI
 
                 // draw the text
                 if (Enabled)
+                {
                     e.Graphics.DrawString(shortcut_text,
                         Consts.menuFont,
                         _textBrush,
                         rect, sf);
+                }
                 else
                 {
                     // if menuItem is disabled
@@ -468,9 +474,13 @@ namespace Poderosa.UI
 
             // fill the rectangle
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+            {
                 e.Graphics.FillRectangle(new SolidBrush(Consts.DarkCheckBoxColor), rect);
+            }
             else
+            {
                 e.Graphics.FillRectangle(new SolidBrush(Consts.CheckBoxColor), rect);
+            }
 
             // draw borders
             e.Graphics.DrawRectangle(_menuDarkPen, rect);
@@ -505,16 +515,26 @@ namespace Poderosa.UI
             }
             if ((modifiers & Keys.Shift) != Keys.None)
             {
-                if (b.Length > 0) b.Append('+');
+                if (b.Length > 0)
+                {
+                    b.Append('+');
+                }
+
                 b.Append("Shift");
             }
             if ((modifiers & Keys.Alt) != Keys.None)
             {
-                if (b.Length > 0) b.Append('+');
+                if (b.Length > 0)
+                {
+                    b.Append('+');
+                }
+
                 b.Append("Alt");
             }
             if (b.Length > 0)
+            {
                 b.Append('+');
+            }
 
             b.Append(UILibUtil.KeyString(key & Keys.KeyCode));
             return b.ToString();

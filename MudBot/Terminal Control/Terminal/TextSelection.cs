@@ -239,16 +239,22 @@ namespace Poderosa.Text
             if (_pivotType == RangeType.Line)
             {
                 if (line_id <= _forwardPivot._line)
+                {
                     col = 0;
+                }
                 else
+                {
                     col = _owner.Connection.TerminalWidth;
+                }
             }
             else
             {
                 if (line_id < _forwardPivot._line)
                 {
                     if (col < 0)
+                    {
                         col = 0;
+                    }
                     else if (col >= _owner.Connection.TerminalWidth)
                     {
                         line_id++;
@@ -258,9 +264,13 @@ namespace Poderosa.Text
                 else if (line_id == _forwardPivot._line)
                 {
                     if (col < 0)
+                    {
                         col = 0;
+                    }
                     else if (col >= _owner.Connection.TerminalWidth)
+                    {
                         col = _owner.Connection.TerminalWidth;
+                    }
                 }
                 else
                 {
@@ -270,7 +280,9 @@ namespace Poderosa.Text
                         col = _owner.Connection.TerminalWidth;
                     }
                     else if (col >= _owner.Connection.TerminalWidth)
+                    {
                         col = _owner.Connection.TerminalWidth;
+                    }
                 }
             }
         }
@@ -298,7 +310,10 @@ namespace Poderosa.Text
 
         private string GetSelectedText(NLOption opt)
         {
-            if (_owner == null || _disabledTemporary) return null;
+            if (_owner == null || _disabledTemporary)
+            {
+                return null;
+            }
 
             StringBuilder bld = new StringBuilder();
             TextPoint a = HeadPoint;
@@ -315,7 +330,10 @@ namespace Poderosa.Text
                   //末尾にNULL文字が入るケースがあるようだ
                     AppendTrim(bld, l.Text, pos, b._position - pos);
                     if (_pivotType == RangeType.Line && eol_required)
+                    {
                         bld.Append("\r\n");
+                    }
+
                     break;
                 }
                 else
@@ -325,9 +343,16 @@ namespace Poderosa.Text
                         AppendTrim(bld, l.Text, pos, l.CharLength - pos);
                     }
                     if (eol_required && bld.Length > 0) //bld.Length>0は行単位選択で余計な改行が入るのを避けるための処置
+                    {
                         bld.Append("\r\n"); //LFのみをクリップボードに持っていっても他のアプリの混乱があるだけなのでやめておく
+                    }
+
                     l = l.NextLine;
-                    if (l == null) break; //!!本来これはないはずだがクラッシュレポートのため回避
+                    if (l == null)
+                    {
+                        break; //!!本来これはないはずだがクラッシュレポートのため回避
+                    }
+
                     pos = 0;
                 }
             } while (true);
@@ -347,9 +372,16 @@ namespace Poderosa.Text
 
             while (length-- > 0)
             {
-                if (pos >= text.Length) break;
+                if (pos >= text.Length)
+                {
+                    break;
+                }
+
                 char ch = text[pos++];
-                if (ch != GLine.WIDECHAR_PAD && ch != '\0') bld.Append(ch);
+                if (ch != GLine.WIDECHAR_PAD && ch != '\0')
+                {
+                    bld.Append(ch);
+                }
             }
         }
 
@@ -376,13 +408,18 @@ namespace Poderosa.Text
                 int pos1 = p1._position;
                 int pos2 = p2._position;
                 if (pos1 == pos2)
+                {
                     return p1;
+                }
                 else
+                {
                     return pos1 < pos2 ? p1 : p2;
+                }
             }
             else
+            {
                 return id1 < id2 ? p1 : p2;
-
+            }
         }
         private static TextPoint Max(ref TextPoint p1, ref TextPoint p2)
         {
@@ -393,13 +430,18 @@ namespace Poderosa.Text
                 int pos1 = p1._position;
                 int pos2 = p2._position;
                 if (pos1 == pos2)
+                {
                     return p1;
+                }
                 else
+                {
                     return pos1 > pos2 ? p1 : p2;
+                }
             }
             else
+            {
                 return id1 > id2 ? p1 : p2;
-
+            }
         }
 
 

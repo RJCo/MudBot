@@ -77,8 +77,15 @@ namespace Poderosa.Forms
             _asciiFontList.SelectedIndex = _asciiFontList.FindStringExact(ascii.Name);
             _japaneseFontList.SelectedIndex = _japaneseFontList.FindStringExact(japanese.Name);
 
-            if (_asciiFontList.SelectedIndex == -1) _asciiFontList.SelectedIndex = _asciiFontList.FindStringExact("Courier New");
-            if (_japaneseFontList.SelectedIndex == -1) _japaneseFontList.SelectedIndex = _japaneseFontList.FindStringExact("‚l‚r ƒSƒVƒbƒN");
+            if (_asciiFontList.SelectedIndex == -1)
+            {
+                _asciiFontList.SelectedIndex = _asciiFontList.FindStringExact("Courier New");
+            }
+
+            if (_japaneseFontList.SelectedIndex == -1)
+            {
+                _japaneseFontList.SelectedIndex = _japaneseFontList.FindStringExact("‚l‚r ƒSƒVƒbƒN");
+            }
 
             _lASCIISample.Font = ascii;
             _lJapaneseSample.Font = japanese;
@@ -345,12 +352,16 @@ namespace Poderosa.Forms
                     _japaneseFontList.Items.Add(lpelfe.lfFaceName);
                     //“ú–{ŒêƒtƒHƒ“ƒg‚Å‚àASCII‚Í•K‚¸•\Ž¦‚Å‚«‚é‚Í‚¸
                     if (_asciiFontList.FindStringExact(lpelfe.lfFaceName) == -1)
+                    {
                         _asciiFontList.Items.Add(lpelfe.lfFaceName);
+                    }
                 }
                 else if (lpntme.ntmTm.tmCharSet == 0)
                 {
                     if (_asciiFontList.FindStringExact(lpelfe.lfFaceName) == -1)
+                    {
                         _asciiFontList.Items.Add(lpelfe.lfFaceName);
+                    }
                 }
             }
             return 1;
@@ -358,7 +369,11 @@ namespace Poderosa.Forms
 
         private void UpdateFontSample(object sender, EventArgs args)
         {
-            if (_ignoreEvent) return;
+            if (_ignoreEvent)
+            {
+                return;
+            }
+
             _lASCIISample.ClearType = _checkClearType.Checked;
             _lJapaneseSample.ClearType = _checkClearType.Checked;
             OnJapaneseFontChange(sender, args);
@@ -368,14 +383,22 @@ namespace Poderosa.Forms
         }
         private void OnJapaneseFontChange(object sender, EventArgs args)
         {
-            if (_ignoreEvent || _japaneseFontList.SelectedIndex == -1) return;
+            if (_ignoreEvent || _japaneseFontList.SelectedIndex == -1)
+            {
+                return;
+            }
+
             string fontname = (string)_japaneseFontList.Items[_japaneseFontList.SelectedIndex];
             _japaneseFont = GUtil.CreateFont(fontname, GetFontSize());
             _lJapaneseSample.Font = _japaneseFont;
         }
         private void OnASCIIFontChange(object sender, EventArgs args)
         {
-            if (_ignoreEvent || _asciiFontList.SelectedIndex == -1) return;
+            if (_ignoreEvent || _asciiFontList.SelectedIndex == -1)
+            {
+                return;
+            }
+
             string fontname = (string)_asciiFontList.Items[_asciiFontList.SelectedIndex];
             _asciiFont = GUtil.CreateFont(fontname, GetFontSize());
             _lASCIISample.Font = _asciiFont;
@@ -383,7 +406,9 @@ namespace Poderosa.Forms
         private void OnOK(object sender, EventArgs args)
         {
             if (!CheckFixedSizeFont("FixedSys", 14) || !CheckFixedSizeFont("Terminal", 6, 10, 14, 17, 20))
+            {
                 DialogResult = DialogResult.None;
+            }
             else
             {
                 DialogResult = DialogResult.OK;
@@ -438,10 +463,14 @@ namespace Poderosa.Forms
                     return false;
                 }
                 else
+                {
                     return true;
+                }
             }
             else
+            {
                 return true;
+            }
         }
 
         private float GetFontSize()
@@ -452,7 +481,7 @@ namespace Poderosa.Forms
 
     }
 
-    class ClearTypeAwareLabel : Label
+    internal class ClearTypeAwareLabel : Label
     {
         private bool _clearType;
         public bool ClearType

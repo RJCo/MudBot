@@ -1,6 +1,6 @@
 ﻿namespace EventEngines
 {
-    class Weapon : IItem
+    internal class Weapon : IItem
     {
     }
 }

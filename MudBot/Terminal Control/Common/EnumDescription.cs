@@ -47,7 +47,11 @@ namespace Poderosa.Toolkit
                 if (fi != null && fi.IsStatic && fi.IsPublic)
                 {
                     int intVal = (int)fi.GetValue(null); //int以外をベースにしているEnum値はサポート外
-                    if (intVal != expected) throw new Exception("unexpected enum value order");
+                    if (intVal != expected)
+                    {
+                        throw new Exception("unexpected enum value order");
+                    }
+
                     EnumValueAttribute a = (EnumValueAttribute)(fi.GetCustomAttributes(typeof(EnumValueAttribute), false)[0]);
 
                     string desc = a.Description;
@@ -72,11 +76,18 @@ namespace Poderosa.Toolkit
         }
         public virtual ValueType FromDescription(string v, ValueType d)
         {
-            if (v == null) return d;
+            if (v == null)
+            {
+                return d;
+            }
+
             IDictionaryEnumerator ie = _descToValue.GetEnumerator();
             while (ie.MoveNext())
             {
-                if (v == LoadString((string)ie.Key)) return (ValueType)ie.Value;
+                if (v == LoadString((string)ie.Key))
+                {
+                    return (ValueType)ie.Value;
+                }
             }
             return d;
         }
@@ -90,7 +101,11 @@ namespace Poderosa.Toolkit
         }
         public virtual ValueType FromName(string v, ValueType d)
         {
-            if (v == null) return d;
+            if (v == null)
+            {
+                return d;
+            }
+
             ValueType t = (ValueType)_nameToValue[v];
             return t == null ? d : t;
         }
@@ -99,7 +114,10 @@ namespace Poderosa.Toolkit
         {
             string[] r = new string[_descriptions.Length];
             for (int i = 0; i < r.Length; i++)
+            {
                 r[i] = LoadString(_descriptions[i]);
+            }
+
             return r;
         }
         private string LoadString(string id)

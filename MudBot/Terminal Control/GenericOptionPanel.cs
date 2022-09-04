@@ -284,7 +284,10 @@ namespace Poderosa.Forms
             _actionOnLaunchBox.Items.Add("Caption.OptionDialog.ActionOnLaunch.Nothing");
             _actionOnLaunchBox.Items.Add("Caption.OptionDialog.ActionOnLaunch.NewConnection");
             for (int i = 0; i < GApp.MacroManager.ModuleCount; i++)
+            {
                 _actionOnLaunchBox.Items.Add("Caption.OptionDialog.ActionOnLaunch.Macro" + GApp.MacroManager.GetModule(i).Title);
+            }
+
             _actionOnLaunchBox.SelectedIndex = ToActionOnLaunchIndex(options.ActionOnLaunch);
             _showToolBar.Checked = options.ShowToolBar;
             _showTabBar.Checked = options.ShowTabBar;
@@ -325,7 +328,9 @@ namespace Poderosa.Forms
                 if (options.Language == Language.Japanese && GApp.Options.EnvLanguage == Language.English)
                 {
                     if (GUtil.AskUserYesNo(this, "Message.OptionDialog.AskJapaneseFont") == DialogResult.No)
+                    {
                         return false;
+                    }
                 }
 
                 successful = true;
@@ -360,20 +365,32 @@ namespace Poderosa.Forms
         private static int ToActionOnLaunchIndex(CID action)
         {
             if (action == CID.NOP)
+            {
                 return 0;
+            }
             else if (action == CID.NewConnection)
+            {
                 return 1;
+            }
             else //CID.ExecMacro
+            {
                 return 2 + (int)(action - CID.ExecMacro);
+            }
         }
         private static CID ToActionOnLaunchCID(int n)
         {
             if (n == 0)
+            {
                 return CID.NOP;
+            }
             else if (n == 1)
+            {
                 return CID.NewConnection;
+            }
             else
+            {
                 return CID.ExecMacro + (n - 2);
+            }
         }
     }
 }

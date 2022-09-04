@@ -18,9 +18,9 @@ namespace Granados.Crypto
 
     public class Blowfish
     {
-        byte[] IV;
-        byte[] enc;
-        byte[] dec;
+        private byte[] IV;
+        private byte[] enc;
+        private byte[] dec;
 
         private const int BLOCK_SIZE = 8; // bytes in a data-block
 

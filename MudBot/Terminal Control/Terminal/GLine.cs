@@ -154,7 +154,10 @@ namespace Poderosa.Text
         {
             GWord w = new GWord(_decoration, _offset, _charGroup);
             if (_next != null)
+            {
                 w._next = _next.DeepClone();
+            }
+
             return w;
         }
 
@@ -210,13 +213,19 @@ namespace Poderosa.Text
         public void Clear()
         {
             for (int i = 0; i < _text.Length; i++)
+            {
                 _text[i] = '\0';
+            }
+
             _firstWord = new GWord(TextDecoration.ClonedDefault(), 0, CharGroup.SingleByte);
         }
         internal void Clear(TextDecoration dec)
         {
             for (int i = 0; i < _text.Length; i++)
+            {
                 _text[i] = ' ';
+            }
+
             _firstWord = new GWord(dec, 0, CharGroup.SingleByte);
         }
         public int Length
@@ -253,7 +262,10 @@ namespace Poderosa.Text
                 int m = _text.Length;
                 for (i = 0; i < m; i++)
                 {
-                    if (_text[i] == '\0') break;
+                    if (_text[i] == '\0')
+                    {
+                        break;
+                    }
                 }
                 return i;
             }
@@ -263,7 +275,11 @@ namespace Poderosa.Text
             get
             {
                 int n = _text.Length - 1;
-                while (n >= 0 && _text[n] == '\0') n--;
+                while (n >= 0 && _text[n] == '\0')
+                {
+                    n--;
+                }
+
                 return n + 1;
             }
         }
@@ -274,7 +290,11 @@ namespace Poderosa.Text
             int v = ToCharGroupForWordBreak(_text[pos]);
             while (pos >= 0)
             {
-                if (v != ToCharGroupForWordBreak(_text[pos])) return pos;
+                if (v != ToCharGroupForWordBreak(_text[pos]))
+                {
+                    return pos;
+                }
+
                 pos--;
             }
             return -1;
@@ -284,7 +304,11 @@ namespace Poderosa.Text
             int v = ToCharGroupForWordBreak(_text[pos]);
             while (pos < _text.Length)
             {
-                if (v != ToCharGroupForWordBreak(_text[pos])) return pos;
+                if (v != ToCharGroupForWordBreak(_text[pos]))
+                {
+                    return pos;
+                }
+
                 pos++;
             }
             return _text.Length;
@@ -292,13 +316,21 @@ namespace Poderosa.Text
         private static int ToCharGroupForWordBreak(char ch)
         {
             if (('0' <= ch && ch <= '9') || ('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z') || ch == '_' || GEnv.Options.AdditionalWordElement.IndexOf(ch) != -1)
+            {
                 return 1;
+            }
             else if (ch <= 0x20 || ch == 0x40)
+            {
                 return 2;
+            }
             else if (ch <= 0x100)
+            {
                 return 3;
+            }
             else //さらにここをUnicodeCategory等をみて適当にこしらえることもできるが
+            {
                 return 4;
+            }
         }
 
 
@@ -352,7 +384,10 @@ namespace Poderosa.Text
 
         internal void ExpandBuffer(int length)
         {
-            if (length <= _text.Length) return;
+            if (length <= _text.Length)
+            {
+                return;
+            }
 
             char[] current = _text;
             _text = new char[length];
@@ -361,7 +396,11 @@ namespace Poderosa.Text
 
         internal void Render(IntPtr hdc, RenderParameter param, RenderProfile prof, int y)
         {
-            if (_text[0] == '\0') return; //何も描かなくてよい
+            if (_text[0] == '\0')
+            {
+                return; //何も描かなくてよい
+            }
+
             float fx = (float)param.TargetRect.Left;
 
             RectangleF rect = new RectangleF
@@ -402,19 +441,27 @@ namespace Poderosa.Text
                 {
                     //if(dec.Bold || (!prof.UsingIdenticalFont && word.CharGroup==CharGroup.TwoBytes))
                     if (dec.Bold || word.CharGroup == CharGroup.TwoBytes) //同じフォント指定でも日本語が半角の２倍でない場合あり。パフォーマンス問題はクリアされつつあるので確実に１文字ずつ描画
+                    {
                         DrawStringByOneChar2(hdc, word, display_length, bkbrush, rect.X, iy, prof);
+                    }
                     else
+                    {
                         DrawWord(hdc, ix, iy, word); //いまやアホな描画エンジンの問題からは解放された！
+                    }
                 }
                 //Debug.WriteLine("PW="+p.Pitch.Width+",TL="+(pb.Text.Length*p.Pitch.Width)+", real="+g.MeasureString(pb.Text, p.Font).Width);
                 if (dec.Underline)
+                {
                     DrawUnderline(hdc, forecolorref, ix, iy + (int)prof.Pitch.Height - 1, (int)(prof.Pitch.Width * display_length));
+                }
 
                 fx += prof.Pitch.Width * display_length;
                 word = word.Next;
-                if (bkbrush != IntPtr.Zero) Win32.DeleteObject(bkbrush);
+                if (bkbrush != IntPtr.Zero)
+                {
+                    Win32.DeleteObject(bkbrush);
+                }
             }
-
         }
 
         private void DrawUnderline(IntPtr hdc, uint col, int x, int y, int length)
@@ -475,8 +522,16 @@ namespace Poderosa.Text
             for (int i = word.Offset; i < nextoffset; i++)
             {
                 char ch = _text[i];
-                if (ch == '\0') break;
-                if (ch == WIDECHAR_PAD) continue;
+                if (ch == '\0')
+                {
+                    break;
+                }
+
+                if (ch == WIDECHAR_PAD)
+                {
+                    continue;
+                }
+
                 unsafe
                 {
                     Win32.TextOut(hdc, (int)fx, y, &ch, 1);
@@ -495,7 +550,9 @@ namespace Poderosa.Text
         {
             int nextoffset = WordNextOffset(word);
             if (nextoffset == 0)
+            {
                 return "";
+            }
             else
             {
                 bool last_is_space = false;
@@ -504,9 +561,13 @@ namespace Poderosa.Text
                 {
                     last_is_space = _text[nextoffset - 1] == ' ';
                     if (last_is_space)
+                    {
                         return new string(_text, word.Offset, nextoffset - word.Offset) + '\t';
+                    }
                     else
+                    {
                         return new string(_text, word.Offset, nextoffset - word.Offset);
+                    }
                 }
                 else
                 {
@@ -524,7 +585,9 @@ namespace Poderosa.Text
                     }
 
                     if (last_is_space)
+                    {
                         buf[i++] = (char)'\t';
+                    }
 
                     return new string(buf, 0, i);
                 }
@@ -535,12 +598,16 @@ namespace Poderosa.Text
         {
             int nextoffset = WordNextOffset(word);
             if (nextoffset == 0)
+            {
                 return "";
+            }
             else
             {
                 Debug.Assert(nextoffset - word.Offset >= 0);
                 if (word.CharGroup == CharGroup.SingleByte)
+                {
                     return new string(_text, word.Offset, nextoffset - word.Offset);
+                }
                 else
                 {
                     char[] buf = new char[256];
@@ -549,7 +616,10 @@ namespace Poderosa.Text
                     {
                         char ch = _text[o];
                         if (ch != WIDECHAR_PAD)
+                        {
                             buf[i++] = ch;
+                        }
+
                         o++;
                     }
                     return new string(buf, 0, i);
@@ -568,7 +638,9 @@ namespace Poderosa.Text
                 return l;
             }
             else
+            {
                 return cache;
+            }
         }
 
         internal int WordNextOffset(GWord word)
@@ -581,7 +653,10 @@ namespace Poderosa.Text
                 {
                     int i = _text.Length - 1;
                     while (i >= 0 && _text[i] == '\0')
+                    {
                         i--;
+                    }
+
                     word.nextOffsetCache = i + 1;
                     return i + 1;
                 }
@@ -592,14 +667,20 @@ namespace Poderosa.Text
                 }
             }
             else
+            {
                 return cache;
+            }
         }
         internal void Append(GWord w)
         {
             if (_firstWord == null)
+            {
                 _firstWord = w;
+            }
             else
+            {
                 LastWord.Next = w;
+            }
         }
         public GWord LastWord
         {
@@ -607,7 +688,10 @@ namespace Poderosa.Text
             {
                 GWord w = _firstWord;
                 while (w.Next != null)
+                {
                     w = w.Next;
+                }
+
                 return w;
             }
         }
@@ -618,7 +702,11 @@ namespace Poderosa.Text
         internal GLine InverseCaret(int index, bool inverse, bool underline)
         {
             ExpandBuffer(index + 1);
-            if (_text[index] == WIDECHAR_PAD) index--;
+            if (_text[index] == WIDECHAR_PAD)
+            {
+                index--;
+            }
+
             GLine ret = new GLine(_text, null)
             {
                 ID = _id,
@@ -645,7 +733,11 @@ namespace Poderosa.Text
                         //色つきキャレットのサポート
                         dec.ToCaretStyle();
                     }
-                    if (underline) dec.Underline = true;
+                    if (underline)
+                    {
+                        dec.Underline = true;
+                    }
+
                     GWord mid = new GWord(dec, index, w.CharGroup);
                     ret.Append(mid);
 
@@ -656,7 +748,9 @@ namespace Poderosa.Text
                     }
                 }
                 else
+                {
                     ret.Append(w.StandAloneClone());
+                }
 
                 w = w.Next;
             }
@@ -674,20 +768,30 @@ namespace Poderosa.Text
                 {
                     dec.ToCaretStyle();
                 }
-                if (underline) dec.Underline = true;
+                if (underline)
+                {
+                    dec.Underline = true;
+                }
+
                 ret.Append(new GWord(dec, index, CharGroup.SingleByte));
             }
 
             return ret;
-
         }
 
         internal GLine InverseRange(int from, int to)
         {
             ExpandBuffer(Math.Max(from + 1, to)); //激しくリサイズしたときなどにこの条件が満たせないことがある
             Debug.Assert(from >= 0 && from < _text.Length);
-            if (from < _text.Length && _text[from] == WIDECHAR_PAD) from--;
-            if (to > 0 && to - 1 < _text.Length && _text[to - 1] == WIDECHAR_PAD) to--;
+            if (from < _text.Length && _text[from] == WIDECHAR_PAD)
+            {
+                from--;
+            }
+
+            if (to > 0 && to - 1 < _text.Length && _text[to - 1] == WIDECHAR_PAD)
+            {
+                to--;
+            }
 
             GLine ret = new GLine(_text, null)
             {
@@ -732,7 +836,10 @@ namespace Poderosa.Text
                 }
             }
 
-            if (to < dec.Length && dec[to] == null) dec[to] = original;
+            if (to < dec.Length && dec[to] == null)
+            {
+                dec[to] = original;
+            }
 
             //これに従ってGWordを作る
             w = null;
@@ -742,7 +849,11 @@ namespace Poderosa.Text
                 if (dec[i] != null && ch != '\0')
                 {
                     int j = i;
-                    if (ch == WIDECHAR_PAD) j++;
+                    if (ch == WIDECHAR_PAD)
+                    {
+                        j++;
+                    }
+
                     GWord ww = new GWord(dec[i], j, CalcCharGroup(ch))
                     {
                         Next = w
@@ -767,9 +878,13 @@ namespace Poderosa.Text
                 int t = i + 0x80;
                 //    §         ¨         °         ±         ´         ¶          ×         ÷
                 if (t == 0xA7 || t == 0xA8 || t == 0xB0 || t == 0xB1 || t == 0xB4 || t == 0xB6 || t == 0xD7 || t == 0xF7)
+                {
                     _length_map_0x80_0xFF[i] = 2;
+                }
                 else
+                {
                     _length_map_0x80_0xFF[i] = 1;
+                }
             }
 
             //全角半角混在ゾーン
@@ -817,32 +932,48 @@ namespace Poderosa.Text
             if (ch >= 0x100)
             {
                 if (0xFF61 <= ch && ch <= 0xFF9F) //半角カナ
+                {
                     return 1;
+                }
                 else if (0x2500 <= ch && ch <= 0x25FF) //罫線等特殊記号
+                {
                     return _length_map_0x2500_0x25FF[ch - 0x2500];
+                }
                 else
+                {
                     return 2;
+                }
             }
             else if (ch >= 0x80)
             {
                 return _length_map_0x80_0xFF[ch - 0x80];
             }
             else
+            {
                 return 1; //本当はtabなどあるかもしれないのでもう少し真面目に計算すべき
+            }
         }
         //ASCIIか日本語文字か フォントの選択に使う
         internal static CharGroup CalcCharGroup(char ch)
         {
             if (ch < 0x80)
+            {
                 return CharGroup.SingleByte;
+            }
             else if (ch < 0x100)
+            {
                 return _length_map_0x80_0xFF[ch - 0x80] == 1 ? CharGroup.SingleByte : CharGroup.TwoBytes;
+            }
             else
             {
                 if (0x2500 <= ch && ch <= 0x25FF) //罫線は日本語フォントは使わない
+                {
                     return _length_map_0x2500_0x25FF[ch - 0x2500] == 1 ? CharGroup.SingleByte : CharGroup.TwoBytes;
+                }
                 else
+                {
                     return CharGroup.TwoBytes;
+                }
             }
         }
     }
@@ -883,8 +1014,15 @@ namespace Poderosa.Text
             }
             else
             {
-                for (int i = 0; i < _decorations.Length; i++) _decorations[i] = null;
-                for (int i = 0; i < _text.Length; i++) _text[i] = '\0';
+                for (int i = 0; i < _decorations.Length; i++)
+                {
+                    _decorations[i] = null;
+                }
+
+                for (int i = 0; i < _text.Length; i++)
+                {
+                    _text[i] = '\0';
+                }
             }
             _caretColumn = 0;
             _eolType = EOLType.Continue;
@@ -902,7 +1040,9 @@ namespace Poderosa.Text
                 _caretColumn = value;
                 value--;
                 while (value >= 0 && _text[value] == '\0')
+                {
                     _text[value--] = ' ';
+                }
             }
         }
 
@@ -954,7 +1094,10 @@ namespace Poderosa.Text
             {
                 int nextoffset = line.WordNextOffset(w);
                 while (n < nextoffset)
+                {
                     _decorations[n++] = w.Decoration;
+                }
+
                 w = w.Next;
             }
 
@@ -972,7 +1115,10 @@ namespace Poderosa.Text
 
         public void ExpandBuffer(int length)
         {
-            if (length <= _text.Length) return;
+            if (length <= _text.Length)
+            {
+                return;
+            }
 
             char[] current = _text;
             _text = new char[length];
@@ -1002,7 +1148,11 @@ namespace Poderosa.Text
                     if (GLine.CalcDisplayLength(ch) == 1)
                     {
                         //全角の上に半角を書いた場合、隣にスペースを入れないと表示が乱れる
-                        if (_caretColumn + 1 < _text.Length) _text[_caretColumn + 1] = ' ';
+                        if (_caretColumn + 1 < _text.Length)
+                        {
+                            _text[_caretColumn + 1] = ' ';
+                        }
+
                         _caretColumn++;
                     }
                     else
@@ -1019,13 +1169,21 @@ namespace Poderosa.Text
                     if (GLine.CalcDisplayLength(ch) == 2)
                     {
                         if (GLine.CalcDisplayLength(_text[_caretColumn + 1]) == 2)
-                            if (_caretColumn + 2 < _text.Length) _text[_caretColumn + 2] = ' ';
+                        {
+                            if (_caretColumn + 2 < _text.Length)
+                            {
+                                _text[_caretColumn + 2] = ' ';
+                            }
+                        }
+
                         _text[_caretColumn + 1] = GLine.WIDECHAR_PAD;
                         _decorations[_caretColumn + 1] = _decorations[_caretColumn];
                         _caretColumn += 2;
                     }
                     else
+                    {
                         _caretColumn++;
+                    }
                 }
             }
             else
@@ -1035,19 +1193,29 @@ namespace Poderosa.Text
                 if (GLine.CalcDisplayLength(ch) == 2)
                 {
                     if (GLine.CalcDisplayLength(_text[_caretColumn + 1]) == 2) //半角、全角となっているところに全角を書いたら
-                        if (_caretColumn + 2 < _text.Length) _text[_caretColumn + 2] = ' ';
+                    {
+                        if (_caretColumn + 2 < _text.Length)
+                        {
+                            _text[_caretColumn + 2] = ' ';
+                        }
+                    }
+
                     _text[_caretColumn + 1] = GLine.WIDECHAR_PAD;
                     _decorations[_caretColumn + 1] = _decorations[_caretColumn];
                     _caretColumn += 2;
                 }
                 else
+                {
                     _caretColumn++; //これが最もcommonなケースだが
+                }
             }
         }
         public void SetDecoration(TextDecoration dec)
         {
             if (_caretColumn < _decorations.Length)
+            {
                 _decorations[_caretColumn] = dec;
+            }
         }
 
         public char CharAt(int index)
@@ -1073,7 +1241,11 @@ namespace Poderosa.Text
         }
         public void FillSpace(int from, int to)
         {
-            if (to > _text.Length) to = _text.Length;
+            if (to > _text.Length)
+            {
+                to = _text.Length;
+            }
+
             for (int i = from; i < to; i++)
             {
                 _text[i] = ' ';
@@ -1082,7 +1254,11 @@ namespace Poderosa.Text
         }
         public void FillSpace(int from, int to, TextDecoration dec)
         {
-            if (to > _text.Length) to = _text.Length;
+            if (to > _text.Length)
+            {
+                to = _text.Length;
+            }
+
             for (int i = from; i < to; i++)
             {
                 _text[i] = ' ';
@@ -1137,13 +1313,23 @@ namespace Poderosa.Text
             for (int offset = 1; offset < m; offset++)
             {
                 char ch = _text[offset];
-                if (ch == '\0') break;
-                else if (ch == GLine.WIDECHAR_PAD) continue;
+                if (ch == '\0')
+                {
+                    break;
+                }
+                else if (ch == GLine.WIDECHAR_PAD)
+                {
+                    continue;
+                }
 
                 TextDecoration dec = _decorations[offset];
                 if (_decorations[offset - 1] != dec || w.CharGroup != GLine.CalcCharGroup(ch))
                 {
-                    if (dec == null) dec = TextDecoration.ClonedDefault(); //!!本当はここがnullになっているのはありえないはず。後で調査すること
+                    if (dec == null)
+                    {
+                        dec = TextDecoration.ClonedDefault(); //!!本当はここがnullになっているのはありえないはず。後で調査すること
+                    }
+
                     GWord ww = new GWord(dec, offset, GLine.CalcCharGroup(ch));
                     w.Next = ww;
                     w = ww;
@@ -1186,8 +1372,15 @@ namespace Poderosa.Text
             for (int i = 0; i < d.Length; i++)
             {
                 char ch = d[i];
-                if (ch == '\0') break;
-                if (ch != GLine.WIDECHAR_PAD) bld.Append(ch);
+                if (ch == '\0')
+                {
+                    break;
+                }
+
+                if (ch != GLine.WIDECHAR_PAD)
+                {
+                    bld.Append(ch);
+                }
             }
             return bld.ToString();
         }

@@ -71,7 +71,11 @@ namespace Poderosa.Forms
             }
             set
             {
-                if (_executing) throw new Exception("illegal!");
+                if (_executing)
+                {
+                    throw new Exception("illegal!");
+                }
+
                 _connectionTag = value;
                 FormatText();
             }
@@ -217,7 +221,9 @@ namespace Poderosa.Forms
             }
             dlg.Filter = "All Files(*)|*";
             if (GCUtil.ShowModalDialog(this, dlg) == DialogResult.OK)
+            {
                 _fileNameBox.Text = dlg.FileName;
+            }
         }
 
         private void OnOK(object sedner, EventArgs args)
@@ -226,11 +232,17 @@ namespace Poderosa.Forms
             DialogResult = DialogResult.None;
             if (_receiving)
             {
-                if (!StartReceive()) return;
+                if (!StartReceive())
+                {
+                    return;
+                }
             }
             else
             {
-                if (!StartSend()) return;
+                if (!StartSend())
+                {
+                    return;
+                }
             }
 
             _executing = true;
@@ -290,14 +302,22 @@ namespace Poderosa.Forms
         private void OnCancel(object sender, EventArgs args)
         {
             if (_executing)
+            {
                 Exit();
+            }
             else
+            {
                 Close();
+            }
         }
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-            if (_executing) Exit();
+            if (_executing)
+            {
+                Exit();
+            }
+
             GApp.Frame.XModemDialog = null;
         }
 
@@ -306,9 +326,13 @@ namespace Poderosa.Forms
             if (wparam == XModem.NOTIFY_PROGRESS)
             {
                 if (_receiving)
+                {
                     _progressText.Text = String.Format("Caption.XModemDialog.ReceptionProgress", lparam);
+                }
                 else
+                {
                     _progressText.Text = String.Format("Caption.XModemDialog.TransmissionProgress", lparam);
+                }
             }
             else
             {
@@ -317,7 +341,9 @@ namespace Poderosa.Forms
                 _progressText.Text = String.Format("Caption.XModemDialog.InitialPrompt", _receiving ? "Common.Transmission" : "Common.Reception".ToLower());
                 Exit();
                 if (wparam == XModem.NOTIFY_SUCCESS)
+                {
                     Close();
+                }
             }
 
         }
@@ -326,7 +352,9 @@ namespace Poderosa.Forms
         {
             base.WndProc(ref m);
             if (m.Msg == GConst.WMG_XMODEM_UPDATE_STATUS)
+            {
                 UpdateStatusText(m.WParam.ToInt32(), m.LParam.ToInt32());
+            }
         }
 
     }

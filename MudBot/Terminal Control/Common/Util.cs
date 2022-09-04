@@ -48,7 +48,9 @@ namespace Poderosa.UI
         {
             int ik = (int)key;
             if ((int)Keys.D0 <= ik && ik <= (int)Keys.D9)
+            {
                 return new string((char)('0' + (ik - (int)Keys.D0)), 1);
+            }
             else
             {
                 switch (key)
@@ -99,16 +101,26 @@ namespace Poderosa.UI
             }
             if ((modifiers & Keys.Shift) != Keys.None)
             {
-                if (b.Length > 0) b.Append(delimiter);
+                if (b.Length > 0)
+                {
+                    b.Append(delimiter);
+                }
+
                 b.Append("Shift");
             }
             if ((modifiers & Keys.Alt) != Keys.None)
             {
-                if (b.Length > 0) b.Append(delimiter);
+                if (b.Length > 0)
+                {
+                    b.Append(delimiter);
+                }
+
                 b.Append("Alt");
             }
             if (b.Length > 0)
+            {
                 b.Append(delimiter);
+            }
 
             b.Append(KeyString(body));
             return b.ToString();

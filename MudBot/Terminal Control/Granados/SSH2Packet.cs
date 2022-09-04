@@ -59,10 +59,14 @@ namespace Granados.SSHCV2
             WriteTo(buf, 0, false);
 
             if (cipher != null)
+            {
                 cipher.Encrypt(buf, 0, bodylen, buf, 0);
+            }
 
             if (_mac != null)
+            {
                 Array.Copy(_mac, 0, buf, bodylen, _mac.Length);
+            }
 
             strm.Write(buf, 0, buf.Length);
             strm.Flush();
@@ -74,14 +78,20 @@ namespace Granados.SSHCV2
             Array.Copy(_payload, 0, buf, offset + 5, _payload.Length);
             Array.Copy(_padding, 0, buf, offset + 5 + _payload.Length, _padding.Length);
             if (includes_mac && _mac != null)
+            {
                 Array.Copy(_mac, 0, buf, offset + 5 + _payload.Length + _padding.Length, _mac.Length);
+            }
         }
 
         public static SSH2Packet FromPlainPayload(byte[] payload, int blocksize, Random rnd)
         {
             SSH2Packet p = new SSH2Packet();
             int r = 11 - payload.Length % blocksize;
-            while (r < 4) r += blocksize;
+            while (r < 4)
+            {
+                r += blocksize;
+            }
+
             p._padding = new byte[r]; //block size is 8, and padding length is at least 4 bytes
             rnd.NextBytes(p._padding);
             p._payload = payload;
@@ -95,11 +105,19 @@ namespace Granados.SSHCV2
             {
                 _packetLength = SSHUtil.ReadInt32(buffer, offset)
             };
-            if (p._packetLength <= 0 || p._packetLength >= MAX_PACKET_LENGTH) throw new SSHException(String.Format("packet size {0} is invalid", p._packetLength));
+            if (p._packetLength <= 0 || p._packetLength >= MAX_PACKET_LENGTH)
+            {
+                throw new SSHException(String.Format("packet size {0} is invalid", p._packetLength));
+            }
+
             offset += 4;
 
             byte pl = buffer[offset++];
-            if (pl < 4) throw new SSHException(String.Format("padding length {0} is invalid", pl));
+            if (pl < 4)
+            {
+                throw new SSHException(String.Format("padding length {0} is invalid", pl));
+            }
+
             p._payload = new byte[p._packetLength - 1 - pl];
             Array.Copy(buffer, offset, p._payload, 0, p._payload.Length);
             return p;
@@ -112,7 +130,11 @@ namespace Granados.SSHCV2
             {
                 _packetLength = SSHUtil.ReadInt32(head, 0)
             };
-            if (p._packetLength <= 0 || p._packetLength >= MAX_PACKET_LENGTH) throw new SSHException(String.Format("packet size {0} is invalid", p._packetLength));
+            if (p._packetLength <= 0 || p._packetLength >= MAX_PACKET_LENGTH)
+            {
+                throw new SSHException(String.Format("packet size {0} is invalid", p._packetLength));
+            }
+
             SSH2DataWriter buf = new SSH2DataWriter();
             buf.Write(sequence);
             buf.Write(head);
@@ -125,7 +147,10 @@ namespace Granados.SSHCV2
             }
             byte[] result = buf.ToByteArray();
             int padding_len = (int)result[8];
-            if (padding_len < 4) throw new SSHException("padding length is invalid");
+            if (padding_len < 4)
+            {
+                throw new SSHException("padding length is invalid");
+            }
 
             byte[] payload = new byte[result.Length - 9 - padding_len];
             Array.Copy(result, 9, payload, 0, payload.Length);
@@ -135,7 +160,9 @@ namespace Granados.SSHCV2
             {
                 p._mac = mac.Calc(result);
                 if (SSHUtil.memcmp(p._mac, 0, buffer, offset, mac.Size) != 0)
+                {
                     throw new SSHException("MAC Error");
+                }
             }
             return p;
         }
@@ -161,7 +188,9 @@ namespace Granados.SSHCV2
             {
                 _packets.Add(packet);
                 if (_packets.Count > 0)
+                {
                     SetReady();
+                }
             }
         }
         public void OnError(Exception error, string msg)
@@ -185,13 +214,19 @@ namespace Granados.SSHCV2
             lock (this)
             {
                 if (_packets.Count == 0)
+                {
                     return null;
+                }
                 else
                 {
                     SSH2Packet p = null;
                     p = (SSH2Packet)_packets[0];
                     _packets.RemoveAt(0);
-                    if (_packets.Count == 0) _event.Reset();
+                    if (_packets.Count == 0)
+                    {
+                        _event.Reset();
+                    }
+
                     return p;
                 }
             }
@@ -244,12 +279,19 @@ namespace Granados.SSHCV2
         }
         public void SetSignal(bool value)
         {
-            if (_event == null) _event = new ManualResetEvent(true);
+            if (_event == null)
+            {
+                _event = new ManualResetEvent(true);
+            }
 
             if (value)
+            {
                 _event.Set();
+            }
             else
+            {
                 _event.Reset();
+            }
         }
 
         public void SetCipher(Cipher c, MAC m)
@@ -274,7 +316,10 @@ namespace Granados.SSHCV2
             try
             {
                 while (_buffer.Length - _writeOffset < length)
+                {
                     ExpandBuffer();
+                }
+
                 Array.Copy(data, offset, _buffer, _writeOffset, length);
                 _writeOffset += length;
 
@@ -296,13 +341,22 @@ namespace Granados.SSHCV2
         {
             SSH2Packet packet = null;
             if (_event != null && !_event.WaitOne(3000, false))
+            {
                 throw new Exception("waithandle timed out");
+            }
 
             if (_cipher == null)
             {
-                if (_writeOffset - _readOffset < 4) return null;
+                if (_writeOffset - _readOffset < 4)
+                {
+                    return null;
+                }
+
                 int len = SSHUtil.ReadInt32(_buffer, _readOffset);
-                if (_writeOffset - _readOffset < 4 + len) return null;
+                if (_writeOffset - _readOffset < 4 + len)
+                {
+                    return null;
+                }
 
                 packet = SSH2Packet.FromPlainStream(_buffer, _readOffset);
                 _readOffset += 4 + len;
@@ -312,7 +366,11 @@ namespace Granados.SSHCV2
             {
                 if (_head == null)
                 {
-                    if (_writeOffset - _readOffset < _cipher.BlockSize) return null;
+                    if (_writeOffset - _readOffset < _cipher.BlockSize)
+                    {
+                        return null;
+                    }
+
                     _head = new byte[_cipher.BlockSize];
                     byte[] eh = new byte[_cipher.BlockSize];
                     Array.Copy(_buffer, _readOffset, eh, 0, eh.Length);
@@ -321,7 +379,10 @@ namespace Granados.SSHCV2
                 }
 
                 int len = SSHUtil.ReadInt32(_head, 0);
-                if (_writeOffset - _readOffset < len + 4 - _head.Length + _mac.Size) return null;
+                if (_writeOffset - _readOffset < len + 4 - _head.Length + _mac.Size)
+                {
+                    return null;
+                }
 
                 packet = SSH2Packet.FromDecryptedHead(_head, _buffer, _readOffset, _cipher, _sequence++, _mac);
                 _readOffset += 4 + len - _head.Length + _mac.Size;
@@ -361,7 +422,10 @@ namespace Granados.SSHCV2
         public void OnClosed()
         {
             _handler.OnClosed();
-            if (_event != null) _event.Close();
+            if (_event != null)
+            {
+                _event.Close();
+            }
         }
     }
 }

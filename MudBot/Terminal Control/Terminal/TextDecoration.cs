@@ -182,7 +182,11 @@ namespace Poderosa.Text
             b.Append('/');
             b.Append(_textColor.ToString());
             b.Append('/');
-            if (_bold) b.Append('B');
+            if (_bold)
+            {
+                b.Append('B');
+            }
+
             return b.ToString();
         }
 
@@ -208,7 +212,11 @@ namespace Poderosa.Text
         {
             get
             {
-                if (_hFont == IntPtr.Zero) _hFont = _font.ToHfont();
+                if (_hFont == IntPtr.Zero)
+                {
+                    _hFont = _font.ToHfont();
+                }
+
                 return _hFont;
             }
         }

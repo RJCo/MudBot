@@ -50,7 +50,9 @@ namespace Granados.SSHCV1
             {
                 uint c = CRC.Calc(buf, 0, buf.Length - 4);
                 if (_CRC != c)
+                {
                     throw new SSHException("CRC Error", buf);
+                }
             }
         }
 
@@ -75,10 +77,11 @@ namespace Granados.SSHCV1
             };
             return p;
         }
+
         /**
 		* creates a packet as the input of shell
 		*/
-        static SSH1Packet AsStdinString(byte[] input)
+        private static SSH1Packet AsStdinString(byte[] input)
         {
             SSH1DataWriter w = new SSH1DataWriter();
             w.WriteAsString(input);
@@ -94,10 +97,16 @@ namespace Granados.SSHCV1
             byte[] image = new byte[packet_length + padding_length + 4];
             SSHUtil.WriteIntToByteArray(image, 0, packet_length);
 
-            for (int i = 0; i < padding_length; i++) image[4 + i] = 0; //padding: filling by random values is better
+            for (int i = 0; i < padding_length; i++)
+            {
+                image[4 + i] = 0; //padding: filling by random values is better
+            }
+
             image[4 + padding_length] = _type;
             if (_data != null)
+            {
                 Array.Copy(_data, 0, image, 4 + padding_length + 1, _data.Length);
+            }
 
             _CRC = CRC.Calc(image, 4, image.Length - 8);
             SSHUtil.WriteIntToByteArray(image, image.Length - 4, (int)_CRC);
@@ -170,7 +179,9 @@ namespace Granados.SSHCV1
             {
                 _packets.Add(packet);
                 if (_packets.Count > 0)
+                {
                     SetReady();
+                }
             }
         }
         public void OnError(Exception error, string msg)
@@ -194,13 +205,19 @@ namespace Granados.SSHCV1
             lock (this)
             {
                 if (_packets.Count == 0)
+                {
                     return null;
+                }
                 else
                 {
                     SSH1Packet p = null;
                     p = (SSH1Packet)_packets[0];
                     _packets.RemoveAt(0);
-                    if (_packets.Count == 0) _event.Reset();
+                    if (_packets.Count == 0)
+                    {
+                        _event.Reset();
+                    }
+
                     return p;
                 }
             }
@@ -251,12 +268,19 @@ namespace Granados.SSHCV1
 
         public void SetSignal(bool value)
         {
-            if (_event == null) _event = new ManualResetEvent(true);
+            if (_event == null)
+            {
+                _event = new ManualResetEvent(true);
+            }
 
             if (value)
+            {
                 _event.Set();
+            }
             else
+            {
                 _event.Reset();
+            }
         }
 
         public void SetCipher(Cipher c, bool check_mac)
@@ -281,7 +305,10 @@ namespace Granados.SSHCV1
             try
             {
                 while (_buffer.Length - _writeOffset < length)
+                {
                     ExpandBuffer();
+                }
+
                 Array.Copy(data, offset, _buffer, _writeOffset, length);
                 _writeOffset += length;
 
@@ -302,19 +329,33 @@ namespace Granados.SSHCV1
         private SSH1Packet ConstructPacket()
         {
             if (_event != null && !_event.WaitOne(3000, false))
+            {
                 throw new Exception("waithandle timed out");
+            }
 
-            if (_writeOffset - _readOffset < 4) return null;
+            if (_writeOffset - _readOffset < 4)
+            {
+                return null;
+            }
+
             int packet_length = SSHUtil.ReadInt32(_buffer, _readOffset);
             int padding_length = 8 - (packet_length % 8); //padding length
             int total = packet_length + padding_length;
-            if (_writeOffset - _readOffset < 4 + total) return null;
+            if (_writeOffset - _readOffset < 4 + total)
+            {
+                return null;
+            }
 
             byte[] decrypted = new byte[total];
             if (_cipher != null)
+            {
                 _cipher.Decrypt(_buffer, _readOffset + 4, total, decrypted, 0);
+            }
             else
+            {
                 Array.Copy(_buffer, _readOffset + 4, decrypted, 0, total);
+            }
+
             _readOffset += 4 + total;
 
             SSH1Packet p = new SSH1Packet();
@@ -352,7 +393,10 @@ namespace Granados.SSHCV1
         public void OnClosed()
         {
             _handler.OnClosed();
-            if (_event != null) _event.Close();
+            if (_event != null)
+            {
+                _event.Close();
+            }
         }
     }
 }

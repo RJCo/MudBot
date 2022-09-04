@@ -71,7 +71,10 @@ namespace Poderosa.Forms
         public void ClearStatusBarText()
         {
             MessagePanel.Text = "";
-            if (_statusBarTextTimer != null) _statusBarTextTimer.Stop();
+            if (_statusBarTextTimer != null)
+            {
+                _statusBarTextTimer.Stop();
+            }
         }
         private void SetStatusBarTextTimer()
         {
@@ -107,9 +110,14 @@ namespace Poderosa.Forms
         public void IndicateBell()
         {
             if (_belltimer.Enabled)
+            {
                 _belltimer.Stop();
+            }
             else
+            {
                 BellPanel.Icon = _bell;
+            }
+
             _belltimer.Start();
         }
 

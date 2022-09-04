@@ -1,6 +1,6 @@
 ﻿namespace MudBot.Locations
 {
-    class Path
+    internal class Path
     {
     }
 }

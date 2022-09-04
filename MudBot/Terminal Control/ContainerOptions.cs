@@ -155,7 +155,10 @@ namespace Poderosa.Config
             set
             {
                 if (value < 0 || value > 20)
+                {
                     throw new InvalidOptionException("The number of recent connections must be between 0 and 20.");
+                }
+
                 _MRUSize = value;
             }
         }
@@ -168,7 +171,10 @@ namespace Poderosa.Config
             set
             {
                 if (value < 1 || value > 99)
+                {
                     throw new InvalidOptionException("The number of serial ports must be between 1 and 99.");
+                }
+
                 _serialCount = value;
             }
         }
@@ -264,7 +270,10 @@ namespace Poderosa.Config
         public ContainerOptions()
         {
             _envLanguage = GUtil.CurrentLanguage;
-            if (_configAttributes == null) InitConfigAttributes();
+            if (_configAttributes == null)
+            {
+                InitConfigAttributes();
+            }
         }
 
         public override object Clone()
@@ -358,7 +367,11 @@ namespace Poderosa.Config
 
             if (!frame_filled)
             {
-                if (_frameState == FormWindowState.Minimized) _frameState = FormWindowState.Normal; //最小化で起動しても仕方ないのでノーマルにする
+                if (_frameState == FormWindowState.Minimized)
+                {
+                    _frameState = FormWindowState.Normal; //最小化で起動しても仕方ないのでノーマルにする
+                }
+
                 Rectangle r = Screen.PrimaryScreen.Bounds;
                 _framePosition.X = r.Width / 6;
                 _framePosition.Y = r.Height / 6;

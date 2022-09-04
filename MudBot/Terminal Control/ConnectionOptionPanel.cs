@@ -195,7 +195,10 @@ namespace Poderosa.Forms
             {
                 options.UseSocks = _useSocks.Checked;
                 if (options.UseSocks && _socksServerBox.Text.Length == 0)
+                {
                     throw new Exception("The SOCKS server name is empty.");
+                }
+
                 options.SocksServer = _socksServerBox.Text;
                 itemname = "SOCKS port number";
                 options.SocksPort = Int32.Parse(_socksPortBox.Text);
@@ -204,7 +207,10 @@ namespace Poderosa.Forms
                 itemname = "network address";
                 foreach (string c in _socksNANetworksBox.Text.Split(';'))
                 {
-                    if (!NetUtil.IsNetworkAddress(c)) throw new FormatException();
+                    if (!NetUtil.IsNetworkAddress(c))
+                    {
+                        throw new FormatException();
+                    }
                 }
                 options.SocksNANetworks = _socksNANetworksBox.Text;
 

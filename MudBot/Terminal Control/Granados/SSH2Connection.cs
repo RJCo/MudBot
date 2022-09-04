@@ -92,7 +92,9 @@ namespace Granados.SSHCV2
 
             string s = Encoding.ASCII.GetString(re.ReadString());
             if (servicename != s)
+            {
                 throw new SSHException("protocol error");
+            }
         }
 
         private AuthenticationResult UserAuth()
@@ -146,7 +148,10 @@ namespace Granados.SSHCV2
 
             _authenticationResult = ProcessAuthenticationResponse();
             if (_authenticationResult == AuthenticationResult.Failure)
+            {
                 throw new SSHException(Strings.GetString("AuthenticationFailed"));
+            }
+
             return _authenticationResult;
         }
         private AuthenticationResult ProcessAuthenticationResponse()
@@ -185,18 +190,26 @@ namespace Granados.SSHCV2
                     return AuthenticationResult.Prompt;
                 }
                 else
+                {
                     throw new SSHException("protocol error: unexpected packet type " + h);
+                }
             } while (true);
         }
         public AuthenticationResult DoKeyboardInteractiveAuth(string[] input)
         {
             if (_param.AuthenticationType != AuthenticationType.KeyboardInteractive)
+            {
                 throw new SSHException("DoKeyboardInteractiveAuth() must be called with keyboard-interactive authentication");
+            }
+
             SSH2DataWriter re = new SSH2DataWriter();
             re.WritePacketType(PacketType.SSH_MSG_USERAUTH_INFO_RESPONSE);
             re.Write(input.Length);
             foreach (string t in input)
+            {
                 re.Write(t);
+            }
+
             TransmitPacket(re.ToByteArray());
 
             _authenticationResult = ProcessAuthenticationResponse();
@@ -321,7 +334,10 @@ namespace Granados.SSHCV2
             lock (_tLockObject)
             {
                 SSH2Packet p = SSH2Packet.FromPlainPayload(payload, _tCipher == null ? 8 : _tCipher.BlockSize, _param.Random);
-                if (_tMAC != null) p.CalcHash(_tMAC, _tSequence);
+                if (_tMAC != null)
+                {
+                    p.CalcHash(_tMAC, _tSequence);
+                }
 
                 _tSequence++;
                 p.WriteTo(_stream, _tCipher);
@@ -341,9 +357,13 @@ namespace Granados.SSHCV2
                 {
                     handler.Wait();
                     if (handler.State == ReceiverState.Error)
+                    {
                         throw new SSHException(handler.ErrorMessage);
+                    }
                     else if (handler.State == ReceiverState.Closed)
+                    {
                         throw new SSHException("socket closed");
+                    }
                 }
                 p = handler.PopPacket();
 
@@ -351,15 +371,23 @@ namespace Granados.SSHCV2
                 PacketType pt = r.ReadPacketType();
                 if (pt == PacketType.SSH_MSG_IGNORE)
                 {
-                    if (_eventReceiver != null) _eventReceiver.OnIgnoreMessage(r.ReadString());
+                    if (_eventReceiver != null)
+                    {
+                        _eventReceiver.OnIgnoreMessage(r.ReadString());
+                    }
                 }
                 else if (pt == PacketType.SSH_MSG_DEBUG)
                 {
                     bool f = r.ReadBool();
-                    if (_eventReceiver != null) _eventReceiver.OnDebugMessage(f, r.ReadString());
+                    if (_eventReceiver != null)
+                    {
+                        _eventReceiver.OnDebugMessage(f, r.ReadString());
+                    }
                 }
                 else
+                {
                     return p;
+                }
             }
         }
         internal void AsyncReceivePacket(SSH2Packet packet)
@@ -372,7 +400,9 @@ namespace Granados.SSHCV2
             {
                 //Debug.WriteLine(ex.StackTrace);
                 if (!_closed)
+                {
                     _eventReceiver.OnError(ex, ex.Message);
+                }
             }
         }
 
@@ -392,7 +422,10 @@ namespace Granados.SSHCV2
             else if (_waitingForPortForwardingResponse)
             {
                 if (pt != PacketType.SSH_MSG_REQUEST_SUCCESS)
+                {
                     _eventReceiver.OnUnknownMessage((byte)pt, r.Image);
+                }
+
                 _waitingForPortForwardingResponse = false;
                 return true;
             }
@@ -406,9 +439,14 @@ namespace Granados.SSHCV2
                 int local_channel = r.ReadInt32();
                 ChannelEntry e = FindChannelEntry(local_channel);
                 if (e != null) //throw new SSHException("Unknown channel "+local_channel);
+                {
                     ((SSH2Channel)e._channel).ProcessPacket(e._receiver, pt, 5 + r.Rest, r);
+                }
                 else
+                {
                     Debug.WriteLine("unexpected channel pt=" + pt + " local_channel=" + local_channel.ToString());
+                }
+
                 return true;
             }
             else if (pt == PacketType.SSH_MSG_IGNORE)
@@ -437,7 +475,11 @@ namespace Granados.SSHCV2
 
         public override void Disconnect(string msg)
         {
-            if (_closed) return;
+            if (_closed)
+            {
+                return;
+            }
+
             SSH2DataWriter wr = new SSH2DataWriter();
             wr.WritePacketType(PacketType.SSH_MSG_DISCONNECT);
             wr.Write(0);
@@ -451,7 +493,11 @@ namespace Granados.SSHCV2
 
         public override void Close()
         {
-            if (_closed) return;
+            if (_closed)
+            {
+                return;
+            }
+
             _closed = true;
             _stream.Close();
         }
@@ -547,7 +593,11 @@ namespace Granados.SSHCV2
 
         public override void SendEOF()
         {
-            if (_connection.IsClosed) return;
+            if (_connection.IsClosed)
+            {
+                return;
+            }
+
             SSH2DataWriter wr = new SSH2DataWriter();
             wr.WritePacketType(PacketType.SSH_MSG_CHANNEL_EOF);
             wr.Write(_remoteID);
@@ -557,12 +607,15 @@ namespace Granados.SSHCV2
 
         public override void Close()
         {
-            if (_connection.IsClosed) return;
+            if (_connection.IsClosed)
+            {
+                return;
+            }
+
             SSH2DataWriter wr = new SSH2DataWriter();
             wr.WritePacketType(PacketType.SSH_MSG_CHANNEL_CLOSE);
             wr.Write(_remoteID);
             TransmitPacket(wr.ToByteArray());
-
         }
 
         //maybe this is SSH2 only feature
@@ -617,11 +670,17 @@ namespace Granados.SSHCV2
             else if (_negotiationStatus != 0)
             { //when the negotiation is not completed
                 if (_type == ChannelType.Shell)
+                {
                     OpenShell(receiver, pt, re);
+                }
                 else if (_type == ChannelType.ForwardedLocalToRemote)
+                {
                     ReceivePortForwardingResponse(receiver, pt, re);
+                }
                 else if (_type == ChannelType.Session)
+                {
                     EstablishSession(receiver, pt, re);
+                }
             }
             else
             {
@@ -691,7 +750,9 @@ namespace Granados.SSHCV2
                 if (pt != PacketType.SSH_MSG_CHANNEL_OPEN_CONFIRMATION)
                 {
                     if (pt != PacketType.SSH_MSG_CHANNEL_OPEN_FAILURE)
+                    {
                         receiver.OnChannelError(null, "opening channel failed; packet type=" + pt);
+                    }
                     else
                     {
                         int errcode = reader.ReadInt32();
@@ -757,7 +818,9 @@ namespace Granados.SSHCV2
                 }
             }
             else
+            {
                 Debug.Assert(false);
+            }
         }
 
         private void ReceivePortForwardingResponse(ISSHChannelEventReceiver receiver, PacketType pt, SSH2DataReader reader)
@@ -767,7 +830,9 @@ namespace Granados.SSHCV2
                 if (pt != PacketType.SSH_MSG_CHANNEL_OPEN_CONFIRMATION)
                 {
                     if (pt != PacketType.SSH_MSG_CHANNEL_OPEN_FAILURE)
+                    {
                         receiver.OnChannelError(null, "opening channel failed; packet type=" + pt);
+                    }
                     else
                     {
                         int errcode = reader.ReadInt32();
@@ -785,7 +850,9 @@ namespace Granados.SSHCV2
                 }
             }
             else
+            {
                 Debug.Assert(false);
+            }
         }
         private void EstablishSession(ISSHChannelEventReceiver receiver, PacketType pt, SSH2DataReader reader)
         {
@@ -794,7 +861,9 @@ namespace Granados.SSHCV2
                 if (pt != PacketType.SSH_MSG_CHANNEL_OPEN_CONFIRMATION)
                 {
                     if (pt != PacketType.SSH_MSG_CHANNEL_OPEN_FAILURE)
+                    {
                         receiver.OnChannelError(null, "opening channel failed; packet type=" + pt);
+                    }
                     else
                     {
                         int remote_id = reader.ReadInt32();
@@ -813,7 +882,9 @@ namespace Granados.SSHCV2
                 }
             }
             else
+            {
                 Debug.Assert(false);
+            }
         }
     }
 
@@ -849,10 +920,10 @@ namespace Granados.SSHCV2
         private byte[] _sessionID;
 
         //results
-        Cipher _rc;
-        Cipher _tc;
-        MAC _rm;
-        MAC _tm;
+        private Cipher _rc;
+        private Cipher _tc;
+        private MAC _rm;
+        private MAC _tm;
 
         private void TransmitPacket(byte[] payload)
         {
@@ -873,7 +944,11 @@ namespace Granados.SSHCV2
             SendKEXINIT();
             ProcessKEXINIT(_con.ReceivePacket());
             SendKEXDHINIT();
-            if (!ProcessKEXDHREPLY(_con.ReceivePacket())) return false;
+            if (!ProcessKEXDHREPLY(_con.ReceivePacket()))
+            {
+                return false;
+            }
+
             SendNEWKEYS();
             ProcessNEWKEYS(_con.ReceivePacket());
             return true;
@@ -938,7 +1013,11 @@ namespace Granados.SSHCV2
             _serverKEXINITPayload = packet.Data;
             SSH2DataReader re = new SSH2DataReader(_serverKEXINITPayload);
             byte[] head = re.Read(17); //Type and cookie
-            if (head[0] != (byte)PacketType.SSH_MSG_KEXINIT) throw new SSHException(String.Format("Server response is not SSH_MSG_KEXINIT but {0}", head[0]));
+            if (head[0] != (byte)PacketType.SSH_MSG_KEXINIT)
+            {
+                throw new SSHException(String.Format("Server response is not SSH_MSG_KEXINIT but {0}", head[0]));
+            }
+
             Encoding enc = Encoding.ASCII;
 
             string kex = enc.GetString(re.ReadString());
@@ -972,7 +1051,10 @@ namespace Granados.SSHCV2
             bool flag = re.ReadBool();
             int reserved = re.ReadInt32();
             Debug.Assert(re.Rest == 0);
-            if (flag) throw new SSHException("Algorithm negotiation failed");
+            if (flag)
+            {
+                throw new SSHException("Algorithm negotiation failed");
+            }
         }
 
 
@@ -994,7 +1076,11 @@ namespace Granados.SSHCV2
             //Round2 receives response
             SSH2DataReader re = new SSH2DataReader(packet.Data);
             PacketType h = re.ReadPacketType();
-            if (h != PacketType.SSH_MSG_KEXDH_REPLY) throw new SSHException(String.Format("KeyExchange response is not KEXDH_REPLY but {0}", h));
+            if (h != PacketType.SSH_MSG_KEXDH_REPLY)
+            {
+                throw new SSHException(String.Format("KeyExchange response is not KEXDH_REPLY but {0}", h));
+            }
+
             byte[] key_and_cert = re.ReadString();
             BigInteger f = re.ReadMPInt();
             byte[] signature = re.ReadString();
@@ -1014,10 +1100,17 @@ namespace Granados.SSHCV2
             wr.Write(_k);
             _hash = new SHA1CryptoServiceProvider().ComputeHash(wr.ToByteArray());
 
-            if (!VerifyHostKey(key_and_cert, signature, _hash)) return false;
+            if (!VerifyHostKey(key_and_cert, signature, _hash))
+            {
+                return false;
+            }
 
             //Debug.WriteLine("hash="+DebugUtil.DumpByteArray(hash));
-            if (_sessionID == null) _sessionID = _hash;
+            if (_sessionID == null)
+            {
+                _sessionID = _hash;
+            }
+
             return true;
         }
         private void SendNEWKEYS()
@@ -1044,7 +1137,10 @@ namespace Granados.SSHCV2
             try
             {
                 byte[] response = packet.Data;
-                if (response.Length != 1 || response[0] != (byte)PacketType.SSH_MSG_NEWKEYS) throw new SSHException("SSH_MSG_NEWKEYS failed");
+                if (response.Length != 1 || response[0] != (byte)PacketType.SSH_MSG_NEWKEYS)
+                {
+                    throw new SSHException("SSH_MSG_NEWKEYS failed");
+                }
 
                 _newKeyEvent.WaitOne();
                 _newKeyEvent.Close();
@@ -1063,27 +1159,42 @@ namespace Granados.SSHCV2
             SSH2DataReader re1 = new SSH2DataReader(K_S);
             string algorithm = Encoding.ASCII.GetString(re1.ReadString());
             if (algorithm != SSH2Util.PublicKeyAlgorithmName(_cInfo._algorithmForHostKeyVerification))
+            {
                 throw new SSHException("Protocol Error: Host Key Algorithm Mismatch");
+            }
 
             SSH2DataReader re2 = new SSH2DataReader(signature);
             algorithm = Encoding.ASCII.GetString(re2.ReadString());
             if (algorithm != SSH2Util.PublicKeyAlgorithmName(_cInfo._algorithmForHostKeyVerification))
+            {
                 throw new SSHException("Protocol Error: Host Key Algorithm Mismatch");
+            }
+
             byte[] sigbody = re2.ReadString();
             Debug.Assert(re2.Rest == 0);
 
             if (_cInfo._algorithmForHostKeyVerification == PublicKeyAlgorithm.RSA)
+            {
                 VerifyHostKeyByRSA(re1, sigbody, hash);
+            }
             else if (_cInfo._algorithmForHostKeyVerification == PublicKeyAlgorithm.DSA)
+            {
                 VerifyHostKeyByDSS(re1, sigbody, hash);
+            }
             else
+            {
                 throw new SSHException("Bad host key algorithm " + _cInfo._algorithmForHostKeyVerification);
+            }
 
             //ask the client whether he accepts the host key
             if (!_startedByHost && _param.KeyCheck != null && !_param.KeyCheck(_cInfo))
+            {
                 return false;
+            }
             else
+            {
                 return true;
+            }
         }
 
         private void VerifyHostKeyByRSA(SSH2DataReader pubkey, byte[] sigbody, byte[] hash)
@@ -1148,7 +1259,9 @@ namespace Granados.SSHCV2
                     return result;
                 }
                 else
+                {
                     throw new SSHException("necessary key length is too big"); //long key is not supported
+                }
             }
         }
 
@@ -1157,7 +1270,10 @@ namespace Granados.SSHCV2
             string[] t = data.Split(',');
             foreach (string s in t)
             {
-                if (s == algorithm_name) return; //found!
+                if (s == algorithm_name)
+                {
+                    return; //found!
+                }
             }
             throw new SSHException("Server does not support " + algorithm_name + " for " + title);
         }
@@ -1188,7 +1304,11 @@ namespace Granados.SSHCV2
         private string FormatHostKeyAlgorithmDescription()
         {
             StringBuilder b = new StringBuilder();
-            if (_param.PreferableHostKeyAlgorithms.Length == 0) throw new SSHException("HostKeyAlgorithm is not set");
+            if (_param.PreferableHostKeyAlgorithms.Length == 0)
+            {
+                throw new SSHException("HostKeyAlgorithm is not set");
+            }
+
             b.Append(SSH2Util.PublicKeyAlgorithmName(_param.PreferableHostKeyAlgorithms[0]));
             for (int i = 1; i < _param.PreferableHostKeyAlgorithms.Length; i++)
             {
@@ -1200,7 +1320,11 @@ namespace Granados.SSHCV2
         private string FormatCipherAlgorithmDescription()
         {
             StringBuilder b = new StringBuilder();
-            if (_param.PreferableCipherAlgorithms.Length == 0) throw new SSHException("CipherAlgorithm is not set");
+            if (_param.PreferableCipherAlgorithms.Length == 0)
+            {
+                throw new SSHException("CipherAlgorithm is not set");
+            }
+
             b.Append(CipherFactory.AlgorithmToSSH2Name(_param.PreferableCipherAlgorithms[0]));
             for (int i = 1; i < _param.PreferableCipherAlgorithms.Length; i++)
             {

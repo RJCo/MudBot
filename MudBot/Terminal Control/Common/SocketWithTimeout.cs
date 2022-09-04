@@ -51,9 +51,13 @@ namespace Poderosa.Communication
             if (!_interrupted)
             {
                 if (_succeeded)
+                {
                     _client.SuccessfullyExit(Result);
+                }
                 else
+                {
                     _client.ConnectionFailed(_errorMessage);
+                }
             }
         }
 
@@ -67,9 +71,14 @@ namespace Poderosa.Communication
         {
             _interrupted = true;
             if (!_async)
+            {
                 _event.Set();
+            }
+
             if (_tcpConnected)
+            {
                 _socket.Close();
+            }
         }
 
         protected Socks _socks;
@@ -108,9 +117,13 @@ namespace Poderosa.Communication
             catch (Exception ex)
             {
                 if (_errorMessage == null)
+                {
                     _errorMessage = ex.Message;
+                }
                 else
+                {
                     _errorMessage += ex.Message;
+                }
             }
             finally
             {
@@ -259,16 +272,23 @@ namespace Poderosa.Communication
         {
             foreach (string netaddress in nss.Split(';'))
             {
-                if (netaddress.Length == 0) continue;
+                if (netaddress.Length == 0)
+                {
+                    continue;
+                }
 
                 if (!NetUtil.IsNetworkAddress(netaddress))
                 {
                     throw new FormatException(String.Format("{0} is not suitable as a network address.", netaddress));
                 }
                 if (NetUtil.NetAddressIncludesIPAddress(netaddress, address.Primary))
+                {
                     return false;
+                }
                 else if (address.Secondary != null && NetUtil.NetAddressIncludesIPAddress(netaddress, address.Secondary))
+                {
                     return false;
+                }
             }
             return true;
         }

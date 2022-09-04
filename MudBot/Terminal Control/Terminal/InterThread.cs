@@ -278,7 +278,10 @@ namespace Poderosa
                     {
                         WarningWithDisableOption dlg = new WarningWithDisableOption(_msg);
                         if (GUtil.ShowModalDialog(GEnv.Frame, dlg) == DialogResult.OK && dlg.CheckedDisableOption)
+                        {
                             GEnv.Options.WarningOption = WarningOption.Ignore;
+                        }
+
                         break;
                     }
             }

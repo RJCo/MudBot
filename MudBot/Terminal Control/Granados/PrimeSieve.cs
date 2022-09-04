@@ -32,7 +32,9 @@ namespace Granados.PKI
         public PrimeSieve(int x)
         {
             if (x < 4)
+            {
                 x = 4;
+            }
 
             int len = (x - 3) / (32 * 2);
             table = new uint[len];
@@ -59,7 +61,10 @@ namespace Granados.PKI
             {
                 w = table[i];
                 for (bits = 0; w != 0; w >>= 8)
+                {
                     bits += (uint)bitCounts[w & 0xff];
+                }
+
                 primes += (32 - bits);
             }
             return primes;
@@ -82,10 +87,15 @@ namespace Granados.PKI
                     while (true)
                     {
                         if ((p / 32) >= table.Length)
+                        {
                             return 0;
+                        }
 
                         if ((table[p / 32] & (1 << (p & (32 - 1)))) == 0)
+                        {
                             return p * 2 + 3;
+                        }
+
                         p++;
                     }
             }

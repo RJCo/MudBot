@@ -43,7 +43,10 @@ namespace Poderosa.Toolkit
         {
             do
             {
-                if (reader.NodeType == type) return true;
+                if (reader.NodeType == type)
+                {
+                    return true;
+                }
             } while (reader.Read());
 
             return false;
@@ -55,11 +58,16 @@ namespace Poderosa.Toolkit
             do
             {
                 if (!reader.Read())
+                {
                     return false;
+                }
 
                 XmlNodeType nt = reader.NodeType;
                 if (nt == XmlNodeType.Attribute || nt == XmlNodeType.CDATA || nt == XmlNodeType.Element || nt == XmlNodeType.EndElement
-                    || nt == XmlNodeType.SignificantWhitespace || nt == XmlNodeType.Text || nt == XmlNodeType.Whitespace) return true;
+                    || nt == XmlNodeType.SignificantWhitespace || nt == XmlNodeType.Text || nt == XmlNodeType.Whitespace)
+                {
+                    return true;
+                }
             } while (true);
         }
 
@@ -75,10 +83,15 @@ namespace Poderosa.Toolkit
                     if (reader.NodeType == XmlNodeType.Element)
                     {
                         name = reader.LocalName;
-                        if (reader.IsEmptyElement) break;
+                        if (reader.IsEmptyElement)
+                        {
+                            break;
+                        }
                     }
                     else if (reader.NodeType == XmlNodeType.Text || reader.NodeType == XmlNodeType.CDATA)
+                    {
                         value = reader.Value;
+                    }
                     else if (reader.NodeType == XmlNodeType.EndElement)
                     {
                         result.Add(name, value);
@@ -90,7 +103,10 @@ namespace Poderosa.Toolkit
         //アトリビュートをHashtableに入れる
         public static void ReadAttributesIntoStrMap(XmlReader reader, Hashtable result)
         {
-            if (!reader.MoveToFirstAttribute()) return;
+            if (!reader.MoveToFirstAttribute())
+            {
+                return;
+            }
 
             do
             {
@@ -104,7 +120,10 @@ namespace Poderosa.Toolkit
         {
             while (reader.NodeType != XmlNodeType.Element || reader.LocalName != name || reader.NamespaceURI != nsuri)
             {
-                if (!ReadSubstantialNode(reader)) return false;
+                if (!ReadSubstantialNode(reader))
+                {
+                    return false;
+                }
             }
             return true;
         }
@@ -112,7 +131,10 @@ namespace Poderosa.Toolkit
         {
             while (reader.NodeType != XmlNodeType.Element || reader.LocalName != name || reader.NamespaceURI != nsuri)
             {
-                if (!ReadSubstantialNode(reader)) return false;
+                if (!ReadSubstantialNode(reader))
+                {
+                    return false;
+                }
             }
             return ReadSubstantialNode(reader); //見つかったStartElementの次に移動
         }
@@ -120,7 +142,10 @@ namespace Poderosa.Toolkit
         {
             while (reader.NodeType != XmlNodeType.Element || reader.LocalName != name)
             {
-                if (!ReadSubstantialNode(reader)) return false;
+                if (!ReadSubstantialNode(reader))
+                {
+                    return false;
+                }
             }
             return ReadSubstantialNode(reader); //見つかったStartElementの次に移動
         }
@@ -128,8 +153,15 @@ namespace Poderosa.Toolkit
         {
             while (reader.NodeType != XmlNodeType.EndElement)
             {
-                if (reader.IsEmptyElement) break;
-                if (!ReadSubstantialNode(reader)) return false;
+                if (reader.IsEmptyElement)
+                {
+                    break;
+                }
+
+                if (!ReadSubstantialNode(reader))
+                {
+                    return false;
+                }
             }
             return ReadSubstantialNode(reader); //見つかったEndElementの次に移動
         }

@@ -48,7 +48,9 @@ namespace Poderosa.MacroEnv
                 throw new Exception("Unsupported macro module type " + mod.Type.ToString() + " is specified.");
             }
             else
+            {
                 throw new Exception("Unsupported macro module type " + mod.Type.ToString() + " is specified.");
+            }
         }
         private static string GetMyExePath()
         {

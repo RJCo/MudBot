@@ -318,10 +318,15 @@ namespace Poderosa.Forms
                 {
                     itemname = "Caption.OptionDialog.KeepAliveInterval";
                     options.KeepAliveInterval = Int32.Parse(_keepAliveIntervalBox.Text) * 60000;
-                    if (options.KeepAliveInterval <= 0) throw new FormatException();
+                    if (options.KeepAliveInterval <= 0)
+                    {
+                        throw new FormatException();
+                    }
                 }
                 else
+                {
                     options.KeepAliveInterval = 0;
+                }
 
                 if (_autoLogCheckBox.Checked)
                 {
@@ -334,14 +339,20 @@ namespace Poderosa.Forms
                     if (!Directory.Exists(_defaultLogDirectory.Text))
                     {
                         if (GUtil.AskUserYesNo(this, String.Format("Message.OptionDialog.AskCreateDirectory", _defaultLogDirectory.Text)) == DialogResult.Yes)
+                        {
                             Directory.CreateDirectory(_defaultLogDirectory.Text);
+                        }
                         else
+                        {
                             return false;
+                        }
                     }
                     options.DefaultLogDirectory = _defaultLogDirectory.Text;
                 }
                 else
+                {
                     options.DefaultLogType = LogType.None;
+                }
 
                 successful = true;
             }
@@ -372,15 +383,24 @@ namespace Poderosa.Forms
                 Description = "Caption.OptionDialog.DefaultLogDirectory"
             };
             if (_defaultLogDirectory.Text.Length > 0 && Directory.Exists(_defaultLogDirectory.Text))
+            {
                 dlg.SelectedPath = _defaultLogDirectory.Text;
+            }
+
             if (GCUtil.ShowModalDialog(FindForm(), dlg) == DialogResult.OK)
+            {
                 _defaultLogDirectory.Text = dlg.SelectedPath;
+            }
         }
         private void OnAutoLogCheckBoxClick(object sender, EventArgs args)
         {
             bool e = _autoLogCheckBox.Checked;
             _defaultLogTypeBox.Enabled = e;
-            if (_defaultLogTypeBox.SelectedIndex == -1) _defaultLogTypeBox.SelectedIndex = 0;
+            if (_defaultLogTypeBox.SelectedIndex == -1)
+            {
+                _defaultLogTypeBox.SelectedIndex = 0;
+            }
+
             _defaultLogDirectory.Enabled = e;
             _dirSelect.Enabled = e;
         }

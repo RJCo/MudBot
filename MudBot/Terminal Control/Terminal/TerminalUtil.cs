@@ -72,30 +72,49 @@ namespace Poderosa.Terminal
                 bool shift = (v & 0x0100) != 0;
                 short body = (short)(v & 0x00FF);
                 if (shift)
+                {
                     _shiftGroup[body] = (char)i;
+                }
                 else
+                {
                     _defaultGroup[body] = (char)i;
+                }
             }
         }
 
         public static char Scan(Keys body, bool shift)
         {
-            if (_defaultGroup == null) Init();
+            if (_defaultGroup == null)
+            {
+                Init();
+            }
 
             //制御文字のうち単品のキーで送信できるもの
             if (body == Keys.Escape)
+            {
                 return (char)0x1B;
+            }
             else if (body == Keys.Tab)
+            {
                 return (char)0x09;
+            }
             else if (body == Keys.Back)
+            {
                 return (char)0x08;
+            }
             else if (body == Keys.Delete)
+            {
                 return (char)0x7F;
+            }
 
             if (shift)
+            {
                 return _shiftGroup[(int)body];
+            }
             else
+            {
                 return _defaultGroup[(int)body];
+            }
         }
     }
 }

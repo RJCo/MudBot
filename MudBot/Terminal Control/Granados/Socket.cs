@@ -124,7 +124,10 @@ namespace Granados.SSHC
             try
             {
                 //the specification claims the version string ends with CRLF, however some servers send LF only
-                if (length <= 2 || buf[offset + length - 1] != 0x0A) throw new SSHException(Strings.GetString("NotSSHServer"));
+                if (length <= 2 || buf[offset + length - 1] != 0x0A)
+                {
+                    throw new SSHException(Strings.GetString("NotSSHServer"));
+                }
                 //Debug.WriteLine(String.Format("receiveServerVersion len={0}",len));
                 string sv = Encoding.ASCII.GetString(buf, offset, length);
                 _serverVersion = sv.Trim();
@@ -132,22 +135,39 @@ namespace Granados.SSHC
 
                 //check compatibility
                 int a = _serverVersion.IndexOf('-');
-                if (a == -1) throw new SSHException("Format of server version is invalid");
+                if (a == -1)
+                {
+                    throw new SSHException("Format of server version is invalid");
+                }
+
                 int b = _serverVersion.IndexOf('-', a + 1);
-                if (b == -1) throw new SSHException("Format of server version is invalid");
+                if (b == -1)
+                {
+                    throw new SSHException("Format of server version is invalid");
+                }
+
                 int comma = _serverVersion.IndexOf('.', a, b - a);
-                if (comma == -1) throw new SSHException("Format of server version is invalid");
+                if (comma == -1)
+                {
+                    throw new SSHException("Format of server version is invalid");
+                }
 
                 int major = Int32.Parse(_serverVersion.Substring(a + 1, comma - a - 1));
                 int minor = Int32.Parse(_serverVersion.Substring(comma + 1, b - comma - 1));
 
                 if (_param.Protocol == SSHProtocol.SSH1)
                 {
-                    if (major != 1) throw new SSHException("The protocol version of server is not compatible for SSH1");
+                    if (major != 1)
+                    {
+                        throw new SSHException("The protocol version of server is not compatible for SSH1");
+                    }
                 }
                 else
                 {
-                    if (major >= 3 || major <= 0 || (major == 1 && minor != 99)) throw new SSHException("The protocol version of server is not compatible with SSH2");
+                    if (major >= 3 || major <= 0 || (major == 1 && minor != 99))
+                    {
+                        throw new SSHException("The protocol version of server is not compatible with SSH2");
+                    }
                 }
 
                 SetReady();
@@ -255,7 +275,9 @@ namespace Granados.SSHC
                     _socket.BeginReceive(_buf, 0, _buf.Length, SocketFlags.None, new AsyncCallback(RepeatCallback), null);
                 }
                 else
+                {
                     _handler.OnClosed();
+                }
             }
             catch (Exception ex)
             {
@@ -265,9 +287,13 @@ namespace Granados.SSHC
                     _socket.BeginReceive(_buf, 0, _buf.Length, SocketFlags.None, new AsyncCallback(RepeatCallback), null);
                 }
                 else if (!_closed)
+                {
                     _handler.OnError(ex, ex.Message);
+                }
                 else
+                {
                     _handler.OnClosed();
+                }
             }
         }
     }
@@ -295,12 +321,20 @@ namespace Granados.SSHC
 
         internal override void Write(byte[] data, int offset, int length)
         {
-            if (!_ready || _channel == null) throw new SSHException("channel not ready");
+            if (!_ready || _channel == null)
+            {
+                throw new SSHException("channel not ready");
+            }
+
             _channel.Transmit(data, offset, length);
         }
         internal override void WriteByte(byte data)
         {
-            if (!_ready || _channel == null) throw new SSHException("channel not ready");
+            if (!_ready || _channel == null)
+            {
+                throw new SSHException("channel not ready");
+            }
+
             byte[] t = new byte[1];
             t[0] = data;
             _channel.Transmit(t);
@@ -319,10 +353,16 @@ namespace Granados.SSHC
         }
         internal override void Close()
         {
-            if (!_ready || _channel == null) throw new SSHException("channel not ready");
+            if (!_ready || _channel == null)
+            {
+                throw new SSHException("channel not ready");
+            }
+
             _channel.Close();
             if (_channel.Connection.ChannelCount <= 1) //close last channel
+            {
                 _channel.Connection.Close();
+            }
         }
 
         public void OnData(byte[] data, int offset, int length)

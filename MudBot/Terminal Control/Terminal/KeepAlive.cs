@@ -26,15 +26,21 @@ namespace Poderosa.Terminal
             else
             {
                 if (ct.Timer == null)
+                {
                     ct.Timer = new Timer(new TimerCallback(OnTimer), ct, GEnv.Options.KeepAliveInterval, Timeout.Infinite);
+                }
                 else
+                {
                     ct.Timer.Change(GEnv.Options.KeepAliveInterval, Timeout.Infinite);
+                }
             }
         }
         public void SetTimerToAllConnectionTags()
         {
             foreach (ConnectionTag ct in GEnv.Connections)
+            {
                 SetTimerToConnectionTag(ct);
+            }
         }
         public void ClearTimerToConnectionTag(ConnectionTag ct)
         {

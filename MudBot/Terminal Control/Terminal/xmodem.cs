@@ -55,9 +55,13 @@ namespace Poderosa.Terminal
                 for (int j = 1; j <= 8; j++)
                 {
                     if ((crc & 0x8000) != 0)
+                    {
                         crc = (ushort)((crc << 1) ^ (ushort)0x1021);
+                    }
                     else
+                    {
                         crc <<= 1;
+                    }
                 }
             }
             return crc;
@@ -117,7 +121,11 @@ namespace Poderosa.Terminal
 
         protected void NotifyStatus(int wparam, int lparam)
         {
-            if (_notifyTarget == IntPtr.Zero) return;
+            if (_notifyTarget == IntPtr.Zero)
+            {
+                return;
+            }
+
             Win32.SendMessage(_notifyTarget, GConst.WMG_XMODEM_UPDATE_STATUS, new IntPtr(wparam), new IntPtr(lparam));
         }
     }
@@ -171,7 +179,10 @@ namespace Poderosa.Terminal
         {
             _tag.ModalTerminalTask = null;
             _stream.Close();
-            if (_timer != null) _timer.Dispose();
+            if (_timer != null)
+            {
+                _timer.Dispose();
+            }
         }
         public override void Abort()
         {
@@ -236,7 +247,11 @@ namespace Poderosa.Terminal
                     {
                         byte sent = data[checksum_offset];
                         byte sum = 0;
-                        for (int i = body_offset; i < checksum_offset; i++) sum += data[i];
+                        for (int i = body_offset; i < checksum_offset; i++)
+                        {
+                            sum += data[i];
+                        }
+
                         success = (sent == sum);
                     }
 
@@ -247,7 +262,11 @@ namespace Poderosa.Terminal
                         _sequenceNumber++;
 
                         int t = checksum_offset - 1;
-                        while (t >= body_offset && data[t] == 26) t--; //Ctrl+Z‚Å–„‚Ü‚Á‚Ä‚¢‚é‚Æ‚±‚ë‚Í–³Ž‹
+                        while (t >= body_offset && data[t] == 26)
+                        {
+                            t--; //Ctrl+Z‚Å–„‚Ü‚Á‚Ä‚¢‚é‚Æ‚±‚ë‚Í–³Ž‹
+                        }
+
                         int len = t + 1 - body_offset;
                         _stream.Write(data, body_offset, len);
                         _processedLength += len;
@@ -268,7 +287,6 @@ namespace Poderosa.Terminal
                             _tag.Connection.Write(new byte[] { NAK });
                         }
                     }
-
                 }
             }
         }
@@ -280,7 +298,10 @@ namespace Poderosa.Terminal
         }
         private void AdjustBuffer(ref byte[] data, ref int offset, ref int count)
         {
-            if (_buffer == null || _buffer.Position == 0) return;
+            if (_buffer == null || _buffer.Position == 0)
+            {
+                return;
+            }
 
             _buffer.Write(data, offset, count);
             count = (int)_buffer.Position;
@@ -344,7 +365,10 @@ namespace Poderosa.Terminal
         private void Exit()
         {
             _tag.ModalTerminalTask = null;
-            if (_timer != null) _timer.Dispose();
+            if (_timer != null)
+            {
+                _timer.Dispose();
+            }
         }
         public override void Abort()
         {
@@ -374,7 +398,10 @@ namespace Poderosa.Terminal
                         break;
                     }
                 }
-                if (_negotiating) return; //‚ ‚½‚Ü‚ª‚«‚Ä‚¢‚È‚¢
+                if (_negotiating)
+                {
+                    return; //‚ ‚½‚Ü‚ª‚«‚Ä‚¢‚È‚¢
+                }
             }
             else
             {
@@ -409,7 +436,11 @@ namespace Poderosa.Terminal
             else
             {
                 int len = 128;
-                if (_crcEnabled && _offset + 1024 <= _body.Length) len = 1024;
+                if (_crcEnabled && _offset + 1024 <= _body.Length)
+                {
+                    len = 1024;
+                }
+
                 byte[] buf = new byte[3 + len + (_crcEnabled ? 2 : 1)];
                 buf[0] = len == 128 ? SOH : STX;
                 buf[1] = (byte)_sequenceNumber;
@@ -417,7 +448,10 @@ namespace Poderosa.Terminal
                 int body_len = Math.Min(len, _body.Length - _offset);
                 Array.Copy(_body, _offset, buf, 3, body_len);
                 for (int i = body_len; i < len; i++)
+                {
                     buf[3 + i] = 26; //padding
+                }
+
                 if (_crcEnabled)
                 {
                     ushort sum = CalcCRC(buf, 3, len);
@@ -427,7 +461,11 @@ namespace Poderosa.Terminal
                 else
                 {
                     byte sum = 0;
-                    for (int i = 0; i < len; i++) sum += buf[3 + i];
+                    for (int i = 0; i < len; i++)
+                    {
+                        sum += buf[3 + i];
+                    }
+
                     buf[3 + len] = sum;
                 }
 
@@ -436,7 +474,6 @@ namespace Poderosa.Terminal
                 NotifyStatus(NOTIFY_PROGRESS, _nextOffset);
                 //Debug.WriteLine("Transmitted "+_sequenceNumber+" " +_offset);
             }
-
         }
 
 

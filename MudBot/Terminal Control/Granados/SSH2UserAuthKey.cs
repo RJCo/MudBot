@@ -51,9 +51,13 @@ namespace Granados.SSHCV2
         {
             PublicKeyAlgorithm a = _keypair.Algorithm;
             if (a == PublicKeyAlgorithm.RSA)
+            {
                 return ((RSAKeyPair)_keypair).SignWithSHA1(data);
+            }
             else
+            {
                 return ((DSAKeyPair)_keypair).Sign(new SHA1CryptoServiceProvider().ComputeHash(data));
+            }
         }
         public byte[] GetPublicKeyBlob()
         {
@@ -76,7 +80,11 @@ namespace Granados.SSHCV2
             {
                 MemoryStream s = new MemoryStream();
                 s.Write(pp, 0, pp.Length);
-                if (offset > 0) s.Write(buf, 0, offset);
+                if (offset > 0)
+                {
+                    s.Write(buf, 0, offset);
+                }
+
                 Array.Copy(md5.ComputeHash(s.ToArray()), 0, buf, offset, hashlen);
                 offset += hashlen;
                 md5.Initialize();
@@ -101,20 +109,31 @@ namespace Granados.SSHCV2
         {
             StreamReader r = new StreamReader(strm, Encoding.ASCII);
             string l = r.ReadLine();
-            if (l == null || l != "---- BEGIN SSH2 ENCRYPTED PRIVATE KEY ----") throw new SSHException("Wrong key format");
+            if (l == null || l != "---- BEGIN SSH2 ENCRYPTED PRIVATE KEY ----")
+            {
+                throw new SSHException("Wrong key format");
+            }
 
             l = r.ReadLine();
             StringBuilder buf = new StringBuilder();
             while (l != "---- END SSH2 ENCRYPTED PRIVATE KEY ----")
             {
                 if (l.IndexOf(':') == -1)
+                {
                     buf.Append(l);
+                }
                 else
                 {
-                    while (l.EndsWith("\\")) l = r.ReadLine();
+                    while (l.EndsWith("\\"))
+                    {
+                        l = r.ReadLine();
+                    }
                 }
                 l = r.ReadLine();
-                if (l == null) throw new SSHException("Key is broken");
+                if (l == null)
+                {
+                    throw new SSHException("Key is broken");
+                }
             }
             r.Close();
 
@@ -129,7 +148,11 @@ namespace Granados.SSHCV2
 
             SSH2DataReader re = new SSH2DataReader(keydata);
             int magic = re.ReadInt32();
-            if (magic != MAGIC_VAL) throw new SSHException("key file is broken");
+            if (magic != MAGIC_VAL)
+            {
+                throw new SSHException("key file is broken");
+            }
+
             int privateKeyLen = re.ReadInt32();
             string type = Encoding.ASCII.GetString(re.ReadString());
 
@@ -147,7 +170,9 @@ namespace Granados.SSHCV2
 
             int parmLen = re.ReadInt32();
             if (parmLen < 0 || parmLen > re.Rest)
+            {
                 throw new SSHException(Strings.GetString("WrongPassphrase"));
+            }
 
             if (type.IndexOf("if-modn") != -1)
             {
@@ -162,7 +187,11 @@ namespace Granados.SSHCV2
             }
             else if (type.IndexOf("dl-modp") != -1)
             {
-                if (re.ReadInt32() != 0) throw new SSHException("DSS Private Key File is broken");
+                if (re.ReadInt32() != 0)
+                {
+                    throw new SSHException("DSS Private Key File is broken");
+                }
+
                 BigInteger p = re.ReadBigIntWithBits();
                 BigInteger g = re.ReadBigIntWithBits();
                 BigInteger q = re.ReadBigIntWithBits();
@@ -171,8 +200,9 @@ namespace Granados.SSHCV2
                 return new SSH2UserAuthKey(new DSAKeyPair(p, g, q, y, x));
             }
             else
+            {
                 throw new SSHException("unknown authentication method " + type);
-
+            }
         }
         public static SSH2UserAuthKey FromSECSHStyleFile(string filename, string passphrase)
         {
@@ -245,7 +275,10 @@ namespace Granados.SSHCV2
             StreamWriter sw = new StreamWriter(dest, Encoding.ASCII);
             sw.WriteLine("---- BEGIN SSH2 ENCRYPTED PRIVATE KEY ----");
             if (comment != null)
+            {
                 WriteKeyFileBlock(sw, "Comment: " + comment, true);
+            }
+
             WriteKeyFileBlock(sw, Encoding.ASCII.GetString(Base64.Encode(rawdata)), false);
             sw.WriteLine("---- END SSH2 ENCRYPTED PRIVATE KEY ----");
             sw.Close();
@@ -257,7 +290,10 @@ namespace Granados.SSHCV2
             StreamWriter sw = new StreamWriter(dest, Encoding.ASCII);
             sw.WriteLine("---- BEGIN SSH2 PUBLIC KEY ----");
             if (comment != null)
+            {
                 WriteKeyFileBlock(sw, "Comment: " + comment, true);
+            }
+
             WriteKeyFileBlock(sw, FormatBase64EncodedPublicKeyBody(), false);
             sw.WriteLine("---- END SSH2 PUBLIC KEY ----");
             sw.Close();
@@ -288,7 +324,9 @@ namespace Granados.SSHCV2
             while (cursor < d.Length)
             {
                 if (maxlen >= d.Length - cursor)
+                {
                     sw.WriteLine(d, cursor, d.Length - cursor);
+                }
                 else
                 {
                     if (escape_needed)
@@ -298,7 +336,9 @@ namespace Granados.SSHCV2
                         cursor--;
                     }
                     else
+                    {
                         sw.WriteLine(d, cursor, maxlen);
+                    }
                 }
 
                 cursor += maxlen;

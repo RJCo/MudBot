@@ -2,12 +2,10 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: LoginDialog.cs,v 1.2 2005/04/20 08:45:45 okajima Exp $
 */
-using Granados.SSHC;
 using Poderosa.Communication;
 using Poderosa.Config;
 using Poderosa.Connection;
 using Poderosa.ConnectionParam;
-using Poderosa.SSH;
 using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -31,7 +29,7 @@ namespace Poderosa.Forms
         private SocketWithTimeout _connector;
         private IntPtr _savedHWND;
 
-        private Container components = null;
+        private readonly Container components = null;
 
         private Label _hostLabel;
         public ComboBox _hostBox;
@@ -69,23 +67,20 @@ namespace Poderosa.Forms
         private Button _loginButton;
         private Button _cancelButton;
         #endregion
+
         public LoginDialog()
         {
             _firstFlag = true;
             _initializing = true;
             _history = GApp.ConnectionHistory;
-            //
-            // Windows フォーム デザイナ サポートに必要です。
-            //
+
             InitializeComponent();
             InitializeText();
 
-            //
-            // TODO: InitializeComponent 呼び出しの後に、コンストラクタ コードを追加してください。
-            //
             InitializeLoginParams();
             _initializing = false;
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -97,6 +92,7 @@ namespace Poderosa.Forms
             }
             base.Dispose(disposing);
         }
+
         #region Windows Form Designer generated code
         private void InitializeComponent()
         {
@@ -139,9 +135,8 @@ namespace Poderosa.Forms
             _sshGroup.SuspendLayout();
             _terminalGroup.SuspendLayout();
             SuspendLayout();
-            // 
+
             // _hostLabel
-            // 
             _hostLabel.ImeMode = ImeMode.NoControl;
             _hostLabel.Location = new Point(16, 12);
             _hostLabel.Name = "_hostLabel";
@@ -149,17 +144,15 @@ namespace Poderosa.Forms
             _hostLabel.Size = new Size(80, 16);
             _hostLabel.TabIndex = 0;
             _hostLabel.TextAlign = ContentAlignment.MiddleLeft;
-            // 
+
             // _hostBox
-            // 
             _hostBox.Location = new Point(104, 8);
             _hostBox.Name = "_hostBox";
             _hostBox.Size = new Size(208, 20);
             _hostBox.TabIndex = 1;
             _hostBox.SelectedIndexChanged += new EventHandler(OnHostIsSelected);
-            // 
+
             // _methodLabel
-            // 
             _methodLabel.ImeMode = ImeMode.NoControl;
             _methodLabel.Location = new Point(16, 36);
             _methodLabel.Name = "_methodLabel";
@@ -167,22 +160,17 @@ namespace Poderosa.Forms
             _methodLabel.Size = new Size(80, 16);
             _methodLabel.TabIndex = 2;
             _methodLabel.TextAlign = ContentAlignment.MiddleLeft;
-            // 
+
             // _methodBox
-            // 
             _methodBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            _methodBox.Items.AddRange(new object[] { "Telnet",
-                                                            "SSH1",
-                                                            "SSH2"
-                                                            });
+            _methodBox.Items.AddRange(new object[] { "Telnet" });
             _methodBox.Location = new Point(104, 32);
             _methodBox.Name = "_methodBox";
             _methodBox.Size = new Size(208, 20);
             _methodBox.TabIndex = 3;
             _methodBox.SelectedIndexChanged += new EventHandler(AdjustConnectionUI);
-            // 
+
             // _portLabel
-            // 
             _portLabel.ImeMode = ImeMode.NoControl;
             _portLabel.Location = new Point(16, 60);
             _portLabel.Name = "_portLabel";
@@ -190,143 +178,37 @@ namespace Poderosa.Forms
             _portLabel.Size = new Size(80, 16);
             _portLabel.TabIndex = 4;
             _portLabel.TextAlign = ContentAlignment.MiddleLeft;
-            // 
+
             // _portBox
-            // 
             _portBox.Location = new Point(104, 56);
             _portBox.Name = "_portBox";
             _portBox.Size = new Size(208, 20);
             _portBox.TabIndex = 5;
-            // 
-            // _sshGroup
-            // 
-            _sshGroup.Controls.AddRange(new Control[] {
-                                                                                    _privateKeyFile,
-                                                                                    _authOptions,
-                                                                                    _privateKeyLabel,
-                                                                                    _passphraseBox,
-                                                                                    _userNameBox,
-                                                                                    _authenticationLabel,
-                                                                                    _passphraseLabel,
-                                                                                    _usernameLabel,
-                                                                                    _privateKeySelect});
-            _sshGroup.Location = new Point(8, 88);
-            _sshGroup.Name = "_sshGroup";
-            _sshGroup.FlatStyle = FlatStyle.System;
-            _sshGroup.Size = new Size(312, 112);
-            _sshGroup.TabIndex = 6;
-            _sshGroup.TabStop = false;
-            // 
-            // _usernameLabel
-            // 
-            _usernameLabel.ImeMode = ImeMode.NoControl;
-            _usernameLabel.Location = new Point(8, 16);
-            _usernameLabel.Name = "_usernameLabel";
-            _usernameLabel.RightToLeft = RightToLeft.No;
-            _usernameLabel.Size = new Size(80, 16);
-            _usernameLabel.TabIndex = 7;
-            _usernameLabel.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // _userNameBox
-            // 
-            _userNameBox.Location = new Point(96, 16);
-            _userNameBox.Name = "_userNameBox";
-            _userNameBox.Size = new Size(200, 20);
-            _userNameBox.TabIndex = 8;
-            // 
-            // _authenticationLabel
-            // 
-            _authenticationLabel.ImeMode = ImeMode.NoControl;
-            _authenticationLabel.Location = new Point(8, 40);
-            _authenticationLabel.Name = "_authenticationLabel";
-            _authenticationLabel.RightToLeft = RightToLeft.No;
-            _authenticationLabel.Size = new Size(80, 16);
-            _authenticationLabel.TabIndex = 9;
-            _authenticationLabel.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // _authOptions
-            // 
-            _authOptions.DropDownStyle = ComboBoxStyle.DropDownList;
-            _authOptions.Location = new Point(96, 40);
-            _authOptions.Name = "_authOptions";
-            _authOptions.Size = new Size(200, 20);
-            _authOptions.TabIndex = 10;
-            _authOptions.SelectedIndexChanged += new EventHandler(AdjustAuthenticationUI);
-            // 
-            // _passphraseLabel
-            // 
-            _passphraseLabel.ImeMode = ImeMode.NoControl;
-            _passphraseLabel.Location = new Point(8, 64);
-            _passphraseLabel.Name = "_passphraseLabel";
-            _passphraseLabel.RightToLeft = RightToLeft.No;
-            _passphraseLabel.Size = new Size(80, 16);
-            _passphraseLabel.TabIndex = 11;
-            _passphraseLabel.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // _passphraseBox
-            // 
-            _passphraseBox.Location = new Point(96, 64);
-            _passphraseBox.Name = "_passphraseBox";
-            _passphraseBox.PasswordChar = '*';
-            _passphraseBox.Size = new Size(200, 19);
-            _passphraseBox.TabIndex = 12;
-            _passphraseBox.Text = "";
-            // 
-            // _privateKeyLabel
-            // 
-            _privateKeyLabel.ImeMode = ImeMode.NoControl;
-            _privateKeyLabel.Location = new Point(8, 88);
-            _privateKeyLabel.Name = "_privateKeyLabel";
-            _privateKeyLabel.RightToLeft = RightToLeft.No;
-            _privateKeyLabel.Size = new Size(72, 16);
-            _privateKeyLabel.TabIndex = 14;
-            _privateKeyLabel.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // _privateKeyFile
-            // 
-            _privateKeyFile.Location = new Point(96, 88);
-            _privateKeyFile.Name = "_privateKeyFile";
-            _privateKeyFile.Size = new Size(176, 19);
-            _privateKeyFile.TabIndex = 15;
-            _privateKeyFile.Text = "";
-            // 
-            // _privateKeySelect
-            // 
-            _privateKeySelect.FlatStyle = FlatStyle.Flat;
-            _privateKeySelect.ImageIndex = 0;
-            _privateKeySelect.FlatStyle = FlatStyle.System;
-            _privateKeySelect.ImeMode = ImeMode.NoControl;
-            _privateKeySelect.Location = new Point(272, 88);
-            _privateKeySelect.Name = "_privateKeySelect";
-            _privateKeySelect.RightToLeft = RightToLeft.No;
-            _privateKeySelect.Size = new Size(19, 19);
-            _privateKeySelect.TabIndex = 16;
-            _privateKeySelect.Text = "...";
-            _privateKeySelect.Click += new EventHandler(OnOpenPrivateKey);
-            // 
+
             // _terminalGroup
             // 
-            _terminalGroup.Controls.AddRange(new Control[] {
-                                                                                         _logTypeBox,
-                                                                                         _logTypeLabel,
-                                                                                         _newLineBox,
-                                                                                         _localEchoBox,
-                                                                                         _localEchoLabel,
-                                                                                         _newLineLabel,
-                                                                                         _logFileBox,
-                                                                                         _logFileLabel,
-                                                                                         _encodingBox,
-                                                                                         _encodingLabel,
-                                                                                         _selectLogButton, _terminalTypeLabel, _terminalTypeBox});
+            _terminalGroup.Controls.AddRange(new Control[]
+            {
+                _logTypeBox,
+                _logTypeLabel,
+                _newLineBox,
+                _localEchoBox,
+                _localEchoLabel,
+                _newLineLabel,
+                _logFileBox,
+                _logFileLabel,
+                _encodingBox,
+                _encodingLabel,
+                _selectLogButton, _terminalTypeLabel, _terminalTypeBox
+            });
             _terminalGroup.Location = new Point(8, 208);
             _terminalGroup.Name = "_terminalGroup";
             _terminalGroup.FlatStyle = FlatStyle.System;
             _terminalGroup.Size = new Size(312, 168);
             _terminalGroup.TabIndex = 17;
             _terminalGroup.TabStop = false;
-            // 
+
             // _logTypeLabel
-            // 
             _logTypeLabel.ImeMode = ImeMode.NoControl;
             _logTypeLabel.Location = new Point(8, 16);
             _logTypeLabel.Name = "_logTypeLabel";
@@ -334,9 +216,8 @@ namespace Poderosa.Forms
             _logTypeLabel.Size = new Size(96, 16);
             _logTypeLabel.TabIndex = 18;
             _logTypeLabel.TextAlign = ContentAlignment.MiddleLeft;
-            // 
+
             // _logTypeBox
-            // 
             _logTypeBox.DropDownStyle = ComboBoxStyle.DropDownList;
             _logTypeBox.Items.AddRange(EnumDescAttributeT.For(typeof(LogType)).DescriptionCollection());
             _logTypeBox.Location = new Point(112, 16);
@@ -344,9 +225,8 @@ namespace Poderosa.Forms
             _logTypeBox.Size = new Size(96, 20);
             _logTypeBox.TabIndex = 19;
             _logTypeBox.SelectionChangeCommitted += new EventHandler(OnLogTypeChanged);
-            // 
+
             // _logFileLabel
-            // 
             _logFileLabel.ImeMode = ImeMode.NoControl;
             _logFileLabel.Location = new Point(8, 40);
             _logFileLabel.Name = "_logFileLabel";
@@ -532,7 +412,11 @@ namespace Poderosa.Forms
         }
         private void AdjustConnectionUI(object sender, EventArgs e)
         {
-            if (_initializing) return;
+            if (_initializing)
+            {
+                return;
+            }
+
             if (_methodBox.Text == "Telnet")
             {
                 _portBox.SelectedIndex = 0; //Telnet:23
@@ -540,7 +424,10 @@ namespace Poderosa.Forms
             else
             {
                 _portBox.SelectedIndex = 1; //SSH:22
-                if (_authOptions.SelectedIndex == -1) _authOptions.SelectedIndex = 0;
+                if (_authOptions.SelectedIndex == -1)
+                {
+                    _authOptions.SelectedIndex = 0;
+                }
             }
             EnableValidControls();
         }
@@ -551,24 +438,41 @@ namespace Poderosa.Forms
         private void InitializeLoginParams()
         {
             StringCollection c = _history.Hosts;
-            foreach (string h in c) _hostBox.Items.Add(h);
-            if (_hostBox.Items.Count > 0) _hostBox.SelectedIndex = 0;
+            foreach (string h in c)
+            {
+                _hostBox.Items.Add(h);
+            }
 
-            c = _history.Accounts;
-            foreach (string a in c) _userNameBox.Items.Add(a);
-            if (_userNameBox.Items.Count > 0) _userNameBox.SelectedIndex = 0;
+            if (_hostBox.Items.Count > 0)
+            {
+                _hostBox.SelectedIndex = 0;
+            }
+
+            if (_userNameBox.Items.Count > 0)
+            {
+                _userNameBox.SelectedIndex = 0;
+            }
 
             int[] ic = _history.Ports;
-            foreach (int p in ic) _portBox.Items.Add(PortDescription(p));
+            foreach (int p in ic)
+            {
+                _portBox.Items.Add(PortDescription(p));
+            }
 
             if (_hostBox.Items.Count > 0)
             {
                 TCPTerminalParam last = _history.SearchByHost((string)_hostBox.Items[0]);
-                if (last != null) ApplyParam(last);
+                if (last != null)
+                {
+                    ApplyParam(last);
+                }
             }
 
             c = _history.LogPaths;
-            foreach (string p in c) _logFileBox.Items.Add(p);
+            foreach (string p in c)
+            {
+                _logFileBox.Items.Add(p);
+            }
 
             if (GApp.Options.DefaultLogType != LogType.None)
             {
@@ -578,21 +482,12 @@ namespace Poderosa.Forms
                 _logFileBox.Text = t;
             }
             else
+            {
                 _logTypeBox.SelectedIndex = 0;
-
+            }
         }
         private void EnableValidControls()
         {
-            bool ssh = _methodBox.Text != "Telnet";
-            bool pubkey = _authOptions.SelectedIndex == (int)AuthType.PublicKey;
-            bool kbd = _authOptions.SelectedIndex == (int)AuthType.KeyboardInteractive;
-
-            _userNameBox.Enabled = ssh;
-            _authOptions.Enabled = ssh;
-            _passphraseBox.Enabled = ssh && (pubkey || !kbd);
-            _privateKeyFile.Enabled = ssh && pubkey;
-            _privateKeySelect.Enabled = ssh && pubkey;
-
             bool e = ((LogType)EnumDescAttributeT.For(typeof(LogType)).FromDescription(_logTypeBox.Text, LogType.None) != LogType.None);
             _logFileBox.Enabled = e;
             _selectLogButton.Enabled = e;
@@ -601,22 +496,7 @@ namespace Poderosa.Forms
         public void ApplyParam(TCPTerminalParam param)
         {
             _initializing = true;
-            _methodBox.SelectedIndex = (int)param.Method;
             _portBox.SelectedIndex = _portBox.FindStringExact(PortDescription(param.Port));
-            _methodBox.SelectedIndex = _methodBox.FindStringExact(param.Method.ToString());
-            if (param.IsSSH)
-            {
-                SSHTerminalParam sp = (SSHTerminalParam)param;
-                _userNameBox.SelectedIndex = _userNameBox.FindStringExact(sp.Account);
-                _passphraseBox.Text = sp.Passphrase;
-
-                if (sp.AuthType == AuthType.PublicKey)
-                    _privateKeyFile.Text = sp.IdentityFile;
-                else
-                    _privateKeyFile.Text = "";
-                _authOptions.SelectedIndex = (int)sp.AuthType;
-            }
-
             _encodingBox.SelectedIndex = (int)param.EncodingProfile.Type;
             _newLineBox.SelectedIndex = (int)param.TransmitNL;
             _localEchoBox.SelectedIndex = param.LocalEcho ? 1 : 0;
@@ -636,7 +516,11 @@ namespace Poderosa.Forms
 
         private void OnHostIsSelected(object sender, EventArgs e)
         {
-            if (_initializing) return;
+            if (_initializing)
+            {
+                return;
+            }
+
             string host = _hostBox.Text;
             TCPTerminalParam param = _history.SearchByHost(host);
             Debug.Assert(param != null);
@@ -645,11 +529,15 @@ namespace Poderosa.Forms
 
         private static int ParsePort(string text)
         {
-            //頻出のやつ
             if (text.IndexOf("(22)") != -1)
+            {
                 return 22;
+            }
+
             if (text.IndexOf("(23)") != -1)
+            {
                 return 23;
+            }
 
             try
             {
@@ -660,41 +548,28 @@ namespace Poderosa.Forms
                 throw new FormatException(String.Format("Message.LoginDialog.InvalidPort", text));
             }
         }
-        private static ConnectionMethod ParseMethod(string text)
-        {
-            if (text.IndexOf("SSH1") != -1)
-                return ConnectionMethod.SSH1;
-            else if (text.IndexOf("SSH2") != -1)
-                return ConnectionMethod.SSH2;
-            else if (text.IndexOf("Telnet") != -1)
-                return ConnectionMethod.Telnet;
-            else
-                throw new ArgumentException("unknown method " + text);
-        }
 
         private static string PortDescription(int port)
         {
-            if (port == 22)
-                return "SSH(22)";
-            else if (port == 23)
+            if (port == 23)
+            {
                 return "Telnet(23)";
+            }
             else
+            {
                 return port.ToString();
+            }
         }
 
-
-        private void OnOpenPrivateKey(object sender, EventArgs e)
-        {
-            string fn = GCUtil.SelectPrivateKeyFileByDialog(this);
-            if (fn != null) _privateKeyFile.Text = fn;
-            _privateKeySelect.Focus(); //どっちにしても次のフォーカスは鍵選択ボタンへ
-        }
 
         public void OnOK(object sender, EventArgs e)
         {
             DialogResult = DialogResult.None;
             TCPTerminalParam param = ValidateContent();
-            if (param == null) return;  //パラメータに誤りがあれば即脱出
+            if (param == null)
+            {
+                return;  //パラメータに誤りがあれば即脱出
+            }
 
             _loginButton.Enabled = false;
             _cancelButton.Enabled = false;
@@ -702,12 +577,11 @@ namespace Poderosa.Forms
             Text = "Caption.LoginDialog.Connecting";
             _savedHWND = Handle;
 
-            HostKeyCheckCallback checker = null;
-            if (param.IsSSH)
-                checker = new HostKeyCheckCallback(new HostKeyChecker(this, (SSHTerminalParam)param).CheckHostKeyCallback);
-
-            _connector = CommunicationUtil.StartNewConnection(this, param, _passphraseBox.Text, checker);
-            if (_connector == null) ClearConnectingState();
+            _connector = CommunicationUtil.StartNewConnection(this, param);
+            if (_connector == null)
+            {
+                ClearConnectingState();
+            }
         }
 
         //入力内容に誤りがあればそれを警告してnullを返す。なければ必要なところを埋めたTCPTerminalParamを返す
@@ -715,20 +589,13 @@ namespace Poderosa.Forms
         {
             string msg = null;
             TCPTerminalParam p = null;
-            SSHTerminalParam sp = null;
             try
             {
-                ConnectionMethod m = ParseMethod(_methodBox.Text);
-                if (m == ConnectionMethod.Telnet)
-                    p = new TelnetTerminalParam("");
-                else
+                p = new TelnetTerminalParam("")
                 {
-                    p = sp = new SSHTerminalParam(ConnectionMethod.SSH2, "", "", "");
-                    sp.Method = m;
-                    sp.Account = _userNameBox.Text;
-                }
+                    Host = _hostBox.Text
+                };
 
-                p.Host = _hostBox.Text;
                 try
                 {
                     p.Port = ParsePort(_portBox.Text);
@@ -739,31 +606,29 @@ namespace Poderosa.Forms
                 }
 
                 if (_hostBox.Text.Length == 0)
+                {
                     msg = "Message.LoginDialog.HostIsEmpty";
+                }
 
                 p.LogType = (LogType)EnumDescAttributeT.For(typeof(LogType)).FromDescription(_logTypeBox.Text, LogType.None);
 
                 if (p.LogType != LogType.None)
                 {
                     p.LogPath = _logFileBox.Text;
-                    if (p.LogPath == GUtil.CreateLogFileName(null)) p.LogPath = GUtil.CreateLogFileName(_hostBox.Text);
+                    if (p.LogPath == GUtil.CreateLogFileName(null))
+                    {
+                        p.LogPath = GUtil.CreateLogFileName(_hostBox.Text);
+                    }
+
                     LogFileCheckResult r = GCUtil.CheckLogFileName(p.LogPath, this);
-                    if (r == LogFileCheckResult.Cancel || r == LogFileCheckResult.Error) return null;
+                    if (r == LogFileCheckResult.Cancel || r == LogFileCheckResult.Error)
+                    {
+                        return null;
+                    }
+
                     p.LogAppend = (r == LogFileCheckResult.Append);
                 }
 
-                if (p.IsSSH)
-                {
-                    Debug.Assert(sp != null);
-                    sp.AuthType = (AuthType)_authOptions.SelectedIndex;
-                    if (sp.AuthType == AuthType.PublicKey)
-                    {
-                        if (!File.Exists(_privateKeyFile.Text))
-                            msg = "Message.LoginDialog.KeyFileNotExist";
-                        else
-                            sp.IdentityFile = _privateKeyFile.Text;
-                    }
-                }
                 p.EncodingProfile = EncodingProfile.Get((EncodingType)_encodingBox.SelectedIndex);
 
                 p.LocalEcho = _localEchoBox.SelectedIndex == 1;
@@ -776,14 +641,15 @@ namespace Poderosa.Forms
                     return null;
                 }
                 else
+                {
                     return p;
+                }
             }
             catch (Exception ex)
             {
                 GUtil.Warning(this, ex.Message);
                 return null;
             }
-
         }
 
         protected override void OnActivated(EventArgs args)
@@ -798,11 +664,18 @@ namespace Poderosa.Forms
         private void SelectLog(object sender, EventArgs e)
         {
             string fn = GCUtil.SelectLogFileByDialog(this);
-            if (fn != null) _logFileBox.Text = fn;
+            if (fn != null)
+            {
+                _logFileBox.Text = fn;
+            }
         }
         private void OnLogTypeChanged(object sender, EventArgs e)
         {
-            if (_initializing) return;
+            if (_initializing)
+            {
+                return;
+            }
+
             EnableValidControls();
         }
 
@@ -815,7 +688,9 @@ namespace Poderosa.Forms
                 return true;
             }
             else
+            {
                 return base.ProcessDialogKey(key);
+            }
         }
         private void ClearConnectingState()
         {

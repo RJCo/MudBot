@@ -88,7 +88,10 @@ namespace Poderosa.UI
             if (clDlg.DialogResult == DialogResult.OK)
             {
                 _selectedColor = clDlg.Color;
-                if (ColorChanged != null) ColorChanged(this, clDlg.Color);
+                if (ColorChanged != null)
+                {
+                    ColorChanged(this, clDlg.Color);
+                }
             }
             Invalidate();
             clDlg.Dispose();

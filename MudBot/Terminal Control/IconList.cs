@@ -13,7 +13,7 @@ namespace Poderosa
     /// </summary>
     internal class IconList : Form
     {
-        ImageList _imageList;
+        private ImageList _imageList;
         private IContainer components;
 
         public IconList()
@@ -95,7 +95,10 @@ namespace Poderosa
         public static Image LoadIcon(int id)
         {
             if (_iconList == null)
+            {
                 _iconList = new IconList();
+            }
+
             return _iconList._imageList.Images[id];
         }
 

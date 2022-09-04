@@ -1,6 +1,6 @@
 ﻿namespace EventEngines
 {
-    class CombatEngine
+    internal class CombatEngine
     {
     }
 }

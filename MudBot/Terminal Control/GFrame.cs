@@ -1120,11 +1120,18 @@ namespace Poderosa.Forms
             Menu = mm;
             InitContextMenu();
             AdjustMRUMenu();
-            if (_toolBar != null) _toolBar.ReloadLanguage(l);
+            if (_toolBar != null)
+            {
+                _toolBar.ReloadLanguage(l);
+            }
+
             AdjustTitle(GEnv.Connections.ActiveTag);
             AdjustMacroMenu();
 
-            if (_xmodemDialog != null) _xmodemDialog.ReloadLanguage();
+            if (_xmodemDialog != null)
+            {
+                _xmodemDialog.ReloadLanguage();
+            }
         }
         private void CreateToolBar()
         {
@@ -1210,7 +1217,11 @@ namespace Poderosa.Forms
         {
             get
             {
-                if (_contextMenu == null) InitContextMenu();
+                if (_contextMenu == null)
+                {
+                    InitContextMenu();
+                }
+
                 return _contextMenu;
             }
         }
@@ -1298,17 +1309,27 @@ namespace Poderosa.Forms
         {
             if (ct != null)
             {
-                if (_tabBar != null) _tabBar.SetActiveTab(ct);
+                if (_tabBar != null)
+                {
+                    _tabBar.SetActiveTab(ct);
+                }
+
                 AdjustTerminalUI(true, ct);
                 _multiPaneControl.ActivateConnection(ct);
                 AdjustTitle(ct);
-                if (_xmodemDialog != null && !_xmodemDialog.Executing) _xmodemDialog.ConnectionTag = ct;
+                if (_xmodemDialog != null && !_xmodemDialog.Executing)
+                {
+                    _xmodemDialog.ConnectionTag = ct;
+                }
             }
             else
             {
                 AdjustTerminalUI(false, null);
                 AdjustTitle(null);
-                if (_xmodemDialog != null) _xmodemDialog.Close();
+                if (_xmodemDialog != null)
+                {
+                    _xmodemDialog.Close();
+                }
             }
 
             IDictionaryEnumerator e = _windowMenuItemMap.GetEnumerator();
@@ -1376,7 +1397,10 @@ namespace Poderosa.Forms
         public void AdjustTerminalUI(bool enabled, ConnectionTag ct)
         {
             TerminalConnection con = ct == null ? null : ct.Connection;
-            if (_toolBar != null) _toolBar.EnableTerminalUI(enabled, con);
+            if (_toolBar != null)
+            {
+                _toolBar.EnableTerminalUI(enabled, con);
+            }
 
             bool e = GEnv.Connections.Count > 0;
             _menuCloseAll.Enabled = e;
@@ -1457,7 +1481,9 @@ namespace Poderosa.Forms
         {
             int n = _menuBarMacro.MergeIndex + 1;
             while (n < _menuMacro.DropDownItems.Count)
+            {
                 _menuMacro.DropDownItems.RemoveAt(n); //バー以降を全消去
+            }
 
             foreach (MacroModule mod in GApp.MacroManager.Modules)
             {
@@ -1485,9 +1511,13 @@ namespace Poderosa.Forms
             };
             //このショートカットは固定で、カスタマイズ不可
             if (_windowMenuItemMap.Count <= 8)
+            {
                 mi.ShortcutKey = Keys.Alt | (Keys)((int)Keys.D1 + _windowMenuItemMap.Count);
+            }
             else if (_windowMenuItemMap.Count == 9)
+            {
                 mi.ShortcutKey = Keys.Alt | Keys.D0;
+            }
 
             foreach (ToolStripMenuItem m in _windowMenuItemMap.Keys)
             {
@@ -1516,11 +1546,17 @@ namespace Poderosa.Forms
                 GMenuItem mi = (GMenuItem)_menuWindow.DropDownItems[i];
                 int n = i - (_menuBarWindow3.MergeIndex + 1);
                 if (n <= 8)
+                {
                     mi.ShortcutKey = Keys.Alt | (Keys)((int)Keys.D1 + n);
+                }
                 else if (n == 9)
+                {
                     mi.ShortcutKey = Keys.Alt | Keys.D0;
+                }
                 else
+                {
                     mi.ShortcutKey = Keys.None;
+                }
             }
         }
         public void ReorderWindowMenu(int index, int newindex, ConnectionTag active_tag)
@@ -1533,7 +1569,10 @@ namespace Poderosa.Forms
 
             _menuWindow.DropDownItems.Remove(mi1);
             _menuWindow.DropDownItems.Insert(TagIndexToWindowMenuItemIndex(newindex), mi1);
-            if (_tabBar != null) _tabBar.ReorderButton(index, newindex, active_tag);
+            if (_tabBar != null)
+            {
+                _tabBar.ReorderButton(index, newindex, active_tag);
+            }
         }
         private int TagIndexToWindowMenuItemIndex(int index)
         {
@@ -1555,7 +1594,9 @@ namespace Poderosa.Forms
             int i = _menuBarBeforeMRU.MergeIndex + 1;
             ToolStripItemCollection mi = _menuFile.DropDownItems;
             while (_menuBarAfterMRU.MergeIndex > i)
+            {
                 mi.RemoveAt(i);
+            }
 
             //リストからセット
             int count = GApp.Options.MRUSize;
@@ -1565,14 +1606,21 @@ namespace Poderosa.Forms
                 GMenuItem mru = new GMenuItem();
                 _MRUMenuToParameter[mru] = p;
                 string text = p.Caption;
-                if (text == null || text.Length == 0) text = p.ShortDescription;
+                if (text == null || text.Length == 0)
+                {
+                    text = p.ShortDescription;
+                }
+
                 mru.Text = i <= 8 ?
-                    String.Format("&{0} {1} - {2}", i + 1, text, p.MethodName) :
-                    String.Format("{0} {1} - {2}", i + 1, text, p.MethodName);
+                    String.Format("&{0} {1}", i + 1, text) :
+                    String.Format("{0} {1}", i + 1, text);
                 mru.Click += new EventHandler(OnMRUMenuClicked);
                 mi.Insert(_menuBarBeforeMRU.MergeIndex + i + 1, mru);
 
-                if (++i == count) break;
+                if (++i == count)
+                {
+                    break;
+                }
             }
 
             _menuBarAfterMRU.Visible = (i > 0); //１つもないときはバーが連続してしまい見苦しい
@@ -1592,7 +1640,9 @@ namespace Poderosa.Forms
             _menuShrinkPane.Enabled = opt.FrameStyle != GFrameStyle.Single;
 
             if (prev != null && prev.FrameStyle != opt.FrameStyle) //起動直後(prev==null)だとまだレイアウトがされていないのでInitUIは実行できない
+            {
                 _multiPaneControl.InitUI(prev, opt);
+            }
 
             bool toolbar = prev != null && prev.ShowToolBar;
             bool tabbar = prev != null && prev.ShowTabBar;
@@ -1614,16 +1664,25 @@ namespace Poderosa.Forms
 
             if (!toolbar && opt.ShowToolBar)
             {
-                if (_toolBar == null) CreateToolBar();
+                if (_toolBar == null)
+                {
+                    CreateToolBar();
+                }
+
                 Controls.Add(_toolBar);
                 Controls.SetChildIndex(_toolBar, opt.ShowTabBar ? 2 : 1);
             }
             else if (toolbar && !opt.ShowToolBar)
             {
-                if (_toolBar != null) Controls.Remove(_toolBar);
+                if (_toolBar != null)
+                {
+                    Controls.Remove(_toolBar);
+                }
             }
             if (opt.ShowToolBar)
+            {
                 _toolBar.ApplyOptions(opt);
+            }
 
             if (!statusbar && opt.ShowStatusBar)
             {
@@ -1635,7 +1694,6 @@ namespace Poderosa.Forms
                 Controls.Remove(_statusBar);
             }
             ResumeLayout(true);
-
         }
         public void ApplyHotKeys()
         {
@@ -1657,7 +1715,10 @@ namespace Poderosa.Forms
                     mi.ShortcutKey = km.FindKey(cid);
 
                 }
-                if (mib.DropDownItems.Count > 0) ApplyHotKeys(km, mib.DropDownItems);
+                if (mib.DropDownItems.Count > 0)
+                {
+                    ApplyHotKeys(km, mib.DropDownItems);
+                }
             }
         }
         #endregion
@@ -1676,9 +1737,13 @@ namespace Poderosa.Forms
                 if (_initialAction.ShortcutFile != null)
                 {
                     if (File.Exists(_initialAction.ShortcutFile))
+                    {
                         GApp.GlobalCommandTarget.OpenShortCut(_initialAction.ShortcutFile);
+                    }
                     else
+                    {
                         GUtil.Warning(this, String.Format("Message.GFrame.FailedToOpen", _initialAction.ShortcutFile));
+                    }
                 }
             }
             else
@@ -1692,11 +1757,15 @@ namespace Poderosa.Forms
             GEnv.InterThreadUIService.MainFrameHandle = Handle; //ここでハンドルをセットし、IWin32Windowを他のスレッドがいじらないようにする
 
             foreach (string m in _initialAction.Messages)
+            {
                 GUtil.Warning(this, m);
+            }
 
             CID cid = GApp.Options.ShowWelcomeDialog ? CID.ShowWelcomeDialog : GApp.Options.ActionOnLaunch;
             if (cid != CID.NOP)
+            {
                 GApp.GlobalCommandTarget.DelayedExec(cid);
+            }
         }
 
         protected override void OnSizeChanged(EventArgs args)
@@ -1708,7 +1777,9 @@ namespace Poderosa.Forms
         protected override void OnClosing(CancelEventArgs args)
         {
             if (GApp.GlobalCommandTarget.CloseAll() == CommandResult.Cancelled)
+            {
                 args.Cancel = true;
+            }
             else
             {
                 GApp.Options.FramePosition = DesktopBounds;
@@ -1739,9 +1810,13 @@ namespace Poderosa.Forms
         private void OnDragEnterBody(DragEventArgs a)
         {
             if (a.Data.GetDataPresent("FileContents") || a.Data.GetDataPresent("FileDrop"))
+            {
                 a.Effect = DragDropEffects.Link;
+            }
             else
+            {
                 a.Effect = DragDropEffects.None;
+            }
         }
         private void OnDragDropBody(DragEventArgs a)
         {
@@ -1790,18 +1865,29 @@ namespace Poderosa.Forms
             CID cmd = (CID)(((GMenuItem)sender).CID);
             Commands.Entry e = GApp.Options.Commands.FindEntry(cmd);
             if (e == null)
+            {
                 Debug.WriteLine("Command Entry Not Found: " + cmd);
+            }
             else
             {
-                if (GApp.MacroManager.MacroIsRunning && e.CID != CID.StopMacro) return;
+                if (GApp.MacroManager.MacroIsRunning && e.CID != CID.StopMacro)
+                {
+                    return;
+                }
 
                 if (e.Target == Commands.Target.Global)
+                {
                     GApp.GlobalCommandTarget.Exec(cmd);
+                }
                 else
                 {
                     bool context_menu = ((ToolStripMenuItem)sender).Owner is ContextMenuStrip;
                     ContainerConnectionCommandTarget t = GApp.GetConnectionCommandTarget(context_menu ? _commandTargetConnection : GEnv.Connections.ActiveConnection);
-                    if (t == null) return; //アクティブなコネクションがなければ無視
+                    if (t == null)
+                    {
+                        return; //アクティブなコネクションがなければ無視
+                    }
+
                     t.Exec(cmd);
                 }
             }
@@ -1835,13 +1921,21 @@ namespace Poderosa.Forms
         {
             Keys key;
             if (sender == _menuMovePaneUp)
+            {
                 key = Keys.Up;
+            }
             else if (sender == _menuMovePaneDown)
+            {
                 key = Keys.Down;
+            }
             else if (sender == _menuMovePaneLeft)
+            {
                 key = Keys.Left;
+            }
             else /*if(sender==_menuMovePaneRight)*/
+            {
                 key = Keys.Right;
+            }
 
             GApp.GlobalCommandTarget.MoveActivePane(key);
         }

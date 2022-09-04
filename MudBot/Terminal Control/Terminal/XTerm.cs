@@ -28,10 +28,15 @@ namespace Poderosa.Terminal
         {
             //WrapAroundがfalseで、キャレットが右端のときは何もしない
             if (!_wrapAroundMode && _manipulator.CaretColumn >= GetConnection().TerminalWidth - 1)
+            {
                 return ProcessCharResult.Processed;
+            }
 
             if (_insertMode)
+            {
                 _manipulator.InsertBlanks(_manipulator.CaretColumn, GLine.CalcDisplayLength(ch));
+            }
+
             return base.ProcessNormalChar(ch);
         }
         protected override ProcessCharResult ProcessControlChar(char ch)
@@ -61,7 +66,10 @@ namespace Poderosa.Terminal
         protected override ProcessCharResult ProcessEscapeSequence(char code, char[] seq, int offset)
         {
             ProcessCharResult v = base.ProcessEscapeSequence(code, seq, offset);
-            if (v != ProcessCharResult.Unsupported) return v;
+            if (v != ProcessCharResult.Unsupported)
+            {
+                return v;
+            }
 
             switch (code)
             {
@@ -72,15 +80,24 @@ namespace Poderosa.Terminal
                         return ProcessCharResult.Processed;
                     }
                     else if (seq.Length > offset && seq[offset] == ' ')
+                    {
                         return ProcessCharResult.Processed; //7/8ビットコントロールは常に両方をサポート
+                    }
+
                     break;
                 case 'G':
                     if (seq.Length > offset && seq[offset] == ' ')
+                    {
                         return ProcessCharResult.Processed; //7/8ビットコントロールは常に両方をサポート
+                    }
+
                     break;
                 case 'L':
                     if (seq.Length > offset && seq[offset] == ' ')
+                    {
                         return ProcessCharResult.Processed; //VT100は最初からOK
+                    }
+
                     break;
                 case 'H':
                     SetTabStop(_manipulator.CaretColumn, true);
@@ -92,7 +109,10 @@ namespace Poderosa.Terminal
         protected override ProcessCharResult ProcessAfterCSI(string param, char code)
         {
             ProcessCharResult v = base.ProcessAfterCSI(param, code);
-            if (v != ProcessCharResult.Unsupported) return v;
+            if (v != ProcessCharResult.Unsupported)
+            {
+                return v;
+            }
 
             switch (code)
             {
@@ -152,17 +172,25 @@ namespace Poderosa.Terminal
                 GetConnection().Write(data);
             }
             else
+            {
                 base.ProcessDeviceAttributes(param);
+            }
         }
 
 
         protected override ProcessCharResult ProcessAfterOSC(string param, char code)
         {
             ProcessCharResult v = base.ProcessAfterOSC(param, code);
-            if (v != ProcessCharResult.Unsupported) return v;
+            if (v != ProcessCharResult.Unsupported)
+            {
+                return v;
+            }
 
             int semicolon = param.IndexOf(';');
-            if (semicolon == -1) return ProcessCharResult.Unsupported;
+            if (semicolon == -1)
+            {
+                return ProcessCharResult.Unsupported;
+            }
 
             string ps = param.Substring(0, semicolon);
             string pt = param.Substring(semicolon + 1);
@@ -172,23 +200,31 @@ namespace Poderosa.Terminal
                 {
                     _tag.WindowTitle = pt;
                     if (GEnv.Options.AdjustsTabTitleToWindowTitle)
+                    {
                         _tag.Connection.Param.Caption = pt;
+                    }
 
                     GEnv.InterThreadUIService.RefreshConnection(_tag);
                 }
                 return ProcessCharResult.Processed;
             }
             else if (ps == "1")
+            {
                 return ProcessCharResult.Processed; //Set Icon Nameというやつだが無視でよさそう
+            }
             else
+            {
                 return ProcessCharResult.Unsupported;
-
+            }
         }
 
         protected override ProcessCharResult ProcessDECSET(string param, char code)
         {
             ProcessCharResult v = base.ProcessDECSET(param, code);
-            if (v != ProcessCharResult.Unsupported) return v;
+            if (v != ProcessCharResult.Unsupported)
+            {
+                return v;
+            }
 
             if (param == "1047")
             { //Screen Buffer: とくに特別なことはしない
@@ -223,13 +259,20 @@ namespace Poderosa.Terminal
             else if (param == "47")
             {
                 if (code == 'h')
+                {
                     SaveScreen();
+                }
                 else
+                {
                     RestoreScreen();
+                }
+
                 return ProcessCharResult.Processed;
             }
             else
+            {
                 return ProcessCharResult.Unsupported;
+            }
         }
 
 
@@ -238,8 +281,15 @@ namespace Poderosa.Terminal
             foreach (string p in param.Split(';'))
             {
                 int row = ParseInt(p, 1);
-                if (row < 1) row = 1;
-                if (row > GetConnection().TerminalHeight) row = GetConnection().TerminalHeight;
+                if (row < 1)
+                {
+                    row = 1;
+                }
+
+                if (row > GetConnection().TerminalHeight)
+                {
+                    row = GetConnection().TerminalHeight;
+                }
 
                 int col = _manipulator.CaretColumn;
 
@@ -254,8 +304,16 @@ namespace Poderosa.Terminal
             foreach (string p in param.Split(';'))
             {
                 int n = ParseInt(p, 1);
-                if (n < 1) n = 1;
-                if (n > GetConnection().TerminalWidth) n = GetConnection().TerminalWidth;
+                if (n < 1)
+                {
+                    n = 1;
+                }
+
+                if (n > GetConnection().TerminalWidth)
+                {
+                    n = GetConnection().TerminalWidth;
+                }
+
                 _manipulator.CaretColumn = n - 1;
             }
         }
@@ -267,7 +325,9 @@ namespace Poderosa.Terminal
             {
                 _manipulator.PutChar(' ', _currentdecoration);
                 if (_manipulator.CaretColumn >= _manipulator.BufferSize)
+                {
                     break;
+                }
             }
             _manipulator.CaretColumn = s;
         }
@@ -281,7 +341,10 @@ namespace Poderosa.Terminal
             GLine nl = _manipulator.Export();
             doc.ReplaceCurrentLine(nl);
             if (doc.ScrollingBottom == -1)
+            {
                 doc.SetScrollingRegion(0, GetConnection().TerminalHeight - 1);
+            }
+
             for (int i = 0; i < d; i++)
             {
                 doc.ScrollUp(doc.CurrentLineNumber, doc.ScrollingBottom);
@@ -299,7 +362,10 @@ namespace Poderosa.Terminal
             GLine nl = _manipulator.Export();
             doc.ReplaceCurrentLine(nl);
             if (doc.ScrollingBottom == -1)
+            {
                 doc.SetScrollingRegion(0, GetConnection().TerminalHeight - 1);
+            }
+
             for (int i = 0; i < d; i++)
             {
                 doc.ScrollDown(doc.CurrentLineNumber, doc.ScrollingBottom);
@@ -313,8 +379,15 @@ namespace Poderosa.Terminal
 
             int t = _manipulator.CaretColumn;
             for (int i = 0; i < n; i++)
+            {
                 t = GetNextTabStop(t);
-            if (t >= GetConnection().TerminalWidth) t = GetConnection().TerminalWidth - 1;
+            }
+
+            if (t >= GetConnection().TerminalWidth)
+            {
+                t = GetConnection().TerminalWidth - 1;
+            }
+
             _manipulator.CaretColumn = t;
         }
         private void ProcessBackwardTab(string param)
@@ -323,16 +396,27 @@ namespace Poderosa.Terminal
 
             int t = _manipulator.CaretColumn;
             for (int i = 0; i < n; i++)
+            {
                 t = GetPrevTabStop(t);
-            if (t < 0) t = 0;
+            }
+
+            if (t < 0)
+            {
+                t = 0;
+            }
+
             _manipulator.CaretColumn = t;
         }
         private void ProcessTabClear(string param)
         {
             if (param == "0")
+            {
                 SetTabStop(_manipulator.CaretColumn, false);
+            }
             else if (param == "3")
+            {
                 ClearAllTabStop();
+            }
         }
 
         private void InitTabStops()
@@ -374,7 +458,11 @@ namespace Poderosa.Terminal
             int index = start + 1;
             while (index < _tag.Connection.TerminalWidth)
             {
-                if (_tabStops[index]) return index;
+                if (_tabStops[index])
+                {
+                    return index;
+                }
+
                 index++;
             }
             return _tag.Connection.TerminalWidth - 1;
@@ -387,7 +475,11 @@ namespace Poderosa.Terminal
             int index = start - 1;
             while (index > 0)
             {
-                if (_tabStops[index]) return index;
+                if (_tabStops[index])
+                {
+                    return index;
+                }
+
                 index--;
             }
             return 0;
@@ -406,7 +498,11 @@ namespace Poderosa.Terminal
         }
         protected void RestoreScreen()
         {
-            if (_savedScreen == null) return;
+            if (_savedScreen == null)
+            {
+                return;
+            }
+
             TerminalDocument doc = GetDocument();
             int w = GetConnection().TerminalWidth;
             int m = GetConnection().TerminalHeight;
@@ -415,13 +511,18 @@ namespace Poderosa.Terminal
             {
                 l.ExpandBuffer(w);
                 if (t == null)
+                {
                     doc.AddLine(l);
+                }
                 else
                 {
                     doc.Replace(t, l);
                     t = l.NextLine;
                 }
-                if (--m == 0) break;
+                if (--m == 0)
+                {
+                    break;
+                }
             }
 
             _savedScreen = null;
@@ -434,15 +535,21 @@ namespace Poderosa.Terminal
                 return ProcessCharResult.Processed;
             }
             else
+            {
                 return ProcessCharResult.Unsupported;
+            }
         }
 
         public override byte[] SequenceKeyData(Keys modifier, Keys key)
         {
             if ((int)Keys.F1 <= (int)key && (int)key <= (int)Keys.F12)
+            {
                 return base.SequenceKeyData(modifier, key);
+            }
             else if (GUtil.IsCursorKey(key))
+            {
                 return base.SequenceKeyData(modifier, key);
+            }
             else
             {
                 byte[] r = new byte[4];
@@ -451,19 +558,34 @@ namespace Poderosa.Terminal
                 r[3] = (byte)'~';
                 //このあたりはxtermでは割と違うようだ
                 if (key == Keys.Insert)
+                {
                     r[2] = (byte)'2';
+                }
                 else if (key == Keys.Home)
+                {
                     r[2] = (byte)'7';
+                }
                 else if (key == Keys.PageUp)
+                {
                     r[2] = (byte)'5';
+                }
                 else if (key == Keys.Delete)
+                {
                     r[2] = (byte)'3';
+                }
                 else if (key == Keys.End)
+                {
                     r[2] = (byte)'8';
+                }
                 else if (key == Keys.PageDown)
+                {
                     r[2] = (byte)'6';
+                }
                 else
+                {
                     throw new ArgumentException("unknown key " + key.ToString());
+                }
+
                 return r;
             }
         }

@@ -43,7 +43,9 @@ namespace Poderosa.Terminal
                 con.BinaryLogger.Append(data, offset, count);
 
                 if (_tag.ModalTerminalTask != null && _tag.ModalTerminalTask.CanReceive)
+                {
                     _tag.ModalTerminalTask.Input(data, offset, count);
+                }
                 else
                 {
                     TerminalDocument document = _tag.Document;
@@ -63,7 +65,10 @@ namespace Poderosa.Terminal
                         AdjustTransientScrollBar();
 
                         int n = document.CurrentLineNumber - _tag.Connection.TerminalHeight + 1 - document.FirstLineNumber;
-                        if (n < 0) n = 0;
+                        if (n < 0)
+                        {
+                            n = 0;
+                        }
 
                         //Debug.WriteLine(String.Format("E={0} C={1} T={2} H={3} LC={4} MAX={5} n={6}", _transientScrollBarEnabled, _tag.Document.CurrentLineNumber, _tag.Document.TopLineNumber, _tag.Connection.TerminalHeight, _transientScrollBarLargeChange, _transientScrollBarMaximum, n));
                         if (IsAutoScrollMode(n))
@@ -72,13 +77,18 @@ namespace Poderosa.Terminal
                             document.TopLineNumber = n + document.FirstLineNumber;
                         }
                         else
+                        {
                             _transientScrollBarValue = document.TopLineNumber - document.FirstLineNumber;
+                        }
 
                         _tag.NotifyUpdate();
                     }
 
                     //Invalidateをlockの外に出す。このほうが安全と思われた
-                    if (_tag.Pane != null) _tag.InvalidateParam.InvokeFor(_tag.Pane);
+                    if (_tag.Pane != null)
+                    {
+                        _tag.InvalidateParam.InvokeFor(_tag.Pane);
+                    }
 
                     ITerminalTextLogger tl = con.TextLogger;
                     if (tl != null)
@@ -90,7 +100,9 @@ namespace Poderosa.Terminal
 
                 ITerminalBinaryLogger bl = con.BinaryLogger;
                 if (bl != null)
+                {
                     bl.Flush();
+                }
             }
             catch (Exception ex)
             {
@@ -105,7 +117,10 @@ namespace Poderosa.Terminal
         }
         private void CheckDiscardDocument()
         {
-            if (_tag == null || _tag.Terminal.TerminalMode == TerminalMode.Application) return;
+            if (_tag == null || _tag.Terminal.TerminalMode == TerminalMode.Application)
+            {
+                return;
+            }
 
             TerminalDocument document = _tag.Document;
             int del = document.DiscardOldLines(GEnv.Options.TerminalBufferSize + _tag.Connection.TerminalHeight);
@@ -114,9 +129,16 @@ namespace Poderosa.Terminal
                 _tag.NotifyUpdate();
                 TextSelection sel = GEnv.TextSelection;
                 if (sel.Owner == _tag.Pane)
+                {
                     sel.ClearIfOverlapped(document.FirstLineNumber);
+                }
+
                 int newvalue = _transientScrollBarValue - del;
-                if (newvalue < 0) newvalue = 0;
+                if (newvalue < 0)
+                {
+                    newvalue = 0;
+                }
+
                 _transientScrollBarValue = newvalue;
                 document.InvalidateAll(); //本当はここまでしなくても良さそうだが念のため
             }
@@ -152,20 +174,29 @@ namespace Poderosa.Terminal
 
         public void CommitScrollBar(VScrollBar sb, bool dirty_only)
         {
-            if (dirty_only && !_transientScrollBarDirty) return;
+            if (dirty_only && !_transientScrollBarDirty)
+            {
+                return;
+            }
 
             sb.Enabled = _transientScrollBarEnabled;
             sb.Maximum = _transientScrollBarMaximum;
             sb.LargeChange = _transientScrollBarLargeChange;
             //!!本来このif文は不要なはずだが、範囲エラーになるケースが見受けられた。その原因を探ってリリース直前にいろいろいじるのは危険なのでここは逃げる。後でちゃんと解明する。
             if (_transientScrollBarValue < _transientScrollBarMaximum)
+            {
                 sb.Value = _transientScrollBarValue;
+            }
+
             _transientScrollBarDirty = false;
         }
 
         public void ErrorOccurred(string msg)
         {
-            if (GEnv.Frame.IgnoreErrors) return;
+            if (GEnv.Frame.IgnoreErrors)
+            {
+                return;
+            }
 
             Debug.WriteLine("Closed=" + _tag.Connection.IsClosed);
             if (!_tag.Connection.IsClosed)
@@ -185,7 +216,11 @@ namespace Poderosa.Terminal
 
         public void DisconnectedFromServer()
         {
-            if (GEnv.Frame.IgnoreErrors) return;
+            if (GEnv.Frame.IgnoreErrors)
+            {
+                return;
+            }
+
             _tag.NotifyDisconnect();
 
             TerminalConnection c = _tag.Connection;
@@ -197,7 +232,10 @@ namespace Poderosa.Terminal
         public void IndicateBell()
         {
             GEnv.InterThreadUIService.IndicateBell(_tag.Document);
-            if (GEnv.Options.BeepOnBellChar) Win32.MessageBeep(-1);
+            if (GEnv.Options.BeepOnBellChar)
+            {
+                Win32.MessageBeep(-1);
+            }
         }
 
     }

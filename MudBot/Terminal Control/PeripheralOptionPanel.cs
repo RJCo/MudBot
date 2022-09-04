@@ -256,24 +256,40 @@ namespace Poderosa.Forms
         private static int LocalBufferScrollModifierIndex(Keys key)
         {
             if (key == Keys.Control)
+            {
                 return 0;
+            }
             else if (key == Keys.Shift)
+            {
                 return 1;
+            }
             else if (key == Keys.Alt)
+            {
                 return 2;
+            }
             else
+            {
                 return -1; //never comes
+            }
         }
         private static Keys LocalBufferScrollModifierKey(int index)
         {
             if (index == 0)
+            {
                 return Keys.Control;
+            }
             else if (index == 1)
+            {
                 return Keys.Shift;
+            }
             else if (index == 2)
+            {
                 return Keys.Alt;
+            }
             else
+            {
                 return Keys.Control;
+            }
         }
     }
 }

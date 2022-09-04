@@ -36,7 +36,11 @@ namespace Poderosa.Communication
             }
             set
             {
-                if (value != 5 && value != 4) throw new IOException("Wrong SOCKS version");
+                if (value != 5 && value != 4)
+                {
+                    throw new IOException("Wrong SOCKS version");
+                }
+
                 _version = value;
             }
         }
@@ -134,9 +138,13 @@ namespace Poderosa.Communication
         public void Connect(Socket s)
         {
             if (_version == 4)
+            {
                 ConnectBySocks4(s);
+            }
             else
+            {
                 ConnectBySocks5(s);
+            }
         }
 
         private void ConnectBySocks4(Socket s)
@@ -171,13 +179,15 @@ namespace Poderosa.Communication
             byte[] response = new byte[8];
             s.Receive(response, 0, response.Length, SocketFlags.None);
             if (response[1] != 90)
+            {
                 throw new IOException("SOCKS authentication failed.");
+            }
             /*
-            #define SOCKS4_REP_SUCCEEDED	90	 rquest granted (succeeded) 
-            #define SOCKS4_REP_REJECTED	91	 request rejected or failed
-            #define SOCKS4_REP_IDENT_FAIL	92	 cannot connect identd 
-            #define SOCKS4_REP_USERID	93	user id not matched 
-            */
+#define SOCKS4_REP_SUCCEEDED	90	 rquest granted (succeeded) 
+#define SOCKS4_REP_REJECTED	91	 request rejected or failed
+#define SOCKS4_REP_IDENT_FAIL	92	 cannot connect identd 
+#define SOCKS4_REP_USERID	93	user id not matched 
+*/
 
         }
 
@@ -193,8 +203,15 @@ namespace Poderosa.Communication
             byte[] response = new byte[4];
             int r = s.Receive(response, 0, 2, SocketFlags.None);
             //Debug.WriteLine("[0] len="+r+" res="+response[1]);
-            if (r != 2) throw new IOException("Failed to communicate with the SOCKS server.");
-            if (response[0] != 5) throw new IOException(String.Format("The SOCKS server specified an unsupported authentication method [{0}].", response[0]));
+            if (r != 2)
+            {
+                throw new IOException("Failed to communicate with the SOCKS server.");
+            }
+
+            if (response[0] != 5)
+            {
+                throw new IOException(String.Format("The SOCKS server specified an unsupported authentication method [{0}].", response[0]));
+            }
 
             if (response[1] == 0)
             {
@@ -205,8 +222,9 @@ namespace Poderosa.Communication
                 Sock5Auth(s);
             }
             else
+            {
                 throw new IOException(String.Format("The SOCKS server specified an unsupported authentication method [{0}].", response[1]));
-
+            }
 
             MemoryStream u = new MemoryStream();
             BinaryWriter wr = new BinaryWriter(u);
@@ -231,7 +249,9 @@ namespace Poderosa.Communication
 
             r = s.Receive(response, 0, 4, SocketFlags.None);
             if (response[1] != 0)
+            {
                 throw new IOException("Failed to communicate with the SOCKS server." + GetSocks5ErrorMessage(response[1]));
+            }
 
             //read addr and port
             if (response[3] == 3)
@@ -247,7 +267,9 @@ namespace Poderosa.Communication
                 s.Receive(t, 0, 6, SocketFlags.None);
             }
             else
+            {
                 throw new IOException("unexpected destination addr type " + response[3]);
+            }
         }
 
         private void Sock5Auth(Socket s)
@@ -266,7 +288,9 @@ namespace Poderosa.Communication
             byte[] response = new byte[2];
             int r = s.Receive(response, 0, 2, SocketFlags.None);
             if (r != 2 || response[1] != 0)
+            {
                 throw new IOException("SOCKS authentication failed.");
+            }
         }
 
         private static string GetSocks5ErrorMessage(byte code)
@@ -334,14 +358,26 @@ namespace Poderosa.Communication
             IPAddress[] t = Dns.GetHostEntry(host).AddressList;
             foreach (IPAddress a in t)
             {
-                if (a.AddressFamily == AddressFamily.InterNetwork && _v4Address == null) _v4Address = a;
-                else if (a.AddressFamily == AddressFamily.InterNetworkV6 && _v6Address == null) _v6Address = a;
+                if (a.AddressFamily == AddressFamily.InterNetwork && _v4Address == null)
+                {
+                    _v4Address = a;
+                }
+                else if (a.AddressFamily == AddressFamily.InterNetworkV6 && _v6Address == null)
+                {
+                    _v6Address = a;
+                }
             }
         }
         public IPAddressSet(IPAddress a)
         {
-            if (a.AddressFamily == AddressFamily.InterNetwork) _v4Address = a;
-            else if (a.AddressFamily == AddressFamily.InterNetworkV6) _v6Address = a;
+            if (a.AddressFamily == AddressFamily.InterNetwork)
+            {
+                _v4Address = a;
+            }
+            else if (a.AddressFamily == AddressFamily.InterNetworkV6)
+            {
+                _v6Address = a;
+            }
         }
         public IPAddressSet(IPAddress v4, IPAddress v6)
         {
@@ -369,7 +405,10 @@ namespace Poderosa.Communication
         public static Socket ConnectTCPSocket(IPAddressSet addr, int port)
         {
             IPAddress primary = addr.Primary;
-            if (primary == null) return null;
+            if (primary == null)
+            {
+                return null;
+            }
 
             Socket s = new Socket(primary.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             try
@@ -380,7 +419,11 @@ namespace Poderosa.Communication
             catch (Exception ex)
             {
                 IPAddress secondary = addr.Secondary;
-                if (secondary == null) throw ex;
+                if (secondary == null)
+                {
+                    throw ex;
+                }
+
                 s = new Socket(secondary.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 s.Connect(new IPEndPoint(secondary, port));
                 return s;
@@ -393,7 +436,10 @@ namespace Poderosa.Communication
             {
                 Regex re = new Regex("([\\dA-Fa-f\\.\\:]+)/\\d+");
                 Match m = re.Match(netaddress);
-                if (m.Length != netaddress.Length || m.Index != 0) return false;
+                if (m.Length != netaddress.Length || m.Index != 0)
+                {
+                    return false;
+                }
 
                 //‚©‚Á‚±‚ªIPƒAƒhƒŒƒX‚È‚çOK
                 string a = m.Groups[1].Value;
@@ -410,7 +456,10 @@ namespace Poderosa.Communication
             int slash = netaddress.IndexOf('/');
             int bits = Int32.Parse(netaddress.Substring(slash + 1));
             IPAddress net = IPAddress.Parse(netaddress.Substring(0, slash));
-            if (net.AddressFamily != target.AddressFamily) return false;
+            if (net.AddressFamily != target.AddressFamily)
+            {
+                return false;
+            }
 
             byte[] bnet = net.GetAddressBytes();
             byte[] btarget = target.GetAddressBytes();
@@ -421,16 +470,24 @@ namespace Poderosa.Communication
                 byte b1 = bnet[i];
                 byte b2 = btarget[i];
                 if (bits <= 0)
+                {
                     return true;
+                }
                 else if (bits >= 8)
                 {
-                    if (b1 != b2) return false;
+                    if (b1 != b2)
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
                     b1 >>= (8 - bits);
                     b2 >>= (8 - bits);
-                    if (b1 != b2) return false;
+                    if (b1 != b2)
+                    {
+                        return false;
+                    }
                 }
                 bits -= 8;
             }

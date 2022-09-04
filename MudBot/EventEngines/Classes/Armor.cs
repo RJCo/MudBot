@@ -1,6 +1,6 @@
 ﻿namespace EventEngines
 {
-    class Armor : IItem
+    internal class Armor : IItem
     {
     }
 }

@@ -120,9 +120,14 @@ namespace Poderosa
                 case CService.SetPanePosition:
                     GEnv.Frame.ActivateConnection(GEnv.Connections.FindTag(_connection));
                     if (GApp.Options.FrameStyle == GFrameStyle.DivHorizontal)
+                    {
                         GApp.GlobalCommandTarget.MoveActivePane(_destinationPanePosition == PanePosition.First ? Keys.Up : Keys.Down);
+                    }
                     else if (GApp.Options.FrameStyle == GFrameStyle.DivVertical)
+                    {
                         GApp.GlobalCommandTarget.MoveActivePane(_destinationPanePosition == PanePosition.First ? Keys.Left : Keys.Right);
+                    }
+
                     break;
                 case CService.SetFrameStyle:
                     SetFrameStyle();

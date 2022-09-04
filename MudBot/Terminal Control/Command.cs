@@ -172,9 +172,13 @@ namespace Poderosa.Config
                 get
                 {
                     if (_category == Category.Macro)
+                    {
                         return _description;
+                    }
                     else
+                    {
                         return _description;
+                    }
                 }
             }
 
@@ -416,7 +420,10 @@ namespace Poderosa.Config
         {
             foreach (Entry e in _macroEntries)
             {
-                if (e.Key != Keys.None) _keyToEntry.Remove(e.Key | e.Modifiers);
+                if (e.Key != Keys.None)
+                {
+                    _keyToEntry.Remove(e.Key | e.Modifiers);
+                }
             }
             _keyMapIsDirty = true;
             _macroEntries.Clear();
@@ -432,14 +439,20 @@ namespace Poderosa.Config
 
         public Entry FindEntry(Keys key)
         {
-            if (_keyMapIsDirty) FixKeyMap();
+            if (_keyMapIsDirty)
+            {
+                FixKeyMap();
+            }
+
             return (Entry)_keyToEntry[key];
         }
 
         public Entry FindEntry(CID id)
         {
             if (id >= CID.ExecMacro)
+            {
                 return FindMacroEntry(id - CID.ExecMacro);
+            }
             else
             {
                 int i = (int)id;
@@ -463,7 +476,9 @@ namespace Poderosa.Config
             //ä˘ë∂ÇÃÉLÅ[ê›íËÇ™Ç†ÇÍÇŒíuÇ´ä∑Ç¶
             Entry existing = FindEntry(key | modifiers);
             if (existing != null)
+            {
                 _keyToEntry.Remove(key | modifiers);
+            }
 
             e.Modifiers = modifiers;
             e.Key = key;
@@ -508,9 +523,13 @@ namespace Poderosa.Config
                 _IDToEntry[(int)e.CID] = e;
 
                 if (e.Category == Category.Fixed)
+                {
                     _fixedEntries.Add(e);
+                }
                 else
+                {
                     _entries.Add(e);
+                }
             }
         }
         protected void FixKeyMap()
@@ -524,7 +543,9 @@ namespace Poderosa.Config
                 {
                     Keys k = e.Key | e.Modifiers;
                     if (!_keyToEntry.ContainsKey(k))
+                    {
                         _keyToEntry.Add(k, e);
+                    }
                 }
             }
             _keyMapIsDirty = false;
@@ -537,7 +558,9 @@ namespace Poderosa.Config
             foreach (Entry e in _entries)
             {
                 if (e.KeyIsModified)
+                {
                     node[e.CID.ToString()] = UILibUtil.KeyString(e.Modifiers, e.Key, ',');
+                }
             }
 
             parent.AddChild(node);
@@ -555,7 +578,11 @@ namespace Poderosa.Config
                 while (ie.MoveNext())
                 {
                     CID id = (CID)GUtil.ParseEnum(typeof(CID), (string)ie.Key, CID.NOP);
-                    if (id == CID.NOP) continue;
+                    if (id == CID.NOP)
+                    {
+                        continue;
+                    }
+
                     string value = (string)ie.Value;
                     Entry e = FindEntry(id);
                     Keys t = GUtil.ParseKey(value.Split(','));
@@ -567,22 +594,34 @@ namespace Poderosa.Config
 
         public CommandResult ProcessKey(Keys k, bool macro_running)
         {
-            if (_keyMapIsDirty) FixKeyMap();
+            if (_keyMapIsDirty)
+            {
+                FixKeyMap();
+            }
+
             Entry e = (Entry)_keyToEntry[k];
             if (e != null)
             {
                 if (macro_running)
                 {
                     if (e.CID != CID.StopMacro)
+                    {
                         return CommandResult.Ignored;
+                    }
                     else
+                    {
                         return Execute(e);
+                    }
                 }
                 else
+                {
                     return Execute(e);
+                }
             }
             else
+            {
                 return CommandResult.NOP;
+            }
         }
 
         private static CommandResult Execute(Entry e)
@@ -595,7 +634,10 @@ namespace Poderosa.Config
             {
                 ContainerConnectionCommandTarget t = GApp.GetConnectionCommandTarget();
                 if (t == null)
+                {
                     return CommandResult.Ignored;
+                }
+
                 return t.Exec(e.CID);
             }
         }

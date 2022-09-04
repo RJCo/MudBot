@@ -14,23 +14,15 @@ namespace WalburySoftware
     public class TerminalControl : Control
     {
         #region fields
-        private string _username = "";
-        private string _password = "";
         private string _hostname = "";
         private int _port = 23; // default to telnet
-        private string _identifyFile = "";
-        private AuthType _authType = AuthType.Password;
-        private ConnectionMethod _connectionMethod;
         private TerminalPane _terminalPane;
         #endregion
 
         #region Constructors
-        public TerminalControl(string UserName, string Password, string Hostname, int Port, ConnectionMethod Method)
+        public TerminalControl(string Hostname, int Port)
         {
-            _connectionMethod = Method;
             _hostname = Hostname;
-            _password = Password;
-            _username = UserName;
             _port = Port;
 
             InitializeTerminalPane();
@@ -64,30 +56,6 @@ namespace WalburySoftware
 
         public void Connect()
         {
-            #region old stuff
-            /*
-            Poderosa.ConnectionParam.LogType logType = Poderosa.ConnectionParam.LogType.Default;
-            string file = null;
-            if (this.TerminalPane.Connection != null)
-            {
-                logType = this.TerminalPane.Connection.LogType;
-                file = this.TerminalPane.Connection.LogPath;
-                //GApp.GetConnectionCommandTarget().Close();
-                this.TerminalPane.Connection.Close();
-                this.TerminalPane.Detach();
-            }
-
-
-            SSHTerminalParam p = new SSHTerminalParam((Poderosa.ConnectionParam.ConnectionMethod)this.Method, this.Host, this.UserName, this.Password);
-            
-            GApp.GlobalCommandTarget.SilentNewConnection(p);
-            
-
-            if (file != null)
-                this.SetLog((LogType) logType, file, true);
-            */
-            #endregion
-
             // Save old log info in case this is a reconnect
             Poderosa.ConnectionParam.LogType logType = Poderosa.ConnectionParam.LogType.Default;
             string file = null;
@@ -95,7 +63,6 @@ namespace WalburySoftware
             {
                 logType = TerminalPane.Connection.LogType;
                 file = TerminalPane.Connection.LogPath;
-                //GApp.GetConnectionCommandTarget().Close();
                 TerminalPane.Connection.Close();
                 TerminalPane.Detach();
             }
@@ -107,30 +74,15 @@ namespace WalburySoftware
                 CommunicationUtil.SilentClient s = new CommunicationUtil.SilentClient();
                 Size sz = Size;
 
-                if (Method == ConnectionMethod.Telnet)
+                connParam = new TelnetTerminalParam(Host)
                 {
-                    connParam = new TelnetTerminalParam(Host)
-                    {
-                        Encoding = EncodingType.ISO8859_1,
-                        Port = _port,
-                        RenderProfile = new RenderProfile(),
-                        TerminalType = TerminalType.XTerm
-                    };
+                    Encoding = EncodingType.ISO8859_1,
+                    Port = _port,
+                    RenderProfile = new RenderProfile(),
+                    TerminalType = TerminalType.XTerm
+                };
 
-                    swt = new TelnetConnector((TelnetTerminalParam)connParam, sz);
-                }
-                else if (Method == ConnectionMethod.SSH1 || Method == ConnectionMethod.SSH2)
-                {
-                    connParam = new SSHTerminalParam((Poderosa.ConnectionParam.ConnectionMethod)Method, Host, UserName, Password);
-                    ((SSHTerminalParam)connParam).AuthType = AuthType;
-                    ((SSHTerminalParam)connParam).IdentityFile = IdentifyFile;
-                    connParam.Encoding = EncodingType.ISO8859_1;
-                    connParam.Port = _port;
-                    connParam.RenderProfile = new RenderProfile();
-                    connParam.TerminalType = TerminalType.XTerm;
-
-                    swt = new SSHConnector((SSHTerminalParam)connParam, sz, ((SSHTerminalParam)connParam).Passphrase, (HostKeyCheckCallback)null);
-                }
+                swt = new TelnetConnector((TelnetTerminalParam)connParam, sz);
 
                 swt.AsyncConnect(s, connParam.Host, connParam.Port);
 
@@ -143,7 +95,9 @@ namespace WalburySoftware
 
                 //-------------------------------------------------------------
                 if (file != null)
+                {
                     SetLog((LogType)logType, file, true);
+                }
                 TerminalPane.ConnectionTag.RenderProfile = new RenderProfile();
                 SetPaneColors(Color.LightBlue, Color.Black);
             }
@@ -165,7 +119,6 @@ namespace WalburySoftware
 
         public void SendText(string command)
         {
-            //GApp.GetConnectionCommandTarget().Connection.WriteChars(command.ToCharArray());
             TerminalPane.Connection.WriteChars(command.ToCharArray());
         }
 
@@ -194,10 +147,11 @@ namespace WalburySoftware
             // make sure directory exists
             string dir = File.Substring(0, File.LastIndexOf(@"\"));
             if (!System.IO.Directory.Exists(dir))
+            {
                 System.IO.Directory.CreateDirectory(dir);
+            }
 
             TerminalPane.Connection.ResetLog((Poderosa.ConnectionParam.LogType)logType, File, append);
-            //this.TerminalPane.Connection.ResetLog(Poderosa.ConnectionParam.LogType.Default, File, append);
         }
 
         public void CommentLog(string comment)
@@ -231,19 +185,25 @@ namespace WalburySoftware
         {
             //GApp.GlobalCommandTarget.Copy();
 
-            if (GEnv.TextSelection.IsEmpty) return;
+            if (GEnv.TextSelection.IsEmpty)
+            {
+                return;
+            }
 
             string t = GEnv.TextSelection.GetSelectedText();
             if (t.Length > 0)
+            {
                 Clipboard.SetDataObject(t, false);
-
+            }
         }
 
         public void PasteTextFromClipboard()
         {
-            //GApp.GetConnectionCommandTarget().Paste();
             string value = (string)Clipboard.GetDataObject().GetData("Text");
-            if (value == null || value.Length == 0 || TerminalPane == null || TerminalPane.ConnectionTag == null) return;
+            if (value == null || value.Length == 0 || TerminalPane == null || TerminalPane.ConnectionTag == null)
+            {
+                return;
+            }
 
             PasteProcessor p = new PasteProcessor(TerminalPane.ConnectionTag, value);
             p.Perform();
@@ -252,59 +212,11 @@ namespace WalburySoftware
         #endregion
 
         #region Properties
-        public AuthType AuthType
-        {
-            get
-            {
-                return _authType;
-            }
-            set
-            {
-                _authType = value; ;
-            }
-        }
-
-        public string IdentifyFile
-        {
-            get
-            {
-                return _identifyFile;
-            }
-            set
-            {
-                _identifyFile = value;
-            }
-        }
-
         public TerminalPane TerminalPane
         {
             get
             {
                 return _terminalPane;
-            }
-        }
-
-        public string UserName
-        {
-            get
-            {
-                return _username;
-            }
-            set
-            {
-                _username = value;
-            }
-        }
-
-        public string Password
-        {
-            get
-            {
-                return _password;
-            }
-            set
-            {
-                _password = value;
             }
         }
 
@@ -324,18 +236,6 @@ namespace WalburySoftware
         {
             get { return _port; }
             set { _port = value; }
-        }
-
-        public ConnectionMethod Method
-        {
-            get
-            {
-                return _connectionMethod;
-            }
-            set
-            {
-                _connectionMethod = value;
-            }
         }
 
         public static int ScrollBackBuffer
@@ -375,22 +275,6 @@ namespace WalburySoftware
     }
 
     #region enums
-    public enum ConnectionMethod
-    {
-        /// <summary>
-        /// Telnet
-        /// </summary>
-        Telnet,
-        /// <summary>
-        /// SSH1
-        /// </summary>
-        SSH1,
-        /// <summary>
-        /// SSH2
-        /// </summary>
-        SSH2
-    }
-
     public enum LogType
     {
         /// <summary>

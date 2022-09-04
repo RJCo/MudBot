@@ -1,6 +1,6 @@
 ﻿namespace EventEngines
 {
-    class ActorsEngine
+    internal class ActorsEngine
     {
     }
 }

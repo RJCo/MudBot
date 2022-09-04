@@ -39,9 +39,13 @@ namespace Granados.SSHC
             //“––Ê‚Í‰pŒêE“ú–{Œê‚µ‚©‚µ‚È‚¢
             CultureInfo ci = System.Threading.Thread.CurrentThread.CurrentUICulture;
             if (ci.Name.StartsWith("ja"))
+            {
                 _resMan = new ResourceManager(name + "_ja", asm);
+            }
             else
+            {
                 _resMan = new ResourceManager(name, asm);
+            }
         }
     }
 }

@@ -38,9 +38,12 @@ namespace Poderosa.MacroEnv
             //位置とサイズの調整
             int n = _instanceCount % 5;
             Location = new Point(GApp.Frame.Left + 30 + 20 * n, GApp.Frame.Top + 30 + 20 * n);
-            if (_instanceCount > 0) Size = _lastWindowSize;
-            _instanceCount++;
+            if (_instanceCount > 0)
+            {
+                Size = _lastWindowSize;
+            }
 
+            _instanceCount++;
         }
 
         /// <summary>
@@ -103,7 +106,11 @@ namespace Poderosa.MacroEnv
         public void AddLine(string t)
         {
             //これはマクロスレッドから呼ばれるのでSendMessageを使う必要がある
-            if (_textBox.TextLength != 0) t = "\r\n" + t;
+            if (_textBox.TextLength != 0)
+            {
+                t = "\r\n" + t;
+            }
+
             _lineToAdd = t;
             Win32.SendMessage(Handle, GConst.WMG_MACRO_TRACE, IntPtr.Zero, IntPtr.Zero);
         }

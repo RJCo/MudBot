@@ -52,7 +52,9 @@ namespace Granados.SSHCV1
             byte[] header = new byte[32];
             s.Read(header, 0, header.Length);
             if (Encoding.ASCII.GetString(header) != "SSH PRIVATE KEY FILE FORMAT 1.1\n")
+            {
                 throw new SSHException(String.Format(Strings.GetString("BrokenKeyFile"), path));
+            }
 
             SSH1DataReader reader = new SSH1DataReader(ReadAll(s));
             s.Close();
@@ -77,7 +79,9 @@ namespace Granados.SSHCV1
             SSH1DataReader prvtreader = new SSH1DataReader(prvt);
             byte[] mark = prvtreader.Read(4);
             if (mark[0] != mark[2] || mark[1] != mark[3])
+            {
                 throw new SSHException(Strings.GetString("WrongPassphrase"));
+            }
 
             _privateExponent = prvtreader.ReadMPInt();
             _crtCoefficient = prvtreader.ReadMPInt();
@@ -101,10 +105,17 @@ namespace Granados.SSHCV1
             q2 = encryptedchallenge % _primeQ;
             q2 = q2.modPow(primeExponentQ, _primeQ);
 
-            if (p2 == q2) return p2;
+            if (p2 == q2)
+            {
+                return p2;
+            }
 
             k = (q2 - p2) % _primeQ;
-            if (k.IsNegative) k += _primeQ;
+            if (k.IsNegative)
+            {
+                k += _primeQ;
+            }
+
             k = k * _crtCoefficient;
             k = k % _primeQ;
 
@@ -125,7 +136,11 @@ namespace Granados.SSHCV1
         {
             byte[] t = new byte[0x1000];
             int l = s.Read(t, 0, 0x1000);
-            if (l == t.Length) throw new IOException("Key file is too big");
+            if (l == t.Length)
+            {
+                throw new IOException("Key file is too big");
+            }
+
             return t;
         }
 

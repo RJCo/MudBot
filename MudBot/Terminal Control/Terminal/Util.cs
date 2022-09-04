@@ -74,7 +74,9 @@ namespace Poderosa
         public static Color ParseColor(string t, Color defaultvalue)
         {
             if (t == null || t.Length == 0)
+            {
                 return defaultvalue;
+            }
             else
             {
                 if (t.Length == 8)
@@ -96,9 +98,13 @@ namespace Poderosa
             try
             {
                 if (t == null || t.Length == 0)
+                {
                     return (ValueType)Enum.ToObject(enumtype, (int)defaultvalue);
+                }
                 else
+                {
                     return (ValueType)Enum.Parse(enumtype, t, false);
+                }
             }
             catch (Exception)
             {
@@ -111,7 +117,10 @@ namespace Poderosa
             {
                 int r = 0;
                 foreach (string a in t.Split(','))
+                {
                     r |= (int)Enum.Parse(enumtype, a, false);
+                }
+
                 return r;
             }
             catch (FormatException)
@@ -146,7 +155,9 @@ namespace Poderosa
                         flag = true;
                     }
                     else //既に実行してだめならあきらめる
+                    {
                         throw;
+                    }
                 }
             } while (true);
         }
@@ -155,7 +166,10 @@ namespace Poderosa
         public static string FileToDir(string filename)
         {
             int n = filename.LastIndexOf('\\');
-            if (n == -1) throw new FormatException("filename does not include \\");
+            if (n == -1)
+            {
+                throw new FormatException("filename does not include \\");
+            }
 
             return filename.Substring(0, n);
         }
@@ -235,7 +249,11 @@ namespace Poderosa
             catch (Exception)
             {
                 dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Poderosa";
-                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
                 return new StreamWriter(dir + "\\error.log", true, Encoding.Default);
             }
         }
@@ -244,7 +262,11 @@ namespace Poderosa
         public static void WriteDebugLog(string data)
         {
             string dir = null;
-            if (_debugLog == null) _debugLog = GetDebugLog(ref dir);
+            if (_debugLog == null)
+            {
+                _debugLog = GetDebugLog(ref dir);
+            }
+
             _debugLog.WriteLine(data);
             _debugLog.Flush();
         }
@@ -259,11 +281,16 @@ namespace Poderosa
 
             string basefile;
             if (host == null || host.Length == 0)
+            {
                 basefile = String.Format("{0}\\{1}", GEnv.Options.DefaultLogDirectory, date);
+            }
             else
             {
                 if (host.StartsWith("rsp://"))
+                {
                     host = host.Substring(6); //rsp://のあとの文字列
+                }
+
                 basefile = String.Format("{0}\\{1}_{2}", GEnv.Options.DefaultLogDirectory, ReplaceBadPathChar(host), date);
             }
 
@@ -272,14 +299,22 @@ namespace Poderosa
             {
                 string filename;
                 if (n == 1)
+                {
                     filename = String.Format("{0}.log", basefile);
+                }
                 else
+                {
                     filename = String.Format("{0}_{1}.log", basefile, n);
+                }
 
                 if (!File.Exists(filename))
+                {
                     return filename;
+                }
                 else
+                {
                     n++;
+                }
             } while (true);
         }
 
@@ -304,7 +339,10 @@ namespace Poderosa
         {
             string[] t = new string[src.Length];
             for (int i = 0; i < src.Length; i++)
+            {
                 t[i] = src[i].WebName;
+            }
+
             return t;
         }
 
@@ -318,17 +356,25 @@ namespace Poderosa
         public static Keys ParseKey(string s)
         {
             if (s.Length == 0)
+            {
                 return Keys.None;
+            }
             else if (s.Length == 1)
             {
                 char ch = s[0];
                 if ('0' <= ch && ch <= '9')
+                {
                     return Keys.D0 + (ch - '0');
+                }
                 else
+                {
                     return (Keys)Enum.Parse(typeof(Keys), s);
+                }
             }
             else
+            {
                 return (Keys)Enum.Parse(typeof(Keys), s);
+            }
         }
         public static Keys ParseKey(string[] value)
         { //modifier込みでパース
@@ -336,10 +382,22 @@ namespace Poderosa
             for (int i = 0; i < value.Length - 1; i++)
             { //最後以外
                 string m = value[i];
-                if (m == "Alt") modifier |= Keys.Alt;
-                else if (m == "Shift") modifier |= Keys.Shift;
-                else if (m == "Ctrl") modifier |= Keys.Control;
-                else throw new Exception(m + " is unknown modifier");
+                if (m == "Alt")
+                {
+                    modifier |= Keys.Alt;
+                }
+                else if (m == "Shift")
+                {
+                    modifier |= Keys.Shift;
+                }
+                else if (m == "Ctrl")
+                {
+                    modifier |= Keys.Control;
+                }
+                else
+                {
+                    throw new Exception(m + " is unknown modifier");
+                }
             }
             return modifier | ParseKey(value[value.Length - 1]);
         }
@@ -353,14 +411,22 @@ namespace Poderosa
             {
                 int ib = (int)body;
                 if ((int)Keys.A <= ib && ib <= (int)Keys.Z)
+                {
                     return ib - (int)Keys.A + 1;
+                }
                 else if (body == Keys.Space)
+                {
                     return 0;
+                }
                 else
+                {
                     return -1;
+                }
             }
             else
+            {
                 return -1;
+            }
         }
 
         public static Thread CreateThread(ThreadStart st)

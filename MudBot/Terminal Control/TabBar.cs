@@ -4,7 +4,6 @@
 */
 using Poderosa.Config;
 using Poderosa.Connection;
-using Poderosa.ConnectionParam;
 using Poderosa.UI;
 using System;
 using System.ComponentModel;
@@ -37,9 +36,6 @@ namespace Poderosa.Forms
         private Font _basicFont;
         private Font _activeTabFont;
         private Bitmap _tabIconDefault;
-        private Bitmap _tabIconSerial;
-        private Bitmap _tabIconCygwin;
-        private Bitmap _tabIconSFU;
 
         private TabBarScrollButton _leftScrollButton;
         private TabBarScrollButton _rightScrollButton;
@@ -62,25 +58,17 @@ namespace Poderosa.Forms
             _tabToolTip = new ToolTip();
 
             if (GApp.Options.TabBarStyle == TabBarStyle.ScrollButton)
+            {
                 InitScrollButtons();
+            }
         }
         private Bitmap GetTabIcon(ConnectionTag tag)
         {
             if (_tabIconDefault == null)
             {
                 _tabIconDefault = (Bitmap)IconList.LoadIcon(IconList.ICON_NEWCONNECTION);
-                _tabIconSerial = (Bitmap)IconList.LoadIcon(IconList.ICON_SERIAL);
-                _tabIconCygwin = (Bitmap)IconList.LoadIcon(IconList.ICON_CYGWIN);
-                _tabIconSFU = (Bitmap)IconList.LoadIcon(IconList.ICON_SFU);
             }
-            if (tag.Connection.Param is SFUTerminalParam)
-                return _tabIconSFU;
-            else if (tag.Connection.Param is CygwinTerminalParam)
-                return _tabIconCygwin;
-            else if (tag.Connection.Param is SerialTerminalParam)
-                return _tabIconSerial;
-            else
-                return _tabIconDefault;
+            return _tabIconDefault;
         }
         private void InitScrollButtons()
         {
@@ -120,8 +108,16 @@ namespace Poderosa.Forms
                     width -= GetNecessaryButtonWidth(GEnv.Connections.TagAt(index));
                 }
                 index++;
-                if (index >= GEnv.Connections.Count) index = GEnv.Connections.Count - 1;
-                if (index < 0) index = 0;
+                if (index >= GEnv.Connections.Count)
+                {
+                    index = GEnv.Connections.Count - 1;
+                }
+
+                if (index < 0)
+                {
+                    index = 0;
+                }
+
                 _scrollButtonOffset = index;
             }
             ArrangeButtons();
@@ -132,10 +128,21 @@ namespace Poderosa.Forms
             if (ct != null)
             {
                 int n = GEnv.Connections.IndexOf(ct);
-                if (n == _scrollButtonOffset) _scrollButtonOffset--;
-                if (_scrollButtonOffset < 0) _scrollButtonOffset = 0;
+                if (n == _scrollButtonOffset)
+                {
+                    _scrollButtonOffset--;
+                }
 
-                if (ct.Button != null) Controls.Remove(ct.Button);
+                if (_scrollButtonOffset < 0)
+                {
+                    _scrollButtonOffset = 0;
+                }
+
+                if (ct.Button != null)
+                {
+                    Controls.Remove(ct.Button);
+                }
+
                 ArrangeButtons();
             }
         }
@@ -152,7 +159,10 @@ namespace Poderosa.Forms
 
         public void RefreshConnection(ConnectionTag tag)
         {
-            if (tag.Button == null) return;
+            if (tag.Button == null)
+            {
+                return;
+            }
 
             SetButtonText(tag.Button as TabBarButton, GEnv.Connections.IndexOf(tag), tag);
             ((TabBarButton)tag.Button).Image = GetTabIcon(tag);
@@ -192,7 +202,10 @@ namespace Poderosa.Forms
         {
             int b = Width - 4;
             if (GApp.Options.TabBarStyle == TabBarStyle.ScrollButton)
+            {
                 b -= SCROLLBUTTON_SIZE * 2;
+            }
+
             return b;
         }
 
@@ -203,7 +216,10 @@ namespace Poderosa.Forms
         }
         private void OnMouseUp(object sender, MouseEventArgs args)
         {
-            if (args.Button != MouseButtons.Right) return;
+            if (args.Button != MouseButtons.Right)
+            {
+                return;
+            }
 
             TabBarButton b = (TabBarButton)sender;
             int tx = Left + b.Left;
@@ -221,20 +237,30 @@ namespace Poderosa.Forms
         private int _dragStartPosY;
         private void OnMouseDown(object sender, MouseEventArgs args)
         {
-            if (args.Button != MouseButtons.Left) return;
+            if (args.Button != MouseButtons.Left)
+            {
+                return;
+            }
+
             _dragStartPosX = args.X;
             _dragStartPosY = args.Y;
         }
         private void OnMouseMove(object sender, MouseEventArgs args)
         {
-            if (args.Button != MouseButtons.Left) return;
+            if (args.Button != MouseButtons.Left)
+            {
+                return;
+            }
 
             if (Math.Abs(_dragStartPosX - args.X) + Math.Abs(_dragStartPosY - args.Y) >= 3)
             {
                 object tag = ((TabBarButton)sender).Tag;
                 DoDragDrop(tag, DragDropEffects.Move);
                 TabBarButton btn = sender as TabBarButton;
-                if (btn != null) btn.Reset();
+                if (btn != null)
+                {
+                    btn.Reset();
+                }
             }
         }
         private void OnLeftScrollButtonClicked(object sender, EventArgs args)
@@ -320,7 +346,10 @@ namespace Poderosa.Forms
                         if (!b.Visible)
                         {
                             int index = GEnv.Connections.IndexOf(ct);
-                            if (index != -1) EnsureButtonVisible(index);
+                            if (index != -1)
+                            {
+                                EnsureButtonVisible(index);
+                            }
                         }
                     }
                 }
@@ -350,7 +379,11 @@ namespace Poderosa.Forms
                 }
 
                 index++;
-                if (index >= GEnv.Connections.Count) index = GEnv.Connections.Count - 1;
+                if (index >= GEnv.Connections.Count)
+                {
+                    index = GEnv.Connections.Count - 1;
+                }
+
                 _scrollButtonOffset = index;
             }
             ArrangeButtons();
@@ -367,16 +400,24 @@ namespace Poderosa.Forms
         public void ArrangeButtons()
         {
             if (GApp.Options.TabBarStyle == TabBarStyle.ScrollButton)
+            {
                 ArrangeButtonsForScrollStyle(false, 0);
+            }
             else
+            {
                 ArrangeButtonsForMultiRowStyle();
+            }
         }
         public void ApplyOptions(ContainerOptions opt)
         {
             if (opt.TabBarStyle == TabBarStyle.ScrollButton)
+            {
                 ArrangeButtonsForScrollStyle(false, 0);
+            }
             else
+            {
                 ArrangeButtonsForMultiRowStyle();
+            }
         }
 
         private void ArrangeButtonsForMultiRowStyle()
@@ -394,7 +435,10 @@ namespace Poderosa.Forms
             foreach (Control c in Controls)
             {
                 TabBarButton button = c as TabBarButton;
-                if (button == null) continue;
+                if (button == null)
+                {
+                    continue;
+                }
 
                 SetButtonText(button, i, (ConnectionTag)button.Tag);
                 if (x + button.Width >= Width)
@@ -415,9 +459,16 @@ namespace Poderosa.Forms
         }
         private void ArrangeButtonsForScrollStyle(bool animation, int animation_offset)
         {
-            if (_leftScrollButton == null) InitScrollButtons();
+            if (_leftScrollButton == null)
+            {
+                InitScrollButtons();
+            }
 
-            for (int i = 0; i < _scrollButtonOffset; i++) GEnv.Connections.TagAt(i).Button.Visible = false;
+            for (int i = 0; i < _scrollButtonOffset; i++)
+            {
+                GEnv.Connections.TagAt(i).Button.Visible = false;
+            }
+
             int x = 2;
             int y = 3;
             int limit = x + GetTabAreaWidth();
@@ -433,7 +484,11 @@ namespace Poderosa.Forms
                     button.Left = x;
                     button.Width = GetNecessaryButtonWidth(ct);
                     SetButtonText(button, index, ct);
-                    if (x > limit && offset > _scrollButtonOffset) break; //少なくとも一つはボタンを表示する
+                    if (x > limit && offset > _scrollButtonOffset)
+                    {
+                        break; //少なくとも一つはボタンを表示する
+                    }
+
                     button.Top = y;
                     button.Visible = true;
                     button.Height = UNITHEIGHT - 4;
@@ -443,7 +498,10 @@ namespace Poderosa.Forms
                 offset++;
             }
 
-            for (int i = offset; i < GEnv.Connections.Count; i++) GEnv.Connections.TagAt(i).Button.Visible = false;
+            for (int i = offset; i < GEnv.Connections.Count; i++)
+            {
+                GEnv.Connections.TagAt(i).Button.Visible = false;
+            }
 
             _leftScrollButton.Left = Width - SCROLLBUTTON_SIZE * 2;
             _leftScrollButton.Top = y + 2;

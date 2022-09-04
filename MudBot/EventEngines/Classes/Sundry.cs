@@ -1,6 +1,6 @@
 ﻿namespace EventEngines
 {
-    class Sundry : IItem
+    internal class Sundry : IItem
     {
     }
 }

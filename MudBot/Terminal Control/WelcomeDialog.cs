@@ -149,11 +149,17 @@ namespace Poderosa.Forms
         private void OnOK(object sender, EventArgs args)
         {
             if (_optNewConnection.Checked)
+            {
                 _cid = CID.NewConnection;
+            }
             else if (_optCygwin.Checked)
+            {
                 _cid = CID.NewCygwinConnection;
+            }
             else if (_optConvert.Checked)
+            {
                 StartConvert();
+            }
         }
         protected override void OnClosed(EventArgs e)
         {
@@ -191,11 +197,19 @@ namespace Poderosa.Forms
                 Description = "Caption.WelcomeDialog.SelectConfigDirectory"
             };
             string initial_dir = GuessVaraTermDir();
-            if (initial_dir != null) dlg.SelectedPath = initial_dir;
+            if (initial_dir != null)
+            {
+                dlg.SelectedPath = initial_dir;
+            }
+
             if (GCUtil.ShowModalDialog(this, dlg) == DialogResult.OK)
+            {
                 return dlg.SelectedPath;
+            }
             else
+            {
                 return null;
+            }
         }
 
         private void ImportConfig(string filename)
@@ -212,9 +226,13 @@ namespace Poderosa.Forms
                 {
                     //全設定をインポートするわけではない
                     if (line.EndsWith("section terminal {"))
+                    {
                         ImportTerminalSettings(ReadStringPair(reader));
+                    }
                     else if (line.EndsWith("section key-definition {"))
+                    {
                         ImportKeySettings(ReadStringPair(reader));
+                    }
                     else if (line.EndsWith("section connection {"))
                     {
                         Hashtable t = ReadStringPair(reader);
@@ -232,7 +250,10 @@ namespace Poderosa.Forms
             }
             finally
             {
-                if (reader != null) reader.Close();
+                if (reader != null)
+                {
+                    reader.Close();
+                }
             }
         }
         private void ImportTerminalSettings(Hashtable values)
@@ -284,7 +305,11 @@ namespace Poderosa.Forms
             while (!line.EndsWith("}"))
             {
                 int start = 0;
-                while (line[start] == '\t') start++;
+                while (line[start] == '\t')
+                {
+                    start++;
+                }
+
                 int eq = line.IndexOf('=', start);
                 if (eq != -1)
                 {
@@ -302,12 +327,17 @@ namespace Poderosa.Forms
             string candidate1 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + "\\Terminal Emulator VaraTerm";
             string candidate2 = candidate1 + "\\" + Environment.UserName;
             if (Directory.Exists(candidate2))
+            {
                 return candidate2;
+            }
             else if (Directory.Exists(candidate1))
+            {
                 return candidate1;
+            }
             else
+            {
                 return null;
-
+            }
         }
 
     }

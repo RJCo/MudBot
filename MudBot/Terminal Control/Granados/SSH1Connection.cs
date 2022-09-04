@@ -103,8 +103,10 @@ namespace Granados.SSHCV1
                     DoRSAChallengeResponse();
                 }
                 bool auth = ReceiveAuthenticationResult();
-                if (!auth) throw new SSHException(Strings.GetString("AuthenticationFailed"));
-
+                if (!auth)
+                {
+                    throw new SSHException(Strings.GetString("AuthenticationFailed"));
+                }
             }
 
             _packetBuilder.Handler = new CallbackSSH1PacketHandler(this);
@@ -121,7 +123,11 @@ namespace Granados.SSHCV1
 
         public override void Disconnect(string msg)
         {
-            if (_closed) return;
+            if (_closed)
+            {
+                return;
+            }
+
             SSH1DataWriter w = new SSH1DataWriter();
             w.Write(msg);
             SSH1Packet p = SSH1Packet.FromPlainPayload(PacketType.SSH_MSG_DISCONNECT, w.ToByteArray());
@@ -133,7 +139,11 @@ namespace Granados.SSHCV1
 
         public override void Close()
         {
-            if (_closed) return;
+            if (_closed)
+            {
+                return;
+            }
+
             _closed = true;
             _stream.Close();
         }
@@ -150,7 +160,10 @@ namespace Granados.SSHCV1
         private void ReceiveServerKeys()
         {
             SSH1Packet SSH1Packet = ReceivePacket();
-            if (SSH1Packet.Type != PacketType.SSH_SMSG_PUBLIC_KEY) throw new SSHException("unexpected SSH SSH1Packet type " + SSH1Packet.Type, SSH1Packet.Data);
+            if (SSH1Packet.Type != PacketType.SSH_SMSG_PUBLIC_KEY)
+            {
+                throw new SSHException("unexpected SSH SSH1Packet type " + SSH1Packet.Type, SSH1Packet.Data);
+            }
 
             SSH1DataReader reader = new SSH1DataReader(SSH1Packet.Data);
             _cInfo._serverinfo = new SSHServerInfo(reader);
@@ -163,7 +176,10 @@ namespace Granados.SSHCV1
             int supported_authentications_mask = reader.ReadInt32();
             //Debug.WriteLine(String.Format("ServerOptions {0} {1} {2}", protocol_flags, supported_ciphers_mask, supported_authentications_mask));
 
-            if (reader.Rest > 0) throw new SSHException("data length mismatch", SSH1Packet.Data);
+            if (reader.Rest > 0)
+            {
+                throw new SSHException("data length mismatch", SSH1Packet.Data);
+            }
 
             //Debug Info
             /*
@@ -176,11 +192,17 @@ namespace Granados.SSHCV1
             foreach (CipherAlgorithm a in _param.PreferableCipherAlgorithms)
             {
                 if (a != CipherAlgorithm.Blowfish && a != CipherAlgorithm.TripleDES)
+                {
                     continue;
+                }
                 else if (a == CipherAlgorithm.Blowfish && (supported_ciphers_mask & (1 << (int)CipherAlgorithm.Blowfish)) == 0)
+                {
                     continue;
+                }
                 else if (a == CipherAlgorithm.TripleDES && (supported_ciphers_mask & (1 << (int)CipherAlgorithm.TripleDES)) == 0)
+                {
                     continue;
+                }
 
                 _cInfo._algorithmForReception = _cInfo._algorithmForTransmittion = a;
                 found = true;
@@ -188,12 +210,19 @@ namespace Granados.SSHCV1
             }
 
             if (!found)
+            {
                 throw new SSHException(String.Format(Strings.GetString("ServerNotSupportedX"), "Blowfish/TripleDES"));
+            }
 
             if (_param.AuthenticationType == AuthenticationType.Password && (supported_authentications_mask & (1 << (int)AuthenticationType.Password)) == 0)
+            {
                 throw new SSHException(String.Format(Strings.GetString("ServerNotSupportedPassword")), SSH1Packet.Data);
+            }
+
             if (_param.AuthenticationType == AuthenticationType.PublicKey && (supported_authentications_mask & (1 << (int)AuthenticationType.PublicKey)) == 0)
+            {
                 throw new SSHException(String.Format(Strings.GetString("ServerNotSupportedRSA")), SSH1Packet.Data);
+            }
         }
 
         private byte[] GenerateSessionKey()
@@ -214,7 +243,10 @@ namespace Granados.SSHCV1
                 byte[] working_data = new byte[session_key.Length];
                 byte[] session_id = CalcSessionID();
                 Array.Copy(session_key, 0, working_data, 0, session_key.Length);
-                for (int i = 0; i < session_id.Length; i++) working_data[i] ^= session_id[i];
+                for (int i = 0; i < session_id.Length; i++)
+                {
+                    working_data[i] ^= session_id[i];
+                }
 
                 //step2 decrypts with RSA
                 RSAPublicKey first_encryption;
@@ -251,12 +283,13 @@ namespace Granados.SSHCV1
                 SSH1Packet.WriteTo(_stream);
 
                 _sessionID = session_id;
-
             }
             catch (Exception e)
             {
                 if (e is IOException)
+                {
                     throw (IOException)e;
+                }
                 else
                 {
                     string t = e.StackTrace;
@@ -269,18 +302,26 @@ namespace Granados.SSHCV1
         {
             SSH1Packet SSH1Packet = ReceivePacket();
             if (SSH1Packet.Type != PacketType.SSH_SMSG_SUCCESS)
+            {
                 throw new SSHException("unexpected packet type [" + SSH1Packet.Type + "] at ReceiveKeyConfirmation()", SSH1Packet.Data);
+            }
         }
 
         private int ReceiveAuthenticationRequirement()
         {
             SSH1Packet SSH1Packet = ReceivePacket();
             if (SSH1Packet.Type == PacketType.SSH_SMSG_SUCCESS)
+            {
                 return AUTH_NOT_REQUIRED;
+            }
             else if (SSH1Packet.Type == PacketType.SSH_SMSG_FAILURE)
+            {
                 return AUTH_REQUIRED;
+            }
             else
+            {
                 throw new SSHException("type " + SSH1Packet.Type, SSH1Packet.Data);
+            }
         }
 
         private void SendUserName(string username)
@@ -310,9 +351,13 @@ namespace Granados.SSHCV1
 
             p = ReceivePacket();
             if (p.Type == PacketType.SSH_SMSG_FAILURE)
+            {
                 throw new SSHException(Strings.GetString("ServerRefusedRSA"));
+            }
             else if (p.Type != PacketType.SSH_SMSG_AUTH_RSA_CHALLENGE)
+            {
                 throw new SSHException(String.Format(Strings.GetString("UnexpectedResponse"), p.Type));
+            }
 
             //creating challenge
             SSH1DataReader r = new SSH1DataReader(p.Data);
@@ -343,17 +388,26 @@ namespace Granados.SSHCV1
                 return ReceiveAuthenticationResult();
             }
             else if (type == PacketType.SSH_SMSG_SUCCESS)
+            {
                 return true;
+            }
             else if (type == PacketType.SSH_SMSG_FAILURE)
+            {
                 return false;
+            }
             else
+            {
                 throw new SSHException("type: " + type, SSH1Packet.Data);
+            }
         }
 
         public override SSHChannel OpenShell(ISSHChannelEventReceiver receiver)
         {
             if (_shellID != -1)
+            {
                 throw new SSHException("A shell is opened already");
+            }
+
             _shellID = RegisterChannelEventReceiver(null, receiver)._localID;
             SendRequestPTY();
             _executingShell = true;
@@ -488,9 +542,13 @@ namespace Granados.SSHCV1
                 {
                     handler.Wait();
                     if (handler.State == ReceiverState.Error)
+                    {
                         throw new SSHException(handler.ErrorMessage);
+                    }
                     else if (handler.State == ReceiverState.Closed)
+                    {
                         throw new SSHException("socket closed");
+                    }
                 }
                 p = handler.PopPacket();
 
@@ -498,14 +556,22 @@ namespace Granados.SSHCV1
                 PacketType pt = p.Type;
                 if (pt == PacketType.SSH_MSG_IGNORE)
                 {
-                    if (_eventReceiver != null) _eventReceiver.OnIgnoreMessage(r.ReadString());
+                    if (_eventReceiver != null)
+                    {
+                        _eventReceiver.OnIgnoreMessage(r.ReadString());
+                    }
                 }
                 else if (pt == PacketType.SSH_MSG_DEBUG)
                 {
-                    if (_eventReceiver != null) _eventReceiver.OnDebugMessage(false, r.ReadString());
+                    if (_eventReceiver != null)
+                    {
+                        _eventReceiver.OnDebugMessage(false, r.ReadString());
+                    }
                 }
                 else
+                {
                     return p;
+                }
             }
         }
 
@@ -586,7 +652,9 @@ namespace Granados.SSHCV1
             catch (Exception ex)
             {
                 if (!_closed)
+                {
                     _eventReceiver.OnError(ex, ex.Message);
+                }
             }
         }
 
@@ -668,7 +736,10 @@ namespace Granados.SSHCV1
 		 */
         public override void Close()
         {
-            if (_connection.IsClosed) return;
+            if (_connection.IsClosed)
+            {
+                return;
+            }
 
             if (_type == ChannelType.Shell)
             {

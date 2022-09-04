@@ -7,7 +7,7 @@ namespace MudBot
 {
     public partial class MudBot : Form
     {
-        DebugForm dform = null;
+        private DebugForm dform = null;
         private static Database _database = new Database();
 
 
@@ -21,8 +21,6 @@ namespace MudBot
         {
             this.terminalControl.Host = this.servertextBox1.Text;
             this.terminalControl.Port = int.Parse(this.PorttextBox.Text);
-            //this.terminalControl1.Method = WalburySoftware.ConnectionMethod.SSH2;
-            this.terminalControl.Method = WalburySoftware.ConnectionMethod.Telnet;
 
             this.terminalControl.Connect();
 
@@ -48,12 +46,16 @@ namespace MudBot
         private void button2_Click(object sender, EventArgs e)
         {
             if (this.terminalControl.TerminalPane.ConnectionTag == null) // it will be null if you're not connected to anything
+            {
                 return;
+            }
 
             Poderosa.Forms.EditRenderProfile dlg = new Poderosa.Forms.EditRenderProfile(this.terminalControl.TerminalPane.ConnectionTag.RenderProfile);
 
             if (dlg.ShowDialog() != DialogResult.OK)
+            {
                 return;
+            }
 
             this.terminalControl.TerminalPane.ConnectionTag.RenderProfile = dlg.Result;
             this.terminalControl.TerminalPane.ApplyRenderProfile(dlg.Result);

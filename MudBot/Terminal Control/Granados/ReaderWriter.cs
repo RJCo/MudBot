@@ -45,7 +45,10 @@ namespace Granados.SSHC
 
         public int ReadInt32()
         {
-            if (_offset + 3 >= _data.Length) throw new IOException(Strings.GetString("UnexpectedEOF"));
+            if (_offset + 3 >= _data.Length)
+            {
+                throw new IOException(Strings.GetString("UnexpectedEOF"));
+            }
 
             int ret = (((int)_data[_offset]) << 24) + (((int)_data[_offset + 1]) << 16) + (((int)_data[_offset + 2]) << 8) + _data[_offset + 3];
 
@@ -55,12 +58,20 @@ namespace Granados.SSHC
 
         public byte ReadByte()
         {
-            if (_offset >= _data.Length) throw new IOException(Strings.GetString("UnexpectedEOF"));
+            if (_offset >= _data.Length)
+            {
+                throw new IOException(Strings.GetString("UnexpectedEOF"));
+            }
+
             return _data[_offset++];
         }
         public bool ReadBool()
         {
-            if (_offset >= _data.Length) throw new IOException(Strings.GetString("UnexpectedEOF"));
+            if (_offset >= _data.Length)
+            {
+                throw new IOException(Strings.GetString("UnexpectedEOF"));
+            }
+
             return _data[_offset++] == 0 ? false : true;
         }
         /**
@@ -79,7 +90,11 @@ namespace Granados.SSHC
             byte[] image = new byte[length];
             for (int i = 0; i < image.Length; i++)
             {
-                if (_offset == _data.Length) throw new IOException(Strings.GetString("UnexpectedEOF"));
+                if (_offset == _data.Length)
+                {
+                    throw new IOException(Strings.GetString("UnexpectedEOF"));
+                }
+
                 image[i] = _data[_offset++];
             }
             return image;
@@ -149,18 +164,27 @@ namespace Granados.SSHC
         public void Write(string data)
         {
             Write(data.Length);
-            if (data.Length > 0) Write(Encoding.ASCII.GetBytes(data));
+            if (data.Length > 0)
+            {
+                Write(Encoding.ASCII.GetBytes(data));
+            }
         }
 
         public void WriteAsString(byte[] data)
         {
             Write(data.Length);
-            if (data.Length > 0) Write(data);
+            if (data.Length > 0)
+            {
+                Write(data);
+            }
         }
         public void WriteAsString(byte[] data, int offset, int length)
         {
             Write(length);
-            if (length > 0) Write(data, offset, length);
+            if (length > 0)
+            {
+                Write(data, offset, length);
+            }
         }
     }
 }
@@ -241,7 +265,10 @@ namespace Granados.SSHCV2
                 Write((byte)0);
             }
             else
+            {
                 Write(len);
+            }
+
             Write(t);
         }
 

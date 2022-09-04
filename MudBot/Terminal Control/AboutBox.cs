@@ -180,22 +180,34 @@ namespace Poderosa.Forms
 
         protected override bool ProcessDialogChar(char charCode)
         {
-            if ('A' <= charCode && charCode <= 'Z') charCode = (char)('a' + charCode - 'A');
+            if ('A' <= charCode && charCode <= 'Z')
+            {
+                charCode = (char)('a' + charCode - 'A');
+            }
+
             if (charCode == _guevaraString[_guevaraIndex])
             {
                 if (++_guevaraIndex == _guevaraString.Length)
                 {
                     if (!GApp.Options.GuevaraMode)
+                    {
                         GUtil.Warning(this, "Welcome to Guevara Mode");
+                    }
                     else
+                    {
                         GUtil.Warning(this, "Now Leaving Guevara Mode");
+                    }
+
                     GApp.Options.GuevaraMode = !GApp.Options.GuevaraMode;
                     GApp.Frame.ReloadIcon();
                     Close();
                 }
             }
             else
+            {
                 _guevaraIndex = 0;
+            }
+
             return base.ProcessDialogChar(charCode);
         }
 

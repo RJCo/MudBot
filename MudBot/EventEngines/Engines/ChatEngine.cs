@@ -1,6 +1,6 @@
 ﻿namespace EventEngines
 {
-    class ChatEngine
+    internal class ChatEngine
     {
     }
 }

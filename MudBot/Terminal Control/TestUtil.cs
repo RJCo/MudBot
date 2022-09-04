@@ -56,7 +56,9 @@ namespace Poderosa.Debugging
                 do
                 {
                     if (reader.NodeType == XmlNodeType.Text || reader.NodeType == XmlNodeType.Whitespace)
+                    {
                         buf.Append(reader.Value);
+                    }
                     else if (reader.NodeType == XmlNodeType.Element)
                     {
                         if (reader.Name == "ESC")
@@ -65,9 +67,13 @@ namespace Poderosa.Debugging
                             buf.Append(reader.GetAttribute("seq"));
                         }
                         else if (reader.Name == "BS")
+                        {
                             buf.Append((char)0x8);
+                        }
                         else if (reader.Name == "BEL")
+                        {
                             buf.Append((char)0x7);
+                        }
                         else if (reader.Name == "dump")
                         {
                             buf = Flush(tag, buf);
@@ -80,7 +86,9 @@ namespace Poderosa.Debugging
                             {
                                 reader.Read();
                                 if (reader.NodeType == XmlNodeType.Text)
+                                {
                                     GEnv.InterThreadUIService.Warning(doc, reader.Value);
+                                }
                             }
                         }
                         else if (reader.Name == "break")
@@ -99,7 +107,9 @@ namespace Poderosa.Debugging
                             GEnv.InterThreadUIService.Warning(doc, reader.GetAttribute("title"));
                         }
                         else if (reader.Name != "SI" && reader.Name != "SO" && reader.Name != "NUL" && reader.Name != "terminal-size")
+                        {
                             Debug.WriteLine("Unsupported element " + reader.Name);
+                        }
                     }
                     else if (reader.NodeType == XmlNodeType.EndElement)
                     {
@@ -140,7 +150,10 @@ namespace Poderosa.Debugging
             for (int i = 0; i < length; i++)
             {
                 bld.Append(data[offset + i].ToString("X2"));
-                if ((i % 4) == 3) bld.Append(' ');
+                if ((i % 4) == 3)
+                {
+                    bld.Append(' ');
+                }
             }
             return bld.ToString();
         }

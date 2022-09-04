@@ -82,7 +82,10 @@ namespace Poderosa.Communication
         internal char PutByte(byte b)
         {
             if (_cursor == 0)
+            {
                 _byte_len = GetCharLength(b);
+            }
+
             _buffer[_cursor++] = b;
             if (_cursor == _byte_len)
             {
@@ -102,12 +105,6 @@ namespace Poderosa.Communication
                 case EncodingType.ISO8859_1:
                     p = new ISO8859_1Profile();
                     break;
-                case EncodingType.EUC_JP:
-                    p = new EUCJPProfile();
-                    break;
-                case EncodingType.SHIFT_JIS:
-                    p = new ShiftJISProfile();
-                    break;
                 case EncodingType.UTF8:
                     p = new UTF8Profile();
                     break;
@@ -115,7 +112,7 @@ namespace Poderosa.Communication
             return p;
         }
 
-        class ISO8859_1Profile : EncodingProfile
+        private class ISO8859_1Profile : EncodingProfile
         {
             public ISO8859_1Profile() : base(EncodingType.ISO8859_1, Encoding.GetEncoding("iso-8859-1"))
             {
@@ -129,35 +126,8 @@ namespace Poderosa.Communication
                 return b >= 0xA0 && b <= 0xFE;
             }
         }
-        class ShiftJISProfile : EncodingProfile
-        {
-            public ShiftJISProfile() : base(EncodingType.SHIFT_JIS, Encoding.GetEncoding("shift_jis"))
-            {
-            }
-            public override int GetCharLength(byte b)
-            {
-                return (b >= 0xA1 && b <= 0xDF) ? 1 : 2;
-            }
-            public override bool IsLeadByte(byte b)
-            {
-                return b >= 0x81 && b <= 0xFC;
-            }
-        }
-        class EUCJPProfile : EncodingProfile
-        {
-            public EUCJPProfile() : base(EncodingType.EUC_JP, Encoding.GetEncoding("euc-jp"))
-            {
-            }
-            public override int GetCharLength(byte b)
-            {
-                return b == 0x8F ? 3 : b >= 0x8E ? 2 : 1;
-            }
-            public override bool IsLeadByte(byte b)
-            {
-                return b >= 0x8E && b <= 0xFE;
-            }
-        }
-        class UTF8Profile : EncodingProfile
+
+        private class UTF8Profile : EncodingProfile
         {
             public UTF8Profile() : base(EncodingType.UTF8, Encoding.UTF8)
             {

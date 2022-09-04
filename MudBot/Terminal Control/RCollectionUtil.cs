@@ -34,7 +34,9 @@ namespace Poderosa.Toolkit
             if (_child != null)
             {
                 if (_child.MoveNext())
+                {
                     return true;
+                }
             }
 
             if (_parent.MoveNext())
@@ -43,16 +45,22 @@ namespace Poderosa.Toolkit
                 return _child.MoveNext();
             }
             else
+            {
                 return false;
+            }
         }
         public object Current
         {
             get
             {
                 if (_child == null)
+                {
                     throw new InvalidOperationException("Current property is referenced before MoveNext() is called");
+                }
                 else
+                {
                     return _child.Current;
+                }
             }
         }
     }
@@ -73,9 +81,13 @@ namespace Poderosa.Toolkit
             get
             {
                 if (_first != null)
+                {
                     return _first.Current;
+                }
                 else
+                {
                     return _second.Current;
+                }
             }
         }
         public bool MoveNext()
@@ -83,7 +95,10 @@ namespace Poderosa.Toolkit
             if (_first != null)
             {
                 bool r = _first.MoveNext();
-                if (r) return true;
+                if (r)
+                {
+                    return true;
+                }
             }
             _first = null;
             return _second.MoveNext();
@@ -100,7 +115,11 @@ namespace Poderosa.Toolkit
     {
         public static IEnumerator NextEnumerator(IEnumerator e)
         {
-            if (!e.MoveNext()) throw new InvalidOperationException("MoveNext() failed");
+            if (!e.MoveNext())
+            {
+                throw new InvalidOperationException("MoveNext() failed");
+            }
+
             return e;
         }
 

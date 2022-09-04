@@ -95,14 +95,20 @@ namespace Poderosa.Forms
         {
             MacroModule mod = (MacroModule)_keyToModule[key];
             if (mod != null)
+            {
                 return mod.Title;
+            }
             else
             {
                 Commands.Entry e = GApp.Options.Commands.FindEntry(key);
                 if (e != null && e.Category != Commands.Category.Macro)
+                {
                     return e.Description;
+                }
                 else
+                {
                     return null;
+                }
             }
         }
 
@@ -275,7 +281,10 @@ namespace Poderosa.Forms
             foreach (MacroModule mod in GApp.MacroManager.Modules)
             {
                 AddListItem(mod, mod.ShortCut);
-                if (mod.ShortCut != Keys.None) _keyToModule[mod.ShortCut] = mod;
+                if (mod.ShortCut != Keys.None)
+                {
+                    _keyToModule[mod.ShortCut] = mod;
+                }
             }
             AdjustUI();
         }
@@ -317,7 +326,11 @@ namespace Poderosa.Forms
             {
                 AddListItem(dlg.Module, dlg.ShortCut);
                 GApp.MacroManager.AddModule(dlg.Module);
-                if (dlg.ShortCut != Keys.None) _keyToModule.Add(dlg.ShortCut, dlg.Module);
+                if (dlg.ShortCut != Keys.None)
+                {
+                    _keyToModule.Add(dlg.ShortCut, dlg.Module);
+                }
+
                 AdjustUI();
             }
         }
@@ -346,7 +359,10 @@ namespace Poderosa.Forms
         private void OnDownButtonClicked(object sender, EventArgs args)
         {
             int n = _list.SelectedItems[0].Index;
-            if (n == _list.Items.Count - 1) return;
+            if (n == _list.Items.Count - 1)
+            {
+                return;
+            }
 
             ListViewItem li = _list.Items[n];
             _list.Items.RemoveAt(n);
@@ -359,7 +375,10 @@ namespace Poderosa.Forms
         private void OnUpButtonClicked(object sender, EventArgs args)
         {
             int n = _list.SelectedItems[0].Index;
-            if (n == 0) return;
+            if (n == 0)
+            {
+                return;
+            }
 
             ListViewItem li = _list.Items[n];
             _list.Items.RemoveAt(n);
@@ -406,7 +425,10 @@ namespace Poderosa.Forms
                 li.SubItems[2].Text = UILibUtil.KeyString(dlg.ShortCut);
                 li.SubItems[3].Text = GetInfoString(dlg.Module);
                 _keyToModule.Remove(key);
-                if (dlg.ShortCut != Keys.None) _keyToModule.Add(dlg.ShortCut, dlg.Module);
+                if (dlg.ShortCut != Keys.None)
+                {
+                    _keyToModule.Add(dlg.ShortCut, dlg.Module);
+                }
 
                 AdjustUI();
             }
@@ -428,7 +450,10 @@ namespace Poderosa.Forms
 
             if (_macroOrderUpdated)
             {
-                if (GApp.Options.ActionOnLaunch == CID.ExecMacro) GApp.Options.ActionOnLaunch = CID.NOP;
+                if (GApp.Options.ActionOnLaunch == CID.ExecMacro)
+                {
+                    GApp.Options.ActionOnLaunch = CID.NOP;
+                }
             }
 
             GApp.Frame.AdjustMacroMenu();

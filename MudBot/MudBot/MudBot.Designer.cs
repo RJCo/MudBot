@@ -96,18 +96,13 @@ namespace MudBot
             this.terminalControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.terminalControl.AuthType = Poderosa.ConnectionParam.AuthType.Password;
             this.terminalControl.Host = "";
-            this.terminalControl.IdentifyFile = "";
             this.terminalControl.Location = new System.Drawing.Point(12, 62);
-            this.terminalControl.Method = WalburySoftware.ConnectionMethod.Telnet;
             this.terminalControl.Name = "terminalControl";
-            this.terminalControl.Password = "";
             this.terminalControl.Port = 23;
             this.terminalControl.Size = new System.Drawing.Size(622, 366);
             this.terminalControl.TabIndex = 0;
             this.terminalControl.Text = "terminalControl";
-            this.terminalControl.UserName = "";
             // 
             // DebugButton
             // 

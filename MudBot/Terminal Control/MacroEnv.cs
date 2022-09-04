@@ -155,22 +155,54 @@ namespace Poderosa.MacroEnv
 
         public override void SetStyleS(int width, int height)
         {
-            if (width <= 0 || width >= 256) throw new ArgumentException("Message.MacroEnv.WidthIsOutOfRange");
-            if (height <= 0 || height >= 256) throw new ArgumentException("Message.MacroEnv.HeightIsOutOfRange");
+            if (width <= 0 || width >= 256)
+            {
+                throw new ArgumentException("Message.MacroEnv.WidthIsOutOfRange");
+            }
+
+            if (height <= 0 || height >= 256)
+            {
+                throw new ArgumentException("Message.MacroEnv.HeightIsOutOfRange");
+            }
+
             GApp.InterThreadUIService.SetFrameStyle(GFrameStyle.Single, width, height, -1, -1);
         }
         public override void SetStyleH(int width, int height1, int height2)
         {
-            if (width <= 0 || width >= 256) throw new ArgumentException("Message.MacroEnv.WidthIsOutOfRange");
-            if (height1 <= 0 || height1 >= 256) throw new ArgumentException("Message.MacroEnv.HeightIsOutOfRange");
-            if (height2 <= 0 || height2 >= 256) throw new ArgumentException("Message.MacroEnv.HeightIsOutOfRange");
+            if (width <= 0 || width >= 256)
+            {
+                throw new ArgumentException("Message.MacroEnv.WidthIsOutOfRange");
+            }
+
+            if (height1 <= 0 || height1 >= 256)
+            {
+                throw new ArgumentException("Message.MacroEnv.HeightIsOutOfRange");
+            }
+
+            if (height2 <= 0 || height2 >= 256)
+            {
+                throw new ArgumentException("Message.MacroEnv.HeightIsOutOfRange");
+            }
+
             GApp.InterThreadUIService.SetFrameStyle(GFrameStyle.DivHorizontal, width, height1, width, height2);
         }
         public override void SetStyleV(int width1, int width2, int height)
         {
-            if (width1 <= 0 || width1 >= 256) throw new ArgumentException("Message.MacroEnv.WidthIsOutOfRange");
-            if (width2 <= 0 || width2 >= 256) throw new ArgumentException("Message.MacroEnv.WidthIsOutOfRange");
-            if (height <= 0 || height >= 256) throw new ArgumentException("Message.MacroEnv.HeightIsOutOfRange");
+            if (width1 <= 0 || width1 >= 256)
+            {
+                throw new ArgumentException("Message.MacroEnv.WidthIsOutOfRange");
+            }
+
+            if (width2 <= 0 || width2 >= 256)
+            {
+                throw new ArgumentException("Message.MacroEnv.WidthIsOutOfRange");
+            }
+
+            if (height <= 0 || height >= 256)
+            {
+                throw new ArgumentException("Message.MacroEnv.HeightIsOutOfRange");
+            }
+
             GApp.InterThreadUIService.SetFrameStyle(GFrameStyle.DivVertical, width1, height, width2, height);
         }
     }
@@ -185,13 +217,17 @@ namespace Poderosa.MacroEnv
         {
             int r = Win32.ShellExecute(Win32.GetDesktopWindow(), verb, filename, "", "", 1).ToInt32(); //1‚ÍSW_SHOWNORMAL
             if (r <= 31)
+            {
                 throw new ArgumentException(String.Format("Message.MacroEnv.ShellExecuteError", verb, filename));
+            }
         }
         public override void Exec(string command)
         {
             int r = Win32.WinExec(command, 1);
             if (r <= 31)
+            {
                 throw new ArgumentException(String.Format("Message.MacroEnv.ExecError", command));
+            }
         }
     }
 
@@ -207,21 +243,34 @@ namespace Poderosa.MacroEnv
 
         public override void Trace(string msg)
         {
-            if (_debugWindow == null || _debugWindow.IsDisposed) return;
+            if (_debugWindow == null || _debugWindow.IsDisposed)
+            {
+                return;
+            }
 
             _debugWindow.AddLine(msg);
         }
         public override void PrintStackTrace()
         {
-            if (_debugWindow == null || _debugWindow.IsDisposed) return;
+            if (_debugWindow == null || _debugWindow.IsDisposed)
+            {
+                return;
+            }
 
             string[] s = System.Environment.StackTrace.Split(new char[] { '\n', '\r' });
             //‚±‚ÌPrintStackTrace‚©‚çæ‚ª•K—v
             bool f = false;
             foreach (string l in s)
             {
-                if (f && l.Length > 0) _debugWindow.AddLine(l);
-                if (!f && l.IndexOf("PrintStackTrace") != -1) f = true;
+                if (f && l.Length > 0)
+                {
+                    _debugWindow.AddLine(l);
+                }
+
+                if (!f && l.IndexOf("PrintStackTrace") != -1)
+                {
+                    f = true;
+                }
             }
         }
     }

@@ -41,9 +41,6 @@
     <Compile Update="Credits.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="CygwinLoginDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="DisplayOptionPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -119,19 +116,7 @@
     <Compile Update="SendingLargeText.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="SerialConfig.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="SerialLoginDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="ServerInfo.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="SSHOptionPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="SSHShortcutLoginDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="TabBar.cs">

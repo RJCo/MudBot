@@ -73,7 +73,10 @@ namespace Granados.Toolkit
                 if (c < 0)
                 {
                     if (encoded[i] == _toBase64[PAD])
+                    {
                         break;
+                    }
+
                     continue;
                 }
                 v = (v << 6) | c;

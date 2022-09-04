@@ -6,9 +6,7 @@ using Granados.SSHC;
 using Poderosa.Connection;
 using Poderosa.ConnectionParam;
 using Poderosa.Log;
-using Poderosa.SSH;
 using Poderosa.Text;
-using Poderosa.Toolkit;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -25,6 +23,7 @@ namespace Poderosa.Communication
         void DisconnectedFromServer();
         void ErrorOccurred(string msg);
     }
+
     internal abstract class AbstractGuevaraSocket
     {
 
@@ -36,6 +35,7 @@ namespace Poderosa.Communication
         internal abstract bool DataAvailable { get; }
         internal abstract void RepeatAsyncRead(IDataReceiver receiver);
     }
+    
     internal class PlainGuevaraSocket : AbstractGuevaraSocket
     {
         private Socket _socket;
@@ -70,7 +70,6 @@ namespace Poderosa.Communication
             _socket.BeginReceive(_buf, 0, _buf.Length, SocketFlags.None, new AsyncCallback(RepeatCallback), null);
         }
 
-#if true
         private void RepeatCallback(IAsyncResult result)
         {
             try
@@ -90,7 +89,9 @@ namespace Poderosa.Communication
                     _socket.BeginReceive(_buf, 0, _buf.Length, SocketFlags.None, new AsyncCallback(RepeatCallback), null);
                 }
                 else
+                {
                     _callback.DisconnectedFromServer();
+                }
             }
             catch (Exception ex)
             {
@@ -100,45 +101,13 @@ namespace Poderosa.Communication
                     _socket.BeginReceive(_buf, 0, _buf.Length, SocketFlags.None, new AsyncCallback(RepeatCallback), null);
                 }
                 else
+                {
                     _callback.ErrorOccurred(ex.Message);
+                }
             }
         }
-#else //受信直後からメインスレッドに処理を移すバージョン
-		private int _readLen;
-		private bool _nextReadRequired;
-		private void RepeatCallback(IAsyncResult result) {
-			_readLen = _socket.EndReceive(result);
-			_nextReadRequired = false;
-			GEnv.Frame.AsForm().Invoke(new MethodInvoker(ReadBody), null);
-			if(_nextReadRequired)
-				_socket.BeginReceive(_buf, 0, _buf.Length, SocketFlags.None, new AsyncCallback(RepeatCallback), null);
-		}
-		private void ReadBody() {
-			try {
-				Debug.Assert(!GEnv.Frame.AsForm().InvokeRequired);
-				if(_readLen > 0) {
-					_callback.DataArrived(_buf, 0, _readLen);
-					_nextReadRequired = true;
-				}
-				else if(_readLen < 0) {
-					//WindowsMEにおいては、ときどきここで-1が返ってきていることが発覚した。
-					//_socket.BeginReceive(_buf, 0, _buf.Length, SocketFlags.None, new AsyncCallback(RepeatCallback), null);
-					_nextReadRequired = true;
-				}
-				else
-					_callback.DisconnectedFromServer();
-			}
-			catch(Exception ex) {
-				if((ex is SocketException) && ((SocketException)ex).ErrorCode==995) {
-					//GUtil.WriteDebugLog(String.Format("t={0} error995", DateTime.Now.ToString()));
-					_nextReadRequired = true;
-				}
-				else
-					_callback.ErrorOccurred(ex.Message);
-			}
-		}
-#endif
     }
+
     internal class ChannelGuevaraSocket : AbstractGuevaraSocket, ISSHConnectionEventReceiver, ISSHChannelEventReceiver
     {
         private SSHChannel _channel;
@@ -182,7 +151,11 @@ namespace Poderosa.Communication
         }
         internal override void Transmit(byte[] data, int offset, int length)
         {
-            if (!_ready || _channel == null) throw new IOException("channel not ready");
+            if (!_ready || _channel == null)
+            {
+                throw new IOException("channel not ready");
+            }
+
             _channel.Transmit(data, offset, length);
         }
         internal override void Flush()
@@ -192,7 +165,9 @@ namespace Poderosa.Communication
         {
             _channel.Close();
             if (_channel.Connection.ChannelCount <= 1)
+            {
                 _channel.Connection.Close();
+            }
         }
 
         public void OnData(byte[] data, int offset, int length)
@@ -211,7 +186,10 @@ namespace Poderosa.Communication
         {
             EnsureHandler();
             if (!_ready)
+            {
                 msg = "Message.ChannelPoderosaSocket.FailedToPortforward" + msg;
+            }
+
             _callback.ErrorOccurred(msg);
         }
 
@@ -230,7 +208,11 @@ namespace Poderosa.Communication
         {
             for (int i = 0; i < msg.Length; i++)
             {
-                if (i == 0) msg[i] += "\r\n";
+                if (i == 0)
+                {
+                    msg[i] += "\r\n";
+                }
+
                 byte[] buf = Encoding.ASCII.GetBytes(msg[i]);
                 OnData(buf, 0, buf.Length);
             }
@@ -276,11 +258,16 @@ namespace Poderosa.Communication
 
         private void EnsureHandler()
         {
-            if (_callback != null) return;
+            if (_callback != null)
+            {
+                return;
+            }
+
             _event = new AutoResetEvent(false);
             _event.WaitOne();
         }
     }
+
     public abstract class TerminalConnection
     {
 
@@ -527,8 +514,15 @@ namespace Poderosa.Communication
             _logType = t;
             _logPath = path;
 
-            if (_loggerT != null) _loggerT.Close();
-            if (_loggerB != null) _loggerB.Close();
+            if (_loggerT != null)
+            {
+                _loggerT.Close();
+            }
+
+            if (_loggerB != null)
+            {
+                _loggerB.Close();
+            }
 
             switch (t)
             {
@@ -568,31 +562,52 @@ namespace Poderosa.Communication
 
             public void Append(char ch)
             {
-                if (!_parent.LogSuspended) _logger.Append(ch);
+                if (!_parent.LogSuspended)
+                {
+                    _logger.Append(ch);
+                }
             }
             public void Append(char[] ch)
             {
-                if (!_parent.LogSuspended) _logger.Append(ch);
+                if (!_parent.LogSuspended)
+                {
+                    _logger.Append(ch);
+                }
             }
             public void Append(char[] ch, int offset, int length)
             {
-                if (!_parent.LogSuspended) _logger.Append(ch, offset, length);
+                if (!_parent.LogSuspended)
+                {
+                    _logger.Append(ch, offset, length);
+                }
             }
             public void BeginEscapeSequence()
             {
-                if (!_parent.LogSuspended) _logger.BeginEscapeSequence();
+                if (!_parent.LogSuspended)
+                {
+                    _logger.BeginEscapeSequence();
+                }
             }
             public void AbortEscapeSequence()
             {
-                if (!_parent.LogSuspended) _logger.AbortEscapeSequence();
+                if (!_parent.LogSuspended)
+                {
+                    _logger.AbortEscapeSequence();
+                }
             }
             public void CommitEscapeSequence()
             {
-                if (!_parent.LogSuspended) _logger.CommitEscapeSequence();
+                if (!_parent.LogSuspended)
+                {
+                    _logger.CommitEscapeSequence();
+                }
             }
             public void Comment(string comment)
             {
-                if (!_parent.LogSuspended) _logger.Comment(comment);
+                if (!_parent.LogSuspended)
+                {
+                    _logger.Comment(comment);
+                }
             }
             public void Flush()
             {
@@ -611,15 +626,24 @@ namespace Poderosa.Communication
             }
             public void PacketDelimiter()
             {
-                if (!_parent.LogSuspended) _logger.PacketDelimiter();
+                if (!_parent.LogSuspended)
+                {
+                    _logger.PacketDelimiter();
+                }
             }
             public void TerminalResized(int width, int height)
             {
-                if (!_parent.LogSuspended) _logger.TerminalResized(width, height);
+                if (!_parent.LogSuspended)
+                {
+                    _logger.TerminalResized(width, height);
+                }
             }
             public void WriteLine(GLine line)
             {
-                if (!_parent.LogSuspended) _logger.WriteLine(line);
+                if (!_parent.LogSuspended)
+                {
+                    _logger.WriteLine(line);
+                }
             }
 
         }
@@ -636,11 +660,17 @@ namespace Poderosa.Communication
 
             public void Append(byte[] data, int offset, int length)
             {
-                if (!_parent.LogSuspended) _logger.Append(data, offset, length);
+                if (!_parent.LogSuspended)
+                {
+                    _logger.Append(data, offset, length);
+                }
             }
             public void Comment(string comment)
             {
-                if (!_parent.LogSuspended) _logger.Comment(comment);
+                if (!_parent.LogSuspended)
+                {
+                    _logger.Comment(comment);
+                }
             }
             public void Flush()
             {
@@ -659,6 +689,7 @@ namespace Poderosa.Communication
             }
         }
     }
+
     internal abstract class TCPTerminalConnection : TerminalConnection
     {
 
@@ -679,8 +710,12 @@ namespace Poderosa.Communication
         {
             get
             {
-                string s = _param.MethodName;
-                if (_usingSocks) s += "Caption.TCPTerminalConnection.UsingSOCKS";
+                string s = string.Empty;
+                if (_usingSocks)
+                {
+                    s += "Caption.TCPTerminalConnection.UsingSOCKS";
+                }
+
                 return s;
             }
         }
@@ -698,302 +733,7 @@ namespace Poderosa.Communication
             }
         }
     }
-    internal class SSHTerminalConnection : TCPTerminalConnection, ISSHConnectionEventReceiver, ISSHChannelEventReceiver
-    {
-        private SSHConnection _connection;
-        private SSHChannel _channel;
-        private MemoryStream _passwordBuffer;
-        private bool _waitingSendBreakReply;
-        public SSHTerminalConnection(TCPTerminalParam p, int width, int height) : base(p, width, height)
-        {
-        }
 
-        public override ConnectionTag Reproduce()
-        {
-            SSHTerminalParam sshp = (SSHTerminalParam)_param.Clone();
-            if (GEnv.Options.DefaultLogType != LogType.None)
-            {
-                sshp.LogType = GEnv.Options.DefaultLogType;
-                sshp.LogPath = GUtil.CreateLogFileName(sshp.ShortDescription);
-            }
-            else
-                sshp.LogType = LogType.None;
-
-            if (sshp.Method == ConnectionMethod.SSH2 && !IsClosed)
-            { //SSH2のときはコネクションを共有してマルチチャネルを使用
-                System.Drawing.Size sz = GEnv.Frame.TerminalSizeForNextConnection;
-                SSHTerminalConnection newcon = new SSHTerminalConnection(sshp, sz.Width, sz.Height);
-                newcon.FixConnection(_connection);
-                newcon.OpenShell();
-                newcon.SetServerInfo(_serverName, _serverAddress);
-                return new ConnectionTag(newcon);
-            }
-            else
-            {
-                bool pp_found = (sshp.Passphrase != null && sshp.Passphrase.Length > 0);
-                if (sshp.Method == ConnectionMethod.SSH1 && !pp_found)
-                    throw new ApplicationException("Message.SSHTerminalConnection.ReproduceErrorOnSSH1");
-                if (sshp.Method == ConnectionMethod.SSH2 && !pp_found && IsClosed)
-                    throw new ApplicationException("Message.SSHTerminalConnection.ReproduceErrorOnSSH2");
-                HostKeyChecker checker = new HostKeyChecker(GEnv.Frame, sshp);
-                return CommunicationUtil.CreateNewConnection(sshp, new HostKeyCheckCallback(checker.CheckHostKeyCallback));
-            }
-        }
-
-
-        public void FixConnection(SSHConnection con)
-        {
-            _connection = con;
-        }
-
-        public SSHConnectionInfo ConnectionInfo
-        {
-            get
-            {
-                return _connection.ConnectionInfo;
-            }
-        }
-
-        public void OpenShell()
-        {
-            _channel = _connection.OpenShell(this);
-        }
-
-        internal override void Disconnect()
-        {
-            Close();
-        }
-
-        internal override void Close()
-        {
-            if (_closed) return; //２度以上クローズしても副作用なし 
-            base.Close();
-            try
-            {
-                if (_channel != null) _channel.Close();
-                if (_connection.ChannelCount == 0)
-                {
-                    _connection.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                GUtil.Warning(GEnv.Frame, "Message.SSHTerminalConnection.CloseError" + ex.Message);
-            }
-        }
-
-        public override string[] ConnectionParameter
-        {
-            get
-            {
-                string[] d = new string[2];
-                d[0] = String.Format("ServerVersionString: {0}", _connection.ConnectionInfo.ServerVersionString);
-                d[1] = String.Format("EncryptionAlgorithm: {0}", _connection.ConnectionInfo.AlgorithmForReception.ToString());
-                return d;
-            }
-        }
-        public override bool Available
-        {
-            get
-            {
-                return !_closed && _connection.Available;
-            }
-        }
-        public override void Write(byte[] buf)
-        {
-            if (_connection.AuthenticationResult == AuthenticationResult.Prompt)
-                InputAuthenticationResponse(buf, 0, buf.Length);
-            else
-            {
-                AddSentDataStats(buf.Length);
-                _channel.Transmit(buf);
-            }
-        }
-        public override void Write(byte[] buf, int offset, int length)
-        {
-            if (_connection.AuthenticationResult == AuthenticationResult.Prompt)
-                InputAuthenticationResponse(buf, offset, length);
-            else
-            {
-                AddSentDataStats(length);
-                _channel.Transmit(buf, offset, length);
-            }
-        }
-
-        //authentication process for keyboard-interactive
-        private void InputAuthenticationResponse(byte[] buf, int offset, int length)
-        {
-            for (int i = offset; i < offset + length; i++)
-            {
-                byte b = buf[i];
-                if (_passwordBuffer == null) _passwordBuffer = new MemoryStream();
-                if (b == 13 || b == 10)
-                { //CR/LF
-                    byte[] pwd = _passwordBuffer.ToArray();
-                    if (pwd.Length > 0)
-                    {
-                        _passwordBuffer.Close();
-                        string[] response = new string[1];
-                        response[0] = Encoding.ASCII.GetString(pwd);
-                        OnData(Encoding.ASCII.GetBytes("\r\n"), 0, 2); //表示上改行しないと格好悪い
-                        if (((Granados.SSHCV2.SSH2Connection)_connection).DoKeyboardInteractiveAuth(response) == AuthenticationResult.Success)
-                            _channel = _connection.OpenShell(this);
-                        _passwordBuffer = null;
-                    }
-                }
-                else if (b == 3 || b == 27)
-                { //Ctrl+C, ESC
-                    GEnv.GetConnectionCommandTarget(this).Disconnect();
-                    return;
-                }
-                else
-                    _passwordBuffer.WriteByte(b);
-            }
-        }
-
-        //非同期に受信する。
-        private IDataReceiver _callback;
-        private MemoryStream _buffer;
-        internal override void RepeatAsyncRead(IDataReceiver cb)
-        {
-            _callback = cb;
-            if (_buffer != null)
-            {
-                lock (this)
-                {
-                    _buffer.Close();
-                    byte[] t = _buffer.ToArray();
-                    if (t.Length > 0) _callback.DataArrived(t, 0, t.Length);
-                    _buffer = null;
-                }
-            }
-        }
-
-
-        public override void Resize(int width, int height)
-        {
-            if (_connection.AuthenticationResult != AuthenticationResult.Success) return;
-            base.Resize(width, height);
-            if (!_closed)
-                _channel.ResizeTerminal(width, height, 0, 0);
-        }
-        public override void SendBreak()
-        {
-            if (_connection.AuthenticationResult != AuthenticationResult.Success) return;
-            if (((TCPTerminalParam)_param).Method == ConnectionMethod.SSH1)
-                base.SendBreak(); //これで拒否になる
-            else
-            {
-                _waitingSendBreakReply = true;
-                ((Granados.SSHCV2.SSH2Channel)_channel).SendBreak(500);
-            }
-        }
-        public override void SendKeepAliveData()
-        {
-            _connection.SendIgnorableData("keep alive");
-        }
-
-        public void OnChannelClosed()
-        {
-            if (!_closed)
-                _callback.DisconnectedFromServer();
-        }
-        public void OnChannelEOF()
-        {
-            if (!_closed)
-                _callback.DisconnectedFromServer();
-        }
-        public void OnData(byte[] data, int offset, int length)
-        {
-            if (_callback == null)
-            { //RepeatAsyncReadが呼ばれる前のデータを集めておく
-                lock (this)
-                {
-                    if (_buffer == null) _buffer = new MemoryStream(0x100);
-                    _buffer.Write(data, offset, length);
-                }
-            }
-            else
-                _callback.DataArrived(data, offset, length);
-        }
-        public void OnAuthenticationPrompt(string[] msg)
-        {
-            for (int i = 0; i < msg.Length; i++)
-            {
-                if (i != 0) msg[i] += "\r\n";
-                byte[] buf = Encoding.ASCII.GetBytes(msg[i]);
-                OnData(buf, 0, buf.Length);
-            }
-        }
-        public void OnExtendedData(int type, byte[] data)
-        {
-        }
-        public void OnMiscPacket(byte type, byte[] data, int offset, int length)
-        {
-            if (_waitingSendBreakReply)
-            {
-                _waitingSendBreakReply = false;
-                if (type == (byte)Granados.SSHCV2.PacketType.SSH_MSG_CHANNEL_FAILURE)
-                    GEnv.InterThreadUIService.Warning("Message.SSHTerminalconnection.BreakError");
-            }
-        }
-        public void OnConnectionClosed()
-        {
-            if (!_closed)
-            {
-                EnsureCallbackHandler();
-                _callback.DisconnectedFromServer();
-            }
-        }
-        public void OnDebugMessage(bool display, byte[] data)
-        {
-            Debug.WriteLine(String.Format("SSH debug {0}[{1}]", data.Length, data[0]));
-        }
-        public void OnIgnoreMessage(byte[] data)
-        {
-            Debug.WriteLine(String.Format("SSH ignore {0}[{1}]", data.Length, data[0]));
-        }
-        public void OnUnknownMessage(byte type, byte[] data)
-        {
-            Debug.WriteLine(String.Format("Unexpected SSH packet type {0}", type));
-        }
-
-        public void OnChannelReady()
-        { //!!Transmitを許可する通知が必要？
-        }
-
-        public void OnChannelError(Exception ex, string msg)
-        {
-            if (!_closed)
-            {
-                EnsureCallbackHandler();
-                _callback.ErrorOccurred(msg);
-            }
-        }
-        public void OnError(Exception ex, string msg)
-        {
-            if (!_closed)
-            {
-                EnsureCallbackHandler();
-                _callback.ErrorOccurred(msg);
-            }
-        }
-
-        public PortForwardingCheckResult CheckPortForwardingRequest(string host, int port, string originator, int originator_port)
-        {
-            return new PortForwardingCheckResult();
-        }
-        public void EstablishPortforwarding(ISSHChannelEventReceiver receiver, SSHChannel channel)
-        {
-        }
-
-        private void EnsureCallbackHandler()
-        {
-            int n = 0;
-            while (_callback == null && n++ < 10) //わずかな時間差でハンドラがセットされないこともある
-                Thread.Sleep(100);
-        }
-    }
     internal class TelnetTerminalConnection : TCPTerminalConnection, IDataReceiver
     {
         private AbstractGuevaraSocket _socket;
@@ -1007,7 +747,11 @@ namespace Poderosa.Communication
 
         internal override void Close()
         {
-            if (_closed) return; //２度以上クローズしても副作用なし 
+            if (_closed)
+            {
+                return; //２度以上クローズしても副作用なし 
+            }
+
             base.Close();
             try
             {
@@ -1030,7 +774,9 @@ namespace Poderosa.Communication
                 np.LogPath = GUtil.CreateLogFileName(np.ShortDescription);
             }
             else
+            {
                 np.LogType = LogType.None;
+            }
 
             return CommunicationUtil.CreateNewConnection(np);
         }
@@ -1057,7 +803,10 @@ namespace Poderosa.Communication
         private IDataReceiver _callback;
         internal override void RepeatAsyncRead(IDataReceiver cb)
         {
-            if (_callback != null) throw new InvalidOperationException("duplicated AsyncRead() is attempted");
+            if (_callback != null)
+            {
+                throw new InvalidOperationException("duplicated AsyncRead() is attempted");
+            }
 
             _callback = cb;
             _socket.RepeatAsyncRead(this);
@@ -1072,13 +821,17 @@ namespace Poderosa.Communication
         public void DisconnectedFromServer()
         {
             if (!_closed)
+            {
                 _callback.DisconnectedFromServer();
+            }
         }
 
         public void ErrorOccurred(string msg)
         {
             if (!_closed)
+            {
                 _callback.ErrorOccurred(msg);
+            }
         }
 
         //CR NUL -> CR
@@ -1089,7 +842,9 @@ namespace Poderosa.Communication
                 while (offset < limit && _negotiator.InProcessing)
                 {
                     if (_negotiator.Process(buf[offset++]) == TelnetNegotiator.ProcessResult.REAL_0xFF)
+                    {
                         _callback.DataArrived(buf, offset - 1, 1);
+                    }
                 }
 
                 int delim = offset;
@@ -1101,14 +856,21 @@ namespace Poderosa.Communication
                         _negotiator.StartNegotiate();
                         break;
                     }
-                    if (b == 0 && delim - 1 >= 0 && buf[delim - 1] == 0x0D) break; //CR NULサポート
+                    if (b == 0 && delim - 1 >= 0 && buf[delim - 1] == 0x0D)
+                    {
+                        break; //CR NULサポート
+                    }
+
                     delim++;
                 }
 
-                if (delim > offset) _callback.DataArrived(buf, offset, delim - offset); //delimの手前まで処理
+                if (delim > offset)
+                {
+                    _callback.DataArrived(buf, offset, delim - offset); //delimの手前まで処理
+                }
+
                 offset = delim + 1;
             }
-
         }
 
         public override void Resize(int width, int height)
@@ -1158,7 +920,9 @@ namespace Poderosa.Communication
                     newbuf[newoffset++] = 0x00;
                 }
                 else
+                {
                     newbuf[newoffset++] = t;
+                }
             }
             _socket.Transmit(newbuf, 0, newoffset);
         }
@@ -1187,303 +951,7 @@ namespace Poderosa.Communication
 
 
     }
-    public class SerialTerminalConnection : TerminalConnection
-    {
-        private byte[] _buf;
 
-        //シリアルの非同期通信をちゃんとやろうとすると.NETライブラリでは不十分なのでほぼAPI直読み
-        private IntPtr _fileHandle;
-
-        private Win32.OVERLAPPED _readOL;
-        private Win32.OVERLAPPED _writeOL;
-
-        public SerialTerminalConnection(SerialTerminalParam p, IntPtr fh, int width, int height) : base(p, width, height)
-        {
-            _fileHandle = fh;
-            _buf = new byte[0x1000];
-            _readOL.hEvent = Win32.CreateEvent(IntPtr.Zero, 0, 0, null);
-            _writeOL.hEvent = Win32.CreateEvent(IntPtr.Zero, 0, 0, null);
-        }
-        internal override void Close()
-        {
-            if (_closed) return; //２度以上クローズしても副作用なし 
-            base.Close();
-
-            Win32.CloseHandle(_readOL.hEvent);
-            Win32.CloseHandle(_writeOL.hEvent);
-            Win32.CloseHandle(_fileHandle);
-            _readOL.hEvent = _writeOL.hEvent = _fileHandle = IntPtr.Zero;
-            //Debug.WriteLine("COM connection termingating...");
-        }
-        public override ConnectionTag Reproduce()
-        {
-            throw new NotSupportedException("Message.SerialTerminalConnection.ReproduceError");
-        }
-
-        internal override void Disconnect()
-        {
-        }
-        public override string ProtocolDescription
-        {
-            get
-            {
-                return "-";
-            }
-        }
-
-        public override string[] ConnectionParameter
-        {
-            get
-            {
-                string[] d = new string[6];
-                SerialTerminalParam p = (SerialTerminalParam)_param;
-                d[0] = String.Format("Port         : COM{0}", p.Port);
-                d[1] = String.Format("Baud rate    : {0}", p.BaudRate);
-                d[2] = String.Format("Data bits    : {0}", p.ByteSize);
-                d[3] = String.Format("Stop bits    : {0}", EnumDescAttribute.For(typeof(StopBits)).GetDescription(p.StopBits));
-                d[4] = String.Format("Parity       : {0}", EnumDescAttribute.For(typeof(Parity)).GetDescription(p.Parity));
-                d[5] = String.Format("Flow Control : {0}", EnumDescAttribute.For(typeof(FlowControl)).GetDescription(p.FlowControl));
-                return d;
-            }
-        }
-        public override bool Available
-        {
-            get
-            {
-                return false; //シリアルだとよくわからないのでfalseを返しておく
-            }
-        }
-        private IDataReceiver _callback;
-        internal override void RepeatAsyncRead(IDataReceiver cb)
-        {
-            if (_callback != null) throw new InvalidOperationException("duplicated AsyncRead() is attempted");
-
-            _callback = cb;
-            GUtil.CreateThread(new ThreadStart(AsyncEntry)).Start();
-            //_stream.BeginRead(_buf, 0, _buf.Length, new AsyncCallback(RepeatCallback), null);
-        }
-
-        private void AsyncEntry()
-        {
-            Win32.OVERLAPPED ol = new Win32.OVERLAPPED();
-            try
-            {
-                //初期化
-                bool success = false;
-                int len = 0, flags = 0;
-                ol.hEvent = Win32.CreateEvent(IntPtr.Zero, 0, 0, null);
-                success = Win32.ClearCommError(_fileHandle, out flags, IntPtr.Zero);
-                //このSetCommMaskを実行しないとWaitCommEventが失敗してしまう
-                success = Win32.SetCommMask(_fileHandle, 0);
-                success = Win32.SetCommMask(_fileHandle, 1); //EV_RXCHAR
-
-                byte[] buf = new byte[128];
-                while (true)
-                {
-                    success = Win32.WaitCommEvent(_fileHandle, out flags, ref ol); //ここは普通falseが返る
-                    if (!success && Win32.GetLastError() != Win32.ERROR_IO_PENDING)
-                        throw new Exception("WaitCommEvent failed " + Win32.GetLastError());
-
-                    //ここでデータが来るまでブロックする。ただ、ドキュメントによればWaitCommEventに対応するGetOverlappedResultはlenの値は無意味とのこと
-                    success = Win32.GetOverlappedResult(_fileHandle, ref ol, ref len, true);
-                    if (!success) break; //たとえば接続を切るなどでfalseが返ってくる
-
-                    do
-                    {
-                        len = 0;
-                        success = Win32.ReadFile(_fileHandle, buf, buf.Length, ref len, ref _readOL);
-                        //このWaitForSingleObjectが必要かどうかがよくわからない
-                        //if(Win32.WaitForSingleObject(_readOL.hEvent, 5000)!=Win32.WAIT_OBJECT_0)
-                        //	throw new Exception("WaitForSingleObject timed out");
-                        success = Win32.GetOverlappedResult(_fileHandle, ref _readOL, ref len, true);
-                        if (len > 0) _callback.DataArrived(buf, 0, len);
-                    } while (len > 0);
-                }
-            }
-            catch (Exception ex)
-            {
-                if (!_closed)
-                {
-                    _callback.ErrorOccurred(ex.Message);
-                }
-            }
-            finally
-            {
-                Win32.CloseHandle(ol.hEvent);
-                //Debug.WriteLine("COM thread terminating...");
-            }
-        }
-
-        public override void Write(byte[] buf)
-        {
-            Write(buf, 0, buf.Length);
-        }
-        public override void Write(byte[] data, int offset, int length)
-        {
-            SerialTerminalParam sp = (SerialTerminalParam)_param;
-            if (sp.TransmitDelayPerChar == 0)
-            {
-                if (sp.TransmitDelayPerLine == 0)
-                    WriteMain(data, offset, length); //最も単純
-                else
-                { //改行のみウェイト挿入
-                    byte nl = (byte)(sp.TransmitNL == NewLine.CR ? 13 : 10);
-                    int limit = offset + length;
-                    int c = offset;
-                    while (offset < limit)
-                    {
-                        if (data[offset] == nl)
-                        {
-                            WriteMain(data, c, offset - c + 1);
-                            Thread.Sleep(sp.TransmitDelayPerLine);
-                            System.Windows.Forms.Application.DoEvents();
-                            c = offset + 1;
-                        }
-                        offset++;
-                    }
-                    if (c < limit) WriteMain(data, c, limit - c);
-                }
-            }
-            else
-            {
-                byte nl = (byte)(sp.TransmitNL == NewLine.CR ? 13 : 10);
-                for (int i = 0; i < length; i++)
-                {
-                    WriteMain(data, offset + i, 1);
-                    Thread.Sleep(data[offset + i] == nl ? sp.TransmitDelayPerLine : sp.TransmitDelayPerChar);
-                    System.Windows.Forms.Application.DoEvents();
-                }
-            }
-
-        }
-
-        private void WriteMain(byte[] buf, int offset, int length)
-        {
-            if (length == 0) return; //長さ０だと fixed(byte* p = buf) が失敗してしまう
-
-            AddSentDataStats(length);
-            //_stream.Write(buf, 0, buf.Length);
-            int result = 0;
-            if (offset != 0)
-            {
-                byte[] nb = new byte[length];
-                Array.Copy(buf, offset, nb, 0, length);
-                buf = nb; //次のWriteFileでoffsetが０でないときはすぐにはサポートできない
-            }
-            bool success;
-            success = Win32.WriteFile(_fileHandle, buf, length, ref result, ref _writeOL);
-            if (Win32.GetLastError() != Win32.ERROR_IO_PENDING)
-                throw new IOException("WriteFile failed for " + Win32.GetLastError());
-            //このWaitForSingleObjectが必要かどうかがよくわからない
-            //err = Win32.WaitForSingleObject(_writeOL.hEvent, 10000);
-            success = Win32.GetOverlappedResult(_fileHandle, ref _writeOL, ref result, true);
-            Debug.Assert(success);
-        }
-        public override void SendBreak()
-        {
-            Win32.SetCommBreak(_fileHandle);
-            Thread.Sleep(500); //500ms待機
-            Win32.ClearCommBreak(_fileHandle);
-        }
-
-        public void ApplySerialParam(SerialTerminalParam param)
-        {
-            //paramの内容でDCBを更新してセットしなおす
-            Win32.DCB dcb = new Win32.DCB();
-            CommunicationUtil.FillDCB(_fileHandle, ref dcb);
-            CommunicationUtil.UpdateDCB(ref dcb, param);
-
-            if (!Win32.SetCommState(_fileHandle, ref dcb))
-                throw new ArgumentException("Message.SerialTerminalConnection.ConfigError");
-
-            _param = param; //SetCommStateが成功したら更新
-        }
-
-    }
-
-    /*
-	public class ProcessConnection : TerminalConnection {
-		private Process _process;
-		private byte[] _bufOut;
-		private byte[] _bufErr;
-
-		public ProcessConnection(ProcessTerminalParam param, Process proc, int width, int height) : base(param, width, height) {
-			_process = proc;
-			_bufOut = new byte[0x1000];
-			_bufErr = new byte[0x1000];
-		}
-		internal override void Close() {
-			if(_closed) return; //２度以上クローズしても副作用なし 
-			base.Close();
-			
-		}
-		public override ConnectionTag Reproduce() {
-			throw new NotSupportedException("プロセスへの接続の複製はできません。");
-		}
-
-		internal override void Disconnect() {
-			_process.Close();
-		}
-		public override string ProtocolDescription {
-			get {
-				return "-";
-			}
-		}
-
-		public override string[] ConnectionParameter {
-			get {
-				string[] d = new string[1];
-				d[0] = ((ProcessTerminalParam)_param).Process;
-				return d;
-			}
-		}
-		public override bool Available {
-			get {
-				return false; 
-			}
-		}
-		private IDataReceiver _callback;
-		internal override void RepeatAsyncRead(IDataReceiver cb) {
-			if(_callback!=null) throw new InvalidOperationException("duplicated AsyncRead() is attempted");
-			
-			_callback = cb;
-			_process.StandardOutput.BaseStream.BeginRead(_bufOut, 0, _bufOut.Length, new AsyncCallback(RepeatCallback), _bufOut);
-			_process.StandardError. BaseStream.BeginRead(_bufErr, 0, _bufErr.Length, new AsyncCallback(RepeatCallback), _bufErr);
-		}
-		private void RepeatCallback(IAsyncResult res) {
-			lock(this) {
-				try {
-					bool stderr = (res.AsyncState==_bufErr);
-					Stream strm = stderr? _process.StandardError.BaseStream : _process.StandardOutput.BaseStream;
-					int len = strm.EndRead(res);
-					//Debug.WriteLine(String.Format("RC {0} {1}", stderr, len));
-					byte[] buf = stderr? _bufErr : _bufOut;
-					if(len > 0) {
-						_callback.DataArrived(buf, 0, len);
-						strm.BeginRead(buf, 0, buf.Length, new AsyncCallback(RepeatCallback), buf);
-					}
-					else if(len < 0) {
-						strm.BeginRead(buf, 0, buf.Length, new AsyncCallback(RepeatCallback), buf);
-					}
-					else
-						_callback.DisconnectedFromServer();
-				}
-				catch(Exception ex) {
-					_callback.ErrorOccurred(ex.Message);
-				}
-			}
-		}
-
-		public override void Write(byte[] buf) {
-			Write(buf, 0, buf.Length);
-		}
-		public override void Write(byte[] data, int offset, int length) {
-			_process.StandardInput.BaseStream.Write(data, offset, length);
-			_process.StandardInput.BaseStream.Flush();
-		}
-
-	}
-	*/
     public class FakeConnection : TerminalConnection
     {
         public FakeConnection(TerminalParam param) : base(param, 80, 25) { }

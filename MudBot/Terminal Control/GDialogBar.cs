@@ -128,48 +128,6 @@ namespace Poderosa.Forms
             _newConnection.MouseHover += new EventHandler(OnMouseHoverOnButton);
             _newConnection.MouseLeave += new EventHandler(OnMouseLeaveFromButton);
             // 
-            // _newSerialConnection
-            // 
-            _newSerialConnection.BorderStyle = BorderStyle.None;
-            _newSerialConnection.ForeColor = SystemColors.ControlText;
-            _newSerialConnection.Location = new Point(32, 2);
-            _newSerialConnection.Name = "_newSerialConnection";
-            _newSerialConnection.Size = new Size(24, 23);
-            _newSerialConnection.TabIndex = 0;
-            _newSerialConnection.TabStop = false;
-            _newSerialConnection.Click += new EventHandler(OpenNewSerialConnection);
-            _newSerialConnection.MouseEnter += new EventHandler(OnMouseEnterToButton);
-            _newSerialConnection.MouseHover += new EventHandler(OnMouseHoverOnButton);
-            _newSerialConnection.MouseLeave += new EventHandler(OnMouseLeaveFromButton);
-            // 
-            // _newCygwinConnection
-            // 
-            _newCygwinConnection.BorderStyle = BorderStyle.None;
-            _newCygwinConnection.ForeColor = SystemColors.ControlText;
-            _newCygwinConnection.Location = new Point(56, 2);
-            _newCygwinConnection.Name = "_newCygwinConnection";
-            _newCygwinConnection.Size = new Size(24, 23);
-            _newCygwinConnection.TabIndex = 0;
-            _newCygwinConnection.TabStop = false;
-            _newCygwinConnection.Click += new EventHandler(OpenNewCygwinConnection);
-            _newCygwinConnection.MouseEnter += new EventHandler(OnMouseEnterToButton);
-            _newCygwinConnection.MouseHover += new EventHandler(OnMouseHoverOnButton);
-            _newCygwinConnection.MouseLeave += new EventHandler(OnMouseLeaveFromButton);
-            // 
-            // _newSFUConnection
-            // 
-            _newSFUConnection.BorderStyle = BorderStyle.None;
-            _newSFUConnection.ForeColor = SystemColors.ControlText;
-            _newSFUConnection.Location = new Point(80, 2);
-            _newSFUConnection.Name = "_newSFUConnection";
-            _newSFUConnection.Size = new Size(24, 23);
-            _newSFUConnection.TabIndex = 0;
-            _newSFUConnection.TabStop = false;
-            _newSFUConnection.Click += new EventHandler(OpenNewSFUConnection);
-            _newSFUConnection.MouseEnter += new EventHandler(OnMouseEnterToButton);
-            _newSFUConnection.MouseHover += new EventHandler(OnMouseHoverOnButton);
-            _newSFUConnection.MouseLeave += new EventHandler(OnMouseLeaveFromButton);
-            // 
             // _openShortcut
             // 
             _openShortcut.BorderStyle = BorderStyle.None;
@@ -493,18 +451,6 @@ namespace Poderosa.Forms
         {
             GApp.GlobalCommandTarget.NewConnectionWithDialog(null);
         }
-        private void OpenNewSerialConnection(object sender, EventArgs e)
-        {
-            GApp.GlobalCommandTarget.NewSerialConnectionWithDialog(null);
-        }
-        private void OpenNewCygwinConnection(object sender, EventArgs e)
-        {
-            GApp.GlobalCommandTarget.NewCygwinConnectionWithDialog(null);
-        }
-        private void OpenNewSFUConnection(object sender, EventArgs e)
-        {
-            GApp.GlobalCommandTarget.NewSFUConnectionWithDialog(null);
-        }
 
         private void OpenShortCut(object sender, EventArgs e)
         {
@@ -518,7 +464,11 @@ namespace Poderosa.Forms
         }
         private void ChangeNewLine(object sender, EventArgs e)
         {
-            if (_blockEventHandler) return;
+            if (_blockEventHandler)
+            {
+                return;
+            }
+
             NewLine nl = (NewLine)_newLineOption.SelectedIndex;
             ContainerConnectionCommandTarget t = GApp.GetConnectionCommandTarget();
             t.SetTransmitNewLine(nl);
@@ -526,7 +476,11 @@ namespace Poderosa.Forms
         }
         private void ChangeEncoding(object sender, EventArgs e)
         {
-            if (_blockEventHandler) return;
+            if (_blockEventHandler)
+            {
+                return;
+            }
+
             EncodingProfile enc = EncodingProfile.Get((EncodingType)_encodingBox.SelectedIndex);
             ContainerConnectionCommandTarget t = GApp.GetConnectionCommandTarget();
             t.SetEncoding(enc);
@@ -534,54 +488,96 @@ namespace Poderosa.Forms
         }
         private void ToggleLocalEcho(object sender, EventArgs e)
         {
-            if (_blockEventHandler) return;
+            if (_blockEventHandler)
+            {
+                return;
+            }
+
             ContainerConnectionCommandTarget t = GApp.GetConnectionCommandTarget();
             t.SetLocalEcho(!t.Connection.Param.LocalEcho);
             t.Focus();
         }
         private void LineFeedRule(object sender, EventArgs e)
         {
-            if (_blockEventHandler) return;
+            if (_blockEventHandler)
+            {
+                return;
+            }
+
             ContainerConnectionCommandTarget t = GApp.GetConnectionCommandTarget();
             t.ShowLineFeedRuleDialog();
             t.Focus();
         }
         private void ToggleLogSwitch(object sender, EventArgs e)
         {
-            if (_blockEventHandler) return;
+            if (_blockEventHandler)
+            {
+                return;
+            }
+
             ContainerConnectionCommandTarget t = GApp.GetConnectionCommandTarget();
             t.SetLogSuspended(!t.Connection.LogSuspended);
             t.Focus();
         }
         private void ToggleSingleStyle(object sender, EventArgs e)
         {
-            if (_blockEventHandler) return;
+            if (_blockEventHandler)
+            {
+                return;
+            }
+
             if (GApp.GlobalCommandTarget.SetFrameStyle(GFrameStyle.Single) == CommandResult.Ignored)
+            {
                 _singleStyle.Checked = true;
+            }
         }
         private void ToggleDivHorizontalStyle(object sender, EventArgs e)
         {
-            if (_blockEventHandler) return;
+            if (_blockEventHandler)
+            {
+                return;
+            }
+
             if (GApp.GlobalCommandTarget.SetFrameStyle(GFrameStyle.DivHorizontal) == CommandResult.Ignored)
+            {
                 _divHorizontalStyle.Checked = true;
+            }
         }
         private void ToggleDivVerticalStyle(object sender, EventArgs e)
         {
-            if (_blockEventHandler) return;
+            if (_blockEventHandler)
+            {
+                return;
+            }
+
             if (GApp.GlobalCommandTarget.SetFrameStyle(GFrameStyle.DivVertical) == CommandResult.Ignored)
+            {
                 _divVerticalStyle.Checked = true;
+            }
         }
         private void ToggleDivHorizontal3Style(object sender, EventArgs e)
         {
-            if (_blockEventHandler) return;
+            if (_blockEventHandler)
+            {
+                return;
+            }
+
             if (GApp.GlobalCommandTarget.SetFrameStyle(GFrameStyle.DivHorizontal3) == CommandResult.Ignored)
+            {
                 _divHorizontal3Style.Checked = true;
+            }
         }
         private void ToggleDivVertical3Style(object sender, EventArgs e)
         {
-            if (_blockEventHandler) return;
+            if (_blockEventHandler)
+            {
+                return;
+            }
+
             if (GApp.GlobalCommandTarget.SetFrameStyle(GFrameStyle.DivVertical3) == CommandResult.Ignored)
+            {
                 _divVertical3Style.Checked = true;
+            }
         }
 
 
@@ -620,52 +616,97 @@ namespace Poderosa.Forms
 
         private void OnMouseEnterToButton(object sender, EventArgs args)
         {
-            if (!_toolTipInitialized) InitToolTip();
+            if (!_toolTipInitialized)
+            {
+                InitToolTip();
+            }
 
             GStatusBar sb = GApp.Frame.StatusBar;
             if (sender == _openShortcut)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._openShortcut");
+            }
             else if (sender == _newConnection)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._newConnection");
+            }
             else if (sender == _newSerialConnection)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._newSerialConnection");
+            }
             else if (sender == _newCygwinConnection)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._newCygwinConnection");
+            }
             else if (sender == _newSFUConnection)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._newSFUConnection");
+            }
             else if (sender == _saveShortcut)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._saveShortcut");
+            }
             else if (sender == _singleStyle)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._singleStyle");
+            }
             else if (sender == _divHorizontalStyle)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._divHorizontalStyle");
+            }
             else if (sender == _divVerticalStyle)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._divVerticalStyle");
+            }
             else if (sender == _divHorizontal3Style)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._divHorizontal3Style");
+            }
             else if (sender == _divVertical3Style)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._divVertical3Style");
+            }
             else if (sender == _newLineOption)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._newLineOption");
+            }
             else if (sender == _lineFeedRule)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._lineFeedRule");
+            }
             else if (sender == _encodingBox)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._encodingBox");
+            }
             else if (sender == _logSuspend)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._logSuspend");
+            }
             else if (sender == _commentLog)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._commentLog");
+            }
             else if (sender == _localEcho)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._localEcho");
+            }
             else if (sender == _serverInfo)
+            {
                 sb.SetStatusBarText("Caption.ToolBar._serverInfo");
+            }
             else
+            {
                 Debug.WriteLine("Unexpected toolbar object");
+            }
         }
 
         private void InitToolTip()
         {
-            if (_toolTip != null) _toolTip.RemoveAll();
+            if (_toolTip != null)
+            {
+                _toolTip.RemoveAll();
+            }
+
             ToolTip tt = new ToolTip();
             tt.SetToolTip(_openShortcut, "ToolTip.ToolBar._openShortcut");
             tt.SetToolTip(_saveShortcut, "ToolTip.ToolBar._saveShortcut");

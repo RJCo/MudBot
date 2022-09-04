@@ -73,7 +73,9 @@ namespace Granados.SSHCV1
         {
             uint val = 0;
             for (int i = 0; i < len; i++)
+            {
                 val = table[(int)((val ^ buf[off + i]) & 0xff)] ^ (val >> 8);
+            }
 
             return val;
         }

@@ -174,7 +174,12 @@ namespace Granados.SSHC
         public static bool ContainsString(string[] s, string v)
         {
             foreach (string x in s)
-                if (x == v) return true;
+            {
+                if (x == v)
+                {
+                    return true;
+                }
+            }
 
             return false;
         }
@@ -183,7 +188,10 @@ namespace Granados.SSHC
         {
             for (int i = 0; i < d1.Length; i++)
             {
-                if (d1[i] != d2[i]) return (int)(d2[i] - d1[i]);
+                if (d1[i] != d2[i])
+                {
+                    return (int)(d2[i] - d1[i]);
+                }
             }
             return 0;
         }
@@ -191,7 +199,10 @@ namespace Granados.SSHC
         {
             for (int i = 0; i < len; i++)
             {
-                if (d1[o1 + i] != d2[o2 + i]) return (int)(d2[o2 + i] - d1[o1 + i]);
+                if (d1[o1 + i] != d2[o2 + i])
+                {
+                    return (int)(d2[o2 + i] - d1[o1 + i]);
+                }
             }
             return 0;
         }
@@ -202,7 +213,11 @@ namespace Granados.SSHC
         private static StringResources _strings;
         public static string GetString(string id)
         {
-            if (_strings == null) Reload();
+            if (_strings == null)
+            {
+                Reload();
+            }
+
             return _strings.GetString(id);
         }
 
@@ -225,7 +240,10 @@ namespace Granados.SSHC
             for (int i = 0; i < length; i++)
             {
                 bld.Append(data[offset + i].ToString("X2"));
-                if ((i % 4) == 3) bld.Append(' ');
+                if ((i % 4) == 3)
+                {
+                    bld.Append(' ');
+                }
             }
             return bld.ToString();
         }

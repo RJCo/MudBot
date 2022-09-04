@@ -112,18 +112,25 @@ namespace Poderosa.Communication
             {
                 case TelnetCode.IAC:
                     if (data == (byte)TelnetCode.SB || ((byte)TelnetCode.WILL <= data && data <= (byte)TelnetCode.DONT))
+                    {
                         _state = (TelnetCode)data;
+                    }
                     else if (data == (byte)TelnetCode.IAC)
                     {
                         _state = TelnetCode.NA;
                         return ProcessResult.REAL_0xFF;
                     }
                     else
+                    {
                         _state = TelnetCode.NA;
+                    }
+
                     break;
                 case TelnetCode.SB:
                     if (data != (byte)TelnetCode.SE)
+                    {
                         _sequenceBuffer.WriteByte(data);
+                    }
                     else
                     {
                         ProcessSequence(_sequenceBuffer.ToArray());
@@ -148,7 +155,9 @@ namespace Poderosa.Communication
             if (response[1] == 1)
             {
                 if (response[0] == (byte)TelnetOption.TerminalType)
+                {
                     _optionWriter.WriteTerminalName(EnumDescAttribute.For(typeof(TerminalType)).GetDescription(_param.TerminalType));
+                }
             }
         }
 
@@ -159,29 +168,50 @@ namespace Poderosa.Communication
             {
                 case TelnetOption.TerminalType:
                     if (_state == TelnetCode.DO)
+                    {
                         _optionWriter.Write(TelnetCode.WILL, option);
+                    }
                     else
+                    {
                         _warnings.Add("Message.Telnet.FailedToSendTerminalType");
+                    }
+
                     break;
                 case TelnetOption.NAWS:
                     if (_state == TelnetCode.DO)
+                    {
                         _optionWriter.WriteTerminalSize(_width, _height);
+                    }
                     else
+                    {
                         _warnings.Add("Message.Telnet.FailedToSendWidnowSize");
+                    }
+
                     break;
                 case TelnetOption.SuppressGoAhead:
                     if (_state != TelnetCode.WILL && _state != TelnetCode.DO) //!!両方が来たことを確認する
+                    {
                         _warnings.Add("Message.Telnet.FailedToSendSuppressGoAhead");
+                    }
+
                     break;
                 case TelnetOption.LocalEcho:
                     if (_state == TelnetCode.DO)
+                    {
                         _optionWriter.Write(TelnetCode.WILL, option);
+                    }
+
                     break;
                 default: //上記以外はすべて拒否。DOにはWON'T, WILLにはDON'Tの応答を返す。 
                     if (_state == TelnetCode.DO)
+                    {
                         _optionWriter.Write(TelnetCode.WONT, option);
+                    }
                     else if (_state == TelnetCode.WILL)
+                    {
                         _optionWriter.Write(TelnetCode.DONT, option);
+                    }
+
                     break;
             }
         }

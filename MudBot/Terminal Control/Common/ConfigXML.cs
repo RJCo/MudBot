@@ -18,12 +18,17 @@ namespace Poderosa.Config
         {
             ConfigNode node = new ConfigNode(elem.LocalName);
             foreach (XmlAttribute attr in elem.Attributes)
+            {
                 node[attr.LocalName] = attr.Value;
+            }
+
             foreach (XmlNode ch in elem.ChildNodes)
             {
                 XmlElement ce = ch as XmlElement;
                 if (ce != null)
+                {
                     node.AddChild(Read(ce));
+                }
             }
             return node;
         }
@@ -33,9 +38,15 @@ namespace Poderosa.Config
             XmlElement e = doc.CreateElement(node.Name);
             IDictionaryEnumerator i = node.GetPairEnumerator();
             while (i.MoveNext())
+            {
                 e.SetAttribute((string)i.Key, (string)i.Value);
+            }
+
             foreach (ConfigNode ch in node.Children)
+            {
                 e.AppendChild(Write(doc, ch));
+            }
+
             return e;
         }
 
@@ -44,9 +55,15 @@ namespace Poderosa.Config
             wr.WriteStartElement(node.Name);
             IDictionaryEnumerator i = node.GetPairEnumerator();
             while (i.MoveNext())
+            {
                 wr.WriteAttributeString((string)i.Key, (string)i.Value);
+            }
+
             foreach (ConfigNode ch in node.Children)
+            {
                 Write(wr, ch);
+            }
+
             wr.WriteEndElement();
         }
     }

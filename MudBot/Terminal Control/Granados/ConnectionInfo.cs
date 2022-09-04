@@ -100,19 +100,46 @@ namespace Granados.SSHCV1
         public void SetSupportedCipherAlgorithms(int mask)
         {
             StringBuilder bld = new StringBuilder();
-            if ((mask & 2) != 0) AppendSupportedCipher(bld, "Idea");
-            if ((mask & 4) != 0) AppendSupportedCipher(bld, "DES");
-            if ((mask & 8) != 0) AppendSupportedCipher(bld, "TripleDES");
-            if ((mask & 16) != 0) AppendSupportedCipher(bld, "TSS");
-            if ((mask & 32) != 0) AppendSupportedCipher(bld, "RC4");
-            if ((mask & 64) != 0) AppendSupportedCipher(bld, "Blowfish");
+            if ((mask & 2) != 0)
+            {
+                AppendSupportedCipher(bld, "Idea");
+            }
+
+            if ((mask & 4) != 0)
+            {
+                AppendSupportedCipher(bld, "DES");
+            }
+
+            if ((mask & 8) != 0)
+            {
+                AppendSupportedCipher(bld, "TripleDES");
+            }
+
+            if ((mask & 16) != 0)
+            {
+                AppendSupportedCipher(bld, "TSS");
+            }
+
+            if ((mask & 32) != 0)
+            {
+                AppendSupportedCipher(bld, "RC4");
+            }
+
+            if ((mask & 64) != 0)
+            {
+                AppendSupportedCipher(bld, "Blowfish");
+            }
 
             _supportedCipherAlgorithms = bld.ToString();
         }
 
         private static void AppendSupportedCipher(StringBuilder bld, string text)
         {
-            if (bld.Length > 0) bld.Append(',');
+            if (bld.Length > 0)
+            {
+                bld.Append(',');
+            }
+
             bld.Append(text);
         }
 
@@ -174,7 +201,9 @@ namespace Granados.SSHCV2
                 wr.Write(dsa.Y);
             }
             else
+            {
                 throw new SSHException("Host key algorithm is unsupported");
+            }
 
             bld.Append(Encoding.ASCII.GetString(Base64.Encode(wr.ToByteArray())));
             return bld.ToString();

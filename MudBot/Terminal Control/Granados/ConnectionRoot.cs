@@ -53,9 +53,13 @@ namespace Granados.SSHC
             get
             {
                 if (_closed)
+                {
                     return false;
+                }
                 else
+                {
                     return _stream.DataAvailable;
+                }
             }
         }
 
@@ -170,7 +174,10 @@ namespace Granados.SSHC
             for (int i = 0; i < _channel_entries.Count; i++)
             {
                 ChannelEntry e = (ChannelEntry)_channel_entries[i];
-                if (e._localID == id) return e;
+                if (e._localID == id)
+                {
+                    return e;
+                }
             }
             return null;
         }
@@ -213,7 +220,10 @@ namespace Granados.SSHC
                         break;
                     }
                 }
-                if (ChannelCount == 0 && _autoDisconnect) Disconnect(""); //auto close
+                if (ChannelCount == 0 && _autoDisconnect)
+                {
+                    Disconnect(""); //auto close
+                }
             }
         }
         public virtual int ChannelCount
@@ -223,7 +233,10 @@ namespace Granados.SSHC
                 int r = 0;
                 for (int i = 0; i < _channel_entries.Count; i++)
                 {
-                    if (_channel_entries[i] != null) r++;
+                    if (_channel_entries[i] != null)
+                    {
+                        r++;
+                    }
                 }
                 return r;
             }
@@ -233,8 +246,15 @@ namespace Granados.SSHC
         //establishes a SSH connection in subject to ConnectionParameter
         public static SSHConnection Connect(SSHConnectionParameter param, ISSHConnectionEventReceiver receiver, Socket underlying_socket)
         {
-            if (param.UserName == null) throw new InvalidOperationException("UserName property is not set");
-            if (param.Password == null) throw new InvalidOperationException("Password property is not set");
+            if (param.UserName == null)
+            {
+                throw new InvalidOperationException("UserName property is not set");
+            }
+
+            if (param.Password == null)
+            {
+                throw new InvalidOperationException("Password property is not set");
+            }
 
             ProtocolNegotiationHandler pnh = new ProtocolNegotiationHandler(param);
             PlainSocket s = new PlainSocket(underlying_socket, pnh);
@@ -243,8 +263,15 @@ namespace Granados.SSHC
         }
         internal static SSHConnection Connect(SSHConnectionParameter param, ISSHConnectionEventReceiver receiver, ProtocolNegotiationHandler pnh, AbstractSocket s)
         {
-            if (param.UserName == null) throw new InvalidOperationException("UserName property is not set");
-            if (param.Password == null) throw new InvalidOperationException("Password property is not set");
+            if (param.UserName == null)
+            {
+                throw new InvalidOperationException("UserName property is not set");
+            }
+
+            if (param.Password == null)
+            {
+                throw new InvalidOperationException("Password property is not set");
+            }
 
             return ConnectMain(param, receiver, pnh, s);
         }
@@ -252,21 +279,30 @@ namespace Granados.SSHC
         {
             pnh.Wait();
 
-            if (pnh.State != ReceiverState.Ready) throw new SSHException(pnh.ErrorMessage);
+            if (pnh.State != ReceiverState.Ready)
+            {
+                throw new SSHException(pnh.ErrorMessage);
+            }
 
             string sv = pnh.ServerVersion;
 
             SSHConnection con = null;
             if (param.Protocol == SSHProtocol.SSH1)
+            {
                 con = new SSH1Connection(param, receiver, sv, SSHUtil.ClientVersionString(param.Protocol));
+            }
             else
+            {
                 con = new SSH2Connection(param, receiver, sv, SSHUtil.ClientVersionString(param.Protocol));
+            }
 
             s.SetHandler(con.PacketBuilder);
             SendMyVersion(s, param);
 
             if (con.Connect(s) != AuthenticationResult.Failure)
+            {
                 return con;
+            }
             else
             {
                 s.Close();
@@ -278,9 +314,14 @@ namespace Granados.SSHC
         {
             string cv = SSHUtil.ClientVersionString(param.Protocol);
             if (param.Protocol == SSHProtocol.SSH1)
+            {
                 cv += param.SSH1VersionEOL;
+            }
             else
+            {
                 cv += "\r\n";
+            }
+
             byte[] data = Encoding.ASCII.GetBytes(cv);
             stream.Write(data, 0, data.Length);
         }

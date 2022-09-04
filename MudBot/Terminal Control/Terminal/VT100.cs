@@ -21,15 +21,10 @@ namespace Poderosa.Terminal
         protected bool _insertMode;
         protected bool _scrollRegionRelative;
 
-        //接続の種類によってエスケープシーケンスの解釈を変える部分
-        protected bool _homePositionOnCSIJ2;
-
         public VT100Terminal(ConnectionTag tag, ICharDecoder decoder) : base(tag, decoder)
         {
             _insertMode = false;
             _scrollRegionRelative = false;
-            bool sfu = tag.Connection.Param is SFUTerminalParam;
-            _homePositionOnCSIJ2 = sfu;
         }
         protected override void ResetInternal()
         {
@@ -103,9 +98,14 @@ namespace Poderosa.Terminal
                     return ProcessDECSETMulti(param, code);
                 case 'r':
                     if (param.Length > 0 && param[0] == '?')
+                    {
                         return ProcessRestoreDECSET(param, code);
+                    }
                     else
+                    {
                         ProcessSetScrollingRegion(param);
+                    }
+
                     break;
                 case 's':
                     return ProcessSaveDECSET(param, code);
@@ -217,13 +217,21 @@ namespace Poderosa.Terminal
         private static int ParseSGRCode(string param)
         {
             if (param.Length == 0)
+            {
                 return 0;
+            }
             else if (param.Length == 1)
+            {
                 return param[0] - '0';
+            }
             else if (param.Length == 2)
+            {
                 return (param[0] - '0') * 10 + (param[1] - '0');
+            }
             else
+            {
                 throw new UnknownEscapeSequenceException(String.Format("unknown SGR parameter {0}", param));
+            }
         }
 
         protected virtual void ProcessDeviceAttributes(string param)
@@ -236,11 +244,17 @@ namespace Poderosa.Terminal
         {
             string response;
             if (param == "5")
+            {
                 response = " [0n"; //これでOKの意味らしい
+            }
             else if (param == "6")
+            {
                 response = String.Format(" [{0};{1}R", GetDocument().CurrentLineNumber - GetDocument().TopLineNumber + 1, _manipulator.CaretColumn + 1);
+            }
             else
+            {
                 throw new UnknownEscapeSequenceException("DSR " + param);
+            }
 
             byte[] data = Encoding.ASCII.GetBytes(response);
             data[0] = 0x1B; //ESC
@@ -267,7 +281,11 @@ namespace Poderosa.Terminal
                 case 'C':
                     {
                         int newvalue = column + count;
-                        if (newvalue >= GetConnection().TerminalWidth) newvalue = GetConnection().TerminalWidth - 1;
+                        if (newvalue >= GetConnection().TerminalWidth)
+                        {
+                            newvalue = GetConnection().TerminalWidth - 1;
+                        }
+
                         _manipulator.ExpandBuffer(newvalue);
                         _manipulator.CaretColumn = newvalue;
                     }
@@ -275,7 +293,11 @@ namespace Poderosa.Terminal
                 case 'D':
                     {
                         int newvalue = column - count;
-                        if (newvalue < 0) newvalue = 0;
+                        if (newvalue < 0)
+                        {
+                            newvalue = 0;
+                        }
+
                         _manipulator.CaretColumn = newvalue;
                     }
                     break;
@@ -292,10 +314,24 @@ namespace Poderosa.Terminal
                 row += GetDocument().ScrollingTop;
             }
 
-            if (row < 1) row = 1;
-            else if (row > GetConnection().TerminalHeight) row = GetConnection().TerminalHeight;
-            if (col < 1) col = 1;
-            else if (col > GetConnection().TerminalWidth) col = GetConnection().TerminalWidth;
+            if (row < 1)
+            {
+                row = 1;
+            }
+            else if (row > GetConnection().TerminalHeight)
+            {
+                row = GetConnection().TerminalHeight;
+            }
+
+            if (col < 1)
+            {
+                col = 1;
+            }
+            else if (col > GetConnection().TerminalWidth)
+            {
+                col = GetConnection().TerminalWidth;
+            }
+
             ProcessCursorPosition(row, col);
         }
         protected void ProcessCursorPosition(int row, int col)
@@ -321,31 +357,42 @@ namespace Poderosa.Terminal
                     doc.ReplaceCurrentLine(_manipulator.Export());
                     doc.RemoveAfter(doc.TopLineNumber + GetConnection().TerminalHeight);
                     if (_currentdecoration.IsDefault)
+                    {
                         doc.ClearAfter(doc.CurrentLineNumber + 1);
+                    }
                     else
+                    {
                         doc.ClearAfter(doc.CurrentLineNumber + 1, _currentdecoration);
+                    }
+
                     _manipulator.Load(doc.CurrentLine, col);
                     break;
                 case 1: //erase above
                     _manipulator.FillSpace(0, _manipulator.CaretColumn);
                     doc.ReplaceCurrentLine(_manipulator.Export());
                     if (_currentdecoration.IsDefault)
+                    {
                         doc.ClearRange(doc.TopLineNumber, doc.CurrentLineNumber);
+                    }
                     else
+                    {
                         doc.ClearRange(doc.TopLineNumber, doc.CurrentLineNumber, _currentdecoration);
+                    }
+
                     _manipulator.Load(doc.CurrentLine, col);
                     break;
                 case 2: //erase all
                     doc.ReplaceCurrentLine(_manipulator.Export());
-                    if (_homePositionOnCSIJ2)
-                    { //SFUではこうなる
-                        ProcessCursorPosition(1, 1);
-                        col = 0;
-                    }
+
                     if (_currentdecoration.IsDefault)
+                    {
                         doc.ClearAfter(doc.TopLineNumber);
+                    }
                     else
+                    {
                         doc.ClearAfter(doc.TopLineNumber, _currentdecoration);
+                    }
+
                     _manipulator.Load(doc.CurrentLine, col);
                     break;
                 default:
@@ -363,9 +410,14 @@ namespace Poderosa.Terminal
             {
                 case 0: //erase right
                     if (_currentdecoration.IsDefault)
+                    {
                         _manipulator.RemoveAfterCaret();
+                    }
                     else
+                    {
                         _manipulator.FillSpace(_manipulator.CaretColumn, _tag.Connection.TerminalWidth, _currentdecoration);
+                    }
+
                     break;
                 case 1: //erase left
                     _manipulator.FillSpace(0, _manipulator.CaretColumn);
@@ -397,9 +449,14 @@ namespace Poderosa.Terminal
             GetDocument().ReplaceCurrentLine(nl);
             int current = GetDocument().CurrentLineNumber;
             if (current == GetDocument().TopLineNumber + GetConnection().TerminalHeight - 1 || current == GetDocument().ScrollingBottom)
+            {
                 GetDocument().ScrollDown();
+            }
             else
+            {
                 GetDocument().CurrentLineNumber = current + 1;
+            }
+
             _manipulator.Load(GetDocument().CurrentLine, _manipulator.CaretColumn);
         }
         protected void ReverseIndex()
@@ -408,9 +465,14 @@ namespace Poderosa.Terminal
             GetDocument().ReplaceCurrentLine(nl);
             int current = GetDocument().CurrentLineNumber;
             if (current == GetDocument().TopLineNumber || current == GetDocument().ScrollingTop)
+            {
                 GetDocument().ScrollUp();
+            }
             else
+            {
                 GetDocument().CurrentLineNumber = current - 1;
+            }
+
             _manipulator.Load(GetDocument().CurrentLine, _manipulator.CaretColumn);
         }
 
@@ -419,10 +481,24 @@ namespace Poderosa.Terminal
             int height = _tag.Connection.TerminalHeight;
             IntPair v = ParseIntPair(param, 1, height);
 
-            if (v.first < 1) v.first = 1;
-            else if (v.first > height) v.first = height;
-            if (v.second < 1) v.second = 1;
-            else if (v.second > height) v.second = height;
+            if (v.first < 1)
+            {
+                v.first = 1;
+            }
+            else if (v.first > height)
+            {
+                v.first = height;
+            }
+
+            if (v.second < 1)
+            {
+                v.second = 1;
+            }
+            else if (v.second > height)
+            {
+                v.second = height;
+            }
+
             if (v.first > v.second)
             { //問答無用でエラーが良いようにも思うが
                 int t = v.first;
@@ -443,7 +519,10 @@ namespace Poderosa.Terminal
 
         protected override void ChangeMode(TerminalMode mode)
         {
-            if (_terminalMode == mode) return;
+            if (_terminalMode == mode)
+            {
+                return;
+            }
 
             if (mode == TerminalMode.Normal)
             {
@@ -453,27 +532,45 @@ namespace Poderosa.Terminal
                                                                                                        //場当たり的だが、ノーマルモードに戻る際に後ろの空行を削除することで対応する。
                 GLine l = GetDocument().LastLine;
                 while (l != null && l.DisplayLength == 0 && l.ID > GetDocument().CurrentLineNumber)
+                {
                     l = l.PrevLine;
+                }
 
-                if (l != null) l = l.NextLine;
-                if (l != null) GetDocument().RemoveAfter(l.ID);
+                if (l != null)
+                {
+                    l = l.NextLine;
+                }
+
+                if (l != null)
+                {
+                    GetDocument().RemoveAfter(l.ID);
+                }
             }
             else
+            {
                 GetDocument().SetScrollingRegion(0, _tag.Connection.TerminalHeight - 1);
+            }
 
             _terminalMode = mode;
         }
 
         private ProcessCharResult ProcessDECSETMulti(string param, char code)
         {
-            if (param.Length == 0) return ProcessCharResult.Processed;
+            if (param.Length == 0)
+            {
+                return ProcessCharResult.Processed;
+            }
+
             bool question = param[0] == '?';
             string[] ps = question ? param.Substring(1).Split(';') : param.Split(';');
             bool unsupported = false;
             foreach (string p in ps)
             {
                 ProcessCharResult r = question ? ProcessDECSET(p, code) : ProcessSetMode(p, code);
-                if (r == ProcessCharResult.Unsupported) unsupported = true;
+                if (r == ProcessCharResult.Unsupported)
+                {
+                    unsupported = true;
+                }
             }
             return unsupported ? ProcessCharResult.Unsupported : ProcessCharResult.Processed;
         }
@@ -492,7 +589,9 @@ namespace Poderosa.Terminal
                 return ProcessCharResult.Processed;
             }
             else
+            {
                 return ProcessCharResult.Unsupported;
+            }
         }
         protected virtual ProcessCharResult ProcessSetMode(string param, char code)
         {
@@ -506,7 +605,9 @@ namespace Poderosa.Terminal
                 return ProcessCharResult.Processed; //!!WinXPのTelnetで確認した
             }
             else
+            {
                 return ProcessCharResult.Unsupported;
+            }
         }
 
         //これはさぼり。ちゃんと保存しないといけない状態はほとんどないので
@@ -537,7 +638,9 @@ namespace Poderosa.Terminal
             GLine nl = _manipulator.Export();
             doc.ReplaceCurrentLine(nl);
             if (doc.ScrollingBottom == -1)
+            {
                 doc.SetScrollingRegion(0, GetConnection().TerminalHeight - 1);
+            }
 
             for (int i = 0; i < d; i++)
             {
@@ -568,7 +671,9 @@ namespace Poderosa.Terminal
             GLine nl = _manipulator.Export();
             doc.ReplaceCurrentLine(nl);
             if (doc.ScrollingBottom == -1)
+            {
                 doc.SetScrollingRegion(0, GetConnection().TerminalHeight - 1);
+            }
 
             for (int i = 0; i < d; i++)
             {
@@ -594,12 +699,21 @@ namespace Poderosa.Terminal
                 r[0] = 0x1B;
                 r[1] = (byte)'[';
                 int n = (int)body - (int)Keys.F1;
-                if ((modifier & Keys.Shift) != Keys.None) n += 10; //shiftは値を10ずらす
+                if ((modifier & Keys.Shift) != Keys.None)
+                {
+                    n += 10; //shiftは値を10ずらす
+                }
+
                 char tail;
                 if (n >= 20)
+                {
                     tail = (modifier & Keys.Control) != Keys.None ? '@' : '$';
+                }
                 else
+                {
                     tail = (modifier & Keys.Control) != Keys.None ? '^' : '~';
+                }
+
                 string f = FUNCTIONKEY_MAP[n];
                 r[2] = (byte)f[0];
                 r[3] = (byte)f[1];
@@ -611,9 +725,13 @@ namespace Poderosa.Terminal
                 byte[] r = new byte[3];
                 r[0] = 0x1B;
                 if (_cursorKeyMode == TerminalMode.Normal)
+                {
                     r[1] = (byte)'[';
+                }
                 else
+                {
                     r[1] = (byte)'O';
+                }
 
                 switch (body)
                 {
@@ -641,19 +759,34 @@ namespace Poderosa.Terminal
                 r[1] = (byte)'[';
                 r[3] = (byte)'~';
                 if (body == Keys.Insert)
+                {
                     r[2] = (byte)'1';
+                }
                 else if (body == Keys.Home)
+                {
                     r[2] = (byte)'2';
+                }
                 else if (body == Keys.PageUp)
+                {
                     r[2] = (byte)'3';
+                }
                 else if (body == Keys.Delete)
+                {
                     r[2] = (byte)'4';
+                }
                 else if (body == Keys.End)
+                {
                     r[2] = (byte)'5';
+                }
                 else if (body == Keys.PageDown)
+                {
                     r[2] = (byte)'6';
+                }
                 else
+                {
                     throw new ArgumentException("unknown key " + body.ToString());
+                }
+
                 return r;
             }
         }

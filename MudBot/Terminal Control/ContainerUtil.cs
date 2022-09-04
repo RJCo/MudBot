@@ -85,7 +85,9 @@ namespace Poderosa
                 return dlg.FileName;
             }
             else
+            {
                 return null;
+            }
         }
         public static string SelectPrivateKeyFileByDialog(Form parent)
         {
@@ -104,7 +106,9 @@ namespace Poderosa
                 return dlg.FileName;
             }
             else
+            {
                 return null;
+            }
         }
         public static string SelectPictureFileByDialog(Form parent)
         {
@@ -122,7 +126,9 @@ namespace Poderosa
                 return dlg.FileName;
             }
             else
+            {
                 return null;
+            }
         }
 
         //.NET1.1SP1 対策で、ダイアログ表示の手続きにひとくせあり

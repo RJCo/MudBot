@@ -29,8 +29,8 @@ namespace Poderosa.Terminal
 
         public VScrollBar _VScrollBar;
 
-        private System.Windows.Forms.Timer _caretTimer;
-        private System.Windows.Forms.Timer _sizeTipTimer;
+        private Timer _caretTimer;
+        private Timer _sizeTipTimer;
         private ConnectionTag _tag;
 
         private int _caretState;
@@ -95,13 +95,13 @@ namespace Poderosa.Terminal
             // TODO: InitForm
             SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.DoubleBuffer, true);
 
-            _caretTimer = new System.Windows.Forms.Timer
+            _caretTimer = new Timer
             {
                 Interval = Win32.GetCaretBlinkTime()
             };
             _caretTimer.Tick += new EventHandler(OnCaretTimer);
 
-            _sizeTipTimer = new System.Windows.Forms.Timer
+            _sizeTipTimer = new Timer
             {
                 Interval = 2000
             };
@@ -126,24 +126,46 @@ namespace Poderosa.Terminal
                 {
                     Size ts = TerminalSize;
                     if (ts.Width != GetConnection().TerminalWidth || ts.Height != GetConnection().TerminalHeight)
+                    {
                         ResizeTerminal(ts.Width, ts.Height);
+                    }
                 }
 
                 if (_fakeVisible)
+                {
                     BackColor = GetRenderProfile().BackColor;
+                }
             }
 
-            if (!_caretTimer.Enabled) _caretTimer.Start();
+            if (!_caretTimer.Enabled)
+            {
+                _caretTimer.Start();
+            }
 
             Invalidate(true);
         }
         public void Detach()
         {
-            if (_inIMEComposition) ClearIMEComposition();
-            if (InFreeSelectionMode) ExitFreeSelectionMode();
-            if (InAutoSelectionMode) ExitAutoSelectionMode();
+            if (_inIMEComposition)
+            {
+                ClearIMEComposition();
+            }
 
-            if (_tag != null) _tag.Pane = null;
+            if (InFreeSelectionMode)
+            {
+                ExitFreeSelectionMode();
+            }
+
+            if (InAutoSelectionMode)
+            {
+                ExitAutoSelectionMode();
+            }
+
+            if (_tag != null)
+            {
+                _tag.Pane = null;
+            }
+
             _tag = null;
             _caretTimer.Stop();
             _VScrollBar.Enabled = false;
@@ -170,9 +192,13 @@ namespace Poderosa.Terminal
         private RenderProfile GetRenderProfile()
         {
             if (_tag != null && _tag.RenderProfile != null)
+            {
                 return _tag.RenderProfile;
+            }
             else
+            {
                 return GEnv.DefaultRenderProfile;
+            }
         }
 
         protected override void Dispose(bool disposing)
@@ -246,7 +272,11 @@ namespace Poderosa.Terminal
 
         private void InternalDataArrived()
         {
-            if (_tag == null) return;
+            if (_tag == null)
+            {
+                return;
+            }
+
             TerminalDocument document = _tag.Document;
             if (_autoSelectionMode)
             {
@@ -257,7 +287,9 @@ namespace Poderosa.Terminal
                     //Debug.WriteLine(String.Format("ExpandTo {0}:{1}-{2}:{3}", GEnv.TextSelection.HeadPoint._line, GEnv.TextSelection.HeadPoint._position, GEnv.TextSelection.TailPoint._line, GEnv.TextSelection.TailPoint._position)); 
                 }
                 else
+                {
                     GEnv.TextSelection.DisableTemporary();
+                }
             }
 
             //Debug.WriteLine(String.Format("v={0} l={1} m={2}", _VScrollBar.Value, _VScrollBar.LargeChange, _VScrollBar.Maximum));
@@ -287,7 +319,11 @@ namespace Poderosa.Terminal
         {
             long tick = DateTime.Now.Ticks;
             _lastInvalidateTime = tick;
-            if (_tag == null) return;
+            if (_tag == null)
+            {
+                return;
+            }
+
             TerminalDocument document = _tag.Document;
             bool full_invalidate = true;
             Rectangle r = new Rectangle();
@@ -309,16 +345,24 @@ namespace Poderosa.Terminal
             {
                 //Debug.WriteLine("Invoke Required");
                 if (full_invalidate)
+                {
                     _tag.InvalidateParam.Set(new InvalidateDelegate1(DelInvalidate), null);
+                }
                 else
+                {
                     _tag.InvalidateParam.Set(new InvalidateDelegate2(DelInvalidate), new object[1] { r });
+                }
             }
             else
             {
                 if (full_invalidate)
+                {
                     Invalidate();
+                }
                 else
+                {
                     Invalidate(r);
+                }
             }
         }
 
@@ -346,8 +390,15 @@ namespace Poderosa.Terminal
                     ControlPaint.DrawBorder3D(g, 0, 0, Width, Height, Border3DStyle.Sunken);
                 }
 
-                if (!_fakeVisible) return;
-                if (DesignMode || _tag == null) return;
+                if (!_fakeVisible)
+                {
+                    return;
+                }
+
+                if (DesignMode || _tag == null)
+                {
+                    return;
+                }
 
                 //
                 /*if(!_thrownFlag) {
@@ -359,7 +410,10 @@ namespace Poderosa.Terminal
                 TerminalDocument document = _tag.Document;
                 RenderProfile profile = GetRenderProfile();
                 Image img = profile.GetImage();
-                if (img != null) DrawBackgroundImage(g, img, profile.ImageStyle, clip);
+                if (img != null)
+                {
+                    DrawBackgroundImage(g, img, profile.ImageStyle, clip);
+                }
 
                 int paneheight = GetConnection().TerminalHeight;
 
@@ -395,7 +449,11 @@ namespace Poderosa.Terminal
                         float y = prof.Pitch.Height * param.LineFrom;
                         for (int i = param.LineFrom; i < t; i++)
                         {
-                            if (i >= lines.Count) break;
+                            if (i >= lines.Count)
+                            {
+                                break;
+                            }
+
                             GLine line = (GLine)lines[i];
                             line.Render(hdc, param, prof, (int)y);
                             y += prof.Pitch.Height;
@@ -403,20 +461,26 @@ namespace Poderosa.Terminal
                     }
                     finally
                     {
-                        if (gdipgraphics != IntPtr.Zero) Win32.GdipDeleteGraphics(gdipgraphics);
+                        if (gdipgraphics != IntPtr.Zero)
+                        {
+                            Win32.GdipDeleteGraphics(gdipgraphics);
+                        }
+
                         g.ReleaseHdc(hdc);
                     }
-
                 }
 
                 if (caret)
                 {
                     if ((GEnv.Options.CaretType & CaretType.StyleMask) == CaretType.Line)
+                    {
                         DrawBarCaret(g, param, caret_pos_y, caret_pos_x);
+                    }
                     else if ((GEnv.Options.CaretType & CaretType.StyleMask) == CaretType.Underline)
+                    {
                         DrawUnderLineCaret(g, param, caret_pos_y, caret_pos_x);
+                    }
                 }
-
             }
             catch (Exception ex)
             {
@@ -430,7 +494,10 @@ namespace Poderosa.Terminal
 
         private void BuildTransientDocument(PaintEventArgs e, ArrayList lines, ref RenderParameter param, ref bool caret, ref int caret_pos_x, ref int caret_pos_y)
         {
-            if (_tag == null) return;   // ペインを閉じる時に _tag が null になっていることがある
+            if (_tag == null)
+            {
+                return;   // ペインを閉じる時に _tag が null になっていることがある
+            }
 
             Rectangle clip = e.ClipRectangle;
             TerminalDocument document = _tag.Document;
@@ -447,7 +514,10 @@ namespace Poderosa.Terminal
             {
                 lines.Add(l.Clone());
                 l = l.NextLine;
-                if (l == null) break;
+                if (l == null)
+                {
+                    break;
+                }
             }
 
             //選択領域の描画
@@ -470,10 +540,16 @@ namespace Poderosa.Terminal
                             GLine r = null;
                             if (l.ID == to._line)
                             {
-                                if (pos != to._position) r = ((GLine)lines[index]).InverseRange(pos, to._position);
+                                if (pos != to._position)
+                                {
+                                    r = ((GLine)lines[index]).InverseRange(pos, to._position);
+                                }
                             }
                             else
+                            {
                                 r = ((GLine)lines[index]).InverseRange(pos, l.CharLength);
+                            }
+
                             if (r != null)
                             {
                                 lines[l.ID - document.TopLineNumber] = r;
@@ -495,23 +571,42 @@ namespace Poderosa.Terminal
                 caret_pos_x = _selectionKeyProcessor.UICaretPos;
                 caret_pos_y = _selectionKeyProcessor.CurrentLine.ID - document.TopLineNumber;
                 if (caret_pos_y >= 0 && caret_pos_y < GetConnection().TerminalHeight && caret_pos_y < lines.Count)
+                {
                     caret_line = (GLine)lines[caret_pos_y];
-                if (_caretState == 1) caret = false; //テキスト選択モードでは常にブリンク
+                }
+
+                if (_caretState == 1)
+                {
+                    caret = false; //テキスト選択モードでは常にブリンク
+                }
             }
             else
             {
                 caret_pos_x = document.CaretColumn;
                 caret_pos_y = document.CurrentLineNumber - document.TopLineNumber;
                 if (caret_pos_y >= 0 && caret_pos_y < GetConnection().TerminalHeight && caret_pos_y < lines.Count)
+                {
                     caret_line = (GLine)lines[caret_pos_y];
-                if (GetConnection().IsClosed) caret = false;
-                if (blink && _caretState == 1) caret = false;
+                }
+
+                if (GetConnection().IsClosed)
+                {
+                    caret = false;
+                }
+
+                if (blink && _caretState == 1)
+                {
+                    caret = false;
+                }
             }
 
             int offset1 = (int)((clip.Top - GEnv.SystemMetrics.ControlBorderHeight) / profile.Pitch.Height);
             param.LineFrom = offset1;
             int offset2 = (int)((clip.Bottom - GEnv.SystemMetrics.ControlBorderHeight) / profile.Pitch.Height);
-            if (offset2 >= GetConnection().TerminalHeight) offset2 = GetConnection().TerminalHeight - 1;
+            if (offset2 >= GetConnection().TerminalHeight)
+            {
+                offset2 = GetConnection().TerminalHeight - 1;
+            }
 
             param.LineCount = offset2 - offset1 + 1;
             //Debug.WriteLine(String.Format("{0} {1} {2}", param.LineFrom, param.LineCount, caret_pos_y));
@@ -528,7 +623,9 @@ namespace Poderosa.Terminal
                 }
             }
             else
+            {
                 caret = false;
+            }
         }
 
         internal void CommitTransientScrollBar()
@@ -559,7 +656,11 @@ namespace Poderosa.Terminal
 
         protected void _VScrollBar_ValueChanged(object sender, EventArgs e)
         {
-            if (_ignoreValueChangeEvent) return;
+            if (_ignoreValueChangeEvent)
+            {
+                return;
+            }
+
             TerminalDocument document = _tag.Document;
             lock (document)
             {
@@ -583,16 +684,36 @@ namespace Poderosa.Terminal
             int clip_top = clip.Top;
             int clip_right = clip.Right;
             int clip_bottom = clip.Bottom;
-            if (clip_left < BORDER) clip_left = BORDER;
-            if (clip_top < BORDER) clip_top = BORDER;
-            if (clip_right >= Width - BORDER) clip_right = Width - BORDER;
-            if (clip_bottom >= Height - BORDER) clip_bottom = Height - BORDER;
+            if (clip_left < BORDER)
+            {
+                clip_left = BORDER;
+            }
+
+            if (clip_top < BORDER)
+            {
+                clip_top = BORDER;
+            }
+
+            if (clip_right >= Width - BORDER)
+            {
+                clip_right = Width - BORDER;
+            }
+
+            if (clip_bottom >= Height - BORDER)
+            {
+                clip_bottom = Height - BORDER;
+            }
+
             Rectangle clip2 = new Rectangle(clip_left, clip_top, clip_right - clip_left, clip_bottom - clip_top);
 
             if (style == ImageStyle.Scaled)
+            {
                 DrawBackgroundImage_Scaled(g, img, clip2);
+            }
             else
+            {
                 DrawBackgroundImage_Normal(g, img, style, clip2);
+            }
         }
 
         private void DrawBackgroundImage_Scaled(Graphics g, Image img, Rectangle clip)
@@ -616,7 +737,9 @@ namespace Poderosa.Terminal
 
             RectangleF target = RectangleF.Intersect(new RectangleF((clip.Left - offset_x) / scale, (clip.Top - offset_y) / scale, clip.Width / scale, clip.Height / scale), new RectangleF(0, 0, img.Width, img.Height));
             if (target != RectangleF.Empty)
+            {
                 g.DrawImage(img, new RectangleF(target.Left * scale + offset_x, target.Top * scale + offset_y, target.Width * scale, target.Height * scale), target, GraphicsUnit.Pixel);
+            }
         }
 
         private void DrawBackgroundImage_Normal(Graphics g, Image img, ImageStyle style, Rectangle clip)
@@ -638,7 +761,9 @@ namespace Poderosa.Terminal
             //画像内のコピー開始座標
             Rectangle target = Rectangle.Intersect(new Rectangle(clip.Left - offset_x, clip.Top - offset_y, clip.Width, clip.Height), new Rectangle(0, 0, img.Width, img.Height));
             if (target != Rectangle.Empty)
+            {
                 g.DrawImage(img, new Rectangle(target.Left + offset_x, target.Top + offset_y, target.Width, target.Height), target, GraphicsUnit.Pixel);
+            }
         }
 
         protected override bool IsInputKey(Keys key)
@@ -646,9 +771,13 @@ namespace Poderosa.Terminal
             Keys mod = key & Keys.Modifiers;
             Keys body = key & Keys.KeyCode;
             if (mod == Keys.None && (body == Keys.Tab || body == Keys.Escape))
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
         }
 
         protected override bool ProcessDialogKey(Keys key)
@@ -675,9 +804,13 @@ namespace Poderosa.Terminal
             }
 
             if (_selectionKeyProcessor != null)
+            {
                 return ProcessDialogKeyInTextSelectionMode(key, keybody, modifiers, cursor);
+            }
             else
+            {
                 return ProcessDialogKeyInNormalMode(key, keybody, modifiers, cursor);
+            }
         }
 
         private bool ProcessDialogKeyInTextSelectionMode(Keys key, Keys keybody, Keys modifiers, bool cursor)
@@ -687,7 +820,9 @@ namespace Poderosa.Terminal
             {
                 processed = base.ProcessDialogKey(key);
                 if (processed)
+                {
                     return true;
+                }
             }
 
             processed = _selectionKeyProcessor.ProcessKey(key);
@@ -700,15 +835,21 @@ namespace Poderosa.Terminal
                 if (_VScrollBar.Enabled)
                 {
                     if (document.TopLineNumber > id)
+                    {
                         _VScrollBar.Value = id - document.FirstLineNumber;
+                    }
                     else if (document.TopLineNumber + GetConnection().TerminalHeight - 1 < id)
+                    {
                         _VScrollBar.Value = id + 1 - GetConnection().TerminalHeight - document.FirstLineNumber;
+                    }
                 }
 
                 Invalidate();
             }
             else
+            {
                 ExitFreeSelectionMode();
+            }
 
             return processed;
         }
@@ -744,18 +885,29 @@ namespace Poderosa.Terminal
             else if (IsSequenceKey(keybody))
             { //
                 CommandResult res = GEnv.Frame.ProcessShortcutKey(key);
-                if (res != CommandResult.NOP) return true;
+                if (res != CommandResult.NOP)
+                {
+                    return true;
+                }
 
                 if (IsScrollKey(keybody) && (modifiers != Keys.None && GEnv.Options.LocalBufferScrollModifier == modifiers))
                 {
-                    if (_VScrollBar.Enabled) ProcessScrollKey(keybody); //
+                    if (_VScrollBar.Enabled)
+                    {
+                        ProcessScrollKey(keybody); //
+                    }
                 }
                 else
+                {
                     ProcessSequenceKey(modifiers, keybody);
+                }
+
                 return true;
             }
             else
+            {
                 return base.ProcessDialogKey(key);
+            }
         }
 
         private static bool IsSequenceKey(Keys key)
@@ -775,12 +927,21 @@ namespace Poderosa.Terminal
 
         private void ProcessSpecialAltKey(AltKeyAction act, Keys modifiers, Keys body)
         {
-            if (!_fakeVisible) return;
+            if (!_fakeVisible)
+            {
+                return;
+            }
+
             char ch = KeyboardInfo.Scan(body, (modifiers & Keys.Shift) != Keys.None);
-            if (ch == '\0') return; //割り当てられていないやつは無視
+            if (ch == '\0')
+            {
+                return; //割り当てられていないやつは無視
+            }
 
             if ((modifiers & Keys.Control) != Keys.None)
+            {
                 ch = (char)((int)ch % 32); //Controlを押したら制御文字
+            }
 
             if (act == AltKeyAction.ESC)
             {
@@ -822,7 +983,10 @@ namespace Poderosa.Terminal
             {
                 //Console.WriteLine("Shift" + e.KeyCode.ToString());
                 string value = (string)Clipboard.GetDataObject().GetData("Text");
-                if (value == null || value.Length == 0 || ConnectionTag == null) return;
+                if (value == null || value.Length == 0 || ConnectionTag == null)
+                {
+                    return;
+                }
 
                 PasteProcessor p = new PasteProcessor(ConnectionTag, value);
                 p.Perform();
@@ -835,7 +999,10 @@ namespace Poderosa.Terminal
         private void OnKeyPress(object sender, KeyPressEventArgs e)
         {
             //Console.WriteLine(e.KeyChar + "|");
-            if (!IsAcceptableUserInput()) return;
+            if (!IsAcceptableUserInput())
+            {
+                return;
+            }
 
             char ch = e.KeyChar;
             char[] chars;
@@ -849,8 +1016,11 @@ namespace Poderosa.Terminal
             }
             else
             {
-                if (ch == ' ' && ModifierKeys == Keys.Control) ch = '\0'; //Ctrl+SpaceでNUL送信
-                                                                          //Debug.WriteLine((int)ch);
+                if (ch == ' ' && ModifierKeys == Keys.Control)
+                {
+                    ch = '\0'; //Ctrl+SpaceでNUL送信
+                }
+                //Debug.WriteLine((int)ch);
                 chars = new char[1] { ch };
             }
 
@@ -859,7 +1029,10 @@ namespace Poderosa.Terminal
 
         private void SendBytes(byte[] data)
         {
-            if (!IsAcceptableUserInput()) return;
+            if (!IsAcceptableUserInput())
+            {
+                return;
+            }
 
             TerminalDocument doc = _tag.Document;
             lock (doc)
@@ -894,10 +1067,13 @@ namespace Poderosa.Terminal
         private bool IsAcceptableUserInput()
         {
             if (!_fakeVisible || GetConnection().IsClosed || GEnv.Frame.MacroIsRunning || _tag.ModalTerminalTask != null)
+            {
                 return false;
+            }
             else
+            {
                 return true;
-
+            }
         }
 
         private void ProcessScrollKey(Keys key)
@@ -926,17 +1102,29 @@ namespace Poderosa.Terminal
                     break;
             }
 
-            if (newvalue < 0) newvalue = 0;
-            else if (newvalue > _VScrollBar.Maximum + 1 - _VScrollBar.LargeChange) newvalue = _VScrollBar.Maximum + 1 - _VScrollBar.LargeChange;
+            if (newvalue < 0)
+            {
+                newvalue = 0;
+            }
+            else if (newvalue > _VScrollBar.Maximum + 1 - _VScrollBar.LargeChange)
+            {
+                newvalue = _VScrollBar.Maximum + 1 - _VScrollBar.LargeChange;
+            }
 
             _VScrollBar.Value = newvalue; //
         }
 
         private void ProcessSequenceKey(Keys modifier, Keys body)
         {
-            if (!_fakeVisible) return;
+            if (!_fakeVisible)
+            {
+                return;
+            }
             //
-            if (GetConnection().IsClosed) return;
+            if (GetConnection().IsClosed)
+            {
+                return;
+            }
 
             ResetCaretBlink();
             byte[] data;
@@ -946,7 +1134,10 @@ namespace Poderosa.Terminal
                 data[0] = 0x7F;
             }
             else
+            {
                 data = _tag.Terminal.SequenceKeyData(modifier, body);
+            }
+
             Write(data);
         }
 
@@ -959,7 +1150,9 @@ namespace Poderosa.Terminal
                 byte[] b = { 0x1B, 0x5B, 0x32, 0x7E };
 
                 if (data[0] == b[0] && data[1] == b[1] && data[2] == b[2] && data[3] == b[3])
+                {
                     return;
+                }
             }
 
             //if (data == {27; 91; 50; 126})
@@ -997,7 +1190,11 @@ namespace Poderosa.Terminal
             else if (_VScrollBar.Value + GetConnection().TerminalHeight <= document.CurrentLineNumber - document.FirstLineNumber)
             { //下に隠れた
                 int n = document.CurrentLineNumber - document.FirstLineNumber - GetConnection().TerminalHeight + 1;
-                if (n < 0) n = 0;
+                if (n < 0)
+                {
+                    n = 0;
+                }
+
                 _tag.Receiver.SetTransientScrollBarValue(n);
                 document.TopLineNumber = n + document.FirstLineNumber;
             }
@@ -1014,7 +1211,10 @@ namespace Poderosa.Terminal
             base.OnResize(args);
             Invalidate();
             //最小化時にはなぜか自身の幅だけが０になってしまう
-            if (DesignMode || ParentForm == null || ParentForm.WindowState == FormWindowState.Minimized) return;
+            if (DesignMode || ParentForm == null || ParentForm.WindowState == FormWindowState.Minimized)
+            {
+                return;
+            }
 
             Size ts = TerminalSize;
 
@@ -1025,7 +1225,10 @@ namespace Poderosa.Terminal
             }
 
             ShowSizeTip(ts.Width, ts.Height);
-            if (!_caretTimer.Enabled) _caretTimer.Start();
+            if (!_caretTimer.Enabled)
+            {
+                _caretTimer.Start();
+            }
         }
 
         private void OnHideSizeTip(object sender, EventArgs args)
@@ -1047,8 +1250,16 @@ namespace Poderosa.Terminal
             Win32.SystemMetrics sm = GEnv.SystemMetrics;
             int width = (int)Math.Floor(((float)Width - sm.ScrollBarWidth - sm.ControlBorderWidth * 2) / charPitch.Width);
             int height = (int)Math.Floor((float)(Height - sm.ControlBorderHeight * 2) / charPitch.Height);
-            if (width <= 0) width = 1;
-            if (height <= 0) height = 1;
+            if (width <= 0)
+            {
+                width = 1;
+            }
+
+            if (height <= 0)
+            {
+                height = 1;
+            }
+
             return new Size(width, height);
         }
 
@@ -1056,7 +1267,10 @@ namespace Poderosa.Terminal
         {
             const int MARGIN = 8;
             Form form = GEnv.Frame.AsForm();
-            if (form == null || !form.Visible) return;
+            if (form == null || !form.Visible)
+            {
+                return;
+            }
 
             Point pt = new Point(Width - _VScrollBar.Width - _sizeTip.Width - MARGIN, Height - _sizeTip.Height - MARGIN);
 
@@ -1081,16 +1295,25 @@ namespace Poderosa.Terminal
         public void ResizeTerminal(int width, int height)
         {
             //Debug.WriteLine(String.Format("Resize {0} {1}", width, height));
-            if (_tag.ModalTerminalTask != null) return; //
+            if (_tag.ModalTerminalTask != null)
+            {
+                return; //
+            }
+
             if (_tag.Terminal.TerminalMode == TerminalMode.Application) //
+            {
                 _tag.Document.SetScrollingRegion(0, height - 1);
+            }
+
             _tag.Terminal.Reset();
             if (_VScrollBar.Enabled)
             {
                 bool scroll = IsAutoScrollMode();
                 _VScrollBar.LargeChange = height;
                 if (scroll)
+                {
                     MakeCurrentLineVisible();
+                }
             }
 
             try
@@ -1115,8 +1338,15 @@ namespace Poderosa.Terminal
 
         public void ToggleFreeSelectionMode()
         {
-            if (_tag == null) return;
-            if (InAutoSelectionMode) ExitAutoSelectionMode();
+            if (_tag == null)
+            {
+                return;
+            }
+
+            if (InAutoSelectionMode)
+            {
+                ExitAutoSelectionMode();
+            }
 
             if (_selectionKeyProcessor == null)
             {
@@ -1143,13 +1373,24 @@ namespace Poderosa.Terminal
 
         public void ToggleAutoSelectionMode()
         {
-            if (_tag == null) return;
-            if (InFreeSelectionMode) ExitFreeSelectionMode();
+            if (_tag == null)
+            {
+                return;
+            }
+
+            if (InFreeSelectionMode)
+            {
+                ExitFreeSelectionMode();
+            }
 
             if (!_autoSelectionMode)
+            {
                 EnterAutoSelectionMode(true);
+            }
             else
+            {
                 ExitAutoSelectionMode();
+            }
 
             if (_inIMEComposition)
             {
@@ -1197,18 +1438,28 @@ namespace Poderosa.Terminal
 
         private void OnCaretTimer(object sender, EventArgs args)
         {
-            if (_tag == null || _inIMEComposition) return;
+            if (_tag == null || _inIMEComposition)
+            {
+                return;
+            }
 
-            if (++_caretState == 2) _caretState = 0;
+            if (++_caretState == 2)
+            {
+                _caretState = 0;
+            }
 
             bool blink = (GEnv.Options.CaretType & CaretType.Blink) != CaretType.None;
             TerminalDocument document = _tag.Document;
             lock (document)
             {
                 if (_selectionKeyProcessor != null)
+                {
                     document.InvalidateLine(_selectionKeyProcessor.CurrentLine.ID);
+                }
                 else if (blink)
+                {
                     document.InvalidateLine(document.CurrentLineNumber);
+                }
 
                 SmartInvalidate();
             }
@@ -1232,7 +1483,11 @@ namespace Poderosa.Terminal
 
         public void ApplyOptions(CommonOptions opt)
         {
-            if (_tag != null && _tag.RenderProfile != null) return;
+            if (_tag != null && _tag.RenderProfile != null)
+            {
+                return;
+            }
+
             ApplyRenderProfile(new RenderProfile(opt));
         }
 
@@ -1257,19 +1512,32 @@ namespace Poderosa.Terminal
             { //アプリケーションモードでは通常処理をやめてカーソル上下と同等の処理にする
                 int m = GEnv.Options.WheelAmount;
                 for (int i = 0; i < m; i++)
+                {
                     ProcessSequenceKey(Keys.None, e.Delta > 0 ? Keys.Up : Keys.Down);
+                }
             }
             else
             {
                 base.OnMouseWheel(e);
-                if (!_VScrollBar.Enabled) return;
+                if (!_VScrollBar.Enabled)
+                {
+                    return;
+                }
 
                 int d = e.Delta / 120;
                 d *= GEnv.Options.WheelAmount;
 
                 int newval = _VScrollBar.Value - d;
-                if (newval < 0) newval = 0;
-                if (newval > _VScrollBar.Maximum - _VScrollBar.LargeChange) newval = _VScrollBar.Maximum - _VScrollBar.LargeChange + 1;
+                if (newval < 0)
+                {
+                    newval = 0;
+                }
+
+                if (newval > _VScrollBar.Maximum - _VScrollBar.LargeChange)
+                {
+                    newval = _VScrollBar.Maximum - _VScrollBar.LargeChange + 1;
+                }
+
                 _VScrollBar.Value = newval;
             }
         }
@@ -1277,30 +1545,59 @@ namespace Poderosa.Terminal
         protected override void OnMouseDown(MouseEventArgs args)
         {
             base.OnMouseDown(args);
-            if (args.Button != MouseButtons.Left) return;
-            if (!_fakeVisible) return;
+            if (args.Button != MouseButtons.Left)
+            {
+                return;
+            }
+
+            if (!_fakeVisible)
+            {
+                return;
+            }
+
             CommitTransientScrollBar();
-            if (_tag == null) return;
+            if (_tag == null)
+            {
+                return;
+            }
+
             TerminalDocument document = _tag.Document;
             lock (document)
             {
                 SizeF pitch = GetRenderProfile().Pitch;
                 int row = (int)Math.Floor(args.Y / pitch.Height);
-                int col = (int)Math.Floor(args.X / pitch.Width); ;
+                int col = (int)Math.Floor(args.X / pitch.Width);
+                ;
                 int target_id = document.TopLine.ID + row;
 
                 TextSelection sel = GEnv.TextSelection;
-                if (sel.Owner != this || sel.State == SelectionState.Fixed) sel.Clear(); //変なところでMouseDownしたとしてもClearだけはする
+                if (sel.Owner != this || sel.State == SelectionState.Fixed)
+                {
+                    sel.Clear(); //変なところでMouseDownしたとしてもClearだけはする
+                }
+
                 if (target_id <= document.LastLineNumber)
                 {
-                    if (InFreeSelectionMode) ExitFreeSelectionMode();
-                    if (InAutoSelectionMode) ExitAutoSelectionMode();
+                    if (InFreeSelectionMode)
+                    {
+                        ExitFreeSelectionMode();
+                    }
+
+                    if (InAutoSelectionMode)
+                    {
+                        ExitAutoSelectionMode();
+                    }
+
                     RangeType rt;
                     //Debug.WriteLine(String.Format("MouseDown {0} {1}", sel.State, sel.PivotType));
                     if (sel.State == SelectionState.Empty || sel.StartX != args.X || sel.StartY != args.Y)
+                    {
                         rt = RangeType.Char;
+                    }
                     else
+                    {
                         rt = sel.PivotType == RangeType.Char ? RangeType.Word : sel.PivotType == RangeType.Word ? RangeType.Line : RangeType.Char;
+                    }
 
                     //マウスを動かしていなくても、MouseDownとともにMouseMoveが来てしまうようだ
                     GLine tl = document.FindLine(target_id);
@@ -1313,11 +1610,21 @@ namespace Poderosa.Terminal
         protected override void OnMouseMove(MouseEventArgs args)
         {
             base.OnMouseMove(args);
-            if (!_fakeVisible) return;
+            if (!_fakeVisible)
+            {
+                return;
+            }
 
             TextSelection sel = GEnv.TextSelection;
-            if (sel.Owner != this || sel.State == SelectionState.Fixed || args.Button != MouseButtons.Left) return;
-            if (sel.StartX == args.X && sel.StartY == args.Y) return;
+            if (sel.Owner != this || sel.State == SelectionState.Fixed || args.Button != MouseButtons.Left)
+            {
+                return;
+            }
+
+            if (sel.StartX == args.X && sel.StartY == args.Y)
+            {
+                return;
+            }
 
             TerminalDocument document = _tag.Document;
             lock (document)
@@ -1330,36 +1637,58 @@ namespace Poderosa.Terminal
                 sel.ConvertSelectionPosition(ref target_id, ref col);
 
                 if (target_id > document.LastLineNumber)
+                {
                     target_id = document.LastLineNumber;
+                }
                 else if (target_id < document.FirstLineNumber)
+                {
                     target_id = document.FirstLineNumber;
+                }
 
                 if (_tag.Terminal.TerminalMode == TerminalMode.Normal)
                 {
                     if (target_id < document.TopLineNumber)
+                    {
                         _VScrollBar.Value = target_id - document.FirstLineNumber;
+                    }
                     else if (target_id >= document.TopLineNumber + GetConnection().TerminalHeight)
                     {
                         int newval = target_id - document.FirstLineNumber - GetConnection().TerminalHeight + 1;
-                        if (newval < 0) newval = 0;
-                        if (newval > _VScrollBar.Maximum - _VScrollBar.LargeChange) newval = _VScrollBar.Maximum - _VScrollBar.LargeChange + 1;
+                        if (newval < 0)
+                        {
+                            newval = 0;
+                        }
+
+                        if (newval > _VScrollBar.Maximum - _VScrollBar.LargeChange)
+                        {
+                            newval = _VScrollBar.Maximum - _VScrollBar.LargeChange + 1;
+                        }
+
                         _VScrollBar.Value = newval;
                     }
                 }
                 else
                 {
                     if (target_id < document.TopLineNumber)
+                    {
                         target_id = document.TopLineNumber;
+                    }
                     else if (target_id >= document.TopLineNumber + GetConnection().TerminalHeight)
+                    {
                         target_id = document.TopLineNumber + GetConnection().TerminalHeight - 1;
+                    }
                 }
 
                 //Debug.WriteLine(String.Format("MouseMove {0} {1} {2}", sel.State, sel.PivotType, args.X));
                 RangeType rt = sel.PivotType;
                 if ((ModifierKeys & Keys.Control) != Keys.None)
+                {
                     rt = RangeType.Word;
+                }
                 else if ((ModifierKeys & Keys.Shift) != Keys.None)
+                {
                     rt = RangeType.Line;
+                }
 
                 GLine tl = document.FindLine(target_id);
                 sel.ExpandTo(tl, col, rt);
@@ -1370,23 +1699,35 @@ namespace Poderosa.Terminal
         protected override void OnMouseUp(MouseEventArgs args)
         {
             base.OnMouseUp(args);
-            if (!_fakeVisible) return;
+            if (!_fakeVisible)
+            {
+                return;
+            }
 
             if (args.Button == MouseButtons.Left)
             {
                 TextSelection sel = GEnv.TextSelection;
                 //Debug.WriteLine(String.Format("MouseUp {0} {1}", sel.State, sel.PivotType));
                 if (sel.Owner == this && sel.State == SelectionState.Expansion)
+                {
                     sel.FixSelection();
+                }
+
                 if (GEnv.Options.AutoCopyByLeftButton)
+                {
                     GEnv.GlobalCommandTarget.Copy();
+                }
             }
             else if (args.Button == MouseButtons.Right)
             {
                 if (GEnv.Options.RightButtonAction == RightButtonAction.ContextMenu)
+                {
                     ShowContextMenu(new Point(args.X, args.Y));
+                }
                 else
+                {
                     GEnv.GetConnectionCommandTarget(GetConnection()).Paste();
+                }
             }
         }
 
@@ -1415,9 +1756,15 @@ namespace Poderosa.Terminal
         protected override void OnLostFocus(EventArgs args)
         {
             base.OnLostFocus(args);
-            if (!_fakeVisible) return;
+            if (!_fakeVisible)
+            {
+                return;
+            }
 
-            if (_inIMEComposition) ClearIMEComposition();
+            if (_inIMEComposition)
+            {
+                ClearIMEComposition();
+            }
         }
 
         private void EnterFreeSelectionMode()
@@ -1441,7 +1788,9 @@ namespace Poderosa.Terminal
             _autoSelectionMode = true;
             _autoSelectionModeFromCommand = from_command;
             if (from_command)
+            {
                 GEnv.Frame.SetSelectionStatus(SelectionStatus.Auto);
+            }
 
             //次の行頭から選択開始
             _tag.Document.EnsureLine(_tag.Document.CurrentLineNumber + 1);
@@ -1459,8 +1808,15 @@ namespace Poderosa.Terminal
 
         public void ExitTextSelection()
         {
-            if (InFreeSelectionMode) ExitFreeSelectionMode();
-            if (InAutoSelectionMode) ExitAutoSelectionMode();
+            if (InFreeSelectionMode)
+            {
+                ExitFreeSelectionMode();
+            }
+
+            if (InAutoSelectionMode)
+            {
+                ExitAutoSelectionMode();
+            }
         }
 
         protected override void OnDragEnter(DragEventArgs args)
@@ -1468,9 +1824,13 @@ namespace Poderosa.Terminal
             base.OnDragEnter(args);
             ConnectionTag ct = args.Data.GetData(typeof(ConnectionTag)) as ConnectionTag;
             if (ct != null)
+            {
                 args.Effect = DragDropEffects.Move;
+            }
             else
+            {
                 GEnv.Frame.OnDragEnter(args);
+            }
         }
 
         protected override void OnDragDrop(DragEventArgs args)
@@ -1480,12 +1840,18 @@ namespace Poderosa.Terminal
             if (ct != null)
             {
                 if (ct == _tag)
+                {
                     Focus();
+                }
                 else
+                {
                     GEnv.GlobalCommandTarget.SetConnectionLocation(ct, this);
+                }
             }
             else
+            {
                 GEnv.Frame.OnDragDrop(args);
+            }
         }
 
         private void ProcessVScrollMessage(int cmd)
@@ -1507,8 +1873,16 @@ namespace Poderosa.Terminal
                     break;
             }
 
-            if (newval < 0) newval = 0;
-            if (newval > _VScrollBar.Maximum - _VScrollBar.LargeChange) newval = _VScrollBar.Maximum - _VScrollBar.LargeChange + 1;
+            if (newval < 0)
+            {
+                newval = 0;
+            }
+
+            if (newval > _VScrollBar.Maximum - _VScrollBar.LargeChange)
+            {
+                newval = _VScrollBar.Maximum - _VScrollBar.LargeChange + 1;
+            }
+
             _VScrollBar.Value = newval;
         }
 
@@ -1519,7 +1893,9 @@ namespace Poderosa.Terminal
             {
                 //Debug.WriteLine("VSCROLL MSG");
                 if (msg.LParam == IntPtr.Zero && _VScrollBar.Enabled)
+                {
                     ProcessVScrollMessage(msg.WParam.ToInt32()); //環境によってはWHEELのかわりにVSCROLLが来ると思われる
+                }
             }
             else if (msg.Msg == Win32.WM_IME_STARTCOMPOSITION)
             {
@@ -1527,13 +1903,19 @@ namespace Poderosa.Terminal
                 AdjustIMEComposition(0);
             }
             else if (msg.Msg == Win32.WM_IME_ENDCOMPOSITION)
+            {
                 _inIMEComposition = false;
+            }
             else if (msg.Msg == GConst.WMG_MAINTHREADTASK)
             {
                 switch (msg.WParam.ToInt32())
                 {
                     case GConst.WPG_ADJUSTIMECOMPOSITION:
-                        if (_inIMEComposition) AdjustIMEComposition(0); //部分確定したときに対応。DataArrivedの時点では全確定か部分確定かわからないのでどのみちここへくる
+                        if (_inIMEComposition)
+                        {
+                            AdjustIMEComposition(0); //部分確定したときに対応。DataArrivedの時点では全確定か部分確定かわからないのでどのみちここへくる
+                        }
+
                         break;
                     case GConst.WPG_TOGGLESELECTIONMODE:
                         ToggleFreeSelectionMode();

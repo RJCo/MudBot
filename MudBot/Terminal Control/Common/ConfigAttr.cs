@@ -41,9 +41,13 @@ namespace Poderosa.Config
         {
             //if the field name starts with '_', strip it off
             if (value[0] == '_')
+            {
                 return value.Substring(1);
+            }
             else
+            {
                 return value;
+            }
         }
 
         public abstract void ExportTo(object holder, ConfigNode node);
@@ -71,7 +75,9 @@ namespace Poderosa.Config
         {
             int value = (int)_fieldInfo.GetValue(holder);
             if (value != _initial)
+            {
                 node[_externalName] = value.ToString();
+            }
         }
         public override void ImportFrom(object holder, ConfigNode node)
         {
@@ -87,9 +93,13 @@ namespace Poderosa.Config
             try
             {
                 if (value == null || value.Length == 0)
+                {
                     return defaultvalue;
+                }
                 else
+                {
                     return Int32.Parse(value);
+                }
             }
             catch (Exception)
             {
@@ -118,7 +128,9 @@ namespace Poderosa.Config
         {
             bool value = (bool)_fieldInfo.GetValue(holder);
             if (value != _initial)
+            {
                 node[_externalName] = value.ToString();
+            }
         }
         public override void ImportFrom(object holder, ConfigNode node)
         {
@@ -133,9 +145,13 @@ namespace Poderosa.Config
             try
             {
                 if (value == null || value.Length == 0)
+                {
                     return defaultvalue;
+                }
                 else
+                {
                     return Boolean.Parse(value);
+                }
             }
             catch (Exception)
             {
@@ -164,7 +180,9 @@ namespace Poderosa.Config
         {
             float value = (float)_fieldInfo.GetValue(holder);
             if (value != _initial)
+            {
                 node[_externalName] = value.ToString();
+            }
         }
         public override void ImportFrom(object holder, ConfigNode node)
         {
@@ -179,9 +197,13 @@ namespace Poderosa.Config
             try
             {
                 if (value == null || value.Length == 0)
+                {
                     return defaultvalue;
+                }
                 else
+                {
                     return Single.Parse(value);
+                }
             }
             catch (Exception)
             {
@@ -210,7 +232,9 @@ namespace Poderosa.Config
         {
             string value = _fieldInfo.GetValue(holder) as string;
             if (value != _initial)
+            {
                 node[_externalName] = value == null ? "" : value;
+            }
         }
         public override void ImportFrom(object holder, ConfigNode node)
         {
@@ -245,7 +269,11 @@ namespace Poderosa.Config
             StringBuilder bld = new StringBuilder();
             foreach (string a in t)
             {
-                if (bld.Length > 0) bld.Append(',');
+                if (bld.Length > 0)
+                {
+                    bld.Append(',');
+                }
+
                 bld.Append(a);
             }
             node[_externalName] = bld.ToString();
@@ -294,7 +322,9 @@ namespace Poderosa.Config
         {
             ValueType value = (ValueType)_fieldInfo.GetValue(holder);
             if (value != _initial)
+            {
                 node[_externalName] = value.ToString();
+            }
         }
         public override void ImportFrom(object holder, ConfigNode node)
         {
@@ -311,9 +341,13 @@ namespace Poderosa.Config
             try
             {
                 if (t == null || t.Length == 0)
+                {
                     return (ValueType)Enum.ToObject(enumtype, (int)defaultvalue);
+                }
                 else
+                {
                     return (ValueType)Enum.Parse(enumtype, t, false);
+                }
             }
             catch (FormatException)
             {
@@ -371,7 +405,11 @@ namespace Poderosa.Config
             {
                 if ((i & value) != 0)
                 {
-                    if (bld.Length > 0) bld.Append(',');
+                    if (bld.Length > 0)
+                    {
+                        bld.Append(',');
+                    }
+
                     bld.Append(Enum.GetName(_enumType, i));
                 }
             }
@@ -381,12 +419,17 @@ namespace Poderosa.Config
         {
             string value = node[_externalName];
             if (value == null)
+            {
                 _fieldInfo.SetValue(holder, Enum.ToObject(_enumType, (int)_initial));
+            }
             else
             {
                 int r = 0;
                 foreach (string t in value.Split(','))
+                {
                     r |= (int)Enum.Parse(_enumType, t, false);
+                }
+
                 _fieldInfo.SetValue(holder, Enum.ToObject(_enumType, (int)r));
             }
         }

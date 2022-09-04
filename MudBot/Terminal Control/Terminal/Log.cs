@@ -59,9 +59,13 @@ namespace Poderosa.Log
         public void Append(char ch)
         {
             if (_escapesequence == null)
+            {
                 WriteChar(ch);
+            }
             else
+            {
                 _escapesequence.Append(ch);
+            }
         }
 
         //ITerminalLoggerÇ≈ÇÕÇ»Ç≠TerminalLoggerBaseì∆é©ÇÃÉÅÉ\ÉbÉh
@@ -73,7 +77,10 @@ namespace Poderosa.Log
 
         public void BeginEscapeSequence()
         {
-            if (_escapesequence != null) throw new InvalidOperationException("duplicated BeginEscapeSequence");
+            if (_escapesequence != null)
+            {
+                throw new InvalidOperationException("duplicated BeginEscapeSequence");
+            }
 
             _escapesequence = new StringBuilder();
         }
@@ -181,7 +188,10 @@ namespace Poderosa.Log
             for (int i = 0; i < line.CharLength; i++)
             {
                 char ch = t[i];
-                if (ch != GLine.WIDECHAR_PAD) _writer.Write(ch);
+                if (ch != GLine.WIDECHAR_PAD)
+                {
+                    _writer.Write(ch);
+                }
             }
             _writer.WriteLine();
 

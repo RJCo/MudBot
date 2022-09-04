@@ -123,14 +123,21 @@ namespace Poderosa.Forms
         }
         protected override bool ProcessDialogKey(Keys key)
         {
-            if (_debugTextBox != null) AppendDebugText(key.ToString() + " " + (int)key);
+            if (_debugTextBox != null)
+            {
+                AppendDebugText(key.ToString() + " " + (int)key);
+            }
+
             string t = FormatKey(key);
             if (t != null)
             {
                 Text = t;
             }
             else
+            {
                 _key = Keys.None;
+            }
+
             return true;
         }
 
@@ -147,23 +154,35 @@ namespace Poderosa.Forms
             }
             if ((modifiers & Keys.Shift) != Keys.None)
             {
-                if (b.Length > 0) b.Append('+');
+                if (b.Length > 0)
+                {
+                    b.Append('+');
+                }
+
                 b.Append("Shift");
             }
             if ((modifiers & Keys.Alt) != Keys.None)
             {
-                if (b.Length > 0) b.Append('+');
+                if (b.Length > 0)
+                {
+                    b.Append('+');
+                }
+
                 b.Append("Alt");
             }
             if (b.Length > 0)
+            {
                 b.Append('+');
+            }
 
             if (IsCharKey(body))
             {
                 if (modifiers != Keys.None && modifiers != Keys.Shift)
                 {
                     if (modifiers == Keys.Alt && (Keys.D0 <= body && body <= Keys.D9))
+                    {
                         _key = Keys.None;
+                    }
                     else
                     {
                         b.Append(UILibUtil.KeyString(body));
@@ -171,7 +190,9 @@ namespace Poderosa.Forms
                     }
                 }
                 else
+                {
                     _key = Keys.None;
+                }
             }
             else if (IsTerminalKey(body))
             {
@@ -179,7 +200,9 @@ namespace Poderosa.Forms
                 {
                     //カスタマイズ不能で固定されたショートカットキーは登録できない
                     if (modifiers == Keys.Control && IsScrollKey(body))
+                    {
                         _key = Keys.None;
+                    }
                     else
                     {
                         b.Append(UILibUtil.KeyString(body));
@@ -187,7 +210,9 @@ namespace Poderosa.Forms
                     }
                 }
                 else
+                {
                     _key = Keys.None;
+                }
             }
             else if (IsFunctionKey(body))
             {

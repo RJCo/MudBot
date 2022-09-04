@@ -5,8 +5,6 @@
 using Poderosa.Communication;
 using Poderosa.Config;
 using Poderosa.Connection;
-using Poderosa.LocalShell;
-using Poderosa.SSH;
 using Poderosa.Terminal;
 using Poderosa.Text;
 
@@ -22,7 +20,6 @@ namespace Poderosa
 
         //•
         private static CommonOptions _options;
-        private static ISSHKnownHosts _sshKnownHosts;
         private static GlobalCommandTarget _commandTarget;
         private static InterThreadUIService _interThreadUIService;
 
@@ -42,7 +39,6 @@ namespace Poderosa
 
         public static void Terminate()
         {
-            LocalShellUtil.Terminate();
         }
 
         public static Connections Connections
@@ -69,7 +65,11 @@ namespace Poderosa
         {
             get
             {
-                if (_systemMetrics == null) _systemMetrics = new Win32.SystemMetrics();
+                if (_systemMetrics == null)
+                {
+                    _systemMetrics = new Win32.SystemMetrics();
+                }
+
                 return _systemMetrics;
             }
         }
@@ -89,7 +89,10 @@ namespace Poderosa
             {
                 bool k = _options == null || _options.KeepAliveInterval != value.KeepAliveInterval;
                 _options = value;
-                if (k) Connections.KeepAlive.SetTimerToAllConnectionTags();
+                if (k)
+                {
+                    Connections.KeepAlive.SetTimerToAllConnectionTags();
+                }
             }
         }
 
@@ -97,7 +100,11 @@ namespace Poderosa
         {
             get
             {
-                if (_defaultRenderProfile == null) _defaultRenderProfile = new RenderProfile(_options);
+                if (_defaultRenderProfile == null)
+                {
+                    _defaultRenderProfile = new RenderProfile(_options);
+                }
+
                 return _defaultRenderProfile;
             }
             set
@@ -116,7 +123,11 @@ namespace Poderosa
         {
             get
             {
-                if (_commandTarget == null) _commandTarget = new GlobalCommandTarget();
+                if (_commandTarget == null)
+                {
+                    _commandTarget = new GlobalCommandTarget();
+                }
+
                 return _commandTarget;
             }
             set
@@ -128,24 +139,16 @@ namespace Poderosa
         {
             get
             {
-                if (_interThreadUIService == null) _interThreadUIService = new InterThreadUIService();
+                if (_interThreadUIService == null)
+                {
+                    _interThreadUIService = new InterThreadUIService();
+                }
+
                 return _interThreadUIService;
             }
             set
             {
                 _interThreadUIService = value;
-            }
-        }
-        public static ISSHKnownHosts SSHKnownHosts
-        {
-            get
-            {
-                if (_sshKnownHosts == null) _sshKnownHosts = new DefaultSSHKnownHosts();
-                return _sshKnownHosts;
-            }
-            set
-            {
-                _sshKnownHosts = value;
             }
         }
 

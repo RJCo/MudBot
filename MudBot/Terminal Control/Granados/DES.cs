@@ -17,9 +17,9 @@ namespace Granados.Crypto
     {
         private const int BLOCK_SIZE = 8; // bytes in a data-block
 
-        uint[] _key;
-        byte[] _iv;
-        byte[] _temp;
+        private uint[] _key;
+        private byte[] _iv;
+        private byte[] _temp;
 
         public DES()
         {

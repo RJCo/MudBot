@@ -1,6 +1,6 @@
 ﻿namespace EventEngines
 {
-    class Monster : IActor
+    internal class Monster : IActor
     {
     }
 }

@@ -168,7 +168,11 @@ namespace Poderosa.Forms
         {
             base.OnPaint(a);
             //アイコンの描画　.NET Frameworkだけでシステムで持っているアイコンのロードはできないようだ
-            if (_questionIcon == null) LoadQuestionIcon();
+            if (_questionIcon == null)
+            {
+                LoadQuestionIcon();
+            }
+
             a.Graphics.DrawIcon(_questionIcon, 16, 8);
         }
         private static Icon _questionIcon;

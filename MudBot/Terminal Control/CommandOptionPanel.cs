@@ -219,7 +219,11 @@ namespace Poderosa.Forms
             while (ie.MoveNext())
             {
                 Commands.Entry e = (Commands.Entry)ie.Current;
-                if (e.Category == Commands.Category.Fixed) continue;
+                if (e.Category == Commands.Category.Fixed)
+                {
+                    continue;
+                }
+
                 ListViewItem li = new ListViewItem(EnumDescAttribute.For(typeof(Commands.Category)).GetDescription(e.Category));
                 li = _keyConfigList.Items.Add(li);
                 li.SubItems.Add(e.Description);
@@ -229,7 +233,10 @@ namespace Poderosa.Forms
         }
         private void OnKeyMapItemActivated(object sender, EventArgs args)
         {
-            if (_keyConfigList.SelectedItems.Count == 0) return;
+            if (_keyConfigList.SelectedItems.Count == 0)
+            {
+                return;
+            }
 
             CID id = (CID)_keyConfigList.SelectedItems[0].Tag;
             Commands.Entry e = _commands.FindEntry(id);
@@ -242,7 +249,10 @@ namespace Poderosa.Forms
         }
         private void OnAllocateKey(object sender, EventArgs args)
         {
-            if (_keyConfigList.SelectedItems.Count == 0) return;
+            if (_keyConfigList.SelectedItems.Count == 0)
+            {
+                return;
+            }
 
             CID id = (CID)_keyConfigList.SelectedItems[0].Tag;
             Keys key = _hotKey.Key;
@@ -250,14 +260,18 @@ namespace Poderosa.Forms
             if (code != -1)
             {
                 if (GUtil.AskUserYesNo(this, String.Format("The key {0} is used to input ASCII code {1} character. Do you give this command setting priority to the ASCII code?", _hotKey.Text, code)) == DialogResult.No)
+                {
                     return;
+                }
             }
 
             Commands.Entry existing = _commands.FindEntry(key);
             if (existing != null && existing.CID != id)
             {
                 if (GUtil.AskUserYesNo(this, String.Format("This key is already allocated for the command \"{0}\". Do you wish to overwrite?", existing.Description)) == DialogResult.No)
+                {
                     return;
+                }
 
                 existing.Key = Keys.None;
                 existing.Modifiers = Keys.None;
@@ -284,7 +298,10 @@ namespace Poderosa.Forms
         {
             foreach (ListViewItem li in _keyConfigList.Items)
             {
-                if (li.Tag.Equals(id)) return li;
+                if (li.Tag.Equals(id))
+                {
+                    return li;
+                }
             }
             return null;
         }

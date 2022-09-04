@@ -18,9 +18,9 @@ namespace Granados.Crypto
 {
     public class Rijndael
     {
-        byte[] _IV;
-        int[][] _Ke;            // encryption round keys
-        int[][] _Kd;            // decryption round keys
+        private byte[] _IV;
+        private int[][] _Ke;            // encryption round keys
+        private int[][] _Kd;            // decryption round keys
         private int _rounds;
 
         public Rijndael()
@@ -47,10 +47,14 @@ namespace Granados.Crypto
         public void InitializeKey(byte[] key)
         {
             if (key == null)
+            {
                 throw new Exception("Empty key");
+            }
             //128bit or 192bit or 256bit
             if (!(key.Length == 16 || key.Length == 24 || key.Length == 32))
+            {
                 throw new Exception("Incorrect key length");
+            }
 
             _rounds = getRounds(key.Length, GetBlockSize());
             _Ke = new int[_rounds + 1][];
@@ -93,19 +97,26 @@ namespace Granados.Crypto
                 if (KC != 8)
                 {
                     for (i = 1, j = 0; i < KC;)
+                    {
                         tk[i++] ^= tk[j++];
+                    }
                 }
                 else
                 {
                     for (i = 1, j = 0; i < KC / 2;)
+                    {
                         tk[i++] ^= tk[j++];
+                    }
+
                     tt = tk[KC / 2 - 1];
                     tk[KC / 2] ^= (S[tt & 0xFF] & 0xFF) ^
                                   (S[(tt >> 8) & 0xFF] & 0xFF) << 8 ^
                                   (S[(tt >> 16) & 0xFF] & 0xFF) << 16 ^
                                   (S[(tt >> 24) & 0xFF] & 0xFF) << 24;
                     for (j = KC / 2, i = j + 1; i < KC;)
+                    {
                         tk[i++] ^= tk[j++];
+                    }
                 }
                 for (j = 0; (j < KC) && (t < ROUND_KEY_COUNT); j++, t++)
                 {
@@ -354,10 +365,18 @@ namespace Granados.Crypto
             for (i = 1; i < 256; i++)
             {
                 j = (alog[i - 1] << 1) ^ alog[i - 1];
-                if ((j & 0x100) != 0) j ^= ROOT;
+                if ((j & 0x100) != 0)
+                {
+                    j ^= ROOT;
+                }
+
                 alog[i] = j;
             }
-            for (i = 1; i < 255; i++) log[alog[i]] = i;
+            for (i = 1; i < 255; i++)
+            {
+                log[alog[i]] = i;
+            }
+
             byte[,] A = new byte[,] {
                 {1, 1, 1, 1, 1, 0, 0, 0},
                 {0, 1, 1, 1, 1, 1, 0, 0},
@@ -388,7 +407,9 @@ namespace Granados.Crypto
                 {
                     cox[i, t] = B[t];
                     for (j = 0; j < 8; j++)
+                    {
                         cox[i, t] ^= (byte)(A[t, j] * box[i, j]);
+                    }
                 }
             }
 
@@ -396,7 +417,10 @@ namespace Granados.Crypto
             {
                 S[i] = (byte)(cox[i, 0] << 7);
                 for (t = 1; t < 8; t++)
+                {
                     S[i] ^= (byte)(cox[i, t] << (7 - t));
+                }
+
                 Si[S[i] & 0xFF] = (byte)i;
             }
             byte[][] G = new byte[4][];
@@ -408,13 +432,19 @@ namespace Granados.Crypto
             byte[,] AA = new byte[4, 8];
             for (i = 0; i < 4; i++)
             {
-                for (j = 0; j < 4; j++) AA[i, j] = G[i][j];
+                for (j = 0; j < 4; j++)
+                {
+                    AA[i, j] = G[i][j];
+                }
+
                 AA[i, i + 4] = 1;
             }
             byte pivot, tmp;
             byte[][] iG = new byte[4][];
             for (i = 0; i < 4; i++)
+            {
                 iG[i] = new byte[4];
+            }
 
             for (i = 0; i < 4; i++)
             {
@@ -423,7 +453,10 @@ namespace Granados.Crypto
                 {
                     t = i + 1;
                     while ((AA[t, i] == 0) && (t < 4))
+                    {
                         t++;
+                    }
+
                     if (t != 4)
                     {
                         for (j = 0; j < 8; j++)
@@ -436,20 +469,35 @@ namespace Granados.Crypto
                     }
                 }
                 for (j = 0; j < 8; j++)
+                {
                     if (AA[i, j] != 0)
+                    {
                         AA[i, j] = (byte)
                             alog[(255 + log[AA[i, j] & 0xFF] - log[pivot & 0xFF]) % 255];
+                    }
+                }
+
                 for (t = 0; t < 4; t++)
+                {
                     if (i != t)
                     {
                         for (j = i + 1; j < 8; j++)
+                        {
                             AA[t, j] ^= (byte)mul(AA[i, j], AA[t, i]);
+                        }
+
                         AA[t, i] = 0;
                     }
+                }
             }
 
             for (i = 0; i < 4; i++)
-                for (j = 0; j < 4; j++) iG[i][j] = AA[i, j + 4];
+            {
+                for (j = 0; j < 4; j++)
+                {
+                    iG[i][j] = AA[i, j + 4];
+                }
+            }
 
             int s;
             for (t = 0; t < 256; t++)
@@ -474,7 +522,10 @@ namespace Granados.Crypto
 
             rcon[0] = 1;
             int r = 1;
-            for (t = 1; t < 30;) rcon[t++] = (byte)(r = mul(2, r));
+            for (t = 1; t < 30;)
+            {
+                rcon[t++] = (byte)(r = mul(2, r));
+            }
         }
 
         private static int mul(int a, int b)
@@ -486,7 +537,11 @@ namespace Granados.Crypto
 
         private static int mul4(int a, byte[] b)
         {
-            if (a == 0) return 0;
+            if (a == 0)
+            {
+                return 0;
+            }
+
             a = log[a & 0xFF];
             int a0 = (b[0] != 0) ? alog[(a + log[b[0] & 0xFF]) % 255] & 0xFF : 0;
             int a1 = (b[1] != 0) ? alog[(a + log[b[1] & 0xFF]) % 255] & 0xFF : 0;

@@ -108,7 +108,9 @@ namespace Poderosa.Terminal
             _manipulator.DefaultDecoration = _currentdecoration;
 
             for (int i = 0; i < length; i++)
+            {
                 ProcessChar(data[offset + i]);
+            }
 
             GetDocument().ReplaceCurrentLine(_manipulator.Export());
             GetDocument().CaretColumn = _manipulator.CaretColumn;
@@ -118,9 +120,13 @@ namespace Poderosa.Terminal
         {
             string desc;
             if (code == '0')
+            {
                 desc = "0 (DEC Special Character)"; //これはよくあるので但し書きつき
+            }
             else
+            {
                 desc = new String(code, 1);
+            }
 
             if (GEnv.Options.WarningOption != WarningOption.Ignore)
             {
@@ -138,9 +144,13 @@ namespace Poderosa.Terminal
         {
             //Encodingが同じ時は簡単に済ませることができる
             if (_decoder.Encoding.Type == _tag.Connection.Param.Encoding)
+            {
                 _decoder.Reset(_decoder.Encoding);
+            }
             else
+            {
                 _decoder = new JapaneseCharDecoder(_tag.Connection);
+            }
         }
         //public void SetEncoding(EncodingProfile enc) {
         //	_decoder.SetEncoding(enc);
@@ -174,13 +184,20 @@ namespace Poderosa.Terminal
                 int i = 0;
                 for (i = 0; i < l; i++)
                 {
-                    if (_bufferForMacro[i] == '\n') break;
+                    if (_bufferForMacro[i] == '\n')
+                    {
+                        break;
+                    }
                 }
 
                 if (l > 0 && i < l)
                 { //めでたく行末がみつかった
                     int j = i;
-                    if (i > 0 && _bufferForMacro[i - 1] == '\r') j = i - 1; //CRLFのときは除いてやる
+                    if (i > 0 && _bufferForMacro[i - 1] == '\r')
+                    {
+                        j = i - 1; //CRLFのときは除いてやる
+                    }
+
                     string r;
                     lock (_bufferForMacro)
                     {
@@ -272,17 +289,28 @@ namespace Poderosa.Terminal
                 {
                     //!!久しぶりのこのあたりを見るとけっこう汚い分岐だな
                     _logger.Append(ch);
-                    if (GEnv.Frame.MacroIsRunning) AppendMacroBuffer(ch);
+                    if (GEnv.Frame.MacroIsRunning)
+                    {
+                        AppendMacroBuffer(ch);
+                    }
 
                     if (ch < 0x20 || (ch >= 0x80 && ch < 0xA0))
+                    {
                         _processCharResult = ProcessControlChar(ch);
+                    }
                     else
+                    {
                         _processCharResult = ProcessNormalChar(ch);
+                    }
                 }
             }
             else
             {
-                if (ch == '\0') return; //シーケンス中にNULL文字が入っているケースが確認された
+                if (ch == '\0')
+                {
+                    return; //シーケンス中にNULL文字が入っているケースが確認された
+                }
+
                 _escapeSequence.Append(ch);
                 bool end_flag = false; //escape sequenceの終わりかどうかを示すフラグ
                 if (_escapeSequence.Length == 1)
@@ -311,12 +339,16 @@ namespace Poderosa.Terminal
                         _processCharResult = ProcessCharResult.Unsupported; //ProcessEscapeSequenceで例外が来た後で状態がEscapingはひどい結果を招くので
                         _processCharResult = ProcessEscapeSequence(code, seq, 1);
                         if (_processCharResult == ProcessCharResult.Unsupported)
+                        {
                             throw new UnknownEscapeSequenceException(String.Format("ESC {0}", new string(seq)));
+                        }
                     }
                     catch (UnknownEscapeSequenceException ex)
                     {
                         if (GEnv.Options.WarningOption != WarningOption.Ignore)
+                        {
                             GEnv.InterThreadUIService.UnsupportedEscapeSequence(GetDocument(), "Message.EscapesequenceTerminal.UnsupportedSequence" + ex.Message);
+                        }
                     }
                     finally
                     {
@@ -324,7 +356,9 @@ namespace Poderosa.Terminal
                     }
                 }
                 else
+                {
                     _processCharResult = ProcessCharResult.Escaping;
+                }
             }
         }
 
@@ -336,7 +370,10 @@ namespace Poderosa.Terminal
                 if (rule == LineFeedRule.Normal || rule == LineFeedRule.LFOnly)
                 {
                     if (rule == LineFeedRule.LFOnly) //LFのみの動作であるとき
+                    {
                         DoCarriageReturn();
+                    }
+
                     DoLineFeed();
                 }
                 return ProcessCharResult.Processed;
@@ -348,7 +385,9 @@ namespace Poderosa.Terminal
                 {
                     DoCarriageReturn();
                     if (rule == LineFeedRule.CROnly)
+                    {
                         DoLineFeed();
+                    }
                 }
                 return ProcessCharResult.Processed;
             }
@@ -369,14 +408,21 @@ namespace Poderosa.Terminal
                         doc.InvalidateLine(doc.CurrentLineNumber);
                         doc.CurrentLineNumber = line;
                         if (doc.CurrentLine == null)
+                        {
                             _manipulator.Clear(GetConnection().TerminalWidth);
+                        }
                         else
+                        {
                             _manipulator.Load(doc.CurrentLine, doc.CurrentLine.CharLength - 1);
+                        }
+
                         doc.InvalidateLine(doc.CurrentLineNumber);
                     }
                 }
                 else
+                {
                     _manipulator.BackCaret();
+                }
 
                 return ProcessCharResult.Processed;
             }
@@ -426,7 +472,11 @@ namespace Poderosa.Terminal
             int t = start;
             //tよりで最小の８の倍数へもっていく
             t += (8 - t % 8);
-            if (t >= _tag.Connection.TerminalWidth) t = _tag.Connection.TerminalWidth - 1;
+            if (t >= _tag.Connection.TerminalWidth)
+            {
+                t = _tag.Connection.TerminalWidth - 1;
+            }
+
             return t;
         }
 
@@ -445,7 +495,9 @@ namespace Poderosa.Terminal
 
             //画面のリサイズがあったときは、_manipulatorのバッファサイズが不足の可能性がある
             if (tw > _manipulator.BufferSize)
+            {
                 _manipulator.ExpandBuffer(tw);
+            }
 
             //通常文字の処理
             _manipulator.PutChar(ch, _currentdecoration);
@@ -461,9 +513,13 @@ namespace Poderosa.Terminal
             try
             {
                 if (param.Length > 0)
+                {
                     return Int32.Parse(param);
+                }
                 else
+                {
                     return default_value;
+                }
             }
             catch (Exception ex)
             {

@@ -3,13 +3,11 @@
 * $Id: TerminalParam.cs,v 1.2 2005/04/20 08:45:48 okajima Exp $
 */
 using System;
-using System.Diagnostics;
 
 using Poderosa.Terminal;
 #if !MACRODOC
 using Poderosa.Config;
 using Poderosa.Communication;
-using Poderosa.LocalShell;
 #endif
 using Poderosa.Toolkit;
 
@@ -31,20 +29,6 @@ namespace Poderosa.ConnectionParam
     public enum AuthType
     {
         /// <summary>
-        /// <ja>パスワード認証</ja>
-        /// <en>Authentication using password.</en>
-        /// </summary>
-        [EnumValue(Description = "Enum.AuthType.Password")]
-        Password,
-
-        /// <summary>
-        /// <ja>手元の秘密鍵とリモートホストに登録した公開鍵を使った認証</ja>
-        /// <en>Authentication using the local private key and the remote public key.</en>
-        /// </summary>
-        [EnumValue(Description = "Enum.AuthType.PublicKey")]
-        PublicKey,
-
-        /// <summary>
         /// <ja>コンソール上でパスワードを入力する認証</ja>
         /// <en>Authentication by sending the password through the console.</en>
         /// </summary>
@@ -65,21 +49,12 @@ namespace Poderosa.ConnectionParam
         /// <en>iso-8859-1</en>
         /// </summary>
         [EnumValue(Description = "Enum.EncodingType.ISO8859_1")] ISO8859_1,
+
         /// <summary>
         /// <ja>utf-8</ja>
         /// <en>utf-8</en>
         /// </summary>
         [EnumValue(Description = "Enum.EncodingType.UTF8")] UTF8,
-        /// <summary>
-        /// <ja>euc-jp</ja>
-        /// <en>euc-jp (This encoding is primarily used with Japanese characters.)</en>
-        /// </summary>
-        [EnumValue(Description = "Enum.EncodingType.EUC_JP")] EUC_JP,
-        /// <summary>
-        /// <ja>shift-jis</ja>
-        /// <en>shift-jis (This encoding is primarily used with Japanese characters.)</en>
-        /// </summary>
-        [EnumValue(Description = "Enum.EncodingType.SHIFT_JIS")] SHIFT_JIS
     }
 
     /// <summary>
@@ -162,26 +137,6 @@ namespace Poderosa.ConnectionParam
     }
 
     /// <summary>
-    /// <ja>接続の種類を示します。</ja>
-    /// <en>Specifies the type of the connection.</en>
-    /// </summary>
-    public enum ConnectionMethod
-    {
-        /// <summary>
-        /// Telnet
-        /// </summary>
-        Telnet,
-        /// <summary>
-        /// SSH1
-        /// </summary>
-        SSH1,
-        /// <summary>
-        /// SSH2
-        /// </summary>
-        SSH2
-    }
-
-    /// <summary>
     /// <ja>背景画像の位置を指定します。</ja>
     /// <en>Specifies the position of the background image.</en>
     /// </summary>
@@ -250,9 +205,6 @@ namespace Poderosa.ConnectionParam
     /// <en>Implements the basic functionality common to connections.</en>
     /// <seealso cref="TCPTerminalParam"/>
     /// <seealso cref="TelnetTerminalParam"/>
-    /// <seealso cref="SSHTerminalParam"/>
-    /// <seealso cref="SerialTerminalParam"/>
-    /// <seealso cref="CygwinTerminalParam"/>
     /// </summary>
     [Serializable()]
     public abstract class TerminalParam : ICloneable
@@ -271,7 +223,7 @@ namespace Poderosa.ConnectionParam
 
         internal TerminalParam()
         {
-            _encoding = EncodingType.EUC_JP;
+            _encoding = EncodingType.UTF8;
             _logtype = LogType.None;
             _terminalType = TerminalType.XTerm;
             _localecho = false;
@@ -297,14 +249,13 @@ namespace Poderosa.ConnectionParam
             _caption = r._caption;
         }
 
-        /// 
-        /// 
-        /// 
-        /// 
         public override bool Equals(object t_)
         {
             TerminalParam t = t_ as TerminalParam;
-            if (t == null) return false;
+            if (t == null)
+            {
+                return false;
+            }
 
             return
                 _encoding == t.Encoding &&
@@ -332,8 +283,6 @@ namespace Poderosa.ConnectionParam
 
         public abstract string ShortDescription { get; }
 
-        public abstract string MethodName { get; }
-
         public virtual void Export(ConfigNode node)
         {
             node["encoding"] = EnumDescAttribute.For(typeof(EncodingType)).GetDescription(_encoding);
@@ -341,8 +290,15 @@ namespace Poderosa.ConnectionParam
             node["transmit-nl"] = EnumDescAttribute.For(typeof(NewLine)).GetName(_transmitnl);
             node["localecho"] = _localecho.ToString();
             node["linefeed"] = EnumDescAttribute.For(typeof(LineFeedRule)).GetName(_lineFeedRule);
-            if (_caption != null && _caption.Length > 0) node["caption"] = _caption;
-            if (_renderProfile != null) _renderProfile.Export(node);
+            if (_caption != null && _caption.Length > 0)
+            {
+                node["caption"] = _caption;
+            }
+
+            if (_renderProfile != null)
+            {
+                _renderProfile.Export(node);
+            }
         }
         public virtual void Import(ConfigNode data)
         {
@@ -354,7 +310,9 @@ namespace Poderosa.ConnectionParam
             _lineFeedRule = (LineFeedRule)EnumDescAttribute.For(typeof(LineFeedRule)).FromName(data["linefeed"], LineFeedRule.Normal);
             _caption = data["caption"];
             if (data.Contains("font-name")) //項目がなければ空のまま
+            {
                 _renderProfile = new RenderProfile(data);
+            }
         }
 
         public EncodingProfile EncodingProfile
@@ -464,9 +422,13 @@ namespace Poderosa.ConnectionParam
 #if !MACRODOC
             _logtype = GEnv.Options.DefaultLogType;
             if (_logtype != LogType.None)
+            {
                 _logpath = GUtil.CreateLogFileName(ShortDescription);
+            }
             else
+            {
                 _logpath = "";
+            }
 #endif
         }
 
@@ -566,22 +528,15 @@ namespace Poderosa.ConnectionParam
         {
             string type = sec["type"];
             TerminalParam param;
-            if (type == "serial")
-                param = new SerialTerminalParam();
-            else if (type == "tcp")
+            if (type == "tcp")
             {
-                ConnectionMethod cm = ParseMethod(sec["method"]);
-                if (cm == ConnectionMethod.Telnet)
-                    param = new TelnetTerminalParam();
-                else
-                    param = new SSHTerminalParam();
+                param = new TelnetTerminalParam();
             }
-            else if (type == "cygwin")
-                param = new CygwinTerminalParam();
-            else if (type == "sfu")
-                param = new SFUTerminalParam();
             else
+            {
                 throw new Exception("invalid format");
+            }
+
             param.Import(sec);
             return param;
         }
@@ -591,17 +546,6 @@ namespace Poderosa.ConnectionParam
             return (EncodingType)EnumDescAttribute.For(typeof(EncodingType)).FromDescription(val, EncodingType.UTF8);
         }
 
-        protected static ConnectionMethod ParseMethod(string val)
-        {
-            if (val == "SSH1")
-                return ConnectionMethod.SSH1;
-            if (val == "SSH2")
-                return ConnectionMethod.SSH2;
-            if (val == "Telnet")
-                return ConnectionMethod.Telnet;
-
-            throw new FormatException(String.Format("{0} is unkown method", val));
-        }
 #endif
     }
 
@@ -617,25 +561,22 @@ namespace Poderosa.ConnectionParam
 
         internal string _host;
         internal int _port;
-        internal ConnectionMethod _method;
 
         internal TCPTerminalParam()
         {
-            _method = ConnectionMethod.Telnet;
         }
 
         internal TCPTerminalParam(TCPTerminalParam r) : base(r)
         {
             _host = r._host;
             _port = r._port;
-            _method = r._method;
         }
+
         internal void Import(TCPTerminalParam r)
         {
             base.Import(r);
             _host = r._host;
             _port = r._port;
-            _method = r._method;
         }
 
         /// 
@@ -644,16 +585,19 @@ namespace Poderosa.ConnectionParam
         public override bool Equals(object t_)
         {
             TCPTerminalParam t = t_ as TCPTerminalParam;
-            if (t == null) return false;
+            if (t == null)
+            {
+                return false;
+            }
 
-            return base.Equals(t) && _host == t.Host && _port == t.Port && _method == t.Method;
+            return base.Equals(t) && _host == t.Host && _port == t.Port;
         }
         /// 
         /// 
         /// 
         public override int GetHashCode()
         {
-            return base.GetHashCode() + _host.GetHashCode() + _port.GetHashCode() * 2 + _method.GetHashCode() * 3;
+            return base.GetHashCode() + _host.GetHashCode() + _port.GetHashCode() * 2;
         }
 
         /// <summary>
@@ -692,43 +636,12 @@ namespace Poderosa.ConnectionParam
             }
         }
 
-        /// <summary>
-        /// <ja>接続の種別です。</ja>
-        /// <en>Gets or sets the connection method.</en>
-        /// </summary>
-        public virtual ConnectionMethod Method
-        {
-            get
-            {
-                return _method;
-            }
-            set
-            {
-#if !MACRODOC
-                throw new ArgumentException("Message.TCPTerminalParam.PropCannotBeSet");
-#endif
-            }
-        }
-
-        /// <summary>
-        /// <ja>この接続がSSHであればtrueです。</ja>
-        /// <en>Returns true if the connection method is SSH.</en>
-        /// </summary>
-        public bool IsSSH
-        {
-            get
-            {
-                return _method == ConnectionMethod.SSH1 || _method == ConnectionMethod.SSH2;
-            }
-        }
-
 #if !MACRODOC
         public override void Export(ConfigNode node)
         {
             node["type"] = "tcp";
             node["host"] = _host;
             node["port"] = _port.ToString();
-            node["method"] = _method.ToString();
             base.Export(node);
         }
 
@@ -736,7 +649,6 @@ namespace Poderosa.ConnectionParam
         {
             _host = data["host"];
             _port = ParsePort(data["port"]);
-            _method = ParseMethod(data["method"]);
             base.Import(data);
         }
 
@@ -759,7 +671,7 @@ namespace Poderosa.ConnectionParam
             {
                 TelnetTerminalParam p = new TelnetTerminalParam
                 {
-                    EncodingProfile = EncodingProfile.Get(EncodingType.EUC_JP)
+                    EncodingProfile = EncodingProfile.Get(EncodingType.UTF8)
                 };
                 return p;
             }
@@ -769,14 +681,6 @@ namespace Poderosa.ConnectionParam
             get
             {
                 return _host;
-            }
-        }
-
-        public override string MethodName
-        {
-            get
-            {
-                return _method == ConnectionMethod.SSH1 ? "SSH1" : _method == ConnectionMethod.SSH2 ? "SSH2" : "telnet";
             }
         }
 #endif
@@ -814,7 +718,6 @@ namespace Poderosa.ConnectionParam
         /// <param name="host"><ja>ホスト名</ja><en>The host name.</en></param>
         public TelnetTerminalParam(string host)
         {
-            _method = ConnectionMethod.Telnet;
             _host = host;
             _port = 23;
         }
@@ -822,8 +725,9 @@ namespace Poderosa.ConnectionParam
 
         internal TelnetTerminalParam()
         {
-            _method = ConnectionMethod.Telnet;
+
         }
+
         internal TelnetTerminalParam(TelnetTerminalParam r) : base(r)
         {
         }
@@ -835,6 +739,7 @@ namespace Poderosa.ConnectionParam
         {
             return new TelnetTerminalParam(this);
         }
+
 #if !MACRODOC
         public override void Import(ConfigNode data)
         {
@@ -848,241 +753,6 @@ namespace Poderosa.ConnectionParam
             }
         }
 #endif
-    }
-
-
-    /// <summary>
-    /// <ja>SSHによる接続パラメータです。</ja>
-    /// <en>Implements the parameters of SSH connections.</en>
-    /// </summary>
-    [Serializable()]
-    public class SSHTerminalParam : TCPTerminalParam
-    {
-        internal string _account;
-        internal string _passphrase; //これはシリアライズの対象外。メモリ上に持つかどうかもオプション
-        internal AuthType _auth;
-        internal string _identityfile;
-
-        /// <summary>
-        /// <ja>ホスト名、アカウント、パスワードを指定して作成します。</ja>
-        /// <en>Initializes with the host name, the account, and the password.</en>
-        /// <seealso cref="Macro.ConnectionList.Open"/>
-        /// </summary>
-        /// <remarks>
-        /// <ja>ポートは22に設定されます。</ja>
-        /// <en>The port number is set to 22.</en>
-        /// <ja>他のパラメータは次のように初期化されます。</ja>
-        /// <en>Other parameters are initialized as following:</en>
-        /// <list type="table">
-        ///   <item><term><ja>エンコーディング</ja><en>Encoding</en></term><description><ja>EUC-JP</ja><en>iso-8859-1</en></description></item>　
-        ///   <item><term><ja>ターミナルタイプ</ja><en>Terminal Type</en></term><description>xterm</description></item>  
-        ///   <item><term><ja>ログ</ja><en>Log</en></term><description><ja>取得しない</ja><en>None</en></description></item>　　　　　　　
-        ///   <item><term><ja>ローカルエコー</ja><en>Local echo</en></term><description><ja>しない</ja><en>Don't</en></description></item>　　
-        ///   <item><term><ja>送信時改行</ja><en>New line</en></term><description>CR</description></item>　　　　
-        ///   <item><term><ja>認証方法</ja><en>Authentication Method</en></term><description><ja>パスワード</ja><en>Password</en></description></item>　　　　
-        /// </list>
-        /// <ja>接続を開くには、ConnectionListオブジェクトの<see cref="Macro.ConnectionList.Open"/>メソッドの引数としてSSHTerminalParamオブジェクトを渡します。</ja>
-        /// <en>To open a new connection, pass the SSHTerminalParam object to the <see cref="Macro.ConnectionList.Open"/> method of the ConnectionList object.</en>
-        /// </remarks>
-        /// <param name="method"><ja>SSH1またはSSH2</ja><en>SSH1 or SSH2.</en></param>
-        /// <param name="host"><ja>ホスト名</ja><en>The host name.</en></param>
-        /// <param name="account"><ja>アカウント名</ja><en>The account</en></param>
-        /// <param name="password"><ja>パスワードまたは秘密鍵のパスフレーズ</ja><en>The password or the passphrase of the private key.</en></param>
-        public SSHTerminalParam(ConnectionMethod method, string host, string account, string password)
-        {
-            if (method == ConnectionMethod.Telnet) throw new ArgumentException("Telnet is specified in the constructor of SSHTerminalParam");
-            _method = method;
-            _host = host;
-            _port = 22;
-            _account = account;
-            _passphrase = password;
-            _auth = AuthType.Password;
-        }
-        internal SSHTerminalParam(SSHTerminalParam r) : base(r)
-        {
-            _account = r._account;
-            _auth = r._auth;
-            _identityfile = r._identityfile;
-            _passphrase = r._passphrase;
-        }
-
-        internal SSHTerminalParam()
-        {
-            _method = ConnectionMethod.SSH2;
-            _auth = AuthType.Password;
-            _port = 22;
-        }
-
-        /// 
-        /// 
-        /// 
-        public override object Clone()
-        {
-            return new SSHTerminalParam(this);
-        }
-        /// 
-        /// 
-        /// 
-        public override bool Equals(object t_)
-        {
-            SSHTerminalParam t = t_ as SSHTerminalParam;
-            if (t == null) return false;
-
-            return base.Equals(t) && _account == t.Account && _auth == t.AuthType;
-        }
-        /// 
-        /// 
-        /// 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode() + _account.GetHashCode() + _auth.GetHashCode() * 2;
-        }
-
-        /// <summary>
-        /// <ja>アカウント名です。</ja>
-        /// <en>Gets or sets the account.</en>
-        /// </summary>
-        public string Account
-        {
-            get
-            {
-                return _account;
-            }
-            set
-            {
-                _account = value;
-            }
-        }
-
-        /// <summary>
-        /// <ja>接続の種別です。</ja>
-        /// <en>Gets or sets the connection method.</en>
-        /// </summary>
-        public override ConnectionMethod Method
-        {
-            set
-            {
-#if !MACRODOC
-                if (value == ConnectionMethod.Telnet)
-                    throw new ArgumentException("Mesage.SSHTerminalParam.MethodSetError");
-                _method = value;
-#endif
-            }
-        }
-
-        /// <summary>
-        /// <ja>ユーザ認証の方法です。</ja>
-        /// <en>Gets or sets the authentication method.</en>
-        /// </summary>
-        /// <remarks>
-        /// <para><ja>これをPublicKeyにした場合、IdentityFileプロパティは秘密鍵ファイルを指していないといけません。</ja>
-        /// <en>If the PublicKey is specified, the IdentityFile property must indicate a correct private key file.</en></para>
-        /// <para><ja>Passwordにした場合、Passphraseプロパティの値がパスワードとして使われます。</ja>
-        /// <en>If the Password is specified, the value of the Passphrase property is used as the login password.</en></para>
-        /// <para><ja>マクロからは、KeyboardInteractiveをセットしないでください。</ja>
-        /// <en>The macro cannot use KeyboardInteractive method.</en></para>
-        /// </remarks>
-        public AuthType AuthType
-        {
-            get
-            {
-                return _auth;
-            }
-            set
-            {
-                _auth = value;
-            }
-        }
-
-        /// <summary>
-        /// <ja>秘密鍵のファイルです。</ja>
-        /// <en>Gets or sets the file name of the private key.</en>
-        /// </summary>
-        /// <remarks>
-        /// <ja>フルパスで指定してください。</ja>
-        /// <en>The full path is required.</en>
-        /// </remarks>
-        public string IdentityFile
-        {
-            get
-            {
-                return _identityfile;
-            }
-            set
-            {
-                _identityfile = value;
-            }
-        }
-
-
-        /// <summary>
-        /// <ja>パスワードまたはパスフレーズです。</ja>
-        /// <en>Gets or sets the password or the passphrase.</en>
-        /// </summary>
-        /// <remarks>
-        /// <ja>公開鍵認証の場合はこのプロパティの値がパスフレーズとして使われます。</ja>
-        /// <en>In case of the public key authentication, the value of this property is used as the passphrase of the private key.</en>
-        /// <ja>パスワード認証の場合はパスワードになります。</ja>
-        /// <en>In case of the password authentication, it is used as the login password.</en>
-        /// </remarks>
-        public string Passphrase
-        {
-            get
-            {
-                return _passphrase;
-            }
-            set
-            {
-                _passphrase = value;
-            }
-        }
-        private static AuthType ParseAuth(string val)
-        {
-            if (val == "Password")
-                return AuthType.Password;
-            if (val == "PublicKey")
-                return AuthType.PublicKey;
-            if (val == "KeyboardInteractive")
-                return AuthType.KeyboardInteractive;
-
-            throw new FormatException(String.Format("{0} is unkown authentication option", val));
-
-        }
-#if !MACRODOC
-        public override sealed void Export(ConfigNode node)
-        {
-            base.Export(node);
-            node["account"] = _account;
-            node["auth"] = _auth.ToString();
-            if (_auth == AuthType.PublicKey)
-                node["keyfile"] = _identityfile;
-        }
-
-        public override void Import(ConfigNode data)
-        {
-            base.Import(data);
-            _method = ParseMethod(data["method"]);
-            Debug.Assert(IsSSH);
-            _account = data["account"];
-            _auth = ParseAuth(data["auth"]);
-            if (_auth == AuthType.PublicKey)
-                _identityfile = data["keyfile"];
-            _passphrase = data["passphrase"];
-        }
-        public override string Description
-        {
-            get
-            {
-                string t;
-                if (_account.Length > 0)
-                    t = _account + "@" + _host;
-                else
-                    t = _host;
-                return t;
-            }
-        }
-#endif
-
     }
 
     /// <summary>
@@ -1156,482 +826,5 @@ namespace Poderosa.ConnectionParam
         /// <en>2 bits</en>
         /// </summary>
         [EnumValue(Description = "Enum.StopBits.TWOSTOPBITS")] TWOSTOPBITS = 2
-    }
-
-
-    /// <summary>
-    /// <ja>シリアル接続のパラメータを示します。</ja>
-    /// <en>Implements the parameters of serial connections.</en>
-    /// </summary>
-    [Serializable()]
-    public class SerialTerminalParam : TerminalParam
-    {
-        internal int _port;
-        internal int _baudRate;
-        internal byte _byteSize;  //7,8のどちらか
-        internal Parity _parity; //Win32クラス内の定数のいずれか
-        internal StopBits _stopBits; //Win32クラス内の定数のいずれか
-        internal FlowControl _flowControl;
-        internal int _transmitDelayPerChar;
-        internal int _transmitDelayPerLine;
-
-        /// <summary>
-        /// <ja>デフォルト設定で初期化します。</ja>
-        /// <en>Initializes with default values.</en>
-        /// <seealso cref="Macro.ConnectionList.Open"/>
-        /// </summary>
-        /// <remarks>
-        /// <ja>パラメータは次のように初期化されます。</ja>
-        /// <en>The parameters are set as following:</en>
-        /// <list type="table">
-        ///   <item><term><ja>エンコーディング</ja><en>Encoding</en></term><description><ja>EUC-JP</ja><en>iso-8859-1</en></description></item>　
-        ///   <item><term><ja>ログ</ja><en>Log</en></term><description><ja>取得しない</ja><en>None</en></description></item>　　　　　　　
-        ///   <item><term><ja>ローカルエコー</ja><en>Local echo</en></term><description><ja>しない</ja><en>Don't</en></description></item>　　
-        ///   <item><term><ja>送信時改行</ja><en>New line</en></term><description>CR</description></item>　　　　
-        ///   <item><term><ja>ポート</ja><en>Port</en></term><description>COM1</description></item>
-        ///   <item><term><ja>ボーレート</ja><en>Baud Rate</en></term><description>9600</description></item>
-        ///   <item><term><ja>データ</ja><en>Data Bits</en></term><description><ja>8ビット</ja><en>8 bits</en></description></item>
-        ///   <item><term><ja>パリティ</ja><en>Parity</en></term><description><ja>なし</ja><en>None</en></description></item>
-        ///   <item><term><ja>ストップビット</ja><en>Stop Bits</en></term><description><ja>１ビット</ja><en>1 bit</en></description></item>
-        ///   <item><term><ja>フローコントロール</ja><en>Flow Control</en></term><description><ja>なし</ja><en>None</en></description></item>
-        /// </list>
-        /// <ja>接続を開くには、<see cref="Macro.ConnectionList.Open"/>メソッドの引数としてSerialTerminalParamオブジェクトを渡します。</ja>
-        /// <en>To open a new connection, pass the SerialTerminalParam object to the <see cref="Macro.ConnectionList.Open"/> method.</en>
-        /// </remarks>
-        public SerialTerminalParam()
-        {
-            _port = 1;
-            _baudRate = 9600;
-            _byteSize = 8;
-            _parity = Parity.NOPARITY;
-            _stopBits = StopBits.ONESTOPBIT;
-            _flowControl = FlowControl.None;
-        }
-        internal SerialTerminalParam(SerialTerminalParam p) : base(p)
-        {
-            _port = p._port;
-            _baudRate = p._baudRate;
-            _byteSize = p._byteSize;
-            _parity = p._parity;
-            _stopBits = p._stopBits;
-            _flowControl = p._flowControl;
-            _transmitDelayPerChar = p._transmitDelayPerChar;
-            _transmitDelayPerLine = p._transmitDelayPerLine;
-        }
-
-        /// 
-        /// 
-        /// 
-        public override object Clone()
-        {
-            return new SerialTerminalParam(this);
-        }
-        /// 
-        /// 
-        /// 
-        public override bool Equals(object t_)
-        {
-            SerialTerminalParam t = t_ as SerialTerminalParam;
-            if (t == null) return false;
-
-            return base.Equals(t) && _port == t.Port && _baudRate == t.BaudRate && _byteSize == t.ByteSize && _parity == t.Parity && _stopBits == t.StopBits && _flowControl == t.FlowControl;
-        }
-        /// 
-        /// 
-        /// 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode() + _port.GetHashCode() * 2 + _baudRate.GetHashCode() * 3 + _byteSize.GetHashCode() * 4 + _parity.GetHashCode() * 5 + _stopBits.GetHashCode() * 6 + _flowControl.GetHashCode() * 7;
-        }
-
-#if !MACRODOC
-        public override sealed void Export(ConfigNode node)
-        {
-            node["type"] = "serial";
-            node["port"] = _port.ToString();
-            node["baud-rate"] = _baudRate.ToString();
-            node["byte-size"] = _byteSize.ToString();
-            node["parity"] = EnumDescAttribute.For(typeof(Parity)).GetName(_parity);
-            node["stop-bits"] = EnumDescAttribute.For(typeof(StopBits)).GetName(_stopBits);
-            node["flow-control"] = EnumDescAttribute.For(typeof(FlowControl)).GetName(_flowControl);
-            node["delay-per-char"] = _transmitDelayPerChar.ToString();
-            node["delay-per-line"] = _transmitDelayPerLine.ToString();
-            base.Export(node);
-        }
-
-        public override sealed void Import(ConfigNode data)
-        {
-            _port = GUtil.ParseInt(data["port"], 1);
-            _baudRate = GUtil.ParseInt(data["baud-rate"], 9600);
-            _byteSize = GUtil.ParseByte(data["byte-size"], 8);
-            _parity = (Parity)EnumDescAttribute.For(typeof(Parity)).FromName(data["parity"], Parity.NOPARITY);
-            _stopBits = (StopBits)EnumDescAttribute.For(typeof(StopBits)).FromName(data["stop-bits"], StopBits.ONESTOPBIT);
-            _flowControl = (FlowControl)EnumDescAttribute.For(typeof(FlowControl)).FromName(data["flow-control"], FlowControl.None);
-            _transmitDelayPerChar = GUtil.ParseInt(data["delay-per-char"], 0);
-            _transmitDelayPerLine = GUtil.ParseInt(data["delay-per-line"], 0);
-            base.Import(data);
-        }
-        public override string ShortDescription
-        {
-            get
-            {
-                return "COM" + _port;
-            }
-        }
-        public override string Description
-        {
-            get
-            {
-                string t = "COM" + _port;
-                return t;
-            }
-        }
-        public override string MethodName
-        {
-            get
-            {
-                return "serial";
-            }
-        }
-#endif
-        /// <summary>
-        /// <ja>ポートです。</ja>
-        /// <en>Gets or sets the port.</en>
-        /// </summary>
-        /// <remarks>
-        /// <ja>１ならCOM1、10ならCOM10になります。</ja>
-        /// <en>1 means COM1, and 10 means COM10.</en>
-        /// </remarks>
-        public int Port
-        {
-            get
-            {
-                return _port;
-            }
-            set
-            {
-                _port = value;
-            }
-        }
-
-        /// <summary>
-        /// <ja>ボーレートです。</ja>
-        /// <en>Gets or sets the baud rate.</en>
-        /// </summary>
-        public int BaudRate
-        {
-            get
-            {
-                return _baudRate;
-            }
-            set
-            {
-                _baudRate = value;
-            }
-        }
-        /// <summary>
-        /// <ja>データのビット数です。</ja>
-        /// <en>Gets or sets the bit count of the data.</en>
-        /// </summary>
-        /// <remarks>
-        /// <ja>７か８でないといけません。</ja>
-        /// <en>The value must be 7 or 8.</en>
-        /// </remarks>
-        public byte ByteSize
-        {
-            get
-            {
-                return _byteSize;
-            }
-            set
-            {
-                _byteSize = value;
-            }
-        }
-        /// <summary>
-        /// <ja>パリティです。</ja>
-        /// <en>Gets or sets the parity.</en>
-        /// </summary>
-        public Parity Parity
-        {
-            get
-            {
-                return _parity;
-            }
-            set
-            {
-                _parity = value;
-            }
-        }
-        /// <summary>
-        /// <ja>ストップビットです。</ja>
-        /// <en>Gets or sets the stop bit.</en>
-        /// </summary>
-        public StopBits StopBits
-        {
-            get
-            {
-                return _stopBits;
-            }
-            set
-            {
-                _stopBits = value;
-            }
-        }
-        /// <summary>
-        /// <ja>フローコントロールです。</ja>
-        /// <en>Gets or sets the flow control.</en>
-        /// </summary>
-        public FlowControl FlowControl
-        {
-            get
-            {
-                return _flowControl;
-            }
-            set
-            {
-                _flowControl = value;
-            }
-        }
-
-        /// <summary>
-        /// <ja>文字あたりのディレイ(ミリ秒単位)です。</ja>
-        /// <en>Gets or sets the delay time per a character in milliseconds.</en>
-        /// </summary>
-        public int TransmitDelayPerChar
-        {
-            get
-            {
-                return _transmitDelayPerChar;
-            }
-            set
-            {
-#if !MACRODOC
-                if (value < 0) throw new ArgumentException("Message.SerialPTerminalParam.TransmitDelayRange");
-                _transmitDelayPerChar = value;
-#endif
-            }
-        }
-        /// <summary>
-        /// <ja>行あたりのディレイ(ミリ秒単位)です。</ja>
-        /// <en>Gets or sets the delay time per a line in milliseconds.</en>
-        /// </summary>
-        public int TransmitDelayPerLine
-        {
-            get
-            {
-                return _transmitDelayPerLine;
-            }
-            set
-            {
-#if !MACRODOC
-                if (value < 0) throw new ArgumentException("Message.SerialPTerminalParam.TransmitDelayRange");
-                _transmitDelayPerLine = value;
-#endif
-            }
-        }
-    }
-
-    /// <summary>
-    /// <ja>CygwinまたはServices for Unixに接続するためのTerminalParamです。</ja>
-    /// <en>Implements the parameters to connect a cygwin shell or a Services for Unix shell.</en>
-    /// </summary>
-    public abstract class LocalShellTerminalParam : TerminalParam
-    {
-
-        protected string _home;
-        protected string _shell;
-
-        /// <summary>
-        /// <ja>標準的な値で初期化します。</ja>
-        /// <en>Initializes with default values.</en>
-        /// </summary>
-        public LocalShellTerminalParam()
-        {
-#if !MACRODOC
-            _terminalType = TerminalType.VT100;
-            _transmitnl = NewLine.CR;
-            _encoding = LocalShellUtil.DefaultEncoding;
-#endif
-        }
-        internal LocalShellTerminalParam(LocalShellTerminalParam p) : base(p)
-        {
-            _home = p._home;
-            _shell = p._shell;
-        }
-
-        /// <summary>
-        /// <ja>Cygwin上のシェルにつないだときのHOME環境変数の値です。デフォルト値は <c>/home/(Windowsのアカウント名)</c> です。</ja>
-        /// <en>Gets or sets the initial value of the HOME environment variable. The default value is <c>/home/(account name on Windows)</c>.</en>
-        /// </summary>
-        public string Home
-        {
-            get
-            {
-                return _home;
-            }
-            set
-            {
-                _home = value;
-            }
-        }
-        /// <summary>
-        /// <ja>起動するCygwinのシェルへのパスです。デフォルト値は <c>/bin/bash</c> です。</ja>
-        /// <en>Gets or sets the path of the shell. The defualt value is <c>/bin/bash</c>.</en>
-        /// </summary>
-        public string Shell
-        {
-            get
-            {
-                return _shell;
-            }
-            set
-            {
-                _shell = value;
-            }
-        }
-
-
-#if !MACRODOC
-        public override void Import(ConfigNode data)
-        {
-            _home = data["home"];
-            _shell = data["shell"];
-            base.Import(data);
-        }
-        public override string ShortDescription
-        {
-            get
-            {
-                int n = _shell.IndexOf(' ');
-                return n == -1 ? _shell : _shell.Substring(0, n);
-            }
-        }
-
-#endif
-    }
-
-    /// <summary>
-    /// <ja>Cygwinに接続するためのTerminalParamです。</ja>
-    /// <en>Implements the parameters to connect a cygwin shell.</en>
-    /// </summary>
-    public class CygwinTerminalParam : LocalShellTerminalParam
-    {
-        public CygwinTerminalParam()
-        {
-#if !MACRODOC
-            _home = CygwinUtil.DefaultHome;
-            _shell = CygwinUtil.DefaultShell;
-#endif
-        }
-
-        public override object Clone()
-        {
-            CygwinTerminalParam p = new CygwinTerminalParam
-            {
-                Home = _home,
-                Shell = _shell
-            };
-            return p;
-        }
-        public override bool Equals(object t_)
-        {
-            CygwinTerminalParam t = t_ as CygwinTerminalParam;
-            if (t == null) return false;
-
-            return base.Equals(t) && _home == t._home && _shell == t._shell;
-        }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode() + _home.GetHashCode() * 3 + _shell.GetHashCode() * 7;
-        }
-
-#if !MACRODOC
-        public override sealed void Export(ConfigNode node)
-        {
-            node["type"] = "cygwin";
-            node["home"] = _home;
-            node["shell"] = _shell;
-            base.Export(node);
-        }
-
-        public override string Description
-        {
-            get
-            {
-                return ShortDescription + "(cygwin)";
-            }
-        }
-
-        public override string MethodName
-        {
-            get
-            {
-                return "cygwin";
-            }
-        }
-#endif
-    }
-
-    /// <summary>
-    /// <ja>Services for Unixに接続するためのTerminalParamです。</ja>
-    /// <en>Implements the parameters to connect a shell of Servies for Unix.</en>
-    /// </summary>
-    public class SFUTerminalParam : LocalShellTerminalParam
-    {
-        public SFUTerminalParam()
-        {
-#if !MACRODOC
-            _home = SFUUtil.DefaultHome;
-            _shell = SFUUtil.DefaultShell;
-#endif
-        }
-
-        public override object Clone()
-        {
-            SFUTerminalParam p = new SFUTerminalParam
-            {
-                Home = _home,
-                Shell = _shell
-            };
-            return p;
-        }
-        public override bool Equals(object t_)
-        {
-            SFUTerminalParam t = t_ as SFUTerminalParam;
-            if (t == null) return false;
-
-            return base.Equals(t) && _home == t._home && _shell == t._shell;
-        }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode() + _home.GetHashCode() * 3 + _shell.GetHashCode() * 7;
-        }
-
-#if !MACRODOC
-        public override sealed void Export(ConfigNode node)
-        {
-            node["type"] = "sfu";
-            node["home"] = _home;
-            node["shell"] = _shell;
-            base.Export(node);
-        }
-
-        public override string Description
-        {
-            get
-            {
-                return ShortDescription + "(SFU)";
-            }
-        }
-
-        public override string MethodName
-        {
-            get
-            {
-                return "SFU";
-            }
-        }
-#endif
     }
 }

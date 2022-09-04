@@ -47,9 +47,13 @@ namespace Poderosa.Text
             get
             {
                 if (_caretPos > _currentLine.CharLength)
+                {
                     return _currentLine.CharLength;
+                }
                 else
+                {
                     return _caretPos;
+                }
             }
         }
 
@@ -75,13 +79,21 @@ namespace Poderosa.Text
             _document.InvalidateLine(nextLine.ID);
             if (body == Keys.Up)
             {
-                if (_currentLine.PrevLine != null) nextLine = _currentLine.PrevLine;
+                if (_currentLine.PrevLine != null)
+                {
+                    nextLine = _currentLine.PrevLine;
+                }
+
                 _document.InvalidateLine(nextLine.ID);
                 processed = true;
             }
             else if (body == Keys.Down)
             {
-                if (_currentLine.NextLine != null) nextLine = _currentLine.NextLine;
+                if (_currentLine.NextLine != null)
+                {
+                    nextLine = _currentLine.NextLine;
+                }
+
                 _document.InvalidateLine(nextLine.ID);
                 processed = true;
             }
@@ -116,9 +128,13 @@ namespace Poderosa.Text
                 if (nextPos > 0)
                 {
                     if (control)
+                    {
                         nextPos = _currentLine.FindPrevWordBreak(nextPos - 1) + 1;
+                    }
                     else
+                    {
                         nextPos--;
+                    }
                 }
                 processed = true;
             }
@@ -127,9 +143,13 @@ namespace Poderosa.Text
                 if (nextPos < _currentLine.CharLength - 1)
                 {
                     if (control)
+                    {
                         nextPos = _currentLine.FindNextWordBreak(nextPos + 1);
+                    }
                     else
+                    {
                         nextPos++;
+                    }
                 }
                 processed = true;
             }
@@ -139,13 +159,19 @@ namespace Poderosa.Text
             if (shift && processed)
             {
                 if (sel.IsEmpty)
+                {
                     sel.StartSelection(_owner, _currentLine, _caretPos, RangeType.Char, -1, -1);
+                }
+
                 sel.ExpandTo(nextLine, nextPos, RangeType.Char);
             }
             else if (processed || body == Keys.Menu || body == Keys.ControlKey || body == Keys.ShiftKey)
             {
                 if (processed)
+                {
                     sel.Clear();
+                }
+
                 processed = true;
             }
             else

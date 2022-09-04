@@ -176,7 +176,11 @@ namespace Poderosa.Forms
             IDictionaryEnumerator de = GApp.MacroManager.EnvironmentVariables;
             while (de.MoveNext())
             {
-                if (!(de.Value is string)) continue;
+                if (!(de.Value is string))
+                {
+                    continue;
+                }
+
                 ListViewItem li = new ListViewItem((string)de.Key);
                 li = _list.Items.Add(li);
                 li.SubItems.Add((string)de.Value);
@@ -222,7 +226,9 @@ namespace Poderosa.Forms
         private void OnDeleteButtonClicked(object sender, EventArgs args)
         {
             if (_list.SelectedIndices.Count > 0)
+            {
                 _list.Items.RemoveAt(_list.SelectedIndices[0]);
+            }
         }
 
         private void OnOK(object sender, EventArgs args)
@@ -240,7 +246,10 @@ namespace Poderosa.Forms
         {
             foreach (ListViewItem li in _list.Items)
             {
-                if (name == li.Text) return true;
+                if (name == li.Text)
+                {
+                    return true;
+                }
             }
             return false;
         }

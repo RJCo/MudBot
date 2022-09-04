@@ -105,10 +105,16 @@ namespace Granados.PKI
             BigInteger q2 = (input % _q).modPow(qe, _q);
 
             if (p2 == q2)
+            {
                 return p2;
+            }
 
             BigInteger k = (q2 - p2) % _q;
-            if (k.IsNegative) k += _q; //in .NET, k is negative when _q is negative
+            if (k.IsNegative)
+            {
+                k += _q; //in .NET, k is negative when _q is negative
+            }
+
             k = (k * _u) % _q;
 
             BigInteger result = k * _p + p2;
@@ -253,7 +259,9 @@ namespace Granados.PKI
         public void Verify(byte[] data, byte[] expected)
         {
             if (VerifyBI(data) != new BigInteger(expected))
+            {
                 throw new VerifyException("Failed to verify");
+            }
         }
         private BigInteger VerifyBI(byte[] data)
         {
@@ -265,14 +273,18 @@ namespace Granados.PKI
             byte[] finaldata = RSAUtil.StripPKCS1Pad(result, 1).getBytes();
 
             if (finaldata.Length != PKIUtil.SHA1_ASN_ID.Length + expected.Length)
+            {
                 throw new VerifyException("result is too short");
+            }
             else
             {
                 byte[] r = new byte[finaldata.Length];
                 Array.Copy(PKIUtil.SHA1_ASN_ID, 0, r, 0, PKIUtil.SHA1_ASN_ID.Length);
                 Array.Copy(expected, 0, r, PKIUtil.SHA1_ASN_ID.Length, expected.Length);
                 if (SSHUtil.memcmp(r, finaldata) != 0)
+                {
                     throw new VerifyException("failed to verify");
+                }
             }
         }
 
@@ -296,7 +308,11 @@ namespace Granados.PKI
             {
                 byte[] b = new byte[1];
                 rand.NextBytes(b);
-                while (b[0] == 0) rand.NextBytes(b); //0‚Å‚Í‚¾‚ß‚¾
+                while (b[0] == 0)
+                {
+                    rand.NextBytes(b); //0‚Å‚Í‚¾‚ß‚¾
+                }
+
                 pad[i] = b[0];
             }
 
@@ -335,18 +351,28 @@ namespace Granados.PKI
             byte[] strip = input.getBytes();
             int i;
 
-            if (strip[0] != type) throw new Exception(String.Format("Invalid PKCS1 padding {0}", type));
+            if (strip[0] != type)
+            {
+                throw new Exception(String.Format("Invalid PKCS1 padding {0}", type));
+            }
 
             for (i = 1; i < strip.Length; i++)
             {
-                if (strip[i] == 0) break;
+                if (strip[i] == 0)
+                {
+                    break;
+                }
 
                 if (type == 0x01 && strip[i] != (byte)0xff)
+                {
                     throw new Exception("Invalid PKCS1 padding, corrupt data");
+                }
             }
 
             if (i == strip.Length)
+            {
                 throw new Exception("Invalid PKCS1 padding, corrupt data");
+            }
 
             byte[] val = new byte[strip.Length - i];
             Array.Copy(strip, i, val, 0, val.Length);

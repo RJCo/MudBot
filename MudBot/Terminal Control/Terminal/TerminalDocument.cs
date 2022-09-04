@@ -68,8 +68,15 @@ namespace Poderosa.Text
         }
         public void InvalidateLine(int id)
         {
-            if (_invalidatedFrom == -1 || _invalidatedFrom > id) _invalidatedFrom = id;
-            if (_invalidatedTo == -1 || _invalidatedTo < id) _invalidatedTo = id;
+            if (_invalidatedFrom == -1 || _invalidatedFrom > id)
+            {
+                _invalidatedFrom = id;
+            }
+
+            if (_invalidatedTo == -1 || _invalidatedTo < id)
+            {
+                _invalidatedTo = id;
+            }
         }
         public void InvalidateAll()
         {
@@ -127,20 +134,36 @@ namespace Poderosa.Text
             int d1 = Math.Abs(index - _currentLine.ID);
             int d2 = Math.Abs(index - _topLine.ID);
             if (d1 < d2)
+            {
                 return FindLineByHint(index, _currentLine);
+            }
             else
+            {
                 return FindLineByHint(index, _topLine);
+            }
         }
 
         public GLine FindLineOrNull(int index)
         {
-            if (index < _firstLine.ID || index > _lastLine.ID) return null;
-            else return FindLine(index);
+            if (index < _firstLine.ID || index > _lastLine.ID)
+            {
+                return null;
+            }
+            else
+            {
+                return FindLine(index);
+            }
         }
         public GLine FindLineOrEdge(int index)
         {
-            if (index < _firstLine.ID) index = _firstLine.ID;
-            else if (index > _lastLine.ID) index = _lastLine.ID;
+            if (index < _firstLine.ID)
+            {
+                index = _firstLine.ID;
+            }
+            else if (index > _lastLine.ID)
+            {
+                index = _lastLine.ID;
+            }
 
             return FindLine(index);
         }
@@ -154,7 +177,10 @@ namespace Poderosa.Text
                 for (int i = h; i < index; i++)
                 {
                     l = l.NextLine;
-                    if (l == null) FindLineByHintFailed(index, hintLine);
+                    if (l == null)
+                    {
+                        FindLineByHintFailed(index, hintLine);
+                    }
                 }
             }
             else
@@ -162,7 +188,10 @@ namespace Poderosa.Text
                 for (int i = h; i > index; i--)
                 {
                     l = l.PrevLine;
-                    if (l == null) FindLineByHintFailed(index, hintLine);
+                    if (l == null)
+                    {
+                        FindLineByHintFailed(index, hintLine);
+                    }
                 }
             }
             return l;
@@ -206,8 +235,15 @@ namespace Poderosa.Text
             }
             set
             {
-                if (value < _firstLine.ID) value = _firstLine.ID; //リサイズ時の微妙なタイミングで負になってしまうことがあったようだ
-                if (value > _lastLine.ID + 100) value = _lastLine.ID + 100; //極端に大きな値を食らって死ぬことがないようにする
+                if (value < _firstLine.ID)
+                {
+                    value = _firstLine.ID; //リサイズ時の微妙なタイミングで負になってしまうことがあったようだ
+                }
+
+                if (value > _lastLine.ID + 100)
+                {
+                    value = _lastLine.ID + 100; //極端に大きな値を食らって死ぬことがないようにする
+                }
 
                 while (value > _lastLine.ID)
                 {
@@ -226,7 +262,11 @@ namespace Poderosa.Text
             }
             set
             {
-                if (_topLine.ID != value) _invalidatedAll = true;
+                if (_topLine.ID != value)
+                {
+                    _invalidatedAll = true;
+                }
+
                 _topLine = FindLineOrEdge(value); //同上の理由でOrEdgeバージョンに変更
                 AssertValid();
             }
@@ -319,7 +359,9 @@ namespace Poderosa.Text
                 if (_connection.TerminalHeight > 1)
                 { //極端に高さがないときはこれで変な値になってしまうのでスキップ
                     if (_currentLine.ID >= _topLine.ID + _connection.TerminalHeight - 1)
+                    {
                         TopLineNumber = _currentLine.ID - _connection.TerminalHeight + 2; //これで次のCurrentLineNumber++と合わせて行送りになる
+                    }
                 }
                 CurrentLineNumber++; //これでプロパティセットがなされ、必要なら行の追加もされる。
             }
@@ -332,16 +374,24 @@ namespace Poderosa.Text
         internal void ScrollUp()
         {
             if (_scrollingTop != -1 && _scrollingBottom != -1)
+            {
                 ScrollUp(_scrollingTop, _scrollingBottom);
+            }
             else
+            {
                 ScrollUp(TopLineNumber, TopLineNumber + _connection.TerminalHeight - 1);
+            }
         }
 
         internal void ScrollUp(int from, int to)
         {
             GLine top = FindLineOrEdge(from);
             GLine bottom = FindLineOrEdge(to);
-            if (top == null || bottom == null) return; //エラーハンドリングはFindLineの中で。ここではクラッシュ回避だけを行う
+            if (top == null || bottom == null)
+            {
+                return; //エラーハンドリングはFindLineの中で。ここではクラッシュ回避だけを行う
+            }
+
             int bottom_id = bottom.ID;
             int topline_id = _topLine.ID;
             GLine nextbottom = bottom.NextLine;
@@ -379,7 +429,9 @@ namespace Poderosa.Text
             //if(_scrollingTop<=_topLine.ID && _topLine.ID<=_scrollingBottom)
             //	_topLine = _currentLine;
             while (topline_id < _topLine.ID)
+            {
                 _topLine = _topLine.PrevLine;
+            }
 
             AssertValid();
 
@@ -390,9 +442,13 @@ namespace Poderosa.Text
         internal void ScrollDown()
         {
             if (_scrollingTop != -1 && _scrollingBottom != -1)
+            {
                 ScrollDown(_scrollingTop, _scrollingBottom);
+            }
             else
+            {
                 ScrollDown(TopLineNumber, TopLineNumber + _connection.TerminalHeight - 1);
+            }
         }
 
         internal void ScrollDown(int from, int to)
@@ -431,13 +487,35 @@ namespace Poderosa.Text
         {
             newline.NextLine = target.NextLine;
             newline.PrevLine = target.PrevLine;
-            if (target.NextLine != null) target.NextLine.PrevLine = newline;
-            if (target.PrevLine != null) target.PrevLine.NextLine = newline;
+            if (target.NextLine != null)
+            {
+                target.NextLine.PrevLine = newline;
+            }
 
-            if (target == _firstLine) _firstLine = newline;
-            if (target == _lastLine) _lastLine = newline;
-            if (target == _topLine) _topLine = newline;
-            if (target == _currentLine) _currentLine = newline;
+            if (target.PrevLine != null)
+            {
+                target.PrevLine.NextLine = newline;
+            }
+
+            if (target == _firstLine)
+            {
+                _firstLine = newline;
+            }
+
+            if (target == _lastLine)
+            {
+                _lastLine = newline;
+            }
+
+            if (target == _topLine)
+            {
+                _topLine = newline;
+            }
+
+            if (target == _currentLine)
+            {
+                _currentLine = newline;
+            }
 
             newline.ID = target.ID;
             InvalidateLine(newline.ID);
@@ -473,8 +551,16 @@ namespace Poderosa.Text
                 line.NextLine.PrevLine = line.PrevLine;
             }
 
-            if (line == _firstLine) _firstLine = line.NextLine;
-            if (line == _lastLine) _lastLine = line.PrevLine;
+            if (line == _firstLine)
+            {
+                _firstLine = line.NextLine;
+            }
+
+            if (line == _lastLine)
+            {
+                _lastLine = line.PrevLine;
+            }
+
             if (line == _topLine)
             {
                 _topLine = line.NextLine;
@@ -482,7 +568,10 @@ namespace Poderosa.Text
             if (line == _currentLine)
             {
                 _currentLine = line.NextLine;
-                if (_currentLine == null) _currentLine = _lastLine;
+                if (_currentLine == null)
+                {
+                    _currentLine = _lastLine;
+                }
             }
 
             _size--;
@@ -492,37 +581,56 @@ namespace Poderosa.Text
         private void InsertBefore(GLine pos, GLine line)
         {
             if (pos.PrevLine != null)
+            {
                 pos.PrevLine.NextLine = line;
+            }
 
             line.PrevLine = pos.PrevLine;
             line.NextLine = pos;
 
             pos.PrevLine = line;
 
-            if (pos == _firstLine) _firstLine = line;
+            if (pos == _firstLine)
+            {
+                _firstLine = line;
+            }
+
             _size++;
             _invalidatedAll = true;
         }
         private void InsertAfter(GLine pos, GLine line)
         {
             if (pos.NextLine != null)
+            {
                 pos.NextLine.PrevLine = line;
+            }
 
             line.NextLine = pos.NextLine;
             line.PrevLine = pos;
 
             pos.NextLine = line;
 
-            if (pos == _lastLine) _lastLine = line;
+            if (pos == _lastLine)
+            {
+                _lastLine = line;
+            }
+
             _size++;
             _invalidatedAll = true;
         }
 
         internal void RemoveAfter(int from)
         {
-            if (from > _lastLine.ID) return;
+            if (from > _lastLine.ID)
+            {
+                return;
+            }
+
             GLine delete = FindLineOrEdge(from);
-            if (delete == null) return;
+            if (delete == null)
+            {
+                return;
+            }
 
             GLine remain = delete.PrevLine;
             delete.PrevLine = null;
@@ -538,8 +646,16 @@ namespace Poderosa.Text
                 while (delete != null)
                 {
                     _size--;
-                    if (delete == _topLine) _topLine = remain;
-                    if (delete == _currentLine) _currentLine = remain;
+                    if (delete == _topLine)
+                    {
+                        _topLine = remain;
+                    }
+
+                    if (delete == _currentLine)
+                    {
+                        _currentLine = remain;
+                    }
+
                     delete = delete.NextLine;
                 }
             }
@@ -550,9 +666,16 @@ namespace Poderosa.Text
 
         internal void ClearAfter(int from)
         {
-            if (from > _lastLine.ID) return;
+            if (from > _lastLine.ID)
+            {
+                return;
+            }
+
             GLine l = FindLineOrEdge(from);
-            if (l == null) return;
+            if (l == null)
+            {
+                return;
+            }
 
             while (l != null)
             {
@@ -565,9 +688,16 @@ namespace Poderosa.Text
         }
         internal void ClearAfter(int from, TextDecoration dec)
         {
-            if (from > _lastLine.ID) return;
+            if (from > _lastLine.ID)
+            {
+                return;
+            }
+
             GLine l = FindLineOrEdge(from);
-            if (l == null) return;
+            if (l == null)
+            {
+                return;
+            }
 
             while (l != null)
             {
@@ -582,7 +712,10 @@ namespace Poderosa.Text
         internal void ClearRange(int from, int to)
         {
             GLine l = FindLineOrEdge(from);
-            if (l == null) return;
+            if (l == null)
+            {
+                return;
+            }
 
             while (l.ID < to)
             {
@@ -595,7 +728,10 @@ namespace Poderosa.Text
         internal void ClearRange(int from, int to, TextDecoration dec)
         {
             GLine l = FindLineOrEdge(from);
-            if (l == null) return;
+            if (l == null)
+            {
+                return;
+            }
 
             while (l.ID < to)
             {
@@ -612,11 +748,16 @@ namespace Poderosa.Text
         internal int DiscardOldLines(int remain)
         {
             int delete_count = _size - remain;
-            if (delete_count <= 0) return 0;
+            if (delete_count <= 0)
+            {
+                return 0;
+            }
 
             GLine newfirst = _firstLine;
             for (int i = 0; i < delete_count; i++)
+            {
                 newfirst = newfirst.NextLine;
+            }
 
             //新しい先頭を決める
             _firstLine = newfirst;
@@ -627,7 +768,11 @@ namespace Poderosa.Text
 
             AssertValid();
 
-            if (_topLine.ID < _firstLine.ID) _topLine = _firstLine;
+            if (_topLine.ID < _firstLine.ID)
+            {
+                _topLine = _firstLine;
+            }
+
             if (_currentLine.ID < _firstLine.ID)
             {
                 _currentLine = _firstLine;

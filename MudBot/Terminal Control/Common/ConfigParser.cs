@@ -74,7 +74,10 @@ namespace Poderosa.Config
         {
             foreach (ConfigNode s in _childConfigNodes)
             {
-                if (s.Name == name) return s;
+                if (s.Name == name)
+                {
+                    return s;
+                }
             }
             return null;
         }
@@ -132,12 +135,23 @@ namespace Poderosa.Config
         private static string Normalize(string s)
         {
             int i = 0;
-            if (s == null) return null;
+            if (s == null)
+            {
+                return null;
+            }
+
             do
             {
-                if (i == s.Length) return "";
+                if (i == s.Length)
+                {
+                    return "";
+                }
+
                 char ch = s[i++];
-                if (ch != ' ' && ch != '\t') return s.Substring(i - 1);
+                if (ch != ' ' && ch != '\t')
+                {
+                    return s.Substring(i - 1);
+                }
             } while (true);
         }
 
@@ -165,7 +179,9 @@ namespace Poderosa.Config
                 }
             }
             foreach (ConfigNode ch in _childConfigNodes)
+            {
                 ch.WriteTo(writer, indent);
+            }
 
             indent -= 2;
             WriteIndent(writer, indent);
@@ -174,7 +190,9 @@ namespace Poderosa.Config
         private void WriteIndent(TextWriter writer, int indent)
         {
             for (int i = 0; i < indent; i++)
+            {
                 writer.Write(' ');
+            }
         }
 
         public static ConfigNode CreateIndirect(string name, Hashtable values)

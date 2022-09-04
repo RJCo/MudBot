@@ -56,8 +56,9 @@ namespace Poderosa.Forms
             }
 
             foreach (string p in GApp.ConnectionHistory.LogPaths)
+            {
                 _fileNameBox.Items.Add(p);
-
+            }
 
             AdjustUI();
         }
@@ -208,7 +209,10 @@ namespace Poderosa.Forms
         private void OnSelectLogFile(object sender, EventArgs args)
         {
             string fn = GCUtil.SelectLogFileByDialog(this);
-            if (fn != null) _fileNameBox.Text = fn;
+            if (fn != null)
+            {
+                _fileNameBox.Text = fn;
+            }
         }
         private void OnOK(object sender, EventArgs args)
         {
@@ -221,7 +225,11 @@ namespace Poderosa.Forms
             {
                 path = _fileNameBox.Text;
                 LogFileCheckResult r = GCUtil.CheckLogFileName(path, this);
-                if (r == LogFileCheckResult.Cancel || r == LogFileCheckResult.Error) return;
+                if (r == LogFileCheckResult.Cancel || r == LogFileCheckResult.Error)
+                {
+                    return;
+                }
+
                 append = (r == LogFileCheckResult.Append);
             }
 

@@ -287,13 +287,21 @@ namespace Granados.SSHC
         public static CipherAlgorithm SSH2NameToAlgorithm(string name)
         {
             if (name == "3des-cbc")
+            {
                 return CipherAlgorithm.TripleDES;
+            }
             else if (name == "blowfish-cbc")
+            {
                 return CipherAlgorithm.Blowfish;
+            }
             else if (name == "aes128-cbc")
+            {
                 return CipherAlgorithm.AES128;
+            }
             else
+            {
                 throw new SSHException("Unknown algorithm " + name);
+            }
         }
     }
 
@@ -301,7 +309,7 @@ namespace Granados.SSHC
 
     /**********        MAC        ***********/
 
-    interface MAC
+    internal interface MAC
     {
         byte[] Calc(byte[] data);
         int Size { get; }
@@ -327,16 +335,24 @@ namespace Granados.SSHC
         public static MAC CreateMAC(MACAlgorithm algorithm, byte[] key)
         {
             if (algorithm == MACAlgorithm.HMACSHA1)
+            {
                 return new MACSHA1(key);
+            }
             else
+            {
                 throw new SSHException("unknown algorithm" + algorithm);
+            }
         }
         public static int GetSize(MACAlgorithm algorithm)
         {
             if (algorithm == MACAlgorithm.HMACSHA1)
+            {
                 return 20;
+            }
             else
+            {
                 throw new SSHException("unknown algorithm" + algorithm);
+            }
         }
     }
 }

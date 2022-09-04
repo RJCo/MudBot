@@ -55,7 +55,10 @@ namespace Poderosa.Connection
         internal void Remove(TerminalConnection con)
         {
             int i = IndexOf(con);
-            if (i == -1) return; //本当はこういうのはよろしくないが
+            if (i == -1)
+            {
+                return; //本当はこういうのはよろしくないが
+            }
 
             ConnectionTag ct = TagAt(i);
             _connections.RemoveAt(i);
@@ -103,7 +106,13 @@ namespace Poderosa.Connection
             get
             {
                 foreach (ConnectionTag ct in _connections)
-                    if (!ct.Connection.IsClosed) return true;
+                {
+                    if (!ct.Connection.IsClosed)
+                    {
+                        return true;
+                    }
+                }
+
                 return false;
             }
         }
@@ -139,9 +148,13 @@ namespace Poderosa.Connection
             get
             {
                 if (_activeIndex == -1)
+                {
                     return null;
+                }
                 else
+                {
                     return TagAt(_activeIndex).Connection;
+                }
             }
         }
 
@@ -151,7 +164,10 @@ namespace Poderosa.Connection
             for (int i = _activatedOrder.Count - 1; i >= 0; i--)
             {
                 ConnectionTag ct = (ConnectionTag)_activatedOrder[i];
-                if (ct.PositionIndex == positionIndex && ct != excluding) return ct;
+                if (ct.PositionIndex == positionIndex && ct != excluding)
+                {
+                    return ct;
+                }
             }
             return null;
         }
@@ -161,7 +177,10 @@ namespace Poderosa.Connection
             for (int i = _activatedOrder.Count - 1; i >= 0; i--)
             {
                 ConnectionTag ct = (ConnectionTag)_activatedOrder[i];
-                if (ct.PreservedPositionIndex == positionIndex && ct != excluding) return ct;
+                if (ct.PreservedPositionIndex == positionIndex && ct != excluding)
+                {
+                    return ct;
+                }
             }
             return null;
         }
@@ -172,9 +191,13 @@ namespace Poderosa.Connection
             get
             {
                 if (_activeIndex == -1)
+                {
                     return null;
+                }
                 else
+                {
                     return TagAt(_activeIndex);
+                }
             }
         }
 
@@ -186,7 +209,10 @@ namespace Poderosa.Connection
         {
             foreach (ConnectionTag t in _connections)
             {
-                if (t.Connection == con) return t;
+                if (t.Connection == con)
+                {
+                    return t;
+                }
             }
             return null;
         }
@@ -195,7 +221,11 @@ namespace Poderosa.Connection
             int i = 0;
             foreach (ConnectionTag t in _connections)
             {
-                if (t.Connection == con) return i;
+                if (t.Connection == con)
+                {
+                    return i;
+                }
+
                 i++;
             }
             return -1;
@@ -205,7 +235,11 @@ namespace Poderosa.Connection
             int i = 0;
             foreach (ConnectionTag t in _connections)
             {
-                if (t == tag) return i;
+                if (t == tag)
+                {
+                    return i;
+                }
+
                 i++;
             }
             return -1;
@@ -227,14 +261,20 @@ namespace Poderosa.Connection
             ConnectionTag ct = (ConnectionTag)_connections[index];
             _connections.RemoveAt(index);
             _connections.Insert(newindex, ct);
-            if (_activeIndex == index) _activeIndex = newindex;
+            if (_activeIndex == index)
+            {
+                _activeIndex = newindex;
+            }
         }
 
         public ConnectionTag FirstMatch(TagCondition cond)
         {
             foreach (ConnectionTag ct in _connections)
             {
-                if (cond(ct)) return ct;
+                if (cond(ct))
+                {
+                    return ct;
+                }
             }
             return null;
         }
@@ -245,7 +285,10 @@ namespace Poderosa.Connection
             foreach (ConnectionTag ct in _connections)
             {
                 Debug.WriteLine(String.Format("pos={0} close={1} pane={2} visible={3}", ct.PositionIndex, ct.Connection.IsClosed, (ct.Pane != null), (ct.Pane != null && ct.Pane.FakeVisible)));
-                if (ct.Pane != null) Debug.Assert(ct.Pane.Connection == ct.Connection);
+                if (ct.Pane != null)
+                {
+                    Debug.Assert(ct.Pane.Connection == ct.Connection);
+                }
             }
         }
 
@@ -271,7 +314,10 @@ namespace Poderosa.Connection
         }
         public void InvokeFor(Control c)
         {
-            if (_set) c.Invoke(_delegate, _param);
+            if (_set)
+            {
+                c.Invoke(_delegate, _param);
+            }
         }
     }
 
@@ -393,9 +439,21 @@ namespace Poderosa.Connection
         public string FormatTabText()
         {
             string t = _connection.Param.Caption;
-            if (t == null || t.Length == 0) t = _connection.Param.ShortDescription;
-            if (_connection.IsClosed) t += "Caption.ConnectionTag.Disconnected";
-            if (_modalTerminalTask != null) t += "(" + _modalTerminalTask.Caption + ")";
+            if (t == null || t.Length == 0)
+            {
+                t = _connection.Param.ShortDescription;
+            }
+
+            if (_connection.IsClosed)
+            {
+                t += "Caption.ConnectionTag.Disconnected";
+            }
+
+            if (_modalTerminalTask != null)
+            {
+                t += "(" + _modalTerminalTask.Caption + ")";
+            }
+
             return t;
         }
         //Frameのキャプション用文字列
@@ -403,7 +461,10 @@ namespace Poderosa.Connection
         {
             string t = FormatTabText();
             if (_windowTitle.Length != 0 && _connection.Param.Caption != _windowTitle) //TabCaptionをWindowTitleに一致させるオプションを使っていると鬱陶しくなるので異なるときのみ表示
+            {
                 t += "[" + _windowTitle + "]";
+            }
+
             return t;
         }
 
@@ -497,17 +558,23 @@ namespace Poderosa.Connection
         internal void NotifyUpdate()
         {
             if (_pane != null)
+            {
                 _pane.DataArrived();
+            }
 
             _terminal.SignalData();
 
             if (_eventReceiver != null)
+            {
                 _eventReceiver.OnUpdate();
+            }
         }
         internal void NotifyDisconnect()
         {
             if (_eventReceiver != null)
+            {
                 _eventReceiver.OnDisconnect();
+            }
         }
 
 
@@ -554,7 +621,10 @@ namespace Poderosa.Connection
                     { //既にソケット切断に起因すれば例外になることもあるかもしれない
                     }
                 }
-                if (value) GEnv.Connections.KeepAlive.ClearTimerToConnectionTag(this);
+                if (value)
+                {
+                    GEnv.Connections.KeepAlive.ClearTimerToConnectionTag(this);
+                }
             }
         }
 
@@ -565,7 +635,10 @@ namespace Poderosa.Connection
             _preservedPositionIndex = src.PreservedPositionIndex;
 
             if (src.Button != null)
+            {
                 src.Button.Tag = this;
+            }
+
             _tabButton = src.Button;
         }
     }

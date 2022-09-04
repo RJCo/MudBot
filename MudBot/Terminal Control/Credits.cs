@@ -227,19 +227,30 @@ namespace Poderosa.Forms
         }
         private void OnPaintCredit(object sender, PaintEventArgs args)
         {
-            if (_creditIndex == _creditGroups.Count) return;
+            if (_creditIndex == _creditGroups.Count)
+            {
+                return;
+            }
 
             CreditGroup grp = (CreditGroup)_creditGroups[_creditIndex];
 
             Color col;
             if (_creditStep < 10)
+            {
                 col = ColorUtil.CalculateColor(SystemColors.WindowText, SystemColors.Window, _creditStep * (255 / 10));
+            }
             else if (_creditStep < 40)
+            {
                 col = SystemColors.WindowText;
+            }
             else if (_creditStep < 50)
+            {
                 col = ColorUtil.CalculateColor(SystemColors.WindowText, SystemColors.Window, (50 - _creditStep) * (255 / 10));
+            }
             else
+            {
                 return; //no draw
+            }
 
             Graphics g = args.Graphics;
             SizeF name_size = g.MeasureString(grp._name, _boldFont);

@@ -46,7 +46,9 @@ namespace Granados.Crypto
         internal static void BlockXor(byte[] src, int s_offset, int len, byte[] dest, int d_offset)
         {
             for (; len > 0; len--)
+            {
                 dest[d_offset++] ^= src[s_offset++];
+            }
         }
 
         public static int memcmp(byte[] d1, int o1, byte[] d2, int o2, int len)
@@ -55,8 +57,14 @@ namespace Granados.Crypto
             {
                 byte b1 = d1[o1 + i];
                 byte b2 = d2[o2 + i];
-                if (b1 < b2) return -1;
-                else if (b1 > b2) return 1;
+                if (b1 < b2)
+                {
+                    return -1;
+                }
+                else if (b1 > b2)
+                {
+                    return 1;
+                }
             }
             return 0;
         }

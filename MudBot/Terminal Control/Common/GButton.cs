@@ -94,7 +94,11 @@ namespace Poderosa.UI
             get
             {
                 int w = Width;
-                if (_showComboStyle) w -= COMBOAREA_WIDTH;
+                if (_showComboStyle)
+                {
+                    w -= COMBOAREA_WIDTH;
+                }
+
                 return w;
             }
         }
@@ -104,13 +108,21 @@ namespace Poderosa.UI
             base.OnPaint(pe);
             DrawState st;
             if (_mouseDown)
+            {
                 st = DrawState.Focused;
+            }
             else if (_mouseEnter)
+            {
                 st = DrawState.Hover;
+            }
             else if (Enabled)
+            {
                 st = DrawState.Normal;
+            }
             else
+            {
                 st = DrawState.Disabled;
+            }
 
             DrawButtonState(pe.Graphics, st);
         }
@@ -198,7 +210,8 @@ namespace Poderosa.UI
                 y = (Height - Image.Height) / 2;
                 if (_checked)
                 {
-                    x++; y++;
+                    x++;
+                    y++;
                 }
                 DrawImage(g, state, Image, x, y);
             }
@@ -208,7 +221,8 @@ namespace Poderosa.UI
                 y = (Height - Image.Height) / 2;
                 if (_checked)
                 {
-                    x++; y++;
+                    x++;
+                    y++;
                 }
                 DrawImage(g, state, Image, x, y);
                 x += Image.Width + 2;
@@ -219,14 +233,15 @@ namespace Poderosa.UI
             {
                 DrawComboStyleTriangle(g, state);
             }
-
         }
 
         protected void DrawBackground(Graphics g, DrawState state)
         {
             Rectangle rc = ClientRectangle;
-            if (_focusedBackgroundBrush == null) CreateBrushes();
-
+            if (_focusedBackgroundBrush == null)
+            {
+                CreateBrushes();
+            }
 
             if (state == DrawState.Normal || state == DrawState.Disabled)
             {
@@ -244,9 +259,14 @@ namespace Poderosa.UI
             else if (state == DrawState.Hover || state == DrawState.Focused)
             {
                 if (state == DrawState.Hover)
+                {
                     g.FillRectangle(_hoverBackgroundBrush, rc);
+                }
                 else
+                {
                     g.FillRectangle(_focusedBackgroundBrush, rc);
+                }
+
                 g.DrawRectangle(SystemPens.Highlight, rc.Left, rc.Top, rc.Width - 1, rc.Height - 1);
             }
         }
@@ -254,9 +274,13 @@ namespace Poderosa.UI
         protected static void DrawImage(Graphics g, DrawState state, Image image, int x, int y)
         {
             if (state == DrawState.Normal)
+            {
                 g.DrawImage(image, x, y, image.Width, image.Height);
+            }
             else if (state == DrawState.Disabled)
+            {
                 ControlPaint.DrawImageDisabled(g, image, x, y, SystemColors.Control);
+            }
             else if (state == DrawState.Focused || state == DrawState.Hover)
             {
                 ControlPaint.DrawImageDisabled(g, image, x + 1, y, SystemColors.Control);
@@ -267,9 +291,13 @@ namespace Poderosa.UI
         protected void DrawText(Graphics g, string text, DrawState state, int x, int y)
         {
             if (state == DrawState.Disabled)
+            {
                 g.DrawString(text, Font, SystemBrushes.ControlDark, new Point(x, y));
+            }
             else
+            {
                 g.DrawString(text, Font, SystemBrushes.ControlText, new Point(x, y));
+            }
         }
 
         protected void DrawComboStyleTriangle(Graphics g, DrawState state)
@@ -312,7 +340,9 @@ namespace Poderosa.UI
         {
             base.OnMouseUp(e);
             if (_autoToggle)
+            {
                 _checked = !_checked;
+            }
         }
     }
 
@@ -353,12 +383,19 @@ namespace Poderosa.UI
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            if (_selectedColors == null) CreateColor();
+            if (_selectedColors == null)
+            {
+                CreateColor();
+            }
             //border
             if (_selected)
+            {
                 DrawUtil.DrawRoundRect(g, 0, 0, Width - 1, Height - 1, _selectedColors);
+            }
             else if (_mouseEnter)
+            {
                 DrawUtil.DrawRoundRect(g, 0, 0, Width - 1, Height - 1, _hoverColors);
+            }
 
             DrawButtonState(g);
         }

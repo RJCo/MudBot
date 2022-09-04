@@ -47,7 +47,9 @@ namespace Poderosa.UI
                 {
                     string theme_name = new string(fn);
                     if (theme_name.IndexOf("Luna") != -1)
+                    {
                         _theme = Theme.Luna;
+                    }
                 }
                 //Debug.WriteLine(String.Format("FN={0} Color={1} Size={2}", new string(fn), new string(cb), new string(sz)));
             }
@@ -62,7 +64,9 @@ namespace Poderosa.UI
             _theme = Theme.Unspecified;
             OperatingSystem os = Environment.OSVersion;
             if (os.Platform == PlatformID.Win32NT && os.Version.CompareTo(new Version(5, 1)) >= 0)
+            {
                 SpecifyThemeUnderWinXP();
+            }
         }
 
         public static Color TabPaneBackColor
@@ -70,9 +74,13 @@ namespace Poderosa.UI
             get
             {
                 if (_theme == Theme.Luna)
+                {
                     return Color.FromKnownColor(KnownColor.ControlLightLight);
+                }
                 else
+                {
                     return Color.FromKnownColor(KnownColor.Control);
+                }
             }
         }
     }

@@ -56,7 +56,11 @@ namespace Poderosa.Forms
             _parameterBox.Lines = con.ConnectionParameter;
             _terminalTypeBox.Text = EnumDescAttributeT.For(typeof(TerminalType)).GetDescription(con.Param.TerminalType);
             string li = EnumDescAttributeT.For(typeof(LogType)).GetDescription(con.LogType);
-            if (con.LogType != LogType.None) li += "(" + con.LogPath + ")";
+            if (con.LogType != LogType.None)
+            {
+                li += "(" + con.LogPath + ")";
+            }
+
             _logBox.Text = li;
             _receiveBytes.Text = String.Format("{0,10}{1}", con.ReceivedDataSize, "Caption.ServerInfo.BytesReceived");
             _transmitBytes.Text = String.Format("{0,10}{1}", con.SentDataSize, "Caption.ServerInfo.BytesSent");
@@ -291,12 +295,18 @@ namespace Poderosa.Forms
             {
                 foreach (string t in v)
                 {
-                    if (b.Length > 0) b.Append(", ");
+                    if (b.Length > 0)
+                    {
+                        b.Append(", ");
+                    }
+
                     b.Append(t);
                 }
             }
             else
+            {
                 b.Append("-");
+            }
 
             return b.ToString();
         }
@@ -307,12 +317,18 @@ namespace Poderosa.Forms
             {
                 foreach (IPAddress t in v)
                 {
-                    if (b.Length > 0) b.Append(", ");
+                    if (b.Length > 0)
+                    {
+                        b.Append(", ");
+                    }
+
                     b.Append(t.ToString());
                 }
             }
             else
+            {
                 b.Append("-");
+            }
 
             return b.ToString();
         }

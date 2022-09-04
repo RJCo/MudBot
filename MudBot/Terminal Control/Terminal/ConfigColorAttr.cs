@@ -51,7 +51,9 @@ namespace Poderosa.Config
         {
             Color value = (Color)_fieldInfo.GetValue(holder);
             if (value != ToColor(_initial))
+            {
                 node[_externalName] = value.Name;
+            }
         }
         public override void ImportFrom(object holder, ConfigNode node)
         {

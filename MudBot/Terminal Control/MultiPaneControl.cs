@@ -88,7 +88,11 @@ namespace Poderosa.Forms
             for (int i = 0; i < _panes.Length; i++)
             {
                 cons[i] = (_panes[i] == null || !_panes[i].FakeVisible) ? null : _panes[i].ConnectionTag;
-                if (_panes[i] != null) _panes[i].Detach();
+                if (_panes[i] != null)
+                {
+                    _panes[i].Detach();
+                }
+
                 _panes[i] = null;
             }
 
@@ -147,7 +151,11 @@ namespace Poderosa.Forms
                 if (prev_pane_count < pane_count && ct.PreservedPositionIndex >= prev_pane_count)
                 { //増えたペインへの強制割り当て
                     pos = ct.PreservedPositionIndex;
-                    if (pos >= pane_count) pos = pane_count - 1;
+                    if (pos >= pane_count)
+                    {
+                        pos = pane_count - 1;
+                    }
+
                     ct.PositionIndex = pos;
                     if (_panes[pos].ConnectionTag == null)
                     {
@@ -209,7 +217,10 @@ namespace Poderosa.Forms
             pane.FakeVisible = true;
             pane.Attach(ct);
             if (!pane.AsControl().Focused)
+            {
                 pane.AsControl().Focus();
+            }
+
             GEnv.Frame.RefreshConnection(ct);
         }
 
@@ -217,11 +228,18 @@ namespace Poderosa.Forms
         public bool MoveActivePane(Keys direction)
         {
             ConnectionTag ct = GEnv.Connections.ActiveTag;
-            if (ct == null || ct.AttachedPane == null) return false; //!!本来この条件になることはないはずだが、激しくタブを移動させているとこうなることがあった。
+            if (ct == null || ct.AttachedPane == null)
+            {
+                return false; //!!本来この条件になることはないはずだが、激しくタブを移動させているとこうなることがあった。
+            }
+
             Debug.Assert(ct.AttachedPane.FakeVisible);
 
             GFrameStyle style = GApp.Options.FrameStyle;
-            if (style == GFrameStyle.Single) return false;
+            if (style == GFrameStyle.Single)
+            {
+                return false;
+            }
 
             int pane_count = style == GFrameStyle.DivVertical3 || style == GFrameStyle.DivHorizontal3 ? 3 : 2;
             bool is_vertical = style == GFrameStyle.DivVertical3 || style == GFrameStyle.DivVertical;
@@ -229,25 +247,60 @@ namespace Poderosa.Forms
             switch (direction)
             {
                 case Keys.Up:
-                    if (!is_vertical) destinationIndex--;
-                    else return false;
+                    if (!is_vertical)
+                    {
+                        destinationIndex--;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
                     break;
                 case Keys.Down:
-                    if (!is_vertical) destinationIndex++;
-                    else return false;
+                    if (!is_vertical)
+                    {
+                        destinationIndex++;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
                     break;
                 case Keys.Left:
-                    if (is_vertical) destinationIndex--;
-                    else return false;
+                    if (is_vertical)
+                    {
+                        destinationIndex--;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
                     break;
                 case Keys.Right:
-                    if (is_vertical) destinationIndex++;
-                    else return false;
+                    if (is_vertical)
+                    {
+                        destinationIndex++;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
                     break;
             }
 
-            if (destinationIndex < 0) return false;
-            if (destinationIndex >= pane_count) return false;
+            if (destinationIndex < 0)
+            {
+                return false;
+            }
+
+            if (destinationIndex >= pane_count)
+            {
+                return false;
+            }
 
             MovePane(ct, destinationIndex);
             return true;
@@ -262,8 +315,16 @@ namespace Poderosa.Forms
             Debug.Assert(originalPos != destinationIndex);
             ct.PositionIndex = destinationIndex;
             TerminalPane pane = GetPane(destinationIndex);
-            if (ct.AttachedPane != null) ct.AttachedPane.Detach();
-            if (pane.FakeVisible) pane.Detach();
+            if (ct.AttachedPane != null)
+            {
+                ct.AttachedPane.Detach();
+            }
+
+            if (pane.FakeVisible)
+            {
+                pane.Detach();
+            }
+
             pane.FakeVisible = true;
             pane.Attach(ct);
             pane.Focus();
@@ -315,14 +376,23 @@ namespace Poderosa.Forms
             get
             {
                 if (GApp.Options.FrameStyle == GFrameStyle.Single)
+                {
                     return 0;
+                }
                 else
                 {
                     int i;
                     for (i = 0; i < _panes.Length; i++)
                     {
-                        if (_panes[i] == null) break;
-                        if (!_panes[i].FakeVisible) return i;
+                        if (_panes[i] == null)
+                        {
+                            break;
+                        }
+
+                        if (!_panes[i].FakeVisible)
+                        {
+                            return i;
+                        }
                     }
 
                     return GEnv.Connections.Count % i; //iが有効な個数になっている
@@ -340,7 +410,10 @@ namespace Poderosa.Forms
             int i;
             for (i = 0; i < _panes.Length; i++)
             {
-                if (_panes[i] == pane) return i;
+                if (_panes[i] == pane)
+                {
+                    return i;
+                }
             }
             return -1;
         }
@@ -350,7 +423,10 @@ namespace Poderosa.Forms
             int i;
             for (i = 0; i < _panes.Length; i++)
             {
-                if (_panes[i] != null) _panes[i].ApplyOptions(opt);
+                if (_panes[i] != null)
+                {
+                    _panes[i].ApplyOptions(opt);
+                }
             }
         }
 
@@ -381,18 +457,29 @@ namespace Poderosa.Forms
 
             for (int i = 0; i < _panes.Length; i++)
             {
-                if (_panes[i] == null) break;
+                if (_panes[i] == null)
+                {
+                    break;
+                }
+
                 if (is_vertical)
+                {
                     _panes[i].SplitterDragging(ws[i], Height);
+                }
                 else
+                {
                     _panes[i].SplitterDragging(Width, ws[i]);
+                }
             }
         }
 
         private bool _ignoreSplitterMoveFlag; //OnResizeの中でSplitPositionをセットするとOnSplitterMovedも呼ばれてしまうのでこれを防止するためにフラグをセット
         private void OnSplitterMoved(object sender, SplitterEventArgs args)
         {
-            if (_ignoreSplitterMoveFlag) return;
+            if (_ignoreSplitterMoveFlag)
+            {
+                return;
+            }
 
             GFrameStyle s = GApp.Options.FrameStyle;
             bool is_vertical = (s == GFrameStyle.DivVertical || s == GFrameStyle.DivVertical3);
@@ -422,16 +509,30 @@ namespace Poderosa.Forms
         protected override void OnResize(EventArgs args)
         {
             base.OnResize(args);
-            if (_splitters == null || _ignoreResize || !GApp.Options.SplitterPreservesRatio) return;
+            if (_splitters == null || _ignoreResize || !GApp.Options.SplitterPreservesRatio)
+            {
+                return;
+            }
+
             GFrameStyle s = GApp.Options.FrameStyle;
-            if (s == GFrameStyle.Single) return;
-            if (_splitters[0] == null) return; //未初期化時はスキップ
+            if (s == GFrameStyle.Single)
+            {
+                return;
+            }
+
+            if (_splitters[0] == null)
+            {
+                return; //未初期化時はスキップ
+            }
 
             AdjustSplitters();
         }
         private void AdjustSplitters()
         {
-            if (_ignoreSplitterMoveFlag) return;
+            if (_ignoreSplitterMoveFlag)
+            {
+                return;
+            }
 
             _ignoreSplitterMoveFlag = true;
             GFrameStyle s = GApp.Options.FrameStyle;
@@ -472,7 +573,11 @@ namespace Poderosa.Forms
         {
             ConnectionTag ct = GEnv.Connections.ActiveTag;
             RenderProfile prof = ct == null ? GEnv.DefaultRenderProfile : ct.RenderProfile;
-            if (prof == null) prof = GEnv.DefaultRenderProfile;
+            if (prof == null)
+            {
+                prof = GEnv.DefaultRenderProfile;
+            }
+
             double diff = IsVerticalFrameStyle(GApp.Options.FrameStyle) ? prof.Pitch.Width / Width : prof.Pitch.Height / Height;
 
 
@@ -494,13 +599,21 @@ namespace Poderosa.Forms
             if (active_index < pane_count - 1)
             {
                 double n0 = ratio[active_index] + (expand ? diff : -diff);
-                if (n0 < diff * 2 || n0 > (active_index + 1 >= ratio.Length ? 1 : ratio[active_index + 1]) - diff * 2) return; //小さすぎてしまうときは拒否
+                if (n0 < diff * 2 || n0 > (active_index + 1 >= ratio.Length ? 1 : ratio[active_index + 1]) - diff * 2)
+                {
+                    return; //小さすぎてしまうときは拒否
+                }
+
                 ratio[active_index] = n0;
             }
             else
             {
                 double n0 = ratio[active_index - 1] + (expand ? -diff : diff);
-                if (n0 < diff * 2 || n0 > 1 - diff * 2) return;
+                if (n0 < diff * 2 || n0 > 1 - diff * 2)
+                {
+                    return;
+                }
+
                 ratio[active_index - 1] = n0;
             }
             AdjustSplitters();
@@ -574,9 +687,13 @@ namespace Poderosa.Forms
             //Debug.WriteLine("MultiPane ProcessDialogKey " + keyData);
             //おそらくContainerControlが、Shift+カーソルキーを処理してフォーカスを移動させるようだ
             if ((keyData & Keys.Modifiers) == Keys.Shift && GUtil.IsCursorKey(keyData & Keys.KeyCode))
+            {
                 return true;
+            }
             else
+            {
                 return base.ProcessDialogKey(keyData);
+            }
         }
 
         private static int StyleToPaneCount(GFrameStyle style)

@@ -31,15 +31,14 @@ namespace Poderosa
         private static PoderosaContainer _container;
         private static ContainerGlobalCommandTarget _globalCommandTarget;
         private static ContainerInterThreadUIService _interThreadUIService;
-        private static SSHKnownHosts _sshKnownHosts;
         private static ContainerOptions _options;
-        public static IntPtr _globalMutex; //複数起動時の設定ファイル保護
-        private static bool _closingApp; //アプリ終了時に立つフラグ 
+        public static IntPtr _globalMutex;
+        private static bool _closingApp;
         private static bool _closeWithoutSave;
 
 
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
@@ -49,7 +48,10 @@ namespace Poderosa
             {
                 if (args.Length > 0)
                 {
-                    if (InterProcessService.SendShortCutFileNameToExistingInstance(args[0])) return;
+                    if (InterProcessService.SendShortCutFileNameToExistingInstance(args[0]))
+                    {
+                        return;
+                    }
                 }
 
                 Run(args);
@@ -63,7 +65,6 @@ namespace Poderosa
 				GUtil.ReportCriticalError(e);
 #endif
             }
-
         }
 
         private static IntPtr CheckDuplicatedInstance()
@@ -75,37 +76,55 @@ namespace Poderosa
                 return IntPtr.Zero;
             }
             else
+            {
                 return t;
+            }
         }
+
         public static void CreateGFrame(string[] args)
         {
             InitialAction a = new InitialAction();
             _globalMutex = Win32.CreateMutex(IntPtr.Zero, 0, "PoderosaGlobalMutex");
             bool already_exists = (Win32.GetLastError() == Win32.ERROR_ALREADY_EXISTS);
-            if (_globalMutex == IntPtr.Zero) throw new Exception("Global mutex could not open");
+            if (_globalMutex == IntPtr.Zero)
+            {
+                throw new Exception("Global mutex could not open");
+            }
 
             LoadEnvironment(a);
             Init(a, args, already_exists);
             //System.Windows.Forms.Application.Run(_frame);
             //_frame.Show();
 
-            if (!_closeWithoutSave) SaveEnvironment();
+            if (!_closeWithoutSave)
+            {
+                SaveEnvironment();
+            }
+
             GEnv.Terminate();
 
             Win32.CloseHandle(_globalMutex);
         }
+
         public static void Run(string[] args)
         {
             InitialAction a = new InitialAction();
             _globalMutex = Win32.CreateMutex(IntPtr.Zero, 0, "PoderosaGlobalMutex");
             bool already_exists = (Win32.GetLastError() == Win32.ERROR_ALREADY_EXISTS);
-            if (_globalMutex == IntPtr.Zero) throw new Exception("Global mutex could not open");
+            if (_globalMutex == IntPtr.Zero)
+            {
+                throw new Exception("Global mutex could not open");
+            }
 
             LoadEnvironment(a);
             Init(a, args, already_exists);
             //System.Windows.Forms.Application.Run(_frame);
             //_frame.Show();
-            if (!_closeWithoutSave) SaveEnvironment();
+            if (!_closeWithoutSave)
+            {
+                SaveEnvironment();
+            }
+
             GEnv.Terminate();
 
             Win32.CloseHandle(_globalMutex);
@@ -148,7 +167,6 @@ namespace Poderosa
             _container = new PoderosaContainer();
             _globalCommandTarget = new ContainerGlobalCommandTarget();
             _interThreadUIService = new ContainerInterThreadUIService();
-            _sshKnownHosts = new SSHKnownHosts();
 
 
             //この時点ではOSの言語設定に合ったリソースをロードする。起動直前で必要に応じてリロード
@@ -158,7 +176,6 @@ namespace Poderosa
             GEnv.Options = _options;
             GEnv.GlobalCommandTarget = _globalCommandTarget;
             GEnv.InterThreadUIService = _interThreadUIService;
-            GEnv.SSHKnownHosts = _sshKnownHosts;
             string dir = GetOptionDirectory(place);
             LoadConfigFiles(dir, act);
             _options.OptionPreservePlace = place;
@@ -174,7 +191,10 @@ namespace Poderosa
 
         private static void LoadConfigFiles(string dir, InitialAction act)
         {
-            if (Win32.WaitForSingleObject(_globalMutex, 10000) != Win32.WAIT_OBJECT_0) throw new Exception("Global mutex lock error");
+            if (Win32.WaitForSingleObject(_globalMutex, 10000) != Win32.WAIT_OBJECT_0)
+            {
+                throw new Exception("Global mutex lock error");
+            }
 
             try
             {
@@ -211,32 +231,28 @@ namespace Poderosa
                 }
                 finally
                 {
-                    if (!config_loaded) _options.Init();
-                    if (!macro_loaded) _macroManager.SetDefault();
-                    if (reader != null) reader.Close();
+                    if (!config_loaded)
+                    {
+                        _options.Init();
+                    }
+
+                    if (!macro_loaded)
+                    {
+                        _macroManager.SetDefault();
+                    }
+
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
                 }
 
                 GEnv.Options = _options; //これでDefaultRenderProfileが初期化される
-
-                string kh = dir + "ssh_known_hosts";
-                if (File.Exists(kh))
-                {
-                    try
-                    {
-                        _sshKnownHosts.Load(kh);
-                    }
-                    catch (Exception ex)
-                    {
-                        _sshKnownHosts.Clear();
-                        act.AddMessage("Failed to read the 'ssh_known_hosts' file.\n" + ex.Message);
-                    }
-                }
             }
             finally
             {
                 Win32.ReleaseMutex(_globalMutex);
             }
-
         }
 
         private static void ReloadStringResource()
@@ -261,7 +277,10 @@ namespace Poderosa
                 g.SetValue("option-place", EnumDescAttribute.For(typeof(OptionPreservePlace)).GetName(_options.OptionPreservePlace));
             }
 
-            if (Win32.WaitForSingleObject(_globalMutex, 10000) != Win32.WAIT_OBJECT_0) throw new Exception("Global mutex lock error");
+            if (Win32.WaitForSingleObject(_globalMutex, 10000) != Win32.WAIT_OBJECT_0)
+            {
+                throw new Exception("Global mutex lock error");
+            }
 
             try
             {
@@ -269,9 +288,11 @@ namespace Poderosa
                 TextWriter wr = null;
                 try
                 {
-                    if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                    if (!Directory.Exists(dir))
+                    {
+                        Directory.CreateDirectory(dir);
+                    }
 
-                    _sshKnownHosts.WriteTo(dir + "ssh_known_hosts");
                     wr = new StreamWriter(dir + "options.conf", false, Encoding.Default);
                 }
                 catch (Exception ex)
@@ -303,25 +324,34 @@ namespace Poderosa
             {
                 Win32.ReleaseMutex(_globalMutex);
             }
-
         }
         public static string GetOptionDirectory(OptionPreservePlace p)
         {
             if (p == OptionPreservePlace.InstalledDir)
             {
                 string t = AppDomain.CurrentDomain.BaseDirectory;
-                if (Environment.UserName.Length > 0) t += Environment.UserName + "\\";
+                if (Environment.UserName.Length > 0)
+                {
+                    t += Environment.UserName + "\\";
+                }
+
                 return t;
             }
             else
+            {
                 return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\poderosa\\";
+            }
         }
         public static string GetCommonLogDirectory()
         {
             if (GetOptionPreservePlace() == OptionPreservePlace.InstalledDir)
+            {
                 return AppDomain.CurrentDomain.BaseDirectory + "\\";
+            }
             else
+            {
                 return Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\";
+            }
         }
         public static string BaseDirectory
         {
@@ -366,7 +396,10 @@ namespace Poderosa
             RenderProfile newprof = new RenderProfile(opt);
             foreach (ConnectionTag ct in GEnv.Connections)
             {
-                if (ct.RenderProfile == null && ct.AttachedPane != null) ct.AttachedPane.ApplyRenderProfile(newprof);
+                if (ct.RenderProfile == null && ct.AttachedPane != null)
+                {
+                    ct.AttachedPane.ApplyRenderProfile(newprof);
+                }
             }
             GEnv.DefaultRenderProfile = newprof;
             _options = opt;
@@ -433,9 +466,13 @@ namespace Poderosa
                 {
                     RegistryKey g = Registry.CurrentUser.CreateSubKey(GCConst.REGISTRY_PATH);
                     if (g == null)
+                    {
                         return false;
+                    }
                     else
+                    {
                         return true;
+                    }
                 }
                 catch (Exception)
                 {
@@ -448,14 +485,20 @@ namespace Poderosa
         {
             RegistryKey g = Registry.CurrentUser.OpenSubKey(GCConst.REGISTRY_PATH, false);
             if (g == null)
+            {
                 return OptionPreservePlace.InstalledDir;
+            }
             else
             {
                 string v = (string)g.GetValue("option-place");
                 if (v == null || v.Length == 0)
+                {
                     return OptionPreservePlace.InstalledDir;
+                }
                 else
+                {
                     return (OptionPreservePlace)Enum.Parse(typeof(OptionPreservePlace), v);
+                }
             }
         }
 
@@ -498,7 +541,10 @@ namespace Poderosa
             get
             {
                 if (_productWeb == null)
+                {
                     _productWeb = "http://en.poderosa.org/";
+                }
+
                 return _productWeb;
             }
         }
@@ -574,11 +620,17 @@ namespace Poderosa
         public void SetSelectionStatus(SelectionStatus status)
         {
             if (status == SelectionStatus.Auto)
+            {
                 GApp.Frame.StatusBar.IndicateAutoSelectionMode();
+            }
             else if (status == SelectionStatus.Free)
+            {
                 GApp.Frame.StatusBar.IndicateFreeSelectionMode();
+            }
             else
+            {
                 GApp.Frame.StatusBar.ClearSelectionMode();
+            }
         }
 
         public bool MacroIsRunning
@@ -637,7 +689,10 @@ namespace Poderosa
                     if (new string(name, 0, len).IndexOf("Poderosa") != -1)
                     { //Window Classを確認するとか何とかすべきかも、だが
                         success = TryToSend(hwnd, filename);
-                        if (success) break;
+                        if (success)
+                        {
+                            break;
+                        }
                     }
                     hwnd = Win32.FindWindowEx(IntPtr.Zero, hwnd, null, null);
                 }
@@ -645,14 +700,17 @@ namespace Poderosa
 
                 return success;
             }
-
         }
 
         private unsafe static bool TryToSend(IntPtr hwnd, string filename)
         {
             char[] data = filename.ToCharArray();
             char* b = stackalloc char[data.Length + 1];
-            for (int i = 0; i < data.Length; i++) b[i] = data[i];
+            for (int i = 0; i < data.Length; i++)
+            {
+                b[i] = data[i];
+            }
+
             b[data.Length] = '\0';
 
             //string t = ReadFileName(hglobal);

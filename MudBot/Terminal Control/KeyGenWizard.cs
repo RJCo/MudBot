@@ -67,7 +67,9 @@ namespace Poderosa.Forms
             // TODO: InitializeComponent 呼び出しの後に、コンストラクタ コードを追加してください。
             //
             if (!DesignMode)
+            {
                 Width = PanelPitch;
+            }
 
             _confirmLabel.Text = "Form.KeyGenWizard._confirmLabel";
             _passphraseLabel.Text = "Form.KeyGenWizard._passphraseLabel";
@@ -370,9 +372,13 @@ namespace Poderosa.Forms
             get
             {
                 if (_algorithmBox.Text == "RSA")
+                {
                     return PublicKeyAlgorithm.RSA;
+                }
                 else
+                {
                     return PublicKeyAlgorithm.DSA;
+                }
             }
         }
         private bool VerifyPassphrase()
@@ -387,7 +393,9 @@ namespace Poderosa.Forms
                 return DialogResult.Yes == GUtil.AskUserYesNo(this, "Message.KeyGenWizard.ConfirmEmptyPassphrase");
             }
             else
+            {
                 return true;
+            }
         }
 
 
@@ -396,7 +404,10 @@ namespace Poderosa.Forms
             switch (_page)
             {
                 case Page.Parameter:
-                    if (!VerifyPassphrase()) return;
+                    if (!VerifyPassphrase())
+                    {
+                        return;
+                    }
 
                     _parameterPanel.Visible = false;
                     _generationPanel.Visible = true;
@@ -435,7 +446,11 @@ namespace Poderosa.Forms
         }
         protected override void OnClosed(EventArgs args)
         {
-            if (_keyGenThread != null) _keyGenThread.SetAbortFlag();
+            if (_keyGenThread != null)
+            {
+                _keyGenThread.SetAbortFlag();
+            }
+
             base.OnClosed(args);
         }
 
@@ -474,7 +489,10 @@ namespace Poderosa.Forms
                 try
                 {
                     string pp = _passphraseBox.Text;
-                    if (pp.Length == 0) pp = null; //空パスフレーズはnull指定
+                    if (pp.Length == 0)
+                    {
+                        pp = null; //空パスフレーズはnull指定
+                    }
 
                     _resultKey.WritePrivatePartInSECSHStyleFile(new FileStream(dlg.FileName, FileMode.Create, FileAccess.Write), "", pp);
                 }
@@ -569,9 +587,14 @@ namespace Poderosa.Forms
                 _mouseMoveCount = 0;
                 KeyPair kp;
                 if (_algorithm == PublicKeyAlgorithm.DSA)
+                {
                     kp = DSAKeyPair.GenerateNew(_bitCount, _rnd);
+                }
                 else
+                {
                     kp = RSAKeyPair.GenerateNew(_bitCount, _rnd);
+                }
+
                 _parent.SetResultKey(new SSH2UserAuthKey(kp));
                 Win32.PostMessage(_parent.Handle, GConst.WMG_KEYGEN_FINISHED, IntPtr.Zero, IntPtr.Zero);
             }
@@ -586,7 +609,10 @@ namespace Poderosa.Forms
         public void OnMouseMove(object sender, MouseEventArgs args)
         {
 
-            if (_mouseMoveCount == _parent.GenerationBar.Maximum) return;
+            if (_mouseMoveCount == _parent.GenerationBar.Maximum)
+            {
+                return;
+            }
 
             int n = (int)DateTime.Now.Ticks;
             n ^= (args.X << 16);
@@ -594,12 +620,15 @@ namespace Poderosa.Forms
             n ^= (int)0x31031293; //これぐらいやれば十分ばらけるだろう
 
             if (++_mouseMoveCount == _parent.GenerationBar.Maximum)
+            {
                 _rnd.RefreshFinal(n);
+            }
             else
+            {
                 _rnd.Refresh(n);
+            }
 
             _parent.SetProgressValue(_mouseMoveCount);
-
         }
 
         private class KeyGenRandomGenerator : Random
@@ -621,7 +650,10 @@ namespace Poderosa.Forms
                 while (_internalAvailableCount == 0)
                 {
                     Thread.Sleep(100); //同期オブジェクトを使うまでもないだろう
-                    if (_abortFlag) throw new Exception("key generation aborted");
+                    if (_abortFlag)
+                    {
+                        throw new Exception("key generation aborted");
+                    }
                 }
 
                 _internalAvailableCount--;

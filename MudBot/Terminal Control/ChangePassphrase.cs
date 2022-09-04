@@ -202,7 +202,10 @@ namespace Poderosa.Forms
         private void OpenKeyFile(object sender, EventArgs args)
         {
             string fn = GCUtil.SelectPrivateKeyFileByDialog(this);
-            if (fn != null) _tKeyFile.Text = fn;
+            if (fn != null)
+            {
+                _tKeyFile.Text = fn;
+            }
         }
 
         private void OnOK(object sender, EventArgs args)
@@ -213,7 +216,9 @@ namespace Poderosa.Forms
             {
                 SSH2UserAuthKey key = SSH2UserAuthKey.FromSECSHStyleFile(_tKeyFile.Text, _tCurrentPassphrase.Text);
                 if (_tNewPassphrase.Text != _tNewPassphraseAgain.Text)
+                {
                     GUtil.Warning(this, "The new passphrase does not match the confirmation input.");
+                }
                 else
                 {
                     if (_tNewPassphrase.Text.Length > 0 || GUtil.AskUserYesNo(this, "The new passphrase is empty. Do you wish to leave the passphrase empty?") == DialogResult.Yes)

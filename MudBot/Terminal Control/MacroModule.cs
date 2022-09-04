@@ -84,11 +84,17 @@ namespace Poderosa.MacroEnv
                 _path = value;
                 string t = System.IO.Path.GetExtension(_path).ToLower();
                 if (t.EndsWith("js"))
+                {
                     _type = MacroType.JavaScript;
+                }
                 else if (t.EndsWith("exe") || t.EndsWith("dll"))
+                {
                     _type = MacroType.Assembly;
+                }
                 else
+                {
                     _type = MacroType.Unknown;
+                }
             }
         }
         public string Title
@@ -149,7 +155,11 @@ namespace Poderosa.MacroEnv
             _debugMode = GUtil.ParseBool(sec["debug"], false);
             Keys shortcut = Keys.None;
             string t = sec["shortcut"];
-            if (t != null) shortcut = GUtil.ParseKey(t.Split(','));
+            if (t != null)
+            {
+                shortcut = GUtil.ParseKey(t.Split(','));
+            }
+
             GApp.Options.Commands.AddEntry(new Commands.MacroEntry(_title, shortcut & Keys.Modifiers, shortcut & Keys.KeyCode, _index));
             _additionalAssemblies = sec["additional-assemblies"].Split(',');
         }
@@ -161,17 +171,28 @@ namespace Poderosa.MacroEnv
             node["debug"] = _debugMode.ToString();
             Commands.Entry e = GApp.Options.Commands.FindMacroEntry(Index);
             if (e != null)
+            {
                 node["shortcut"] = UILibUtil.KeyString(e.Modifiers, e.Key, ',');
+            }
+
             node["additional-assemblies"] = Concat(_additionalAssemblies);
             parent.AddChild(node);
         }
         private string Concat(string[] v)
         {
-            if (v == null) return "";
+            if (v == null)
+            {
+                return "";
+            }
+
             StringBuilder b = new StringBuilder();
             foreach (string t in v)
             {
-                if (b.Length > 0) b.Append(';');
+                if (b.Length > 0)
+                {
+                    b.Append(';');
+                }
+
                 b.Append(t);
             }
             return b.ToString();
@@ -264,7 +285,9 @@ namespace Poderosa.MacroEnv
                     Assembly asm = MacroUtil.LoadMacroAssembly(mod);
                     MethodInfo ep = asm.EntryPoint;
                     if (ep == null)
+                    {
                         throw new Exception("Message.MacroModule.NoEntryPoint");
+                    }
 
                     _runningMacro = new MacroExecutor(mod, ep);
                     IndicateMacroStarted();
@@ -283,7 +306,11 @@ namespace Poderosa.MacroEnv
 
         public void StopMacro()
         {
-            if (_runningMacro == null) return;
+            if (_runningMacro == null)
+            {
+                return;
+            }
+
             _runningMacro.Abort();
         }
 
@@ -321,7 +348,9 @@ namespace Poderosa.MacroEnv
             GApp.Frame.RefreshConnection(GEnv.Connections.ActiveTag);
             GApp.Frame.MenuMacroStop.Enabled = true;
             if (_macroListener != null)
+            {
                 _macroListener.IndicateMacroStarted();
+            }
         }
         public void IndicateMacroFinished()
         {
@@ -329,22 +358,30 @@ namespace Poderosa.MacroEnv
             GApp.Frame.RefreshConnection(GEnv.Connections.ActiveTag);
             GApp.Frame.MenuMacroStop.Enabled = false;
             if (_macroListener != null)
+            {
                 _macroListener.IndicateMacroFinished();
+            }
 
             foreach (ConnectionTag ct in GEnv.Connections)
+            {
                 ct.Terminal.ClearMacroBuffer();
+            }
         }
 
         public void Load(ConfigNode parent)
         {
             ConfigNode node = parent.FindChildConfigNode("macro");
             if (node == null)
+            {
                 SetDefault();
+            }
             else
             {
                 ConfigNode var = node.FindChildConfigNode("variables");
                 if (var != null)
+                {
                     _environmentVariables = var.InnerHashtable;
+                }
 
                 foreach (ConfigNode ch in node.Children)
                 {
@@ -370,12 +407,17 @@ namespace Poderosa.MacroEnv
                 ConfigNode variables = new ConfigNode("variables");
                 IDictionaryEnumerator de = _environmentVariables.GetEnumerator();
                 while (de.MoveNext())
+                {
                     variables[(string)de.Key] = (string)de.Value;
+                }
+
                 node.AddChild(variables);
             }
 
             foreach (MacroModule mod in _entries)
+            {
                 mod.Save(node);
+            }
 
             parent.AddChild(node);
         }
@@ -416,11 +458,17 @@ namespace Poderosa.MacroEnv
             foreach (MacroModule mod in _entries)
             {
                 if (mod.Path == helloworld)
+                {
                     mod.Title = "Caption.MacroModule.SampleTitleHelloWorld";
+                }
                 else if (mod.Path == autotelnet)
+                {
                     mod.Title = "Caption.MacroModule.SampleTitleAutoTelnet";
+                }
                 else if (mod.Path == openbashrc)
+                {
                     mod.Title = "Caption.MacroModule.SampleTitleOpenBashrc";
+                }
             }
         }
     }

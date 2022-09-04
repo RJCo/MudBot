@@ -162,7 +162,9 @@ namespace Poderosa.Terminal
         private void ProcessByte(byte b)
         {
             if (_terminal.State == ProcessCharResult.Escaping)
+            {
                 _terminal.ProcessChar((char)b);
+            }
             else
             {
                 if (_state == State.Normal && !IsControlChar(b) && _encoding.IsInterestingByte(b))
@@ -175,21 +177,36 @@ namespace Poderosa.Terminal
                     {
                         case State.Normal:
                             if (b == 0x1B) //ESC
+                            {
                                 _state = State.ESC;
+                            }
                             else if (b == 14) //SO
+                            {
                                 ChangeProcessor(_G1ByteProcessor);
+                            }
                             else if (b == 15) //SI
+                            {
                                 ChangeProcessor(_G0ByteProcessor);
+                            }
                             else
+                            {
                                 ConsumeByte(b);
+                            }
+
                             break;
                         case State.ESC:
                             if (b == (byte)'$')
+                            {
                                 _state = State.ESC_DOLLAR;
+                            }
                             else if (b == (byte)'(')
+                            {
                                 _state = State.ESC_BRACKET;
+                            }
                             else if (b == (byte)')')
+                            {
                                 _state = State.ESC_ENDBRACKET;
+                            }
                             else
                             {
                                 ConsumeByte(0x1B);
@@ -199,18 +216,30 @@ namespace Poderosa.Terminal
                             break;
                         case State.ESC_BRACKET:
                             if (b == (byte)'0')
+                            {
                                 _G0ByteProcessor = _DECLineByteProcessor;
+                            }
                             else if (b == (byte)'B' || b == (byte)'J' || b == (byte)'~') //!!lessでssh2architecture.txtを見ていたら来た。詳細はまだ調べていない。
+                            {
                                 _G0ByteProcessor = null;
+                            }
                             else
+                            {
                                 _terminal.UnsupportedCharSetDetected((char)b);
+                            }
+
                             ChangeProcessor(_G0ByteProcessor);
                             break;
                         case State.ESC_ENDBRACKET:
                             if (b == (byte)'0')
+                            {
                                 _G1ByteProcessor = _DECLineByteProcessor;
+                            }
                             else if (b == (byte)'B' || b == (byte)'J' || b == (byte)'~') //!!lessでssh2architecture.txtを見ていたら来た。詳細はまだ調べていない。
+                            {
                                 _G1ByteProcessor = null;
+                            }
+
                             _state = State.Normal;
                             break;
                         case State.ESC_DOLLAR:
@@ -259,7 +288,9 @@ namespace Poderosa.Terminal
                 _terminal.ProcessChar(linechar);
             }
             else
+            {
                 _terminal.ProcessChar(ch);
+            }
         }
 
         private void ChangeProcessor(ByteProcessor newprocessor)
@@ -282,9 +313,13 @@ namespace Poderosa.Terminal
         private void ConsumeByte(byte b)
         {
             if (_currentByteProcessor == null)
+            {
                 _terminal.ProcessChar((char)b);
+            }
             else
+            {
                 _currentByteProcessor(b);
+            }
         }
 
 
@@ -314,7 +349,10 @@ namespace Poderosa.Terminal
 
             char[] x = JIS.GetString(_jisbuf.ToArray()).ToCharArray();
             for (int i = 0; i < x.Length; i++)
+            {
                 _terminal.ProcessChar(x[i]);
+            }
+
             _jisbuf.SetLength(0);
         }
         private void PutMBCSByte(byte b)
@@ -324,7 +362,9 @@ namespace Poderosa.Terminal
             {
                 char ch = _encoding.PutByte(b);
                 if (ch != '\0')
+                {
                     _terminal.ProcessChar(ch);
+                }
             }
             catch (Exception)
             {

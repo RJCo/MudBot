@@ -301,9 +301,17 @@ namespace Poderosa.Terminal
         {
             CommonOptions opt = GEnv.Options;
             _fontName = data["font-name"];
-            if (_fontName == null) _fontName = opt.FontName;
+            if (_fontName == null)
+            {
+                _fontName = opt.FontName;
+            }
+
             _japaneseFontName = data["japanese-font-name"];
-            if (_japaneseFontName == null) _japaneseFontName = opt.JapaneseFontName;
+            if (_japaneseFontName == null)
+            {
+                _japaneseFontName = opt.JapaneseFontName;
+            }
+
             _fontSize = (float)GUtil.ParseInt(data["font-size"], 10);
             _useClearType = GUtil.ParseBool(data["clear-type"], false);
             ClearFont();
@@ -313,7 +321,11 @@ namespace Poderosa.Terminal
                 _forecolor = Color.FromArgb(GUtil.ParseHexInt(data["fore-color"], (int)0xFF000000));
                 _bgcolor = Color.FromArgb(GUtil.ParseHexInt(data["back-color"], (int)0xFFFFFFFF));
             }
-            if (_esColorSet == null) _esColorSet = (EscapesequenceColorSet)opt.ESColorSet.Clone();
+            if (_esColorSet == null)
+            {
+                _esColorSet = (EscapesequenceColorSet)opt.ESColorSet.Clone();
+            }
+
             _esColorSet.Load(data["color-sequence"]);
             ClearBrush();
 
@@ -331,7 +343,10 @@ namespace Poderosa.Terminal
             writer.WriteAttributeString("back-color", _bgcolor.ToArgb().ToString("X"));
             writer.WriteAttributeString("image-file", _backgroundImageFileName);
             writer.WriteAttributeString("bg-style", _imageStyle.ToString());
-            if (!_esColorSet.IsDefault) writer.WriteAttributeString("color-sequence", _esColorSet.Format());
+            if (!_esColorSet.IsDefault)
+            {
+                writer.WriteAttributeString("color-sequence", _esColorSet.Format());
+            }
         }
         public void Export(ConfigNode node)
         {
@@ -343,7 +358,10 @@ namespace Poderosa.Terminal
             node["back-color"] = _bgcolor.ToArgb().ToString("X");
             node["image-file"] = _backgroundImageFileName;
             node["bg-style"] = _imageStyle.ToString();
-            if (!_esColorSet.IsDefault) node["color-sequence"] = _esColorSet.Format();
+            if (!_esColorSet.IsDefault)
+            {
+                node["color-sequence"] = _esColorSet.Format();
+            }
         }
 
         private void ClearFont()
@@ -410,7 +428,11 @@ namespace Poderosa.Terminal
         {
             get
             {
-                if (_brush == null) CreateBrushes();
+                if (_brush == null)
+                {
+                    CreateBrushes();
+                }
+
                 return _brush;
             }
         }
@@ -418,7 +440,11 @@ namespace Poderosa.Terminal
         {
             get
             {
-                if (_bgbrush == null) CreateBrushes();
+                if (_bgbrush == null)
+                {
+                    CreateBrushes();
+                }
+
                 return _bgbrush;
             }
         }
@@ -426,7 +452,11 @@ namespace Poderosa.Terminal
         {
             get
             {
-                if (_font == null) CreateFonts();
+                if (_font == null)
+                {
+                    CreateFonts();
+                }
+
                 return _pitch;
             }
         }
@@ -439,7 +469,9 @@ namespace Poderosa.Terminal
                     _imageLoadIsAttempted = true;
                     _backgroundImage = null;
                     if (_backgroundImageFileName != null && _backgroundImageFileName.Length > 0)
+                    {
                         _backgroundImage = Image.FromFile(_backgroundImageFileName);
+                    }
                 }
 
                 return _backgroundImage;
@@ -455,7 +487,11 @@ namespace Poderosa.Terminal
         {
             get
             {
-                if (_font == null) CreateFonts();
+                if (_font == null)
+                {
+                    CreateFonts();
+                }
+
                 return _chargap;
             }
         }
@@ -469,8 +505,15 @@ namespace Poderosa.Terminal
 
         internal Brush CalcTextBrush(TextDecoration dec)
         {
-            if (_brush == null) CreateBrushes();
-            if (dec == null) return _brush;
+            if (_brush == null)
+            {
+                CreateBrushes();
+            }
+
+            if (dec == null)
+            {
+                return _brush;
+            }
 
             switch (dec.TextColorType)
             {
@@ -486,8 +529,15 @@ namespace Poderosa.Terminal
         }
         internal Color CalcTextColor(TextDecoration dec)
         {
-            if (_brush == null) CreateBrushes();
-            if (dec == null) return _forecolor;
+            if (_brush == null)
+            {
+                CreateBrushes();
+            }
+
+            if (dec == null)
+            {
+                return _forecolor;
+            }
 
             switch (dec.TextColorType)
             {
@@ -503,8 +553,15 @@ namespace Poderosa.Terminal
         }
         internal Brush CalcBackBrush(TextDecoration dec)
         {
-            if (_brush == null) CreateBrushes();
-            if (dec == null) return _bgbrush;
+            if (_brush == null)
+            {
+                CreateBrushes();
+            }
+
+            if (dec == null)
+            {
+                return _bgbrush;
+            }
 
             switch (dec.BackColorType)
             {
@@ -520,8 +577,15 @@ namespace Poderosa.Terminal
         }
         internal Color CalcBackColor(TextDecoration dec)
         {
-            if (_brush == null) CreateBrushes();
-            if (dec == null) return _bgcolor;
+            if (_brush == null)
+            {
+                CreateBrushes();
+            }
+
+            if (dec == null)
+            {
+                return _bgcolor;
+            }
 
             switch (dec.BackColorType)
             {
@@ -546,39 +610,64 @@ namespace Poderosa.Terminal
 
         private FontHandle CalcFontInternal(TextDecoration dec, CharGroup cg, bool ignore_underline)
         {
-            if (_font == null) CreateFonts();
+            if (_font == null)
+            {
+                CreateFonts();
+            }
 
             if (cg == CharGroup.TwoBytes)
             {
-                if (dec == null) return _japaneseFont;
+                if (dec == null)
+                {
+                    return _japaneseFont;
+                }
 
                 if (dec.Bold)
                 {
                     if (!ignore_underline && dec.Underline)
+                    {
                         return _japaneseBoldunderlinefont;
+                    }
                     else
+                    {
                         return _japaneseBoldfont;
+                    }
                 }
                 else if (!ignore_underline && dec.Underline)
+                {
                     return _japaneseUnderlinefont;
+                }
                 else
+                {
                     return _japaneseFont;
+                }
             }
             else
             {
-                if (dec == null) return _font;
+                if (dec == null)
+                {
+                    return _font;
+                }
 
                 if (dec.Bold)
                 {
                     if (!ignore_underline && dec.Underline)
+                    {
                         return _boldunderlinefont;
+                    }
                     else
+                    {
                         return _boldfont;
+                    }
                 }
                 else if (!ignore_underline && dec.Underline)
+                {
                     return _underlinefont;
+                }
                 else
+                {
                     return _font;
+                }
             }
         }
 #endif
@@ -612,7 +701,10 @@ namespace Poderosa.Terminal
         {
             EscapesequenceColorSet newval = new EscapesequenceColorSet();
             for (int i = 0; i < _colors.Length; i++)
+            {
                 newval._colors[i] = _colors[i];
+            }
+
             newval._isDefault = _isDefault;
             return newval;
         }
@@ -626,7 +718,10 @@ namespace Poderosa.Terminal
             set
             {
                 _colors[index] = value;
-                if (_isDefault) _isDefault = GetDefaultColor(index) == value;
+                if (_isDefault)
+                {
+                    _isDefault = GetDefaultColor(index) == value;
+                }
             }
         }
 
@@ -640,11 +735,19 @@ namespace Poderosa.Terminal
         }
         public string Format()
         {
-            if (_isDefault) return "";
+            if (_isDefault)
+            {
+                return "";
+            }
+
             StringBuilder bld = new StringBuilder();
             for (int i = 0; i < _colors.Length; i++)
             {
-                if (i > 0) bld.Append(',');
+                if (i > 0)
+                {
+                    bld.Append(',');
+                }
+
                 bld.Append(_colors[i].Name);
             }
             return bld.ToString();
@@ -652,18 +755,25 @@ namespace Poderosa.Terminal
         public void Load(string value)
         {
             if (value == null)
+            {
                 SetDefault();
+            }
             else
             {
                 string[] cols = value.Split(',');
                 if (cols.Length < _colors.Length)
+                {
                     SetDefault();
+                }
                 else
                 {
                     for (int i = 0; i < cols.Length; i++)
                     {
                         _colors[i] = GUtil.ParseColor(cols[i], Color.Empty);
-                        if (_colors[i].IsEmpty) _colors[i] = GetDefaultColor(i);
+                        if (_colors[i].IsEmpty)
+                        {
+                            _colors[i] = GetDefaultColor(i);
+                        }
                     }
                     _isDefault = false;
                 }

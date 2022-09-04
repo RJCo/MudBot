@@ -432,16 +432,22 @@ namespace Poderosa.Forms
         private void OnApplyRenderProfile(object sender, EventArgs args)
         {
             if (Commit(GApp.Options))
+            {
                 GApp.GlobalCommandTarget.ResetAllRenderProfiles(new RenderProfile(GApp.Options));
+            }
         }
 
         private void AdjustFontDescription(Font ascii, Font japanese)
         {
             int sz = (int)(ascii.Size + 0.5);
             if (GEnv.Options.Language == Language.English || ascii.Name == japanese.Name)
+            {
                 _fontDescription.Text = String.Format("{0},{1}pt", ascii.Name, sz); //Singleをintにキャストすると切り捨てだが、四捨五入にしてほしいので0.5を足してから切り捨てる
+            }
             else
+            {
                 _fontDescription.Text = String.Format("{0}/{1},{2}pt", ascii.Name, japanese.Name, sz);
+            }
         }
 
         private void OnBGColorChanged(object sender, Color e)
@@ -477,9 +483,18 @@ namespace Poderosa.Forms
         private static int CaretTypeToIndex(CaretType t)
         {
             int i = 0;
-            if ((t & CaretType.StyleMask) == CaretType.Box) i = 0;
-            else if ((t & CaretType.StyleMask) == CaretType.Line) i = 1;
-            else if ((t & CaretType.StyleMask) == CaretType.Underline) i = 2;
+            if ((t & CaretType.StyleMask) == CaretType.Box)
+            {
+                i = 0;
+            }
+            else if ((t & CaretType.StyleMask) == CaretType.Line)
+            {
+                i = 1;
+            }
+            else if ((t & CaretType.StyleMask) == CaretType.Underline)
+            {
+                i = 2;
+            }
 
             return i;
         }

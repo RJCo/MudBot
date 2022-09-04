@@ -171,11 +171,16 @@ namespace Poderosa.Forms
 
         public void SelectItem(int index)
         {
-            if ((PageID)index == _currentPageID) return;
+            if ((PageID)index == _currentPageID)
+            {
+                return;
+            }
 
             //現在の内容でCommitできた場合のみ選択されたページを表示
             if (ClosePage())
+            {
                 ShowPage((PageID)index);
+            }
         }
         public void SetHilightingItemIndex(int index)
         {
@@ -194,7 +199,11 @@ namespace Poderosa.Forms
         private bool ClosePage()
         {
             CategoryPanel cp = _pages[(int)_currentPageID];
-            if (!cp.Commit(_options)) return false;
+            if (!cp.Commit(_options))
+            {
+                return false;
+            }
+
             Controls.Remove(cp);
             PanelItemAt(_currentPageID).Selected = false;
             _categoryItems.Invalidate(true);
@@ -204,7 +213,9 @@ namespace Poderosa.Forms
         private void ShowPage(PageID p)
         {
             if (_pages[(int)p] == null)
+            {
                 _pages[(int)p] = CreatePage(p);
+            }
 
             _currentPageID = p;
             CategoryPanel cp = _pages[(int)p];
@@ -230,9 +241,6 @@ namespace Poderosa.Forms
                     break;
                 case PageID.Command:
                     panel = new CommandOptionPanel();
-                    break;
-                case PageID.SSH:
-                    panel = new SSHOptionPanel();
                     break;
                 case PageID.Connection:
                     panel = new ConnectionOptionPanel();
@@ -378,14 +386,22 @@ namespace Poderosa.Forms
         {
             base.OnPaint(e);
             const int image_size = 32; //square image
-            if (_selectedColors == null) CreateColor();
+            if (_selectedColors == null)
+            {
+                CreateColor();
+            }
 
             Graphics g = e.Graphics;
 
             if (_selected)
+            {
                 DrawUtil.DrawRoundRect(g, 0, 0, Width - 1, Height - 1, _selectedColors);
+            }
             else if (_hilight)
+            {
                 DrawUtil.DrawRoundRect(g, 0, 0, Width - 1, Height - 1, _hilightColors);
+            }
+
             g.DrawImage(_image, (Width - image_size) / 2, 0);
             SizeF sz = g.MeasureString(_caption, Font);
             g.DrawString(_caption, Font, _textBrush, (int)(Width - sz.Width) / 2, image_size);
@@ -394,11 +410,17 @@ namespace Poderosa.Forms
         private void AdjustBackColor()
         {
             if (_selected)
+            {
                 BackColor = Color.Orange;
+            }
             else if (_hilight)
+            {
                 BackColor = DrawUtil.LightColor(Color.Orange);
+            }
             else
+            {
                 BackColor = SystemColors.Window;
+            }
         }
 
 

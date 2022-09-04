@@ -123,7 +123,9 @@ namespace Granados.PKI
                 u = u + one;
 
                 if (u.bitCount() <= (primeBits - 1))
+                {
                     continue;
+                }
 
                 for (j = 0; j < table_count; j++)
                 {
@@ -144,26 +146,40 @@ namespace Granados.PKI
                         cur_p = prime_table[j];
                         value = table_u[j];
                         if (value >= cur_p)
+                        {
                             value -= cur_p;
+                        }
+
                         if (value == 0)
+                        {
                             flag = false;
+                        }
+
                         table_u[j] = value + table_q[j];
                     }
                     if (!flag)
+                    {
                         continue;
+                    }
 
                     aux = aux2 * new BigInteger(i);
                     prime = u + aux;
 
                     if (prime.bitCount() > primeBits)
+                    {
                         continue;
+                    }
 
                     if (prime.isProbablePrime(20))
+                    {
                         break;
+                    }
                 }
 
                 if (i < (1 << 24))
+                {
                     break;
+                }
             }
 
             return new BigInteger[] { prime, order };
@@ -190,7 +206,9 @@ namespace Granados.PKI
                 generator = generator % modulo;
                 generator = generator.modPow(t, modulo);
                 if (generator != one)
+                {
                     break;
+                }
             }
 
             aux = generator.modPow(order, modulo);
@@ -277,7 +295,10 @@ namespace Granados.PKI
             BigInteger v = ((_g.modPow(u1, _p) * _y.modPow(u2, _p)) % _p) % _q;
             //Debug.WriteLine(DebugUtil.DumpByteArray(v.GetBytes()));
             //Debug.WriteLine(DebugUtil.DumpByteArray(r.GetBytes()));
-            if (v != r) throw new VerifyException("Failed to verify");
+            if (v != r)
+            {
+                throw new VerifyException("Failed to verify");
+            }
         }
     }
 }
