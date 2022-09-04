@@ -35,7 +35,7 @@ namespace Poderosa.Communication
         internal abstract bool DataAvailable { get; }
         internal abstract void RepeatAsyncRead(IDataReceiver receiver);
     }
-    
+
     internal class PlainGuevaraSocket : AbstractGuevaraSocket
     {
         private Socket _socket;

@@ -3,7 +3,6 @@
 * $Id: Paste.cs,v 1.2 2005/04/20 08:45:47 okajima Exp $
 */
 using Poderosa.Connection;
-using Poderosa.ConnectionParam;
 using System;
 using System.Collections;
 using System.Diagnostics;

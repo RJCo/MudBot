@@ -3,7 +3,6 @@
 * $Id: VT100.cs,v 1.2 2005/04/20 08:45:48 okajima Exp $
 */
 using Poderosa.Connection;
-using Poderosa.ConnectionParam;
 using Poderosa.Text;
 using Poderosa.UI;
 using System;

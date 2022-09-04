@@ -11,7 +11,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
 using EnumDescAttributeT = Poderosa.Toolkit.EnumDescAttribute;
 
