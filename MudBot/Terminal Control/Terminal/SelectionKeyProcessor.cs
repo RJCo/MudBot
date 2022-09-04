@@ -13,46 +13,27 @@ namespace Poderosa.Text
     /// </summary>
     internal class SelectionKeyProcessor
     {
-        private TerminalPane _owner;
         //現在のカーソル位置
-        private GLine _currentLine;
         private TerminalDocument _document;
-        private int _caretPos;
 
-        public TerminalPane Owner
-        {
-            get
-            {
-                return _owner;
-            }
-        }
-        public GLine CurrentLine
-        {
-            get
-            {
-                return _currentLine;
-            }
-        }
+        public TerminalPane Owner { get; }
 
-        public int CaretPos
-        {
-            get
-            {
-                return _caretPos;
-            }
-        }
+        public GLine CurrentLine { get; private set; }
+
+        public int CaretPos { get; private set; }
+
         //表示上のキャレット位置。行の右端よりも向こうに表示しないようにするため
         public int UICaretPos
         {
             get
             {
-                if (_caretPos > _currentLine.CharLength)
+                if (CaretPos > CurrentLine.CharLength)
                 {
-                    return _currentLine.CharLength;
+                    return CurrentLine.CharLength;
                 }
                 else
                 {
-                    return _caretPos;
+                    return CaretPos;
                 }
             }
         }
@@ -60,11 +41,11 @@ namespace Poderosa.Text
 
         public SelectionKeyProcessor(TerminalPane owner, TerminalDocument doc, GLine line, int pos)
         {
-            _owner = owner;
+            Owner = owner;
             _document = doc;
             Debug.Assert(line != null);
-            _currentLine = line;
-            _caretPos = pos;
+            CurrentLine = line;
+            CaretPos = pos;
         }
 
         public bool ProcessKey(Keys key)
@@ -75,13 +56,13 @@ namespace Poderosa.Text
             bool processed = false;
 
             //移動先の行と桁の計算
-            GLine nextLine = _currentLine;
+            GLine nextLine = CurrentLine;
             _document.InvalidateLine(nextLine.ID);
             if (body == Keys.Up)
             {
-                if (_currentLine.PrevLine != null)
+                if (CurrentLine.PrevLine != null)
                 {
-                    nextLine = _currentLine.PrevLine;
+                    nextLine = CurrentLine.PrevLine;
                 }
 
                 _document.InvalidateLine(nextLine.ID);
@@ -89,9 +70,9 @@ namespace Poderosa.Text
             }
             else if (body == Keys.Down)
             {
-                if (_currentLine.NextLine != null)
+                if (CurrentLine.NextLine != null)
                 {
-                    nextLine = _currentLine.NextLine;
+                    nextLine = CurrentLine.NextLine;
                 }
 
                 _document.InvalidateLine(nextLine.ID);
@@ -99,20 +80,20 @@ namespace Poderosa.Text
             }
             else if (body == Keys.PageUp)
             {
-                int n = _currentLine.ID - _owner.Connection.TerminalHeight;
+                int n = CurrentLine.ID - Owner.Connection.TerminalHeight;
                 nextLine = n <= _document.FirstLineNumber ? _document.FirstLine : _document.FindLine(n);
                 _document.InvalidateAll();
                 processed = true;
             }
             else if (body == Keys.PageDown)
             {
-                int n = _currentLine.ID + _owner.Connection.TerminalHeight;
+                int n = CurrentLine.ID + Owner.Connection.TerminalHeight;
                 nextLine = n >= _document.LastLineNumber ? _document.LastLine : _document.FindLine(n);
                 _document.InvalidateAll();
                 processed = true;
             }
 
-            int nextPos = _caretPos;
+            int nextPos = CaretPos;
             if (body == Keys.Home)
             {
                 nextPos = 0;
@@ -120,7 +101,7 @@ namespace Poderosa.Text
             }
             else if (body == Keys.End)
             {
-                nextPos = _currentLine.CharLength - 1;
+                nextPos = CurrentLine.CharLength - 1;
                 processed = true;
             }
             else if (body == Keys.Left)
@@ -129,7 +110,7 @@ namespace Poderosa.Text
                 {
                     if (control)
                     {
-                        nextPos = _currentLine.FindPrevWordBreak(nextPos - 1) + 1;
+                        nextPos = CurrentLine.FindPrevWordBreak(nextPos - 1) + 1;
                     }
                     else
                     {
@@ -140,11 +121,11 @@ namespace Poderosa.Text
             }
             else if (body == Keys.Right)
             {
-                if (nextPos < _currentLine.CharLength - 1)
+                if (nextPos < CurrentLine.CharLength - 1)
                 {
                     if (control)
                     {
-                        nextPos = _currentLine.FindNextWordBreak(nextPos + 1);
+                        nextPos = CurrentLine.FindNextWordBreak(nextPos + 1);
                     }
                     else
                     {
@@ -160,7 +141,7 @@ namespace Poderosa.Text
             {
                 if (sel.IsEmpty)
                 {
-                    sel.StartSelection(_owner, _currentLine, _caretPos, RangeType.Char, -1, -1);
+                    sel.StartSelection(Owner, CurrentLine, CaretPos, RangeType.Char, -1, -1);
                 }
 
                 sel.ExpandTo(nextLine, nextPos, RangeType.Char);
@@ -181,8 +162,8 @@ namespace Poderosa.Text
             }
 
             Debug.Assert(nextLine != null);
-            _currentLine = nextLine;
-            _caretPos = nextPos;
+            CurrentLine = nextLine;
+            CaretPos = nextPos;
             return processed;
         }
     }

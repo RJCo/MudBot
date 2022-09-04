@@ -98,7 +98,7 @@ namespace Poderosa.Log
         public abstract void Comment(string comment);
         public virtual void PacketDelimiter() { }
         public virtual void TerminalResized(int width, int height) { }
-        public virtual bool IsActive { get { return true; } } //Activeを返すのがデフォルトの挙動
+        public virtual bool IsActive => true; //Activeを返すのがデフォルトの挙動
     }
 
     internal class NullTextLogger : ITerminalTextLogger
@@ -112,13 +112,7 @@ namespace Poderosa.Log
         public void Flush() { }
         public void Close() { }
         public void Comment(string comment) { }
-        public bool IsActive
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsActive => false;
         public void PacketDelimiter() { }
         public void TerminalResized(int width, int height) { }
         public void WriteLine(GLine line) { }
@@ -129,13 +123,7 @@ namespace Poderosa.Log
         public void Comment(string comment) { }
         public void Flush() { }
         public void Close() { }
-        public bool IsActive
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsActive => false;
     }
 
     internal class BinaryLogger : ITerminalBinaryLogger
@@ -163,13 +151,7 @@ namespace Poderosa.Log
         {
             _strm.Close();
         }
-        public bool IsActive
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsActive => true;
     }
 
     internal class DefaultLogger : TerminalLoggerBase

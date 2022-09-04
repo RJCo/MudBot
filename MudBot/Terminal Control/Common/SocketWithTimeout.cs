@@ -33,7 +33,7 @@ namespace Poderosa.Communication
             _port = port;
             _socks = null;
 
-            UI.UILibUtil.CreateThread(new ThreadStart(Run)).Start();
+            UI.UILibUtil.CreateThread(Run).Start();
         }
         public void AsyncConnect(ISocketWithTimeoutClient client, Socks socks)
         {
@@ -42,7 +42,7 @@ namespace Poderosa.Communication
             _event = null;
             _socks = socks;
 
-            UI.UILibUtil.CreateThread(new ThreadStart(Run)).Start();
+            UI.UILibUtil.CreateThread(Run).Start();
         }
 
 
@@ -228,45 +228,17 @@ namespace Poderosa.Communication
 
         public Socks Socks
         {
-            get
-            {
-                return _socks;
-            }
-            set
-            {
-                _socks = value;
-            }
+            get => _socks;
+            set => _socks = value;
         }
 
-        public bool Succeeded
-        {
-            get
-            {
-                return _succeeded;
-            }
-        }
-        public bool Interrupted
-        {
-            get
-            {
-                return _interrupted;
-            }
-        }
+        public bool Succeeded => _succeeded;
 
-        public string ErrorMessage
-        {
-            get
-            {
-                return _errorMessage;
-            }
-        }
-        public IPAddress IPAddress
-        {
-            get
-            {
-                return _connectedAddress;
-            }
-        }
+        public bool Interrupted => _interrupted;
+
+        public string ErrorMessage => _errorMessage;
+
+        public IPAddress IPAddress => _connectedAddress;
 
         private static bool SocksApplicapable(string nss, IPAddressSet address)
         {

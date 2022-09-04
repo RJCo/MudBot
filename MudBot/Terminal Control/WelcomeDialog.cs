@@ -15,8 +15,6 @@ namespace Poderosa.Forms
     /// </summary>
     internal class WelcomeDialog : Form
     {
-        private CID _cid;
-
         private Label _welcomeMessage;
         private RadioButton _optNewConnection;
         private RadioButton _optCygwin;
@@ -84,7 +82,7 @@ namespace Poderosa.Forms
             _okButton.Location = new Point(168, 184);
             _okButton.Name = "_okButton";
             _okButton.TabIndex = 5;
-            _okButton.Click += new EventHandler(OnOK);
+            _okButton.Click += OnOK;
             // 
             // _checkNext
             // 
@@ -116,17 +114,11 @@ namespace Poderosa.Forms
             ResumeLayout(false);
 
         }
-        public CID CID
-        {
-            get
-            {
-                return _cid;
-            }
-        }
+        public CID CID { get; private set; }
 
         public WelcomeDialog()
         {
-            _cid = CID.NOP;
+            CID = CID.NOP;
             InitializeComponent();
             InitializeText();
             // 
@@ -150,7 +142,7 @@ namespace Poderosa.Forms
         {
             if (_optNewConnection.Checked)
             {
-                _cid = CID.NewConnection;
+                CID = CID.NewConnection;
             }
             else if (_optConvert.Checked)
             {

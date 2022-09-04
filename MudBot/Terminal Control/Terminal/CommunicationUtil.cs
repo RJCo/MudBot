@@ -34,13 +34,7 @@ namespace Poderosa.Communication
             _result = new ConnectionTag(r);
         }
 
-        protected override object Result
-        {
-            get
-            {
-                return _result;
-            }
-        }
+        protected override object Result => _result;
     }
 
     public class CommunicationUtil

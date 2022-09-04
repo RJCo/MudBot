@@ -26,15 +26,8 @@ namespace Poderosa
     internal class GApp
     {
         public static GFrame _frame;
-        private static ConnectionHistory _history;
-        private static MacroManager _macroManager;
         private static PoderosaContainer _container;
-        private static ContainerGlobalCommandTarget _globalCommandTarget;
-        private static ContainerInterThreadUIService _interThreadUIService;
-        private static ContainerOptions _options;
         public static IntPtr _globalMutex;
-        private static bool _closingApp;
-        private static bool _closeWithoutSave;
 
 
         [STAThread]
@@ -96,7 +89,7 @@ namespace Poderosa
             //System.Windows.Forms.Application.Run(_frame);
             //_frame.Show();
 
-            if (!_closeWithoutSave)
+            if (!CloseWithoutSave)
             {
                 SaveEnvironment();
             }
@@ -120,7 +113,7 @@ namespace Poderosa
             Init(a, args, already_exists);
             //System.Windows.Forms.Application.Run(_frame);
             //_frame.Show();
-            if (!_closeWithoutSave)
+            if (!CloseWithoutSave)
             {
                 SaveEnvironment();
             }
@@ -139,21 +132,21 @@ namespace Poderosa
             }
 
             _frame = new GFrame(act);
-            _globalCommandTarget.Init(_frame);
+            GlobalCommandTarget.Init(_frame);
 
-            if (already_exists && _options.FrameState == FormWindowState.Normal)
+            if (already_exists && Options.FrameState == FormWindowState.Normal)
             {
-                Rectangle rect = _options.FramePosition;
+                Rectangle rect = Options.FramePosition;
                 rect.Location += new Size(24, 24);
-                _options.FramePosition = rect;
+                Options.FramePosition = rect;
             }
 
-            _frame.DesktopBounds = _options.FramePosition;
-            _frame.WindowState = _options.FrameState;
+            _frame.DesktopBounds = Options.FramePosition;
+            _frame.WindowState = Options.FrameState;
             _frame.AdjustMRUMenu();
 
             //キャッチできなかったエラーの補足
-            Application.ThreadException += new ThreadExceptionEventHandler(OnThreadException);
+            Application.ThreadException += OnThreadException;
         }
 
         public static void LoadEnvironment(InitialAction act)
@@ -161,29 +154,29 @@ namespace Poderosa
             ThemeUtil.Init();
 
             OptionPreservePlace place = GetOptionPreservePlace();
-            _options = new ContainerOptions();
-            _history = new ConnectionHistory();
-            _macroManager = new MacroManager();
+            Options = new ContainerOptions();
+            ConnectionHistory = new ConnectionHistory();
+            MacroManager = new MacroManager();
             _container = new PoderosaContainer();
-            _globalCommandTarget = new ContainerGlobalCommandTarget();
-            _interThreadUIService = new ContainerInterThreadUIService();
+            GlobalCommandTarget = new ContainerGlobalCommandTarget();
+            InterThreadUIService = new ContainerInterThreadUIService();
 
 
             //この時点ではOSの言語設定に合ったリソースをロードする。起動直前で必要に応じてリロード
             ReloadStringResource();
 
             GEnv.Init(_container);
-            GEnv.Options = _options;
-            GEnv.GlobalCommandTarget = _globalCommandTarget;
-            GEnv.InterThreadUIService = _interThreadUIService;
+            GEnv.Options = Options;
+            GEnv.GlobalCommandTarget = GlobalCommandTarget;
+            GEnv.InterThreadUIService = InterThreadUIService;
             string dir = GetOptionDirectory(place);
             LoadConfigFiles(dir, act);
-            _options.OptionPreservePlace = place;
+            Options.OptionPreservePlace = place;
 
             //ここまできたら言語設定をチェックし、必要なら読み直し
-            if (GUtil.CurrentLanguage != _options.Language)
+            if (GUtil.CurrentLanguage != Options.Language)
             {
-                Thread.CurrentThread.CurrentUICulture = _options.Language == Language.Japanese ? new CultureInfo("ja") : CultureInfo.InvariantCulture;
+                Thread.CurrentThread.CurrentUICulture = Options.Language == Language.Japanese ? new CultureInfo("ja") : CultureInfo.InvariantCulture;
                 ReloadStringResource();
             }
 
@@ -213,10 +206,10 @@ namespace Poderosa
                             ConfigNode root = new ConfigNode("root", reader).FindChildConfigNode("poderosa");
                             if (root != null)
                             {
-                                _options.Load(root);
+                                Options.Load(root);
                                 config_loaded = true;
-                                _history.Load(root);
-                                _macroManager.Load(root);
+                                ConnectionHistory.Load(root);
+                                MacroManager.Load(root);
                                 macro_loaded = true;
                             }
                         }
@@ -233,12 +226,12 @@ namespace Poderosa
                 {
                     if (!config_loaded)
                     {
-                        _options.Init();
+                        Options.Init();
                     }
 
                     if (!macro_loaded)
                     {
-                        _macroManager.SetDefault();
+                        MacroManager.SetDefault();
                     }
 
                     if (reader != null)
@@ -247,7 +240,7 @@ namespace Poderosa
                     }
                 }
 
-                GEnv.Options = _options; //これでDefaultRenderProfileが初期化される
+                GEnv.Options = Options; //これでDefaultRenderProfileが初期化される
             }
             finally
             {
@@ -262,8 +255,8 @@ namespace Poderosa
 
         private static void InitConfig()
         {
-            _options.Init();
-            _macroManager.SetDefault();
+            Options.Init();
+            MacroManager.SetDefault();
         }
 
 
@@ -274,7 +267,7 @@ namespace Poderosa
             if (IsRegistryWritable)
             {
                 RegistryKey g = Registry.CurrentUser.CreateSubKey(GCConst.REGISTRY_PATH);
-                g.SetValue("option-place", EnumDescAttribute.For(typeof(OptionPreservePlace)).GetName(_options.OptionPreservePlace));
+                g.SetValue("option-place", EnumDescAttribute.For(typeof(OptionPreservePlace)).GetName(Options.OptionPreservePlace));
             }
 
             if (Win32.WaitForSingleObject(_globalMutex, 10000) != Win32.WAIT_OBJECT_0)
@@ -284,7 +277,7 @@ namespace Poderosa
 
             try
             {
-                string dir = GetOptionDirectory(_options.OptionPreservePlace);
+                string dir = GetOptionDirectory(Options.OptionPreservePlace);
                 TextWriter wr = null;
                 try
                 {
@@ -306,9 +299,9 @@ namespace Poderosa
                     try
                     {
                         ConfigNode node = new ConfigNode("poderosa");
-                        _options.Save(node);
-                        _history.Save(node);
-                        _macroManager.Save(node);
+                        Options.Save(node);
+                        ConnectionHistory.Save(node);
+                        MacroManager.Save(node);
 
                         wr.WriteLine(GCConst.CONFIG_HEADER);
                         node.WriteTo(wr);
@@ -353,37 +346,21 @@ namespace Poderosa
                 return Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\";
             }
         }
-        public static string BaseDirectory
-        {
-            get
-            {
-                return AppDomain.CurrentDomain.BaseDirectory;
-            }
-        }
+        public static string BaseDirectory => AppDomain.CurrentDomain.BaseDirectory;
 
 
-        public static ConnectionHistory ConnectionHistory
-        {
-            get
-            {
-                return _history;
-            }
-        }
-        public static MacroManager MacroManager
-        {
-            get
-            {
-                return _macroManager;
-            }
-        }
+        public static ConnectionHistory ConnectionHistory { get; private set; }
+
+        public static MacroManager MacroManager { get; private set; }
+
         public static void UpdateOptions(ContainerOptions opt)
         {
             GEnv.Options = opt;
-            _frame.ApplyOptions(_options, opt);
-            _history.LimitCount(opt.MRUSize);
+            _frame.ApplyOptions(Options, opt);
+            ConnectionHistory.LimitCount(opt.MRUSize);
             _frame.AdjustMRUMenu();
 
-            if (_options.Language != opt.Language)
+            if (Options.Language != opt.Language)
             {
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
                 ReloadStringResource();
@@ -401,60 +378,19 @@ namespace Poderosa
                 }
             }
             GEnv.DefaultRenderProfile = newprof;
-            _options = opt;
+            Options = opt;
         }
 
-        internal static ContainerInterThreadUIService InterThreadUIService
-        {
-            get
-            {
-                return _interThreadUIService;
-            }
-        }
+        internal static ContainerInterThreadUIService InterThreadUIService { get; private set; }
 
-        internal static GFrame Frame
-        {
-            get
-            {
-                return _frame;
-            }
-        }
-        internal static ContainerOptions Options
-        {
-            get
-            {
-                return _options;
-            }
-        }
-        internal static ContainerGlobalCommandTarget GlobalCommandTarget
-        {
-            get
-            {
-                return _globalCommandTarget;
-            }
-        }
-        public static bool ClosingApp
-        {
-            get
-            {
-                return _closingApp;
-            }
-            set
-            {
-                _closingApp = value;
-            }
-        }
-        public static bool CloseWithoutSave
-        {
-            get
-            {
-                return _closeWithoutSave;
-            }
-            set
-            {
-                _closeWithoutSave = value;
-            }
-        }
+        internal static GFrame Frame => _frame;
+        internal static ContainerOptions Options { get; private set; }
+
+        internal static ContainerGlobalCommandTarget GlobalCommandTarget { get; private set; }
+
+        public static bool ClosingApp { get; set; }
+
+        public static bool CloseWithoutSave { get; set; }
 
 
         public static bool IsRegistryWritable
@@ -575,21 +511,9 @@ namespace Poderosa
             GApp.Frame.OnDragEnterInternal(args);
         }
 
-        public Size TerminalSizeForNextConnection
-        {
-            get
-            {
-                return GApp.Frame.PaneContainer.TerminalSizeForNextConnection;
-            }
-        }
+        public Size TerminalSizeForNextConnection => GApp.Frame.PaneContainer.TerminalSizeForNextConnection;
 
-        public int PositionForNextConnection
-        {
-            get
-            {
-                return GApp.Frame.PaneContainer.PositionForNextConnection;
-            }
-        }
+        public int PositionForNextConnection => GApp.Frame.PaneContainer.PositionForNextConnection;
 
 
         public void IndicateBell()
@@ -632,13 +556,7 @@ namespace Poderosa
             }
         }
 
-        public bool MacroIsRunning
-        {
-            get
-            {
-                return GApp.MacroManager.MacroIsRunning;
-            }
-        }
+        public bool MacroIsRunning => GApp.MacroManager.MacroIsRunning;
 
         public CommandResult ProcessShortcutKey(Keys key)
         {
@@ -651,21 +569,9 @@ namespace Poderosa
         }
 
 
-        public IntPtr Handle
-        {
-            get
-            {
-                return GApp.Frame.Handle;
-            }
-        }
+        public IntPtr Handle => GApp.Frame.Handle;
 
-        public bool IgnoreErrors
-        {
-            get
-            {
-                return GApp.ClosingApp;
-            }
-        }
+        public bool IgnoreErrors => GApp.ClosingApp;
     }
     internal class InterProcessService
     {
@@ -701,7 +607,7 @@ namespace Poderosa
             }
         }
 
-        private unsafe static bool TryToSend(IntPtr hwnd, string filename)
+        private static unsafe bool TryToSend(IntPtr hwnd, string filename)
         {
             char[] data = filename.ToCharArray();
             char* b = stackalloc char[data.Length + 1];
@@ -729,7 +635,6 @@ namespace Poderosa
     internal class InitialAction
     {
         private ArrayList _messages;  //message boxを出すべき内容
-        private string _shortcutFile; //最初に開くショートカットファイル：不要なときはnull
 
         public InitialAction()
         {
@@ -739,23 +644,8 @@ namespace Poderosa
         {
             _messages.Add(msg);
         }
-        public string ShortcutFile
-        {
-            get
-            {
-                return _shortcutFile;
-            }
-            set
-            {
-                _shortcutFile = value;
-            }
-        }
-        public IEnumerable Messages
-        {
-            get
-            {
-                return _messages;
-            }
-        }
+        public string ShortcutFile { get; set; }
+
+        public IEnumerable Messages => _messages;
     }
 }

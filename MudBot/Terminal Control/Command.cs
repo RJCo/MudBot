@@ -83,15 +83,6 @@ namespace Poderosa.Config
 
         // Activation
         ActivateConnection0,
-        ActivateConnection1,
-        ActivateConnection2,
-        ActivateConnection3,
-        ActivateConnection4,
-        ActivateConnection5,
-        ActivateConnection6,
-        ActivateConnection7,
-        ActivateConnection8,
-        ActivateConnection9,
         ActivateConnectionLast,
 
         //Special
@@ -131,41 +122,22 @@ namespace Poderosa.Config
 
         public class Entry
         {
-            private Category _category;
-            private CID _cid;
             private string _description;
-            private Target _target;
-            private Keys _modifiers;
-            private Keys _key;
-            private Keys _defaultModifiers;
-            private Keys _defaultKey;
 
             public Entry Clone()
             {
                 return MemberwiseClone() as Entry;
             }
 
-            public Category Category
-            {
-                get
-                {
-                    return _category;
-                }
-            }
+            public Category Category { get; }
 
-            public CID CID
-            {
-                get
-                {
-                    return _cid;
-                }
-            }
+            public CID CID { get; }
 
             public string Description
             {
                 get
                 {
-                    if (_category == Category.Macro)
+                    if (Category == Category.Macro)
                     {
                         return _description;
                     }
@@ -176,103 +148,42 @@ namespace Poderosa.Config
                 }
             }
 
-            public Keys Modifiers
-            {
-                get
-                {
-                    return _modifiers;
-                }
-                set
-                {
-                    _modifiers = value;
-                }
-            }
+            public Keys Modifiers { get; set; }
 
-            public Keys Key
-            {
-                get
-                {
-                    return _key;
-                }
-                set
-                {
-                    _key = value;
-                }
-            }
+            public Keys Key { get; set; }
 
-            public Keys DefaultModifiers
-            {
-                get
-                {
-                    return _defaultModifiers;
-                }
-            }
+            public Keys DefaultModifiers { get; }
 
-            public Keys DefaultKey
-            {
-                get
-                {
-                    return _defaultKey;
-                }
-            }
+            public Keys DefaultKey { get; }
 
-            public Target Target
-            {
-                get
-                {
-                    return _target;
-                }
-                set
-                {
-                    _target = value;
-                }
-            }
+            public Target Target { get; set; }
 
-            public string KeyDisplayString
-            {
-                get
-                {
-                    return UILibUtil.KeyString(_modifiers, _key, '+');
-                }
-            }
+            public string KeyDisplayString => UILibUtil.KeyString(Modifiers, Key, '+');
 
-            public bool KeyIsModified
-            {
-                get
-                {
-                    return _key != _defaultKey || _modifiers != _defaultModifiers;
-                }
-            }
+            public bool KeyIsModified => Key != DefaultKey || Modifiers != DefaultModifiers;
 
             public Entry(Category cat, Target target, CID cid, string desc, Keys mod, Keys key)
             {
-                _category = cat;
-                _target = target;
-                _cid = cid;
+                Category = cat;
+                Target = target;
+                CID = cid;
                 _description = desc;
-                _modifiers = mod;
-                _key = key;
-                _defaultModifiers = mod;
-                _defaultKey = key;
+                Modifiers = mod;
+                Key = key;
+                DefaultModifiers = mod;
+                DefaultKey = key;
             }
 
         }
 
         public class MacroEntry : Entry
         {
-            private int _index;
             public MacroEntry(string desc, Keys mod, Keys key, int index) : base(Category.Macro, Target.Global, CID.ExecMacro, desc, mod, key)
             {
-                _index = index;
+                Index = index;
             }
 
-            public int Index
-            {
-                get
-                {
-                    return _index;
-                }
-            }
+            public int Index { get; }
         }
 
         protected Entry[] _IDToEntry;
@@ -397,10 +308,10 @@ namespace Poderosa.Config
         private void InitFixedCommands()
         {
             _fixedEntries.Clear();
-            int count = (int)(CID.ActivateConnectionLast - CID.ActivateConnection0);
+            int count = CID.ActivateConnectionLast - CID.ActivateConnection0;
             for (int i = 0; i < count; i++)
             {
-                AddKeyMap(Category.Fixed, Target.Global, (CID)(CID.ActivateConnection0 + i), "", Keys.Alt, i == 9 ? Keys.D0 : Keys.D1 + i);
+                AddKeyMap(Category.Fixed, Target.Global, CID.ActivateConnection0 + i, "", Keys.Alt, i == 9 ? Keys.D0 : Keys.D1 + i);
             }
         }
 
@@ -487,12 +398,6 @@ namespace Poderosa.Config
         }
 
         protected void AddKeyMap(Category cat, Target target, CID id, string desc, Keys mod, Keys key)
-        {
-            Entry e = new Entry(cat, target, id, desc, mod, key);
-            AddEntry(e);
-        }
-
-        protected void AddKeyMap(Category cat, Target target, CID id, string desc, Keys mod, Keys key, int param)
         {
             Entry e = new Entry(cat, target, id, desc, mod, key);
             AddEntry(e);

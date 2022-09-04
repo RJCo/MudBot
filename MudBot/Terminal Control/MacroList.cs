@@ -17,7 +17,7 @@ namespace Poderosa.Forms
     /// <summary>
     /// MacroList ‚ÌŠT—v‚Ìà–¾‚Å‚·B
     /// </summary>
-    internal class MacroList : Form, IMacroEventListener
+    internal sealed class MacroList : Form, IMacroEventListener
     {
         private Button _runButton;
         private Button _stopButton;

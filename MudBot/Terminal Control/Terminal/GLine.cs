@@ -13,44 +13,11 @@ namespace Poderosa.Text
 {
     internal class RenderParameter
     {
-        private int _linefrom;
-        private int _linecount;
-        private Rectangle _targetRect;
+        public int LineFrom { get; set; }
 
-        public int LineFrom
-        {
-            get
-            {
-                return _linefrom;
-            }
-            set
-            {
-                _linefrom = value;
-            }
-        }
+        public int LineCount { get; set; }
 
-        public int LineCount
-        {
-            get
-            {
-                return _linecount;
-            }
-            set
-            {
-                _linecount = value;
-            }
-        }
-        public Rectangle TargetRect
-        {
-            get
-            {
-                return _targetRect;
-            }
-            set
-            {
-                _targetRect = value;
-            }
-        }
+        public Rectangle TargetRect { get; set; }
     }
 
     /// <summary>
@@ -75,11 +42,6 @@ namespace Poderosa.Text
     /// </summary>
     public class GWord
     {
-        private TextDecoration _decoration;
-        private int _offset;
-        private CharGroup _charGroup;
-        private GWord _next;
-
         //しばしば参照するのでキャッシュする値
         internal int nextOffsetCache;
         internal int displayLengthCache;
@@ -87,48 +49,17 @@ namespace Poderosa.Text
         /// <summary>
         /// 表示用の装飾
         /// </summary>
-        internal TextDecoration Decoration
-        {
-            get
-            {
-                return _decoration;
-            }
-        }
+        internal TextDecoration Decoration { get; }
+
         /// <summary>
         /// 所属するGLineの中で何文字目から始まっているか
         /// </summary>
-        public int Offset
-        {
-            get
-            {
-                return _offset;
-            }
-        }
+        public int Offset { get; }
 
         ///次のWord
-        public GWord Next
-        {
-            get
-            {
-                return _next;
-            }
-            set
-            {
-                _next = value;
-            }
-        }
+        public GWord Next { get; set; }
 
-        public CharGroup CharGroup
-        {
-            get
-            {
-                return _charGroup;
-            }
-            set
-            {
-                _charGroup = value;
-            }
-        }
+        public CharGroup CharGroup { get; set; }
 
         /// <summary>
         /// 文字列、デコレーション、オフセットを指定するコンストラクタ。TypeはNormalになる。
@@ -136,10 +67,10 @@ namespace Poderosa.Text
         internal GWord(TextDecoration d, int o, CharGroup chargroup)
         {
             Debug.Assert(d != null);
-            _offset = o;
-            _decoration = d;
-            _next = null;
-            _charGroup = chargroup;
+            Offset = o;
+            Decoration = d;
+            Next = null;
+            CharGroup = chargroup;
             nextOffsetCache = -1;
             displayLengthCache = -1;
         }
@@ -147,15 +78,15 @@ namespace Poderosa.Text
         //Nextの値以外をコピーする
         public GWord StandAloneClone()
         {
-            return new GWord(_decoration, _offset, _charGroup);
+            return new GWord(Decoration, Offset, CharGroup);
         }
 
         public GWord DeepClone()
         {
-            GWord w = new GWord(_decoration, _offset, _charGroup);
-            if (_next != null)
+            GWord w = new GWord(Decoration, Offset, CharGroup);
+            if (Next != null)
             {
-                w._next = _next.DeepClone();
+                w.Next = Next.DeepClone();
             }
 
             return w;
@@ -177,34 +108,25 @@ namespace Poderosa.Text
 
         public const char WIDECHAR_PAD = '\uFFFF';
 
-        private char[] _text;
-        private EOLType _eolType;
-        private int _id;
-
-        private GWord _firstWord;
-
-        private GLine _nextLine;
-        private GLine _prevLine;
-
         public GLine(int length)
         {
             Debug.Assert(length > 0);
-            _text = new char[length];
-            _firstWord = new GWord(TextDecoration.ClonedDefault(), 0, CharGroup.SingleByte);
-            _id = -1;
+            Text = new char[length];
+            FirstWord = new GWord(TextDecoration.ClonedDefault(), 0, CharGroup.SingleByte);
+            ID = -1;
         }
         public GLine(char[] data, GWord firstWord)
         {
-            _text = (char[])data.Clone();
-            _firstWord = firstWord;
-            _id = -1;
+            Text = (char[])data.Clone();
+            FirstWord = firstWord;
+            ID = -1;
         }
         public GLine Clone()
         {
-            GLine nl = new GLine(_text, _firstWord.DeepClone())
+            GLine nl = new GLine(Text, FirstWord.DeepClone())
             {
-                _eolType = _eolType,
-                _id = _id
+                EOLType = EOLType,
+                ID = ID
             };
             return nl;
         }
@@ -212,57 +134,40 @@ namespace Poderosa.Text
 
         public void Clear()
         {
-            for (int i = 0; i < _text.Length; i++)
+            for (int i = 0; i < Text.Length; i++)
             {
-                _text[i] = '\0';
+                Text[i] = '\0';
             }
 
-            _firstWord = new GWord(TextDecoration.ClonedDefault(), 0, CharGroup.SingleByte);
+            FirstWord = new GWord(TextDecoration.ClonedDefault(), 0, CharGroup.SingleByte);
         }
         internal void Clear(TextDecoration dec)
         {
-            for (int i = 0; i < _text.Length; i++)
+            for (int i = 0; i < Text.Length; i++)
             {
-                _text[i] = ' ';
+                Text[i] = ' ';
             }
 
-            _firstWord = new GWord(dec, 0, CharGroup.SingleByte);
+            FirstWord = new GWord(dec, 0, CharGroup.SingleByte);
         }
-        public int Length
-        {
-            get
-            {
-                return _text.Length;
-            }
-        }
+        public int Length => Text.Length;
 
         /// <summary>
         /// インデクスを指定してGWordを返す。レンダリング済みかどうかは考慮していない。
         /// </summary>
-        public GWord FirstWord
-        {
-            get
-            {
-                return _firstWord;
-            }
-        }
-        public char[] Text
-        {
-            get
-            {
-                return _text;
-            }
-        }
+        public GWord FirstWord { get; private set; }
+
+        public char[] Text { get; private set; }
 
         public int DisplayLength
         {
             get
             {
                 int i = 0;
-                int m = _text.Length;
+                int m = Text.Length;
                 for (i = 0; i < m; i++)
                 {
-                    if (_text[i] == '\0')
+                    if (Text[i] == '\0')
                     {
                         break;
                     }
@@ -274,8 +179,8 @@ namespace Poderosa.Text
         {
             get
             {
-                int n = _text.Length - 1;
-                while (n >= 0 && _text[n] == '\0')
+                int n = Text.Length - 1;
+                while (n >= 0 && Text[n] == '\0')
                 {
                     n--;
                 }
@@ -287,10 +192,10 @@ namespace Poderosa.Text
         //前後の単語区切りを見つける。返す位置は、posとGetWordBreakGroupの値が一致する中で遠い地点
         public int FindPrevWordBreak(int pos)
         {
-            int v = ToCharGroupForWordBreak(_text[pos]);
+            int v = ToCharGroupForWordBreak(Text[pos]);
             while (pos >= 0)
             {
-                if (v != ToCharGroupForWordBreak(_text[pos]))
+                if (v != ToCharGroupForWordBreak(Text[pos]))
                 {
                     return pos;
                 }
@@ -301,17 +206,17 @@ namespace Poderosa.Text
         }
         public int FindNextWordBreak(int pos)
         {
-            int v = ToCharGroupForWordBreak(_text[pos]);
-            while (pos < _text.Length)
+            int v = ToCharGroupForWordBreak(Text[pos]);
+            while (pos < Text.Length)
             {
-                if (v != ToCharGroupForWordBreak(_text[pos]))
+                if (v != ToCharGroupForWordBreak(Text[pos]))
                 {
                     return pos;
                 }
 
                 pos++;
             }
-            return _text.Length;
+            return Text.Length;
         }
         private static int ToCharGroupForWordBreak(char ch)
         {
@@ -334,74 +239,35 @@ namespace Poderosa.Text
         }
 
 
-        public int ID
-        {
-            get
-            {
-                return _id;
-            }
-            set
-            {
-                _id = value;
-            }
-        }
+        public int ID { get; set; }
 
         //隣接行の設定　この変更はTerminalDocumentからのみ行うこと！
-        public GLine NextLine
-        {
-            get
-            {
-                return _nextLine;
-            }
-            set
-            {
-                _nextLine = value;
-            }
-        }
-        public GLine PrevLine
-        {
-            get
-            {
-                return _prevLine;
-            }
-            set
-            {
-                _prevLine = value;
-            }
-        }
+        public GLine NextLine { get; set; }
 
-        public EOLType EOLType
-        {
-            get
-            {
-                return _eolType;
-            }
-            set
-            {
-                _eolType = value;
-            }
-        }
+        public GLine PrevLine { get; set; }
+
+        public EOLType EOLType { get; set; }
 
         internal void ExpandBuffer(int length)
         {
-            if (length <= _text.Length)
+            if (length <= Text.Length)
             {
                 return;
             }
 
-            char[] current = _text;
-            _text = new char[length];
-            Array.Copy(current, 0, _text, 0, current.Length);
+            char[] current = Text;
+            Text = new char[length];
+            Array.Copy(current, 0, Text, 0, current.Length);
         }
 
         internal void Render(IntPtr hdc, RenderParameter param, RenderProfile prof, int y)
         {
-            if (_text[0] == '\0')
+            if (Text[0] == '\0')
             {
                 return; //何も描かなくてよい
             }
 
-            float fx = (float)param.TargetRect.Left;
+            float fx = param.TargetRect.Left;
 
             RectangleF rect = new RectangleF
             {
@@ -409,7 +275,7 @@ namespace Poderosa.Text
                 Height = prof.Pitch.Height
             };
 
-            GWord word = _firstWord;
+            GWord word = FirstWord;
             while (word != null)
             {
 
@@ -484,7 +350,7 @@ namespace Poderosa.Text
 
                 if (word.CharGroup == CharGroup.SingleByte)
                 {
-                    fixed (char* p = &_text[0])
+                    fixed (char* p = &Text[0])
                     {
                         len = WordNextOffset(word) - word.Offset;
                         Win32.TextOut(hdc, x, y, p + word.Offset, len);
@@ -521,7 +387,7 @@ namespace Poderosa.Text
             }
             for (int i = word.Offset; i < nextoffset; i++)
             {
-                char ch = _text[i];
+                char ch = Text[i];
                 if (ch == '\0')
                 {
                     break;
@@ -559,14 +425,14 @@ namespace Poderosa.Text
                 Debug.Assert(nextoffset - word.Offset >= 0);
                 if (word.CharGroup == CharGroup.SingleByte)
                 {
-                    last_is_space = _text[nextoffset - 1] == ' ';
+                    last_is_space = Text[nextoffset - 1] == ' ';
                     if (last_is_space)
                     {
-                        return new string(_text, word.Offset, nextoffset - word.Offset) + '\t';
+                        return new string(Text, word.Offset, nextoffset - word.Offset) + '\t';
                     }
                     else
                     {
-                        return new string(_text, word.Offset, nextoffset - word.Offset);
+                        return new string(Text, word.Offset, nextoffset - word.Offset);
                     }
                 }
                 else
@@ -575,7 +441,7 @@ namespace Poderosa.Text
                     int o = word.Offset, i = 0;
                     while (o < nextoffset)
                     {
-                        char ch = _text[o];
+                        char ch = Text[o];
                         if (ch != WIDECHAR_PAD)
                         {
                             last_is_space = ch == ' ';
@@ -586,7 +452,7 @@ namespace Poderosa.Text
 
                     if (last_is_space)
                     {
-                        buf[i++] = (char)'\t';
+                        buf[i++] = '\t';
                     }
 
                     return new string(buf, 0, i);
@@ -606,7 +472,7 @@ namespace Poderosa.Text
                 Debug.Assert(nextoffset - word.Offset >= 0);
                 if (word.CharGroup == CharGroup.SingleByte)
                 {
-                    return new string(_text, word.Offset, nextoffset - word.Offset);
+                    return new string(Text, word.Offset, nextoffset - word.Offset);
                 }
                 else
                 {
@@ -614,7 +480,7 @@ namespace Poderosa.Text
                     int o = word.Offset, i = 0;
                     while (o < nextoffset)
                     {
-                        char ch = _text[o];
+                        char ch = Text[o];
                         if (ch != WIDECHAR_PAD)
                         {
                             buf[i++] = ch;
@@ -651,8 +517,8 @@ namespace Poderosa.Text
             {
                 if (word.Next == null)
                 {
-                    int i = _text.Length - 1;
-                    while (i >= 0 && _text[i] == '\0')
+                    int i = Text.Length - 1;
+                    while (i >= 0 && Text[i] == '\0')
                     {
                         i--;
                     }
@@ -673,9 +539,9 @@ namespace Poderosa.Text
         }
         internal void Append(GWord w)
         {
-            if (_firstWord == null)
+            if (FirstWord == null)
             {
-                _firstWord = w;
+                FirstWord = w;
             }
             else
             {
@@ -686,7 +552,7 @@ namespace Poderosa.Text
         {
             get
             {
-                GWord w = _firstWord;
+                GWord w = FirstWord;
                 while (w.Next != null)
                 {
                     w = w.Next;
@@ -702,18 +568,18 @@ namespace Poderosa.Text
         internal GLine InverseCaret(int index, bool inverse, bool underline)
         {
             ExpandBuffer(index + 1);
-            if (_text[index] == WIDECHAR_PAD)
+            if (Text[index] == WIDECHAR_PAD)
             {
                 index--;
             }
 
-            GLine ret = new GLine(_text, null)
+            GLine ret = new GLine(Text, null)
             {
-                ID = _id,
-                EOLType = _eolType
+                ID = ID,
+                EOLType = EOLType
             };
 
-            GWord w = _firstWord;
+            GWord w = FirstWord;
             int nextoffset = 0;
             while (w != null)
             {
@@ -741,9 +607,9 @@ namespace Poderosa.Text
                     GWord mid = new GWord(dec, index, w.CharGroup);
                     ret.Append(mid);
 
-                    if (index + CalcDisplayLength(_text[index]) < nextoffset)
+                    if (index + CalcDisplayLength(Text[index]) < nextoffset)
                     {
-                        GWord tail = new GWord(w.Decoration, index + CalcDisplayLength(_text[index]), w.CharGroup);
+                        GWord tail = new GWord(w.Decoration, index + CalcDisplayLength(Text[index]), w.CharGroup);
                         ret.Append(tail);
                     }
                 }
@@ -782,25 +648,25 @@ namespace Poderosa.Text
         internal GLine InverseRange(int from, int to)
         {
             ExpandBuffer(Math.Max(from + 1, to)); //激しくリサイズしたときなどにこの条件が満たせないことがある
-            Debug.Assert(from >= 0 && from < _text.Length);
-            if (from < _text.Length && _text[from] == WIDECHAR_PAD)
+            Debug.Assert(from >= 0 && from < Text.Length);
+            if (from < Text.Length && Text[from] == WIDECHAR_PAD)
             {
                 from--;
             }
 
-            if (to > 0 && to - 1 < _text.Length && _text[to - 1] == WIDECHAR_PAD)
+            if (to > 0 && to - 1 < Text.Length && Text[to - 1] == WIDECHAR_PAD)
             {
                 to--;
             }
 
-            GLine ret = new GLine(_text, null)
+            GLine ret = new GLine(Text, null)
             {
-                ID = _id,
-                EOLType = _eolType
+                ID = ID,
+                EOLType = EOLType
             };
             //装飾の配列をセット
-            TextDecoration[] dec = new TextDecoration[_text.Length];
-            GWord w = _firstWord;
+            TextDecoration[] dec = new TextDecoration[Text.Length];
+            GWord w = FirstWord;
             while (w != null)
             {
                 Debug.Assert(w.Decoration != null);
@@ -845,7 +711,7 @@ namespace Poderosa.Text
             w = null;
             for (int i = dec.Length - 1; i >= 0; i--)
             {
-                char ch = _text[i];
+                char ch = Text[i];
                 if (dec[i] != null && ch != '\0')
                 {
                     int j = i;
@@ -989,8 +855,6 @@ namespace Poderosa.Text
 
         private int _caretColumn;
 
-        private TextDecoration _defaultDecoration;
-
         private EOLType _eolType;
 
         /// <summary>
@@ -1030,10 +894,7 @@ namespace Poderosa.Text
 
         public int CaretColumn
         {
-            get
-            {
-                return _caretColumn;
-            }
+            get => _caretColumn;
             set
             {
                 Debug.Assert(value >= 0 && value <= _text.Length);
@@ -1052,25 +913,10 @@ namespace Poderosa.Text
             _eolType = EOLType.CR;
         }
 
-        public bool IsEmpty
-        {
-            get
-            {
-                //_textを全部見る必要はないだろう
-                return _caretColumn == 0 && _text[0] == '\0';
-            }
-        }
-        public TextDecoration DefaultDecoration
-        {
-            get
-            {
-                return _defaultDecoration;
-            }
-            set
-            {
-                _defaultDecoration = value;
-            }
-        }
+        public bool IsEmpty =>
+            //_textを全部見る必要はないだろう
+            _caretColumn == 0 && _text[0] == '\0';
+        public TextDecoration DefaultDecoration { get; set; }
 
         /// <summary>
         /// 引数と同じ内容で初期化する。lineの内容は破壊されない。
@@ -1105,13 +951,7 @@ namespace Poderosa.Text
             ExpandBuffer(cc + 1);
             CaretColumn = cc; //' 'で埋めることもあるのでプロパティセットを使う
         }
-        public int BufferSize
-        {
-            get
-            {
-                return _text.Length;
-            }
-        }
+        public int BufferSize => _text.Length;
 
         public void ExpandBuffer(int length)
         {

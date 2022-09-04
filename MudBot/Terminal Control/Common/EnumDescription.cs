@@ -9,18 +9,9 @@ using System.Reflection;
 namespace Poderosa.Toolkit
 {
 
-    //整数のenum値に表記をつけたり相互変換したりする　構造上
     [AttributeUsage(AttributeTargets.Enum)]
     public class EnumDescAttribute : Attribute
     {
-
-#if MACRODOC
-		public EnumDescAttribute(Type t) {
-		}
-
-#else
-        private static Hashtable _assemblyToResource = new Hashtable(4); //小さいテーブルでよい
-
         private string[] _descriptions;
         private Hashtable _descToValue;
         private string[] _names;
@@ -46,7 +37,7 @@ namespace Poderosa.Toolkit
                 FieldInfo fi = mi as FieldInfo;
                 if (fi != null && fi.IsStatic && fi.IsPublic)
                 {
-                    int intVal = (int)fi.GetValue(null); //int以外をベースにしているEnum値はサポート外
+                    int intVal = (int)fi.GetValue(null);
                     if (intVal != expected)
                     {
                         throw new Exception("unexpected enum value order");
@@ -74,6 +65,7 @@ namespace Poderosa.Toolkit
         {
             return LoadString(_descriptions[(int)i]);
         }
+
         public virtual ValueType FromDescription(string v, ValueType d)
         {
             if (v == null)
@@ -106,8 +98,8 @@ namespace Poderosa.Toolkit
                 return d;
             }
 
-            ValueType t = (ValueType)_nameToValue[v];
-            return t == null ? d : t;
+            var t = (ValueType)_nameToValue[v];
+            return t ?? d;
         }
 
         public virtual string[] DescriptionCollection()
@@ -120,42 +112,28 @@ namespace Poderosa.Toolkit
 
             return r;
         }
-        private string LoadString(string id)
+
+        private static string LoadString(string id)
         {
             return id;
         }
 
-        private static Hashtable _typeToAttr = new Hashtable();
+        private static readonly Hashtable TypeToAttr = new Hashtable();
         public static EnumDescAttribute For(Type type)
         {
-            EnumDescAttribute a = _typeToAttr[type] as EnumDescAttribute;
-            if (a == null)
+            if (!(TypeToAttr[type] is EnumDescAttribute a))
             {
                 a = (EnumDescAttribute)(type.GetCustomAttributes(typeof(EnumDescAttribute), false)[0]);
-                _typeToAttr.Add(type, a);
+                TypeToAttr.Add(type, a);
             }
             return a;
         }
-#endif
-
     }
 
     [AttributeUsage(AttributeTargets.Field)]
     public class EnumValueAttribute : Attribute
     {
-        private string _description;
-
-        public string Description
-        {
-            get
-            {
-                return _description;
-            }
-            set
-            {
-                _description = value;
-            }
-        }
+        public string Description { get; set; }
     }
 
 }

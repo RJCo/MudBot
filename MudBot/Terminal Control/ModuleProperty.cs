@@ -15,7 +15,7 @@ namespace Poderosa.Forms
     /// <summary>
     /// ModuleProperty の概要の説明です。
     /// </summary>
-    internal class ModuleProperty : Form
+    internal sealed class ModuleProperty : Form
     {
         private Label _titleLabel;
         private TextBox _title;
@@ -33,23 +33,11 @@ namespace Poderosa.Forms
 
         //編集対象のMacroModule 新規作成時はnull
         private MacroList _parent;
-        private MacroModule _module;
         private Keys _prevShortCut;
 
-        public MacroModule Module
-        {
-            get
-            {
-                return _module;
-            }
-        }
-        public Keys ShortCut
-        {
-            get
-            {
-                return _shortcut.Key;
-            }
-        }
+        public MacroModule Module { get; }
+
+        public Keys ShortCut => _shortcut.Key;
 
         /// <summary>
         /// 必要なデザイナ変数です。
@@ -60,7 +48,7 @@ namespace Poderosa.Forms
         {
             _parent = p;
             _prevShortCut = shortcut;
-            _module = mod == null ? new MacroModule(0) : (MacroModule)mod.Clone();
+            Module = mod == null ? new MacroModule(0) : (MacroModule)mod.Clone();
             //
             // Windows フォーム デザイナ サポートに必要です。
             //
@@ -77,10 +65,10 @@ namespace Poderosa.Forms
 
             if (mod != null)
             {
-                _title.Text = _module.Title;
-                _path.Text = _module.Path;
-                _additionalAssembly.Text = Concat(_module.AdditionalAssemblies);
-                _debugOption.Checked = _module.DebugMode;
+                _title.Text = Module.Title;
+                _path.Text = Module.Path;
+                _additionalAssembly.Text = Concat(Module.AdditionalAssemblies);
+                _debugOption.Checked = Module.DebugMode;
                 _shortcut.Key = shortcut;
             }
         }
@@ -293,10 +281,10 @@ namespace Poderosa.Forms
                     }
                 }
 
-                _module.Title = _title.Text;
-                _module.Path = _path.Text;
-                _module.DebugMode = _debugOption.Checked;
-                _module.AdditionalAssemblies = ParseAdditionalAssemblies(_additionalAssembly.Text);
+                Module.Title = _title.Text;
+                Module.Path = _path.Text;
+                Module.DebugMode = _debugOption.Checked;
+                Module.AdditionalAssemblies = ParseAdditionalAssemblies(_additionalAssembly.Text);
                 DialogResult = DialogResult.OK;
             }
         }
@@ -323,7 +311,7 @@ namespace Poderosa.Forms
 
         private string[] ParseAdditionalAssemblies(string t)
         {
-            string[] l = t.Split(new char[] { ';', ',' });
+            string[] l = t.Split(';', ',');
             return l;
         }
     }

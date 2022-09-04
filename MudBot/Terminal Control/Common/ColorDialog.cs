@@ -49,7 +49,6 @@ namespace Poderosa.UI
         };
         private Button moreColorsButton = new Button();
         private Button cancelButton = new Button();
-        private Color selectedColor;
 
         public ColorPaletteDialog(int x, int y)
         {
@@ -65,24 +64,21 @@ namespace Poderosa.UI
             moreColorsButton.Text = "Others...";
             moreColorsButton.Size = new Size(142, 22);
             moreColorsButton.Location = new Point(5, 99);
-            moreColorsButton.Click += new EventHandler(moreColorsButton_Click);
+            moreColorsButton.Click += moreColorsButton_Click;
             moreColorsButton.FlatStyle = FlatStyle.Popup;
             Controls.Add(moreColorsButton);
 
             //"invisible" button to cancel at Escape
             cancelButton.Size = new Size(5, 5);
             cancelButton.Location = new Point(-10, -10);
-            cancelButton.Click += new EventHandler(cancelButton_Click);
+            cancelButton.Click += cancelButton_Click;
             Controls.Add(cancelButton);
             cancelButton.TabIndex = 0;
             cancelButton.DialogResult = DialogResult.Cancel;
             CancelButton = cancelButton;
         }
 
-        public Color Color
-        {
-            get { return selectedColor; }
-        }
+        public Color Color { get; private set; }
 
         private void BuildPalette()
         {
@@ -116,11 +112,11 @@ namespace Poderosa.UI
                 }
 
                 panel[i].BackColor = color[i];
-                panel[i].MouseEnter += new EventHandler(OnMouseEnterPanel);
-                panel[i].MouseLeave += new EventHandler(OnMouseLeavePanel);
-                panel[i].MouseDown += new MouseEventHandler(OnMouseDownPanel);
-                panel[i].MouseUp += new MouseEventHandler(OnMouseUpPanel);
-                panel[i].Paint += new PaintEventHandler(OnPanelPaint);
+                panel[i].MouseEnter += OnMouseEnterPanel;
+                panel[i].MouseLeave += OnMouseLeavePanel;
+                panel[i].MouseDown += OnMouseDownPanel;
+                panel[i].MouseUp += OnMouseUpPanel;
+                panel[i].Paint += OnPanelPaint;
             }
         }
 
@@ -133,7 +129,7 @@ namespace Poderosa.UI
             DialogResult = colDialog.ShowDialog();
             if (DialogResult == DialogResult.OK)
             {
-                selectedColor = colDialog.Color;
+                Color = colDialog.Color;
             }
 
             colDialog.Dispose();
@@ -165,7 +161,7 @@ namespace Poderosa.UI
         private void OnMouseUpPanel(object sender, MouseEventArgs e)
         {
             Panel panel = (Panel)sender;
-            selectedColor = panel.BackColor;
+            Color = panel.BackColor;
             DialogResult = DialogResult.OK;
             _isClosing = true;
             Close();

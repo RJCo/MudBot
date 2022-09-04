@@ -12,7 +12,7 @@ namespace Poderosa.Forms
     /// <summary>
     /// EditEnvVariable ‚ÌŠT—v‚Ìà–¾‚Å‚·B
     /// </summary>
-    internal class EditEnvVariable : Form
+    internal sealed class EditEnvVariable : Form
     {
         private bool _isNew;
         private EnvVariableList _parent;
@@ -151,32 +151,17 @@ namespace Poderosa.Forms
 
         public string VarName
         {
-            get
-            {
-                return _nameBox.Text;
-            }
-            set
-            {
-                _nameBox.Text = value;
-            }
+            get => _nameBox.Text;
+            set => _nameBox.Text = value;
         }
         public string VarValue
         {
-            get
-            {
-                return _valueBox.Text;
-            }
-            set
-            {
-                _valueBox.Text = value;
-            }
+            get => _valueBox.Text;
+            set => _valueBox.Text = value;
         }
         public bool IsNewVariable
         {
-            get
-            {
-                return _isNew;
-            }
+            get => _isNew;
             set
             {
                 _isNew = value;

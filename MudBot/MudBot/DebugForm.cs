@@ -9,28 +9,21 @@ namespace MudBot
             InitializeComponent();
         }
 
-        private MudBot _parent = null;
-        public DebugForm(Form parent)
-        {
-            _parent = parent as MudBot;
-            InitializeComponent();
-        }
-
         private delegate void UpdateDebugCallback(string text);
         public void UpdateDebug(string text)
         {
-            if (this.DebugTextBox.InvokeRequired)
+            if (DebugTextBox.InvokeRequired)
             {
-                UpdateDebugCallback debugCallback = new UpdateDebugCallback(UpdateDebug);
-                this.Invoke(debugCallback, new object[] { text });
+                UpdateDebugCallback debugCallback = UpdateDebug;
+                Invoke(debugCallback, text);
             }
             else
             {
-                this.DebugTextBox.Text += text;
+                DebugTextBox.Text += text;
             }
 
-            this.DebugTextBox.Update();
-            this.Update();
+            DebugTextBox.Update();
+            Update();
         }
 
     }

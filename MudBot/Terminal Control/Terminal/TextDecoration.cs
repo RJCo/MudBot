@@ -18,12 +18,8 @@ namespace Poderosa.Text
 
     internal class TextDecoration : ICloneable
     {
-        private ColorType _bgColorType;
         private Color _bgColor;
-        private ColorType _textColorType;
         private Color _textColor;
-        private bool _bold;
-        private bool _underline;
 
         private static TextDecoration _default;
         public static TextDecoration Default
@@ -46,12 +42,12 @@ namespace Poderosa.Text
         {
             TextDecoration t = new TextDecoration
             {
-                _bgColorType = _bgColorType,
+                BackColorType = BackColorType,
                 _bgColor = _bgColor,
-                _textColorType = _textColorType,
+                TextColorType = TextColorType,
                 _textColor = _textColor,
-                _bold = _bold,
-                _underline = _underline
+                Bold = Bold,
+                Underline = Underline
             };
             return t;
         }
@@ -59,80 +55,31 @@ namespace Poderosa.Text
 
         public Color TextColor
         {
-            get
-            {
-                return _textColor;
-            }
+            get => _textColor;
             set
             {
                 _textColor = value;
-                _textColorType = value == Color.Empty ? ColorType.DefaultText : ColorType.Custom;
+                TextColorType = value == Color.Empty ? ColorType.DefaultText : ColorType.Custom;
             }
         }
         public Color BackColor
         {
-            get
-            {
-                return _bgColor;
-            }
+            get => _bgColor;
             set
             {
                 _bgColor = value;
-                _bgColorType = value == Color.Empty ? ColorType.DefaultBack : ColorType.Custom;
+                BackColorType = value == Color.Empty ? ColorType.DefaultBack : ColorType.Custom;
             }
         }
-        public ColorType TextColorType
-        {
-            get
-            {
-                return _textColorType;
-            }
-            set
-            {
-                _textColorType = value;
-            }
-        }
-        public ColorType BackColorType
-        {
-            get
-            {
-                return _bgColorType;
-            }
-            set
-            {
-                _bgColorType = value;
-            }
-        }
-        public bool Bold
-        {
-            get
-            {
-                return _bold;
-            }
-            set
-            {
-                _bold = value;
-            }
-        }
-        public bool Underline
-        {
-            get
-            {
-                return _underline;
-            }
-            set
-            {
-                _underline = value;
-            }
-        }
+        public ColorType TextColorType { get; set; }
 
-        public bool IsDefault
-        {
-            get
-            {
-                return !_underline && !_bold && _bgColorType == ColorType.DefaultBack && _textColorType == ColorType.DefaultText;
-            }
-        }
+        public ColorType BackColorType { get; set; }
+
+        public bool Bold { get; set; }
+
+        public bool Underline { get; set; }
+
+        public bool IsDefault => !Underline && !Bold && BackColorType == ColorType.DefaultBack && TextColorType == ColorType.DefaultText;
 
         public void Inverse()
         {
@@ -140,26 +87,26 @@ namespace Poderosa.Text
             _textColor = _bgColor;
             _bgColor = tmp;
 
-            ColorType tmp2 = _textColorType;
-            _textColorType = _bgColorType;
-            _bgColorType = tmp2;
+            ColorType tmp2 = TextColorType;
+            TextColorType = BackColorType;
+            BackColorType = tmp2;
         }
         public void ToCaretStyle()
         {
             Inverse();
             if (GEnv.Options.CaretColor != Color.Empty)
             {
-                _bgColorType = ColorType.Custom;
+                BackColorType = ColorType.Custom;
                 _bgColor = GEnv.Options.CaretColor;
             }
         }
 
         public TextDecoration(bool underline, bool bold)
         {
-            _bgColorType = ColorType.DefaultBack;
-            _textColorType = ColorType.DefaultText;
-            _bold = bold;
-            _underline = underline;
+            BackColorType = ColorType.DefaultBack;
+            TextColorType = ColorType.DefaultText;
+            Bold = bold;
+            Underline = underline;
         }
         public TextDecoration(Color bg, Color txt, bool underline, bool bold)
         {
@@ -168,11 +115,11 @@ namespace Poderosa.Text
         public void Init(Color bg, Color txt, bool underline, bool bold)
         {
             _bgColor = bg;
-            _bgColorType = ColorType.Custom;
+            BackColorType = ColorType.Custom;
             _textColor = txt;
-            _textColorType = ColorType.Custom;
-            _bold = bold;
-            _underline = underline;
+            TextColorType = ColorType.Custom;
+            Bold = bold;
+            Underline = underline;
         }
 
         public override string ToString()
@@ -182,7 +129,7 @@ namespace Poderosa.Text
             b.Append('/');
             b.Append(_textColor.ToString());
             b.Append('/');
-            if (_bold)
+            if (Bold)
             {
                 b.Append('B');
             }
@@ -194,27 +141,21 @@ namespace Poderosa.Text
 
     internal class FontHandle
     {
-        private Font _font;
         private IntPtr _hFont;
 
         public FontHandle(Font f)
         {
-            _font = f;
+            Font = f;
         }
-        public Font Font
-        {
-            get
-            {
-                return _font;
-            }
-        }
+        public Font Font { get; }
+
         public IntPtr HFONT
         {
             get
             {
                 if (_hFont == IntPtr.Zero)
                 {
-                    _hFont = _font.ToHfont();
+                    _hFont = Font.ToHfont();
                 }
 
                 return _hFont;

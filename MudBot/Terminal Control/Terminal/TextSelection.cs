@@ -41,9 +41,6 @@ namespace Poderosa.Text
             }
         }
 
-        private SelectionState _state;
-
-        private TerminalPane _owner;
         //最初の選択点。単語や行を選択したときのために２つ設ける
         private TextPoint _forwardPivot;
         private TextPoint _backwardPivot;
@@ -52,66 +49,37 @@ namespace Poderosa.Text
         private TextPoint _backwardDestination;
 
         //pivotの状態
-        private RangeType _pivotType;
 
         //選択を開始したときのマウス座標
-        private int _startX;
-        private int _startY;
 
         //ちょっと汚いフラグ
         private bool _disabledTemporary;
 
         public TextSelection()
         {
-            _owner = null;
+            Owner = null;
         }
 
-        public TerminalPane Owner
-        {
-            get
-            {
-                return _owner;
-            }
-        }
-        public SelectionState State
-        {
-            get
-            {
-                return _state;
-            }
-        }
-        public RangeType PivotType
-        {
-            get
-            {
-                return _pivotType;
-            }
-        }
-        public int StartX
-        {
-            get
-            {
-                return _startX;
-            }
-        }
-        public int StartY
-        {
-            get
-            {
-                return _startY;
-            }
-        }
+        public TerminalPane Owner { get; private set; }
+
+        public SelectionState State { get; private set; }
+
+        public RangeType PivotType { get; private set; }
+
+        public int StartX { get; private set; }
+
+        public int StartY { get; private set; }
 
 
         public void Clear()
         {
-            if (_owner != null)
+            if (Owner != null)
             {
-                _owner.ExitTextSelection();
+                Owner.ExitTextSelection();
             }
-            _owner = null;
-            _state = SelectionState.Empty;
-            _pivotType = RangeType.Char;
+            Owner = null;
+            State = SelectionState.Empty;
+            PivotType = RangeType.Char;
             _forwardPivot.Clear();
             _backwardPivot.Clear();
             _forwardDestination.Clear();
@@ -144,14 +112,9 @@ namespace Poderosa.Text
             }
         }
 
-        public bool IsEmpty
-        {
-            get
-            {
-                return _owner == null || _forwardPivot._line == -1 || _backwardPivot._line == -1 |
-                    _forwardDestination._line == -1 || _backwardDestination._line == -1 || _disabledTemporary;
-            }
-        }
+        public bool IsEmpty =>
+            Owner == null || _forwardPivot._line == -1 || _backwardPivot._line == -1 |
+            _forwardDestination._line == -1 || _backwardDestination._line == -1 || _disabledTemporary;
 
         internal bool StartSelection(TerminalPane owner, GLine line, int position, RangeType type, int x, int y)
         {
@@ -160,8 +123,8 @@ namespace Poderosa.Text
             line.ExpandBuffer(position + 1);
 
             _disabledTemporary = false;
-            _owner = owner;
-            _pivotType = type;
+            Owner = owner;
+            PivotType = type;
             _forwardPivot._line = line.ID;
             _backwardPivot._line = line.ID;
             _forwardDestination._line = line.ID;
@@ -183,9 +146,9 @@ namespace Poderosa.Text
                     _backwardPivot._position = line.CharLength;
                     break;
             }
-            _state = SelectionState.Pivot;
-            _startX = x;
-            _startY = y;
+            State = SelectionState.Pivot;
+            StartX = x;
+            StartY = y;
             return true;
         }
 
@@ -193,7 +156,7 @@ namespace Poderosa.Text
         {
             line.ExpandBuffer(position + 1);
             _disabledTemporary = false;
-            _state = SelectionState.Expansion;
+            State = SelectionState.Expansion;
 
             _forwardDestination._line = line.ID;
             _backwardDestination._line = line.ID;
@@ -221,22 +184,22 @@ namespace Poderosa.Text
         {
             _disabledTemporary = false;
             Debug.Assert(owner != null);
-            _owner = owner;
-            _forwardPivot._line = _owner.Document.FirstLine.ID;
+            Owner = owner;
+            _forwardPivot._line = Owner.Document.FirstLine.ID;
             _forwardPivot._position = 0;
             _backwardPivot = _forwardPivot;
-            _forwardDestination._line = _owner.Document.LastLine.ID;
-            _forwardDestination._position = _owner.Document.LastLine.CharLength - 1;
+            _forwardDestination._line = Owner.Document.LastLine.ID;
+            _forwardDestination._position = Owner.Document.LastLine.CharLength - 1;
             _backwardDestination = _forwardDestination;
 
-            _state = SelectionState.Fixed;
-            _pivotType = RangeType.Char;
+            State = SelectionState.Fixed;
+            PivotType = RangeType.Char;
         }
 
         //ペイン外へマウスをドラッグしていった場合に位置を修正する
         internal void ConvertSelectionPosition(ref int line_id, ref int col)
         {
-            if (_pivotType == RangeType.Line)
+            if (PivotType == RangeType.Line)
             {
                 if (line_id <= _forwardPivot._line)
                 {
@@ -244,7 +207,7 @@ namespace Poderosa.Text
                 }
                 else
                 {
-                    col = _owner.Connection.TerminalWidth;
+                    col = Owner.Connection.TerminalWidth;
                 }
             }
             else
@@ -255,7 +218,7 @@ namespace Poderosa.Text
                     {
                         col = 0;
                     }
-                    else if (col >= _owner.Connection.TerminalWidth)
+                    else if (col >= Owner.Connection.TerminalWidth)
                     {
                         line_id++;
                         col = 0;
@@ -267,9 +230,9 @@ namespace Poderosa.Text
                     {
                         col = 0;
                     }
-                    else if (col >= _owner.Connection.TerminalWidth)
+                    else if (col >= Owner.Connection.TerminalWidth)
                     {
-                        col = _owner.Connection.TerminalWidth;
+                        col = Owner.Connection.TerminalWidth;
                     }
                 }
                 else
@@ -277,11 +240,11 @@ namespace Poderosa.Text
                     if (col < 0)
                     {
                         line_id--;
-                        col = _owner.Connection.TerminalWidth;
+                        col = Owner.Connection.TerminalWidth;
                     }
-                    else if (col >= _owner.Connection.TerminalWidth)
+                    else if (col >= Owner.Connection.TerminalWidth)
                     {
-                        col = _owner.Connection.TerminalWidth;
+                        col = Owner.Connection.TerminalWidth;
                     }
                 }
             }
@@ -290,7 +253,7 @@ namespace Poderosa.Text
 
         internal void FixSelection()
         {
-            _state = SelectionState.Fixed;
+            State = SelectionState.Fixed;
         }
 
         public string GetSelectedText()
@@ -310,7 +273,7 @@ namespace Poderosa.Text
 
         private string GetSelectedText(NLOption opt)
         {
-            if (_owner == null || _disabledTemporary)
+            if (Owner == null || _disabledTemporary)
             {
                 return null;
             }
@@ -319,7 +282,7 @@ namespace Poderosa.Text
             TextPoint a = HeadPoint;
             TextPoint b = TailPoint;
 
-            GLine l = _owner.Document.FindLineOrEdge(a._line);
+            GLine l = Owner.Document.FindLineOrEdge(a._line);
             int pos = a._position;
 
             do
@@ -329,7 +292,7 @@ namespace Poderosa.Text
                 { //最終行
                   //末尾にNULL文字が入るケースがあるようだ
                     AppendTrim(bld, l.Text, pos, b._position - pos);
-                    if (_pivotType == RangeType.Line && eol_required)
+                    if (PivotType == RangeType.Line && eol_required)
                     {
                         bld.Append("\r\n");
                     }
@@ -385,20 +348,10 @@ namespace Poderosa.Text
             }
         }
 
-        internal TextPoint HeadPoint
-        {
-            get
-            {
-                return Min(ref _forwardPivot, ref _forwardDestination);
-            }
-        }
-        internal TextPoint TailPoint
-        {
-            get
-            {
-                return Max(ref _backwardPivot, ref _backwardDestination);
-            }
-        }
+        internal TextPoint HeadPoint => Min(ref _forwardPivot, ref _forwardDestination);
+
+        internal TextPoint TailPoint => Max(ref _backwardPivot, ref _backwardDestination);
+
         private static TextPoint Min(ref TextPoint p1, ref TextPoint p2)
         {
             int id1 = p1._line;

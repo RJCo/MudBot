@@ -39,7 +39,6 @@ namespace Poderosa
             dlg._methodBox.SelectedIndex = 2;
             dlg._portBox.Text = "22";
             dlg._userNameBox.Text = "bwilliam";
-            dlg._passphraseBox.Text = "lkmj9u";
             dlg.OnOK(null, null);
 
             ConnectionTag ct = dlg.Result;

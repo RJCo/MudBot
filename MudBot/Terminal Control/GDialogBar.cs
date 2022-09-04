@@ -17,7 +17,6 @@ namespace Poderosa.Forms
 {
     /// <summary>
     /// GDialogBar の概要の説明です。
-    /// 
     /// ツールバーは、標準的なアイコンは24pxピッチ、アイコン自体は16px。縦棒のエリアは8px
     /// </summary>
     internal class GDialogBar : UserControl
@@ -34,10 +33,6 @@ namespace Poderosa.Forms
         private ToggleButton _divHorizontal3Style;
         private ToggleButton _divVertical3Style;
         private Label _newLineLabel;
-        private ComboBox _newLineOption;
-        private ToggleButton _localEcho;
-        private GButton _lineFeedRule;
-        private ToggleButton _logSuspend;
         private GButton _commentLog;
         private GButton _serverInfo;
         private Label _encodingLabel;
@@ -51,7 +46,7 @@ namespace Poderosa.Forms
         {
             // この呼び出しは、Windows.Forms フォーム デザイナで必要です。
             InitializeComponent();
-            _newLineOption.BringToFront(); //日本語・英語で若干配置を変える都合で、これをトップにもってくる
+            NewLineBox.BringToFront(); //日本語・英語で若干配置を変える都合で、これをトップにもってくる
             ReloadLanguage(GEnv.Options.Language);
 
             _toolTipInitialized = false;
@@ -62,7 +57,7 @@ namespace Poderosa.Forms
         {
             _encodingLabel.Text = "Form.GDialogBar._encodingLabel";
             _newLineLabel.Text = "Form.GDialogBar._newLineLabel";
-            _newLineOption.Left = l == Language.Japanese ? 340 : 356; //配置の都合
+            NewLineBox.Left = l == Language.Japanese ? 340 : 356; //配置の都合
             InitToolTip();
         }
 
@@ -86,7 +81,6 @@ namespace Poderosa.Forms
         /// デザイナ サポートに必要なメソッドです。このメソッドの内容を
         /// コード エディタで変更しないでください。
         /// this._newLineOption.Items.AddRange(EnumDescAttributeT.For(typeof(NewLine)).DescriptionCollection());
-        /// 
         /// this._encodingBox.Items.AddRange(EnumDescAttributeT.For(typeof(EncodingType)).DescriptionCollection());
         /// </summary>
         private void InitializeComponent()
@@ -104,10 +98,10 @@ namespace Poderosa.Forms
             _divHorizontal3Style = new ToggleButton();
             _divVertical3Style = new ToggleButton();
             _newLineLabel = new Label();
-            _newLineOption = new ComboBox();
-            _logSuspend = new ToggleButton();
-            _lineFeedRule = new GButton();
-            _localEcho = new ToggleButton();
+            NewLineBox = new ComboBox();
+            SuspendLogButton = new ToggleButton();
+            LineFeedRuleButton = new GButton();
+            LocalEchoButton = new ToggleButton();
             _serverInfo = new GButton();
             _commentLog = new GButton();
             _encodingLabel = new Label();
@@ -238,15 +232,15 @@ namespace Poderosa.Forms
             // 
             // _newLineOption
             // 
-            _newLineOption.DropDownStyle = ComboBoxStyle.DropDownList;
-            _newLineOption.Enabled = false;
-            _newLineOption.Items.AddRange(EnumDescAttributeT.For(typeof(NewLine)).DescriptionCollection());
-            _newLineOption.Location = new Point(340, 4);
-            _newLineOption.Name = "_newLineOption";
-            _newLineOption.Size = new Size(72, 20);
-            _newLineOption.TabIndex = 0;
-            _newLineOption.TabStop = false;
-            _newLineOption.SelectedIndexChanged += new EventHandler(ChangeNewLine);
+            NewLineBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            NewLineBox.Enabled = false;
+            NewLineBox.Items.AddRange(EnumDescAttributeT.For(typeof(NewLine)).DescriptionCollection());
+            NewLineBox.Location = new Point(340, 4);
+            NewLineBox.Name = "NewLineBox";
+            NewLineBox.Size = new Size(72, 20);
+            NewLineBox.TabIndex = 0;
+            NewLineBox.TabStop = false;
+            NewLineBox.SelectedIndexChanged += new EventHandler(ChangeNewLine);
             // 
             // _encodingLabel
             // 
@@ -270,47 +264,47 @@ namespace Poderosa.Forms
             // 
             // _localEcho
             // 
-            _localEcho.BorderStyle = BorderStyle.None;
-            _localEcho.Checked = false;
-            _localEcho.Enabled = false;
-            _localEcho.Location = new Point(600, 2);
-            _localEcho.Name = "_localEcho";
-            _localEcho.Size = new Size(24, 23);
-            _localEcho.TabIndex = 0;
-            _localEcho.TabStop = false;
-            _localEcho.Click += new EventHandler(ToggleLocalEcho);
-            _localEcho.MouseEnter += new EventHandler(OnMouseEnterToButton);
-            _localEcho.MouseHover += new EventHandler(OnMouseHoverOnButton);
-            _localEcho.MouseLeave += new EventHandler(OnMouseLeaveFromButton);
+            LocalEchoButton.BorderStyle = BorderStyle.None;
+            LocalEchoButton.Checked = false;
+            LocalEchoButton.Enabled = false;
+            LocalEchoButton.Location = new Point(600, 2);
+            LocalEchoButton.Name = "LocalEchoButton";
+            LocalEchoButton.Size = new Size(24, 23);
+            LocalEchoButton.TabIndex = 0;
+            LocalEchoButton.TabStop = false;
+            LocalEchoButton.Click += new EventHandler(ToggleLocalEcho);
+            LocalEchoButton.MouseEnter += new EventHandler(OnMouseEnterToButton);
+            LocalEchoButton.MouseHover += new EventHandler(OnMouseHoverOnButton);
+            LocalEchoButton.MouseLeave += new EventHandler(OnMouseLeaveFromButton);
             // 
             // _lineFeedRule
             // 
-            _lineFeedRule.BorderStyle = BorderStyle.None;
-            _lineFeedRule.Enabled = false;
-            _lineFeedRule.Location = new Point(624, 2);
-            _lineFeedRule.Name = "_lineFeedRule";
-            _lineFeedRule.Size = new Size(24, 23);
-            _lineFeedRule.TabIndex = 0;
-            _lineFeedRule.TabStop = false;
-            _lineFeedRule.Click += new EventHandler(LineFeedRule);
-            _lineFeedRule.MouseEnter += new EventHandler(OnMouseEnterToButton);
-            _lineFeedRule.MouseHover += new EventHandler(OnMouseHoverOnButton);
-            _lineFeedRule.MouseLeave += new EventHandler(OnMouseLeaveFromButton);
+            LineFeedRuleButton.BorderStyle = BorderStyle.None;
+            LineFeedRuleButton.Enabled = false;
+            LineFeedRuleButton.Location = new Point(624, 2);
+            LineFeedRuleButton.Name = "LineFeedRuleButton";
+            LineFeedRuleButton.Size = new Size(24, 23);
+            LineFeedRuleButton.TabIndex = 0;
+            LineFeedRuleButton.TabStop = false;
+            LineFeedRuleButton.Click += new EventHandler(LineFeedRule);
+            LineFeedRuleButton.MouseEnter += new EventHandler(OnMouseEnterToButton);
+            LineFeedRuleButton.MouseHover += new EventHandler(OnMouseHoverOnButton);
+            LineFeedRuleButton.MouseLeave += new EventHandler(OnMouseLeaveFromButton);
             // 
             // _logSuspend
             // 
-            _logSuspend.BorderStyle = BorderStyle.None;
-            _logSuspend.Checked = false;
-            _logSuspend.Enabled = false;
-            _logSuspend.Location = new Point(650, 2);
-            _logSuspend.Name = "_logSuspend";
-            _logSuspend.Size = new Size(24, 23);
-            _logSuspend.TabIndex = 0;
-            _logSuspend.TabStop = false;
-            _logSuspend.Click += new EventHandler(ToggleLogSwitch);
-            _logSuspend.MouseEnter += new EventHandler(OnMouseEnterToButton);
-            _logSuspend.MouseHover += new EventHandler(OnMouseHoverOnButton);
-            _logSuspend.MouseLeave += new EventHandler(OnMouseLeaveFromButton);
+            SuspendLogButton.BorderStyle = BorderStyle.None;
+            SuspendLogButton.Checked = false;
+            SuspendLogButton.Enabled = false;
+            SuspendLogButton.Location = new Point(650, 2);
+            SuspendLogButton.Name = "SuspendLogButton";
+            SuspendLogButton.Size = new Size(24, 23);
+            SuspendLogButton.TabIndex = 0;
+            SuspendLogButton.TabStop = false;
+            SuspendLogButton.Click += new EventHandler(ToggleLogSwitch);
+            SuspendLogButton.MouseEnter += new EventHandler(OnMouseEnterToButton);
+            SuspendLogButton.MouseHover += new EventHandler(OnMouseHoverOnButton);
+            SuspendLogButton.MouseLeave += new EventHandler(OnMouseLeaveFromButton);
             // 
             // _commentLog
             // 
@@ -355,13 +349,13 @@ namespace Poderosa.Forms
                                                                           _divHorizontal3Style,
                                                                           _divVertical3Style,
                                                                           _newLineLabel,
-                                                                          _newLineOption,
+                                                                          NewLineBox,
                                                                           _encodingLabel,
                                                                           _encodingBox,
-                                                                          _lineFeedRule,
+                                                                          LineFeedRuleButton,
                                                                           _commentLog,
-                                                                          _logSuspend,
-                                                                          _localEcho,
+                                                                          SuspendLogButton,
+                                                                          LocalEchoButton,
                                                                           _serverInfo});
             Name = "GDialogBar";
             Size = new Size(664, 24);
@@ -384,42 +378,20 @@ namespace Poderosa.Forms
             _divVerticalStyle.Image = IconList.LoadIcon(IconList.ICON_DIVVERTICAL);
             _divHorizontal3Style.Image = IconList.LoadIcon(IconList.ICON_DIVHORIZONTAL3);
             _divVertical3Style.Image = IconList.LoadIcon(IconList.ICON_DIVVERTICAL3);
-            _localEcho.Image = IconList.LoadIcon(IconList.ICON_LOCALECHO);
-            _lineFeedRule.Image = IconList.LoadIcon(IconList.ICON_LINEFEED);
-            _logSuspend.Image = IconList.LoadIcon(IconList.ICON_SUSPENDLOG);
+            LocalEchoButton.Image = IconList.LoadIcon(IconList.ICON_LOCALECHO);
+            LineFeedRuleButton.Image = IconList.LoadIcon(IconList.ICON_LINEFEED);
+            SuspendLogButton.Image = IconList.LoadIcon(IconList.ICON_SUSPENDLOG);
             _commentLog.Image = IconList.LoadIcon(IconList.ICON_COMMENTLOG);
             _serverInfo.Image = IconList.LoadIcon(IconList.ICON_INFO);
         }
 
-        public ToggleButton SuspendLogButton
-        {
-            get
-            {
-                return _logSuspend;
-            }
-        }
-        public ToggleButton LocalEchoButton
-        {
-            get
-            {
-                return _localEcho;
-            }
-        }
-        public GButton LineFeedRuleButton
-        {
-            get
-            {
-                return _lineFeedRule;
-            }
-        }
+        public ToggleButton SuspendLogButton { get; private set; }
 
-        public ComboBox NewLineBox
-        {
-            get
-            {
-                return _newLineOption;
-            }
-        }
+        public ToggleButton LocalEchoButton { get; private set; }
+
+        public GButton LineFeedRuleButton { get; private set; }
+
+        public ComboBox NewLineBox { get; private set; }
 
         protected override void OnGotFocus(EventArgs args)
         {
@@ -469,7 +441,7 @@ namespace Poderosa.Forms
                 return;
             }
 
-            NewLine nl = (NewLine)_newLineOption.SelectedIndex;
+            NewLine nl = (NewLine)NewLineBox.SelectedIndex;
             ContainerConnectionCommandTarget t = GApp.GetConnectionCommandTarget();
             t.SetTransmitNewLine(nl);
             t.Focus();
@@ -585,19 +557,19 @@ namespace Poderosa.Forms
         {
             _blockEventHandler = true;
             _saveShortcut.Enabled = enabled;
-            _newLineOption.Enabled = enabled && !con.IsClosed;
-            _logSuspend.Enabled = enabled && !con.IsClosed && con.TextLogger.IsActive;
-            _localEcho.Enabled = enabled && !con.IsClosed;
-            _lineFeedRule.Enabled = enabled && !con.IsClosed;
+            NewLineBox.Enabled = enabled && !con.IsClosed;
+            SuspendLogButton.Enabled = enabled && !con.IsClosed && con.TextLogger.IsActive;
+            LocalEchoButton.Enabled = enabled && !con.IsClosed;
+            LineFeedRuleButton.Enabled = enabled && !con.IsClosed;
             _encodingBox.Enabled = enabled && !con.IsClosed;
             _serverInfo.Enabled = enabled;
             _commentLog.Enabled = enabled && !con.IsClosed && con.TextLogger.IsActive;
             if (enabled)
             {
-                _newLineOption.SelectedIndex = (int)con.Param.TransmitNL;
+                NewLineBox.SelectedIndex = (int)con.Param.TransmitNL;
                 _encodingBox.SelectedIndex = (int)con.Param.EncodingProfile.Type;
-                _logSuspend.Checked = con.LogSuspended;
-                _localEcho.Checked = con.Param.LocalEcho;
+                SuspendLogButton.Checked = con.LogSuspended;
+                LocalEchoButton.Checked = con.Param.LocalEcho;
             }
             _blockEventHandler = false;
             Invalidate(true);
@@ -666,11 +638,11 @@ namespace Poderosa.Forms
             {
                 sb.SetStatusBarText("Caption.ToolBar._divVertical3Style");
             }
-            else if (sender == _newLineOption)
+            else if (sender == NewLineBox)
             {
                 sb.SetStatusBarText("Caption.ToolBar._newLineOption");
             }
-            else if (sender == _lineFeedRule)
+            else if (sender == LineFeedRuleButton)
             {
                 sb.SetStatusBarText("Caption.ToolBar._lineFeedRule");
             }
@@ -678,7 +650,7 @@ namespace Poderosa.Forms
             {
                 sb.SetStatusBarText("Caption.ToolBar._encodingBox");
             }
-            else if (sender == _logSuspend)
+            else if (sender == SuspendLogButton)
             {
                 sb.SetStatusBarText("Caption.ToolBar._logSuspend");
             }
@@ -686,7 +658,7 @@ namespace Poderosa.Forms
             {
                 sb.SetStatusBarText("Caption.ToolBar._commentLog");
             }
-            else if (sender == _localEcho)
+            else if (sender == LocalEchoButton)
             {
                 sb.SetStatusBarText("Caption.ToolBar._localEcho");
             }
@@ -720,12 +692,12 @@ namespace Poderosa.Forms
             tt.SetToolTip(_newCygwinConnection, "ToolTip.ToolBar._newCygwinConnection");
             tt.SetToolTip(_newSFUConnection, "ToolTip.ToolBar._newSFUConnection");
             tt.SetToolTip(_newLineLabel, "ToolTip.ToolBar._newLineLabel");
-            tt.SetToolTip(_newLineOption, "ToolTip.ToolBar._newLineLabel");
+            tt.SetToolTip(NewLineBox, "ToolTip.ToolBar._newLineLabel");
             tt.SetToolTip(_encodingLabel, "ToolTip.ToolBar._encodingLabel");
             tt.SetToolTip(_encodingBox, "ToolTip.ToolBar._encodingBox");
-            tt.SetToolTip(_localEcho, "ToolTip.ToolBar._localEcho");
-            tt.SetToolTip(_lineFeedRule, "ToolTip.ToolBar._lineFeedRule");
-            tt.SetToolTip(_logSuspend, "ToolTip.ToolBar._logSuspend");
+            tt.SetToolTip(LocalEchoButton, "ToolTip.ToolBar._localEcho");
+            tt.SetToolTip(LineFeedRuleButton, "ToolTip.ToolBar._lineFeedRule");
+            tt.SetToolTip(SuspendLogButton, "ToolTip.ToolBar._logSuspend");
             tt.SetToolTip(_commentLog, "ToolTip.ToolBar._commentLog");
             tt.SetToolTip(_serverInfo, "ToolTip.ToolBar._serverInfo");
 

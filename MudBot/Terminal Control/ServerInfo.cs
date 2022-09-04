@@ -17,7 +17,7 @@ namespace Poderosa.Forms
     /// <summary>
     /// ServerInfo ÇÃäTóvÇÃê‡ñæÇ≈Ç∑ÅB
     /// </summary>
-    internal class ServerInfo : Form
+    internal sealed class ServerInfo : Form
     {
         private Button _okButton;
         private Label _serverNamesLabel;
@@ -322,7 +322,7 @@ namespace Poderosa.Forms
                         b.Append(", ");
                     }
 
-                    b.Append(t.ToString());
+                    b.Append(t);
                 }
             }
             else

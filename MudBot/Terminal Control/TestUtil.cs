@@ -26,7 +26,7 @@ namespace Poderosa.Debugging
             //XmlTextReader r = new XmlTextReader(filename);
             //EmulateWithLog(r, tag);
             //r.Close();
-            Thread th = new Thread(new ThreadStart(Run));
+            Thread th = new Thread(Run);
             th.Start();
 
         }
@@ -136,26 +136,5 @@ namespace Poderosa.Debugging
             return new StringBuilder();
         }
 
-    }
-
-    internal class DebugUtil
-    {
-        public static string DumpByteArray(byte[] data)
-        {
-            return DumpByteArray(data, 0, data.Length);
-        }
-        public static string DumpByteArray(byte[] data, int offset, int length)
-        {
-            StringBuilder bld = new StringBuilder();
-            for (int i = 0; i < length; i++)
-            {
-                bld.Append(data[offset + i].ToString("X2"));
-                if ((i % 4) == 3)
-                {
-                    bld.Append(' ');
-                }
-            }
-            return bld.ToString();
-        }
     }
 }

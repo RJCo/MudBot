@@ -26,7 +26,7 @@ namespace Poderosa
             {
                 if (path.Length == 0)
                 {
-                    GUtil.Warning(parent, "The path is not specified.");
+                    Warning(parent, "The path is not specified.");
                     return LogFileCheckResult.Cancel;
                 }
 

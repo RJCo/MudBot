@@ -17,8 +17,6 @@ namespace Poderosa.Forms
     /// </summary>
     internal class XModemDialog : Form
     {
-        private bool _receiving; //受信ならtrue,送信ならfalse これは表示前にのみ設定可能
-        private bool _executing;
         private ConnectionTag _connectionTag;
         private XModem _xmodemTask;
 
@@ -45,33 +43,16 @@ namespace Poderosa.Forms
             //
             ReloadLanguage();
         }
-        public bool Receiving
-        {
-            get
-            {
-                return _receiving;
-            }
-            set
-            {
-                _receiving = value;
-            }
-        }
-        public bool Executing
-        {
-            get
-            {
-                return _executing;
-            }
-        }
+        public bool Receiving { get; set; }
+
+        public bool Executing { get; private set; }
+
         public ConnectionTag ConnectionTag
         {
-            get
-            {
-                return _connectionTag;
-            }
+            get => _connectionTag;
             set
             {
-                if (_executing)
+                if (Executing)
                 {
                     throw new Exception("illegal!");
                 }
@@ -125,7 +106,7 @@ namespace Poderosa.Forms
             _okButton.Location = new Point(152, 64);
             _okButton.Name = "_okButton";
             _okButton.TabIndex = 0;
-            _okButton.Click += new EventHandler(OnOK);
+            _okButton.Click += OnOK;
             // 
             // _cancelButton
             // 
@@ -134,7 +115,7 @@ namespace Poderosa.Forms
             _cancelButton.Location = new Point(240, 64);
             _cancelButton.Name = "_cancelButton";
             _cancelButton.TabIndex = 1;
-            _cancelButton.Click += new EventHandler(OnCancel);
+            _cancelButton.Click += OnCancel;
             // 
             // _fileNameLabel
             // 
@@ -160,7 +141,7 @@ namespace Poderosa.Forms
             _selectButton.Size = new Size(19, 19);
             _selectButton.TabIndex = 4;
             _selectButton.Text = "...";
-            _selectButton.Click += new EventHandler(OnSelectFile);
+            _selectButton.Click += OnSelectFile;
             // 
             // _progressText
             // 
@@ -195,13 +176,13 @@ namespace Poderosa.Forms
 
         private void FormatText()
         {
-            Text = String.Format("Caption.XModemDialog.DialogTitle", _receiving ? "Common.Reception" : "Common.Transmission", _connectionTag.FormatTabText());
-            _progressText.Text = String.Format("Caption.XModemDialog.InitialPrompt", _receiving ? "Common.Transmission" : "Common.Reception".ToLower());
+            Text = String.Format("Caption.XModemDialog.DialogTitle", Receiving ? "Common.Reception" : "Common.Transmission", _connectionTag.FormatTabText());
+            _progressText.Text = String.Format("Caption.XModemDialog.InitialPrompt", Receiving ? "Common.Transmission" : "Common.Reception".ToLower());
         }
         private void OnSelectFile(object sender, EventArgs args)
         {
             FileDialog dlg = null;
-            if (_receiving)
+            if (Receiving)
             {
                 SaveFileDialog sf = new SaveFileDialog
                 {
@@ -228,9 +209,9 @@ namespace Poderosa.Forms
 
         private void OnOK(object sedner, EventArgs args)
         {
-            Debug.Assert(!_executing);
+            Debug.Assert(!Executing);
             DialogResult = DialogResult.None;
-            if (_receiving)
+            if (Receiving)
             {
                 if (!StartReceive())
                 {
@@ -245,7 +226,7 @@ namespace Poderosa.Forms
                 }
             }
 
-            _executing = true;
+            Executing = true;
             _okButton.Enabled = false;
             _fileNameBox.Enabled = false;
             _selectButton.Enabled = false;
@@ -293,7 +274,7 @@ namespace Poderosa.Forms
                 _xmodemTask.Abort();
                 _xmodemTask = null;
             }
-            _executing = false;
+            Executing = false;
             _okButton.Enabled = true;
             _fileNameBox.Enabled = true;
             _selectButton.Enabled = true;
@@ -301,7 +282,7 @@ namespace Poderosa.Forms
 
         private void OnCancel(object sender, EventArgs args)
         {
-            if (_executing)
+            if (Executing)
             {
                 Exit();
             }
@@ -313,7 +294,7 @@ namespace Poderosa.Forms
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-            if (_executing)
+            if (Executing)
             {
                 Exit();
             }
@@ -325,7 +306,7 @@ namespace Poderosa.Forms
         {
             if (wparam == XModem.NOTIFY_PROGRESS)
             {
-                if (_receiving)
+                if (Receiving)
                 {
                     _progressText.Text = String.Format("Caption.XModemDialog.ReceptionProgress", lparam);
                 }
@@ -338,7 +319,7 @@ namespace Poderosa.Forms
             {
                 //PROGRESS以外は単に閉じる。ダイアログボックスの表示などはプロトコル実装側がやる
                 DialogResult = DialogResult.Abort;
-                _progressText.Text = String.Format("Caption.XModemDialog.InitialPrompt", _receiving ? "Common.Transmission" : "Common.Reception".ToLower());
+                _progressText.Text = String.Format("Caption.XModemDialog.InitialPrompt", Receiving ? "Common.Transmission" : "Common.Reception".ToLower());
                 Exit();
                 if (wparam == XModem.NOTIFY_SUCCESS)
                 {

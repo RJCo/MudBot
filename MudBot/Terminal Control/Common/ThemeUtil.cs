@@ -22,15 +22,7 @@ namespace Poderosa.UI
             Luna
         }
 
-        private static Theme _theme;
-
-        public static Theme CurrentTheme
-        {
-            get
-            {
-                return _theme;
-            }
-        }
+        public static Theme CurrentTheme { get; private set; }
 
         [DllImport("uxtheme.dll", CharSet = CharSet.Unicode)]
         private static extern int GetCurrentThemeName(char[] filename, int filenamelen, char[] colorbuff, int colornamelen, char[] sizebuff, int sizebufflen);
@@ -48,7 +40,7 @@ namespace Poderosa.UI
                     string theme_name = new string(fn);
                     if (theme_name.IndexOf("Luna") != -1)
                     {
-                        _theme = Theme.Luna;
+                        CurrentTheme = Theme.Luna;
                     }
                 }
                 //Debug.WriteLine(String.Format("FN={0} Color={1} Size={2}", new string(fn), new string(cb), new string(sz)));
@@ -61,7 +53,7 @@ namespace Poderosa.UI
         public static void Init()
         {
             Application.EnableVisualStyles();
-            _theme = Theme.Unspecified;
+            CurrentTheme = Theme.Unspecified;
             OperatingSystem os = Environment.OSVersion;
             if (os.Platform == PlatformID.Win32NT && os.Version.CompareTo(new Version(5, 1)) >= 0)
             {
@@ -73,7 +65,7 @@ namespace Poderosa.UI
         {
             get
             {
-                if (_theme == Theme.Luna)
+                if (CurrentTheme == Theme.Luna)
                 {
                     return Color.FromKnownColor(KnownColor.ControlLightLight);
                 }

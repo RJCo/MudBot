@@ -17,10 +17,8 @@ namespace Poderosa.Forms
     /// <summary>
     /// EditRenderProfile の概要の説明です。
     /// </summary>
-    public class EditRenderProfile : Form
+    public sealed class EditRenderProfile : Form
     {
-        private RenderProfile _profile;
-
         private Button _okButton;
         private Button _cancelButton;
         private Label _bgColorLabel;
@@ -65,7 +63,7 @@ namespace Poderosa.Forms
             //
             // TODO: InitializeComponent 呼び出しの後に、コンストラクタ コードを追加してください。
             //
-            _profile = new RenderProfile(prof == null ? GEnv.DefaultRenderProfile : prof);
+            Result = new RenderProfile(prof == null ? GEnv.DefaultRenderProfile : prof);
             InitUI();
         }
 
@@ -89,7 +87,7 @@ namespace Poderosa.Forms
         /// デザイナ サポートに必要なメソッドです。このメソッドの内容を
         /// コード エディタで変更しないでください。
         /// </summary>
-        protected void InitializeComponent()
+        private void InitializeComponent()
         {
             _okButton = new Button();
             _cancelButton = new Button();
@@ -123,7 +121,7 @@ namespace Poderosa.Forms
             _bgColorBox.Name = "_bgColorBox";
             _bgColorBox.Size = new Size(112, 20);
             _bgColorBox.TabIndex = 1;
-            _bgColorBox.ColorChanged += new ColorButton.NewColorEventHandler(OnBGColorChanged);
+            _bgColorBox.ColorChanged += OnBGColorChanged;
             // 
             // _textColorLabel
             // 
@@ -139,14 +137,14 @@ namespace Poderosa.Forms
             _textColorBox.Name = "_textColorBox";
             _textColorBox.Size = new Size(112, 20);
             _textColorBox.TabIndex = 3;
-            _textColorBox.ColorChanged += new ColorButton.NewColorEventHandler(OnTextColorChanged);
+            _textColorBox.ColorChanged += OnTextColorChanged;
             //
             // _editColorEscapeSequence
             //
             _editColorEscapeSequence.Location = new Point(120, 72);
             _editColorEscapeSequence.Size = new Size(216, 24);
             _editColorEscapeSequence.TabIndex = 4;
-            _editColorEscapeSequence.Click += new EventHandler(OnEditColorEscapeSequence);
+            _editColorEscapeSequence.Click += OnEditColorEscapeSequence;
             _editColorEscapeSequence.FlatStyle = FlatStyle.System;
             // 
             // _fontLabel
@@ -172,7 +170,7 @@ namespace Poderosa.Forms
             _fontSelectButton.FlatStyle = FlatStyle.System;
             _fontSelectButton.Size = new Size(64, 23);
             _fontSelectButton.TabIndex = 7;
-            _fontSelectButton.Click += new EventHandler(OnFontSelect);
+            _fontSelectButton.Click += OnFontSelect;
             // 
             // _fontSample
             // 
@@ -207,7 +205,7 @@ namespace Poderosa.Forms
             _backgroundImageSelectButton.Size = new Size(19, 19);
             _backgroundImageSelectButton.TabIndex = 11;
             _backgroundImageSelectButton.Text = "...";
-            _backgroundImageSelectButton.Click += new EventHandler(OnSelectBackgroundImage);
+            _backgroundImageSelectButton.Click += OnSelectBackgroundImage;
             // 
             // _imageStyleLabel
             // 
@@ -232,7 +230,7 @@ namespace Poderosa.Forms
             _okButton.Name = "_okButton";
             _okButton.FlatStyle = FlatStyle.System;
             _okButton.TabIndex = 14;
-            _okButton.Click += new EventHandler(OnOK);
+            _okButton.Click += OnOK;
             // 
             // _cancelButton
             // 
@@ -277,21 +275,21 @@ namespace Poderosa.Forms
         private void OnBGColorChanged(object sender, Color e)
         {
             _fontSample.BackColor = e;
-            _profile.BackColor = e;
+            Result.BackColor = e;
         }
         private void OnTextColorChanged(object sender, Color e)
         {
             _fontSample.ForeColor = e;
-            _profile.ForeColor = e;
+            Result.ForeColor = e;
         }
         private void OnEditColorEscapeSequence(object sender, EventArgs args)
         {
-            EditEscapeSequenceColor dlg = new EditEscapeSequenceColor(_fontSample.BackColor, _fontSample.ForeColor, _profile.ESColorSet);
+            EditEscapeSequenceColor dlg = new EditEscapeSequenceColor(_fontSample.BackColor, _fontSample.ForeColor, Result.ESColorSet);
             if (GCUtil.ShowModalDialog(this, dlg) == DialogResult.OK)
             {
-                _profile.ESColorSet = dlg.Result;
-                _profile.ForeColor = dlg.GForeColor;
-                _profile.BackColor = dlg.GBackColor;
+                Result.ESColorSet = dlg.Result;
+                Result.ForeColor = dlg.GForeColor;
+                Result.BackColor = dlg.GBackColor;
                 _bgColorBox.SelectedColor = dlg.GBackColor;
                 _textColorBox.SelectedColor = dlg.GForeColor;
                 _fontSample.ForeColor = dlg.GForeColor;
@@ -305,16 +303,16 @@ namespace Poderosa.Forms
         private void OnFontSelect(object sender, EventArgs args)
         {
             GFontDialog gd = new GFontDialog();
-            Font nf = GUtil.CreateFont(_profile.FontName, _profile.FontSize);
-            Font jf = GUtil.CreateFont(_profile.JapaneseFontName, _profile.FontSize);
-            gd.SetFont(_profile.UseClearType, nf, jf);
+            Font nf = GUtil.CreateFont(Result.FontName, Result.FontSize);
+            Font jf = GUtil.CreateFont(Result.JapaneseFontName, Result.FontSize);
+            gd.SetFont(Result.UseClearType, nf, jf);
             if (GCUtil.ShowModalDialog(this, gd) == DialogResult.OK)
             {
                 Font f = gd.ASCIIFont;
-                _profile.FontName = f.Name;
-                _profile.JapaneseFontName = gd.JapaneseFont.Name;
-                _profile.FontSize = f.Size;
-                _profile.UseClearType = gd.UseClearType;
+                Result.FontName = f.Name;
+                Result.JapaneseFontName = gd.JapaneseFont.Name;
+                Result.FontSize = f.Size;
+                Result.UseClearType = gd.UseClearType;
                 _fontSample.Font = f;
                 AdjustFontDescription(f.Name, gd.JapaneseFont.Name, f.Size);
             }
@@ -325,7 +323,7 @@ namespace Poderosa.Forms
             if (t != null)
             {
                 _backgroundImageBox.Text = t;
-                _profile.BackgroundImageFileName = t;
+                Result.BackgroundImageFileName = t;
             }
         }
         private void AdjustFontDescription(string ascii, string japanese, float fsz)
@@ -343,16 +341,16 @@ namespace Poderosa.Forms
 
         private void InitUI()
         {
-            AdjustFontDescription(_profile.FontName, _profile.JapaneseFontName, _profile.FontSize);
-            _fontSample.Font = GUtil.CreateFont(_profile.FontName, _profile.FontSize);
-            _fontSample.BackColor = _profile.BackColor;
-            _fontSample.ForeColor = _profile.ForeColor;
-            _fontSample.ClearType = _profile.UseClearType;
+            AdjustFontDescription(Result.FontName, Result.JapaneseFontName, Result.FontSize);
+            _fontSample.Font = GUtil.CreateFont(Result.FontName, Result.FontSize);
+            _fontSample.BackColor = Result.BackColor;
+            _fontSample.ForeColor = Result.ForeColor;
+            _fontSample.ClearType = Result.UseClearType;
             _fontSample.Invalidate(true);
-            _backgroundImageBox.Text = _profile.BackgroundImageFileName;
-            _bgColorBox.SelectedColor = _profile.BackColor;
-            _textColorBox.SelectedColor = _profile.ForeColor;
-            _imageStyleBox.SelectedIndex = (int)_profile.ImageStyle;
+            _backgroundImageBox.Text = Result.BackgroundImageFileName;
+            _bgColorBox.SelectedColor = Result.BackColor;
+            _textColorBox.SelectedColor = Result.ForeColor;
+            _imageStyleBox.SelectedIndex = (int)Result.ImageStyle;
         }
 
         private void OnOK(object sender, EventArgs args)
@@ -370,18 +368,10 @@ namespace Poderosa.Forms
                     return;
                 }
             }
-            _profile.BackgroundImageFileName = _backgroundImageBox.Text;
-            _profile.ImageStyle = (ImageStyle)_imageStyleBox.SelectedIndex;
+            Result.BackgroundImageFileName = _backgroundImageBox.Text;
+            Result.ImageStyle = (ImageStyle)_imageStyleBox.SelectedIndex;
         }
 
-        public RenderProfile Result
-        {
-            get
-            {
-                return _profile;
-            }
-        }
-
-
+        public RenderProfile Result { get; }
     }
 }

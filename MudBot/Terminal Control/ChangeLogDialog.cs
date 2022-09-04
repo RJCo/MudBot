@@ -15,9 +15,9 @@ namespace Poderosa.Forms
     /// <summary>
     /// ChangeLogDialog の概要の説明です。
     /// </summary>
-    internal class ChangeLogDialog : Form
+    internal sealed class ChangeLogDialog : Form
     {
-        private TerminalConnection _connection;
+        private readonly TerminalConnection _connection;
 
         private ComboBox _logTypeBox;
         private Label _logTypeLabel;
@@ -29,7 +29,7 @@ namespace Poderosa.Forms
         /// <summary>
         /// 必要なデザイナ変数です。
         /// </summary>
-        private Container components = null;
+        private readonly Container _components = null;
 
         public ChangeLogDialog(TerminalConnection current)
         {
@@ -70,9 +70,9 @@ namespace Poderosa.Forms
         {
             if (disposing)
             {
-                if (components != null)
+                if (_components != null)
                 {
-                    components.Dispose();
+                    _components.Dispose();
                 }
             }
             base.Dispose(disposing);

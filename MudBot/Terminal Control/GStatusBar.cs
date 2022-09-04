@@ -37,32 +37,15 @@ namespace Poderosa.Forms
                 Interval = 500
             };
             //_belltimer.AutoReset = false;
-            _belltimer.Tick += new EventHandler(CancelBellIcon);
+            _belltimer.Tick += CancelBellIcon;
             //_belltimer.Elapsed += new ElapsedEventHandler(CancelBellIcon);
         }
 
-        private StatusBarPanel MessagePanel
-        {
-            get
-            {
-                return _statusBar.Panels[0];
-            }
-        }
+        private StatusBarPanel MessagePanel => _statusBar.Panels[0];
 
-        private StatusBarPanel BellPanel
-        {
-            get
-            {
-                return _statusBar.Panels[1];
-            }
-        }
-        private StatusBarPanel CaretPanel
-        {
-            get
-            {
-                return _statusBar.Panels[2];
-            }
-        }
+        private StatusBarPanel BellPanel => _statusBar.Panels[1];
+
+        private StatusBarPanel CaretPanel => _statusBar.Panels[2];
 
         public void SetStatusBarText(string text)
         {
@@ -84,7 +67,7 @@ namespace Poderosa.Forms
                 {
                     Interval = 10000
                 };
-                _statusBarTextTimer.Tick += new EventHandler(ClearStatusBarTextHandler);
+                _statusBarTextTimer.Tick += ClearStatusBarTextHandler;
             }
             _statusBarTextTimer.Start();
         }

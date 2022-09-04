@@ -13,7 +13,7 @@ namespace Poderosa.Forms
     /// <summary>
     /// EnvVariable ‚ÌŠT—v‚Ìà–¾‚Å‚·B
     /// </summary>
-    internal class EnvVariableList : Form
+    internal sealed class EnvVariableList : Form
     {
         private ListView _list;
         private Button _addButton;

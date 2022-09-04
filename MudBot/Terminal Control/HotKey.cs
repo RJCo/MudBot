@@ -10,67 +10,24 @@ using System.Windows.Forms;
 
 namespace Poderosa.Forms
 {
-    /*
-	 * ホットキーコントロール暫定版
-	 * 
-	 * キーを次の４種類に区別する。
-	 * 1. ModifierKey: Ctrl, Shift, Alt。何かと組み合わせるキー。
-	 * 2. CharKey: 文字と関連付けられたキー。テンキー,スペース含む。
-	 * 3. TerminalKey: ターミナルにとって意味のあるキー。Enter,BS,ESC,Tab,カーソルキー,ファンクションキー。
-	 * 4. GenericKey:  その他のキー
-	 * 
-	 * ホットキーに有効な入力はmodifierにより異なり、
-	 * modifierなしかShiftのみ：4のみ
-	 * ControlまたはAltあり： 2,3,4
-	 * となる。
-	 * 
-	 * 確認済み怪現象：Shift+F4, Control+F10で変なキーが来る
-	 * 
-	 * デバッグオプションで、来たキーのリストをリストボックスあたりにダンプする機能があるとよいだろう。
-	*/
-
-
-    /// <summary>
-    /// HotKey の概要の説明です。
-    /// </summary>
     internal class HotKey : TextBox
     {
-        /// <summary>
-        /// 必要なデザイナ変数です。
-        /// </summary>
-        private Container components = null;
-
-        private TextBox _debugTextBox;
+        private Container components;
 
         private Keys _key;
 
         public HotKey()
         {
-            // この呼び出しは、Windows.Forms フォーム デザイナで必要です。
             InitializeComponent();
 
-            // TODO: InitForm を呼び出しの後に初期化処理を追加します。
-
+            // TODO: InitForm
         }
 
-        public TextBox DebugTextBox
-        {
-            get
-            {
-                return _debugTextBox;
-            }
-            set
-            {
-                _debugTextBox = value;
-            }
-        }
+        public TextBox DebugTextBox { get; set; }
 
         public Keys Key
         {
-            get
-            {
-                return _key;
-            }
+            get => _key;
             set
             {
                 _key = value;
@@ -78,9 +35,6 @@ namespace Poderosa.Forms
             }
         }
 
-        /// <summary>
-        /// 使用されているリソースに後処理を実行します。
-        /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -94,10 +48,6 @@ namespace Poderosa.Forms
         }
 
         #region Component Designer generated code
-        /// <summary>
-        /// デザイナ サポートに必要なメソッドです。このメソッドの内容を
-        /// コード エディタで変更しないでください。
-        /// </summary>
         private void InitializeComponent()
         {
             components = new Container();
@@ -116,16 +66,16 @@ namespace Poderosa.Forms
 
             Keys body = _key & Keys.KeyCode;
             if (body == Keys.Menu || body == Keys.ShiftKey || body == Keys.ControlKey)
-            { //modifierのみは認めない
+            {
                 _key = Keys.None;
                 Text = "";
             }
         }
         protected override bool ProcessDialogKey(Keys key)
         {
-            if (_debugTextBox != null)
+            if (DebugTextBox != null)
             {
-                AppendDebugText(key.ToString() + " " + (int)key);
+                AppendDebugText(key + " " + (int)key);
             }
 
             string t = FormatKey(key);
@@ -146,12 +96,12 @@ namespace Poderosa.Forms
             Keys body = key & Keys.KeyCode;
             Keys modifiers = key & Keys.Modifiers;
 
-            //modifierは常に表示する
             StringBuilder b = new StringBuilder();
             if ((modifiers & Keys.Control) != Keys.None)
             {
                 b.Append("Ctrl");
             }
+
             if ((modifiers & Keys.Shift) != Keys.None)
             {
                 if (b.Length > 0)
@@ -161,6 +111,7 @@ namespace Poderosa.Forms
 
                 b.Append("Shift");
             }
+
             if ((modifiers & Keys.Alt) != Keys.None)
             {
                 if (b.Length > 0)
@@ -170,6 +121,7 @@ namespace Poderosa.Forms
 
                 b.Append("Alt");
             }
+
             if (b.Length > 0)
             {
                 b.Append('+');
@@ -198,7 +150,6 @@ namespace Poderosa.Forms
             {
                 if (modifiers != Keys.None)
                 {
-                    //カスタマイズ不能で固定されたショートカットキーは登録できない
                     if (modifiers == Keys.Control && IsScrollKey(body))
                     {
                         _key = Keys.None;
@@ -245,10 +196,12 @@ namespace Poderosa.Forms
                 key == Keys.LShiftKey || key == Keys.RShiftKey ||
                 key == Keys.LControlKey || key == Keys.RControlKey;
         }
+
         private static bool IsFunctionKey(Keys key)
         {
             return (int)Keys.F1 <= (int)key && (int)key <= (int)Keys.F24;
         }
+
         private static bool IsTerminalKey(Keys key)
         {
             return key == Keys.Escape || key == Keys.Back || key == Keys.Tab ||
@@ -257,30 +210,30 @@ namespace Poderosa.Forms
                 key == Keys.Home || key == Keys.End || key == Keys.Next || key == Keys.Prior || key == Keys.PageDown || key == Keys.PageUp ||
                 key == Keys.Insert || key == Keys.Delete;
         }
+
         private static bool IsScrollKey(Keys key)
         { //TerminalKeyのサブセットで、Ctrlとの組み合わせでバッファのスクロールをする
             return key == Keys.Up || key == Keys.Down ||
                 key == Keys.Home || key == Keys.End ||
                 key == Keys.PageDown || key == Keys.PageUp;
         }
-
-
+        
         private void AppendDebugText(string text)
         {
-            string[] data = _debugTextBox.Lines;
+            string[] data = DebugTextBox.Lines;
             if (data.Length >= 5)
             {
                 string[] n = new string[5];
                 Array.Copy(data, data.Length - 4, n, 0, 4);
                 n[4] = text;
-                _debugTextBox.Lines = n;
+                DebugTextBox.Lines = n;
             }
             else
             {
                 string[] n = new string[data.Length + 1];
                 Array.Copy(data, 0, n, 0, data.Length);
                 n[data.Length] = text;
-                _debugTextBox.Lines = n;
+                DebugTextBox.Lines = n;
             }
         }
     }

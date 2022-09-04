@@ -127,7 +127,7 @@ namespace Poderosa.Forms
             _bgColorBox.Name = "_bgColorBox";
             _bgColorBox.Size = new Size(152, 20);
             _bgColorBox.TabIndex = 2;
-            _bgColorBox.ColorChanged += new ColorButton.NewColorEventHandler(OnBGColorChanged);
+            _bgColorBox.ColorChanged += OnBGColorChanged;
             // 
             // _textColorLabel
             // 
@@ -143,14 +143,14 @@ namespace Poderosa.Forms
             _textColorBox.Name = "_textColorBox";
             _textColorBox.Size = new Size(152, 20);
             _textColorBox.TabIndex = 4;
-            _textColorBox.ColorChanged += new ColorButton.NewColorEventHandler(OnTextColorChanged);
+            _textColorBox.ColorChanged += OnTextColorChanged;
             //
             // _editColorEscapeSequence
             //
             _editColorEscapeSequence.Location = new Point(120, 66);
             _editColorEscapeSequence.Size = new Size(224, 24);
             _editColorEscapeSequence.TabIndex = 5;
-            _editColorEscapeSequence.Click += new EventHandler(OnEditColorEscapeSequence);
+            _editColorEscapeSequence.Click += OnEditColorEscapeSequence;
             _editColorEscapeSequence.FlatStyle = FlatStyle.System;
             // 
             // _fontLabel
@@ -176,7 +176,7 @@ namespace Poderosa.Forms
             _fontSelectButton.FlatStyle = FlatStyle.System;
             _fontSelectButton.Size = new Size(64, 23);
             _fontSelectButton.TabIndex = 8;
-            _fontSelectButton.Click += new EventHandler(OnFontSelect);
+            _fontSelectButton.Click += OnFontSelect;
             // 
             // _fontSample
             // 
@@ -212,7 +212,7 @@ namespace Poderosa.Forms
             _backgroundImageSelectButton.Size = new Size(19, 19);
             _backgroundImageSelectButton.TabIndex = 12;
             _backgroundImageSelectButton.Text = "...";
-            _backgroundImageSelectButton.Click += new EventHandler(OnSelectBackgroundImage);
+            _backgroundImageSelectButton.Click += OnSelectBackgroundImage;
             // 
             // _imageStyleLabel
             // 
@@ -237,7 +237,7 @@ namespace Poderosa.Forms
             _applyRenderProfileButton.FlatStyle = FlatStyle.System;
             _applyRenderProfileButton.Size = new Size(120, 24);
             _applyRenderProfileButton.TabIndex = 15;
-            _applyRenderProfileButton.Click += new EventHandler(OnApplyRenderProfile);
+            _applyRenderProfileButton.Click += OnApplyRenderProfile;
             // 
             // _caretGroup
             // 
@@ -286,7 +286,7 @@ namespace Poderosa.Forms
             _caretSpecifyColor.Size = new Size(104, 20);
             _caretSpecifyColor.TabIndex = 20;
             _caretSpecifyColor.FlatStyle = FlatStyle.System;
-            _caretSpecifyColor.CheckedChanged += new EventHandler(OnCaretSpecifyColorChanged);
+            _caretSpecifyColor.CheckedChanged += OnCaretSpecifyColorChanged;
             // 
             // _caretColorBox
             // 

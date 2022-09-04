@@ -29,92 +29,55 @@ namespace Poderosa.MacroEnv
 
     internal class MacroModule : ICloneable
     {
-        private MacroType _type;
         private string _path;
-        private string _title;
-        private string[] _additionalAssemblies;
-        private bool _debugMode;
-        private int _index;
 
         public MacroModule(int index)
         {
-            _index = index;
-            _additionalAssemblies = new string[0];
+            Index = index;
+            AdditionalAssemblies = new string[0];
         }
-        public int Index
-        {
-            get
-            {
-                return _index;
-            }
-            set
-            {
-                _index = value;
-            }
-        }
+        public int Index { get; set; }
 
         public object Clone()
         {
-            MacroModule m = new MacroModule(_index)
+            MacroModule m = new MacroModule(Index)
             {
-                _type = _type,
+                Type = Type,
                 _path = _path,
-                _title = _title,
-                _additionalAssemblies = _additionalAssemblies,
-                _debugMode = _debugMode
+                Title = Title,
+                AdditionalAssemblies = AdditionalAssemblies,
+                DebugMode = DebugMode
             };
             return m;
         }
 
-        public MacroType Type
-        {
-            get
-            {
-                return _type;
-            }
-        }
+        public MacroType Type { get; private set; }
+
         public string Path
         {
-            get
-            {
-                return _path;
-            }
+            get => _path;
             set
             {
                 _path = value;
                 string t = System.IO.Path.GetExtension(_path).ToLower();
                 if (t.EndsWith("js"))
                 {
-                    _type = MacroType.JavaScript;
+                    Type = MacroType.JavaScript;
                 }
                 else if (t.EndsWith("exe") || t.EndsWith("dll"))
                 {
-                    _type = MacroType.Assembly;
+                    Type = MacroType.Assembly;
                 }
                 else
                 {
-                    _type = MacroType.Unknown;
+                    Type = MacroType.Unknown;
                 }
             }
         }
-        public string Title
-        {
-            get
-            {
-                return _title;
-            }
-            set
-            {
-                _title = value;
-            }
-        }
-        public CID CommandID
-        {
-            get
-            {
-                return CID.ExecMacro + _index;
-            }
-        }
+        public string Title { get; set; }
+
+        public CID CommandID => CID.ExecMacro + Index;
+
         public Keys ShortCut
         {
             get
@@ -125,34 +88,15 @@ namespace Poderosa.MacroEnv
         }
 
 
-        public string[] AdditionalAssemblies
-        {
-            get
-            {
-                return _additionalAssemblies;
-            }
-            set
-            {
-                _additionalAssemblies = value;
-            }
-        }
-        public bool DebugMode
-        {
-            get
-            {
-                return _debugMode;
-            }
-            set
-            {
-                _debugMode = value;
-            }
-        }
+        public string[] AdditionalAssemblies { get; set; }
+
+        public bool DebugMode { get; set; }
 
         public void Load(ConfigNode sec)
         {
             Path = sec["path"];
-            _title = sec["title"];
-            _debugMode = GUtil.ParseBool(sec["debug"], false);
+            Title = sec["title"];
+            DebugMode = GUtil.ParseBool(sec["debug"], false);
             Keys shortcut = Keys.None;
             string t = sec["shortcut"];
             if (t != null)
@@ -160,22 +104,22 @@ namespace Poderosa.MacroEnv
                 shortcut = GUtil.ParseKey(t.Split(','));
             }
 
-            GApp.Options.Commands.AddEntry(new Commands.MacroEntry(_title, shortcut & Keys.Modifiers, shortcut & Keys.KeyCode, _index));
-            _additionalAssemblies = sec["additional-assemblies"].Split(',');
+            GApp.Options.Commands.AddEntry(new Commands.MacroEntry(Title, shortcut & Keys.Modifiers, shortcut & Keys.KeyCode, Index));
+            AdditionalAssemblies = sec["additional-assemblies"].Split(',');
         }
         public void Save(ConfigNode parent)
         {
             ConfigNode node = new ConfigNode("module");
             node["path"] = _path;
-            node["title"] = _title;
-            node["debug"] = _debugMode.ToString();
+            node["title"] = Title;
+            node["debug"] = DebugMode.ToString();
             Commands.Entry e = GApp.Options.Commands.FindMacroEntry(Index);
             if (e != null)
             {
                 node["shortcut"] = UILibUtil.KeyString(e.Modifiers, e.Key, ',');
             }
 
-            node["additional-assemblies"] = Concat(_additionalAssemblies);
+            node["additional-assemblies"] = Concat(AdditionalAssemblies);
             parent.AddChild(node);
         }
         private string Concat(string[] v)
@@ -212,28 +156,12 @@ namespace Poderosa.MacroEnv
             _entries = new ArrayList();
             _environmentVariables = new Hashtable();
         }
-        public IEnumerable Modules
-        {
-            get
-            {
-                return _entries;
-            }
-        }
-        public int ModuleCount
-        {
-            get
-            {
-                return _entries.Count;
-            }
-        }
+        public IEnumerable Modules => _entries;
 
-        public IDictionaryEnumerator EnvironmentVariables
-        {
-            get
-            {
-                return _environmentVariables.GetEnumerator();
-            }
-        }
+        public int ModuleCount => _entries.Count;
+
+        public IDictionaryEnumerator EnvironmentVariables => _environmentVariables.GetEnumerator();
+
         public string GetVariable(string name, string defaultvalue)
         {
             object t = _environmentVariables[name];
@@ -244,20 +172,10 @@ namespace Poderosa.MacroEnv
             _environmentVariables = newmap;
         }
 
-        public bool MacroIsRunning
-        {
-            get
-            {
-                return _runningMacro != null;
-            }
-        }
-        public MacroModule CurrentMacro
-        {
-            get
-            {
-                return _runningMacro.Module;
-            }
-        }
+        public bool MacroIsRunning => _runningMacro != null;
+
+        public MacroModule CurrentMacro => _runningMacro.Module;
+
         public void SetMacroEventListener(IMacroEventListener f)
         {
             _macroListener = f;

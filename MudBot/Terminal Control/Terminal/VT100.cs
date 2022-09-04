@@ -157,13 +157,12 @@ namespace Poderosa.Terminal
                 int code = ParseSGRCode(cmd);
                 if (code >= 30 && code <= 37)
                 {
-                    //これだと色を変更したとき既に画面にあるものは連動しなくなるが、そこをちゃんとするのは困難である
                     dec.TextColor = _tag.GetCurrentRenderProfile().ESColorSet[code % 10];
                 }
                 else if (code >= 40 && code <= 47)
                 {
                     Color c = _tag.GetCurrentRenderProfile().ESColorSet[code % 10];
-                    dec.BackColor = DrawUtil.DarkColor(c); //背景色は暗めに
+                    dec.BackColor = DrawUtil.DarkColor(c);
                 }
                 else
                 {
@@ -183,7 +182,7 @@ namespace Poderosa.Terminal
                             dec.Inverse();
                             break;
                         case 2:
-                            dec = TextDecoration.ClonedDefault(); //不明だがSGR 2で終わっている例があった
+                            dec = TextDecoration.ClonedDefault();
                             break;
                         case 22:
                         case 25:
@@ -203,9 +202,9 @@ namespace Poderosa.Terminal
                         case 10:
                         case 11:
                         case 12:
-                            break; //'konsole'というやつらしい。無視で問題なさそう
+                            break; //'konsole'
                         default:
-                            throw new UnknownEscapeSequenceException(String.Format("unknown SGR command {0}", param));
+                            throw new UnknownEscapeSequenceException($"unknown SGR command {param}");
                     }
                 }
 
@@ -219,23 +218,23 @@ namespace Poderosa.Terminal
             {
                 return 0;
             }
-            else if (param.Length == 1)
+
+            if (param.Length == 1)
             {
                 return param[0] - '0';
             }
-            else if (param.Length == 2)
+
+            if (param.Length == 2)
             {
                 return (param[0] - '0') * 10 + (param[1] - '0');
             }
-            else
-            {
-                throw new UnknownEscapeSequenceException(String.Format("unknown SGR parameter {0}", param));
-            }
+
+            throw new UnknownEscapeSequenceException($"unknown SGR parameter {param}");
         }
 
         protected virtual void ProcessDeviceAttributes(string param)
         {
-            byte[] data = Encoding.ASCII.GetBytes(" [?1;2c"); //なんかよくわからないがMindTerm等をみるとこれでいいらしい
+            byte[] data = Encoding.ASCII.GetBytes(" [?1;2c");
             data[0] = 0x1B; //ESC
             GetConnection().Write(data);
         }
@@ -244,7 +243,7 @@ namespace Poderosa.Terminal
             string response;
             if (param == "5")
             {
-                response = " [0n"; //これでOKの意味らしい
+                response = " [0n";
             }
             else if (param == "6")
             {
@@ -783,7 +782,7 @@ namespace Poderosa.Terminal
                 }
                 else
                 {
-                    throw new ArgumentException("unknown key " + body.ToString());
+                    throw new ArgumentException("unknown key " + body);
                 }
 
                 return r;

@@ -14,8 +14,6 @@ namespace Poderosa.Forms
     /// </summary>
     internal class InputBox : Form
     {
-        private bool _allowsZeroLenString;
-
         private TextBox _textBox;
         private Button _okButton;
         private Button _cancelButton;
@@ -35,17 +33,7 @@ namespace Poderosa.Forms
             // TODO: InitializeComponent 呼び出しの後に、コンストラクタ コードを追加してください。
             //
         }
-        public bool AllowsZeroLenString
-        {
-            get
-            {
-                return _allowsZeroLenString;
-            }
-            set
-            {
-                _allowsZeroLenString = value;
-            }
-        }
+        public bool AllowsZeroLenString { get; set; }
 
         /// <summary>
         /// 使用されているリソースに後処理を実行します。
@@ -82,8 +70,8 @@ namespace Poderosa.Forms
             _textBox.Size = new Size(192, 19);
             _textBox.TabIndex = 0;
             _textBox.Text = "";
-            _textBox.GotFocus += new EventHandler(OnTextBoxGotFocus);
-            _textBox.TextChanged += new EventHandler(OnTextChanged);
+            _textBox.GotFocus += OnTextBoxGotFocus;
+            _textBox.TextChanged += OnTextChanged;
             // 
             // _okButton
             // 
@@ -127,14 +115,11 @@ namespace Poderosa.Forms
 
         public string Content
         {
-            get
-            {
-                return _textBox.Text;
-            }
+            get => _textBox.Text;
             set
             {
                 _textBox.Text = value;
-                _okButton.Enabled = _allowsZeroLenString || (value != null && value.Length != 0);
+                _okButton.Enabled = AllowsZeroLenString || (value != null && value.Length != 0);
             }
         }
 
@@ -144,7 +129,7 @@ namespace Poderosa.Forms
         }
         private void OnTextChanged(object sender, EventArgs args)
         {
-            _okButton.Enabled = _allowsZeroLenString || (_textBox.Text != null && _textBox.Text.Length != 0);
+            _okButton.Enabled = AllowsZeroLenString || (_textBox.Text != null && _textBox.Text.Length != 0);
         }
     }
 }

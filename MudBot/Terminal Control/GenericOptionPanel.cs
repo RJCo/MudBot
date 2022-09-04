@@ -159,7 +159,7 @@ namespace Poderosa.Forms
             _showTabBar.FlatStyle = FlatStyle.System;
             _showTabBar.Size = new System.Drawing.Size(136, 23);
             _showTabBar.TabIndex = 8;
-            _showTabBar.CheckedChanged += new EventHandler(OnShowTabBarCheckedChanged);
+            _showTabBar.CheckedChanged += OnShowTabBarCheckedChanged;
             // 
             // _tabBarGroup
             // 
@@ -244,7 +244,7 @@ namespace Poderosa.Forms
             _optionPreservePlace.Name = "_optionPreservePlaceBox";
             _optionPreservePlace.Size = new System.Drawing.Size(200, 20);
             _optionPreservePlace.TabIndex = 18;
-            _optionPreservePlace.SelectedIndexChanged += new EventHandler(OnOptionPreservePlaceChanged);
+            _optionPreservePlace.SelectedIndexChanged += OnOptionPreservePlaceChanged;
             // 
             // _optionPreservePlacePath
             // 
@@ -374,7 +374,7 @@ namespace Poderosa.Forms
             }
             else //CID.ExecMacro
             {
-                return 2 + (int)(action - CID.ExecMacro);
+                return 2 + (action - CID.ExecMacro);
             }
         }
         private static CID ToActionOnLaunchCID(int n)

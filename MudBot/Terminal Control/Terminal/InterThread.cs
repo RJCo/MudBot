@@ -44,14 +44,8 @@ namespace Poderosa
 
         public IntPtr MainFrameHandle
         {
-            get
-            {
-                return _mainFrameHandle;
-            }
-            set
-            {
-                _mainFrameHandle = value;
-            }
+            get => _mainFrameHandle;
+            set => _mainFrameHandle = value;
         }
 
         //これらの各メソッドはそれぞれロックしながら実行される
@@ -80,25 +74,6 @@ namespace Poderosa
                 _msg = msg;
                 SendMessageCore(Service.Information);
             }
-        }
-        public DialogResult AskUserYesNo(string msg)
-        {
-            lock (this)
-            {
-                _msg = msg;
-                SendMessageCore(Service.AskUserYesNo);
-            }
-            return _dialogResult;
-        }
-        internal void ReportCriticalError(TerminalDocument doc, Exception ex)
-        {
-            Monitor.Exit(doc);
-            lock (this)
-            {
-                _exception = ex;
-                SendMessageCore(Service.CriticalError);
-            }
-            Monitor.Enter(doc);
         }
         public void ReportCriticalError(Exception ex)
         {

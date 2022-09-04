@@ -51,12 +51,12 @@ namespace Poderosa.Terminal
 					}
 				}
 				*/
-                crc ^= (ushort)((ushort)d << 8);
+                crc ^= (ushort)(d << 8);
                 for (int j = 1; j <= 8; j++)
                 {
                     if ((crc & 0x8000) != 0)
                     {
-                        crc = (ushort)((crc << 1) ^ (ushort)0x1021);
+                        crc = (ushort)((crc << 1) ^ 0x1021);
                     }
                     else
                     {
@@ -82,42 +82,20 @@ namespace Poderosa.Terminal
             _fileName = fn;
             _sequenceNumber = 1;
         }
-        public bool CRCEnabled
-        {
-            get
-            {
-                return _crcEnabled;
-            }
-        }
+        public bool CRCEnabled => _crcEnabled;
+
         public IntPtr NotifyTarget
         {
-            get
-            {
-                return _notifyTarget;
-            }
-            set
-            {
-                _notifyTarget = value;
-            }
+            get => _notifyTarget;
+            set => _notifyTarget = value;
         }
         public abstract void Start();
         public abstract void Abort();
 
         public abstract void Input(byte[] data, int offset, int count);
-        public bool CanReceive
-        {
-            get
-            {
-                return true;
-            }
-        }
-        public string Caption
-        {
-            get
-            {
-                return "XMODEM";
-            }
-        }
+        public bool CanReceive => true;
+
+        public string Caption => "XMODEM";
 
         protected void NotifyStatus(int wparam, int lparam)
         {
@@ -147,9 +125,9 @@ namespace Poderosa.Terminal
         public override void Start()
         {
             _tag.ModalTerminalTask = this;
-            _timer = new Timer(new TimerCallback(OnTimeout), CRC_TIMEOUT, 3000, Timeout.Infinite);
+            _timer = new Timer(OnTimeout, CRC_TIMEOUT, 3000, Timeout.Infinite);
             _crcEnabled = true;
-            _tag.Connection.Write(new byte[] { (byte)'C' }); //CRCモードでトライ
+            _tag.Connection.Write(new[] { (byte)'C' }); //CRCモードでトライ
 
             //_debugStream = new FileStream("C:\\IOPort\\xmodemtest.bin", FileMode.Create, FileAccess.Write);
         }
@@ -163,11 +141,11 @@ namespace Poderosa.Terminal
             {
                 case CRC_TIMEOUT:
                     _crcEnabled = false;
-                    _timer = new Timer(new TimerCallback(OnTimeout), NEGOTIATION_TIMEOUT, 5000, Timeout.Infinite);
-                    _tag.Connection.Write(new byte[] { NAK });
+                    _timer = new Timer(OnTimeout, NEGOTIATION_TIMEOUT, 5000, Timeout.Infinite);
+                    _tag.Connection.Write(new[] { NAK });
                     break;
                 case NEGOTIATION_TIMEOUT:
-                    _tag.Connection.Write(new byte[] { CAN });
+                    _tag.Connection.Write(new[] { CAN });
                     GEnv.InterThreadUIService.Warning("Message.XModem.StartTimedOut");
                     NotifyStatus(NOTIFY_TIMEOUT, 0);
                     Exit();
@@ -186,7 +164,7 @@ namespace Poderosa.Terminal
         }
         public override void Abort()
         {
-            _tag.Connection.Write(new byte[] { CAN });
+            _tag.Connection.Write(new[] { CAN });
             Exit();
         }
 
@@ -206,7 +184,7 @@ namespace Poderosa.Terminal
             byte head = data[offset];
             if (head == EOT)
             { //successfully exit
-                _tag.Connection.Write(new byte[] { ACK });
+                _tag.Connection.Write(new[] { ACK });
                 GEnv.InterThreadUIService.Information("Message.XModem.ReceiveComplete");
                 NotifyStatus(NOTIFY_SUCCESS, 0);
                 //_debugStream.Close();
@@ -239,7 +217,7 @@ namespace Poderosa.Terminal
                     int checksum_offset = offset + 3 + body_len;
                     if (_crcEnabled)
                     {
-                        ushort sent = (ushort)((((ushort)data[checksum_offset]) << 8) + (ushort)data[checksum_offset + 1]);
+                        ushort sent = (ushort)((data[checksum_offset] << 8) + data[checksum_offset + 1]);
                         ushort sum = CalcCRC(data, body_offset, body_len);
                         success = (sent == sum);
                     }
@@ -258,7 +236,7 @@ namespace Poderosa.Terminal
                     _buffer = null; //ブロックごとにACKを待つ仕様なので、もらってきたデータが複数ブロックにまたがることはない。したがってここで破棄して構わない。
                     if (success)
                     {
-                        _tag.Connection.Write(new byte[] { ACK });
+                        _tag.Connection.Write(new[] { ACK });
                         _sequenceNumber++;
 
                         int t = checksum_offset - 1;
@@ -284,7 +262,7 @@ namespace Poderosa.Terminal
                         }
                         else
                         {
-                            _tag.Connection.Write(new byte[] { NAK });
+                            _tag.Connection.Write(new[] { NAK });
                         }
                     }
                 }
@@ -325,13 +303,7 @@ namespace Poderosa.Terminal
 
         private const int NEGOTIATION_TIMEOUT = 1;
 
-        public int TotalLength
-        {
-            get
-            {
-                return _body.Length;
-            }
-        }
+        public int TotalLength => _body.Length;
 
         public XModemSender(ConnectionTag tag, string filename) : base(tag, filename)
         {
@@ -343,7 +315,7 @@ namespace Poderosa.Terminal
         public override void Start()
         {
             _tag.ModalTerminalTask = this;
-            _timer = new Timer(new TimerCallback(OnTimeout), NEGOTIATION_TIMEOUT, 60000, Timeout.Infinite);
+            _timer = new Timer(OnTimeout, NEGOTIATION_TIMEOUT, 60000, Timeout.Infinite);
             _negotiating = true;
             //_tag.Connection.WriteChars(TerminalUtil.NewLineChars(_tag.Connection.Param.TransmitNL));
         }
@@ -372,7 +344,7 @@ namespace Poderosa.Terminal
         }
         public override void Abort()
         {
-            _tag.Connection.Write(new byte[] { CAN });
+            _tag.Connection.Write(new[] { CAN });
             Exit();
         }
 
@@ -430,7 +402,7 @@ namespace Poderosa.Terminal
 
             if (_nextOffset >= _body.Length)
             { //last
-                _tag.Connection.Write(new byte[] { EOT });
+                _tag.Connection.Write(new[] { EOT });
                 _offset = _body.Length;
             }
             else
@@ -443,7 +415,7 @@ namespace Poderosa.Terminal
 
                 byte[] buf = new byte[3 + len + (_crcEnabled ? 2 : 1)];
                 buf[0] = len == 128 ? SOH : STX;
-                buf[1] = (byte)_sequenceNumber;
+                buf[1] = _sequenceNumber;
                 buf[2] = (byte)(255 - buf[1]);
                 int body_len = Math.Min(len, _body.Length - _offset);
                 Array.Copy(_body, _offset, buf, 3, body_len);

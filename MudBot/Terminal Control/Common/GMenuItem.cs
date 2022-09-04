@@ -35,25 +35,13 @@ namespace Poderosa.UI
 
         public Keys ShortcutKey
         {
-            get
-            {
-                return _shortcut;
-            }
-            set
-            {
-                _shortcut = value;
-            }
+            get => _shortcut;
+            set => _shortcut = value;
         }
         public int CID
         {
-            get
-            {
-                return _id;
-            }
-            set
-            {
-                _id = value;
-            }
+            get => _id;
+            set => _id = value;
         }
 
         protected class Consts

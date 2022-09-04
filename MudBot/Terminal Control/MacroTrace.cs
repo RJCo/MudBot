@@ -15,7 +15,7 @@ namespace Poderosa.MacroEnv
     internal class MacroTraceWindow : Form
     {
         internal static int _instanceCount;
-        internal static Size _lastWindowSize = new Size();
+        internal static Size _lastWindowSize;
 
         private TextBox _textBox;
         /// <summary>

@@ -24,27 +24,11 @@ namespace Poderosa.Terminal
         public void Input(byte[] data, int offset, int length)
         {
         }
-        public bool CanReceive
-        {
-            get
-            {
-                return false;
-            }
-        }
-        public string Caption
-        {
-            get
-            {
-                return "Caption.ConnectionCommandTarget.DuringPaste";
-            }
-        }
-        public int LineCount
-        {
-            get
-            {
-                return _data.Count;
-            }
-        }
+        public bool CanReceive => false;
+
+        public string Caption => "Caption.ConnectionCommandTarget.DuringPaste";
+
+        public int LineCount => _data.Count;
 
         public event EventHandler LineProcessed;
 
@@ -83,7 +67,7 @@ namespace Poderosa.Terminal
             {
                 _async = true;
                 _tag.ModalTerminalTask = this;
-                new Thread(new ThreadStart(Run)).Start();
+                new Thread(Run).Start();
                 return CommandResult.Success;
             }
         }

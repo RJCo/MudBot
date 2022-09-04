@@ -9,62 +9,35 @@ namespace Poderosa.Config
 {
     public class ConfigNode
     {
-        private string _name;
-        private Hashtable _data;
-        private ArrayList _childConfigNodes;
+        private readonly ArrayList _childConfigNodes;
 
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-        }
+        public string Name { get; }
+
         public IDictionaryEnumerator GetPairEnumerator()
         {
-            return _data.GetEnumerator();
+            return InnerHashtable.GetEnumerator();
         }
-        public Hashtable InnerHashtable
-        {
-            get
-            {
-                return _data;
-            }
-        }
+        public Hashtable InnerHashtable { get; private set; }
+
         public string this[string name]
         {
-            get
-            {
-                return (string)_data[name];
-            }
-            set
-            {
-                _data[name] = value;
-            }
+            get => (string)InnerHashtable[name];
+            set => InnerHashtable[name] = value;
         }
+
         public string GetValue(string name, string defval)
         {
-            object t = _data[name];
+            object t = InnerHashtable[name];
             return t == null ? defval : (string)t;
         }
+
         public bool Contains(string name)
         {
-            return _data.Contains(name);
+            return InnerHashtable.Contains(name);
         }
-        public bool HasChild
-        {
-            get
-            {
-                return _childConfigNodes.Count > 0;
-            }
-        }
-        public IEnumerable Children
-        {
-            get
-            {
-                return _childConfigNodes;
-            }
-        }
+
+        public IEnumerable Children => _childConfigNodes;
+
         public void AddChild(ConfigNode child)
         {
             _childConfigNodes.Add(child);
@@ -84,14 +57,14 @@ namespace Poderosa.Config
 
         public ConfigNode(string name)
         {
-            _name = name;
-            _data = new Hashtable();
+            Name = name;
+            InnerHashtable = new Hashtable();
             _childConfigNodes = new ArrayList();
         }
         public ConfigNode(string name, TextReader reader)
         {
-            _name = name;
-            _data = new Hashtable();
+            Name = name;
+            InnerHashtable = new Hashtable();
             _childConfigNodes = new ArrayList();
             ReadFrom(reader);
         }
@@ -105,7 +78,7 @@ namespace Poderosa.Config
                 {
                     string name0 = Normalize(line.Substring(0, e));
                     string value = e == line.Length - 1 ? "" : Normalize(line.Substring(e + 1));
-                    _data[name0] = value;
+                    InnerHashtable[name0] = value;
                 }
                 else if (line.EndsWith("{"))
                 {
@@ -162,11 +135,11 @@ namespace Poderosa.Config
         private void WriteTo(TextWriter writer, int indent)
         {
             WriteIndent(writer, indent);
-            writer.Write(_name);
+            writer.Write(Name);
             writer.WriteLine(" {");
             indent += 2;
 
-            IDictionaryEnumerator i = _data.GetEnumerator();
+            IDictionaryEnumerator i = InnerHashtable.GetEnumerator();
             while (i.MoveNext())
             {
                 object v = i.Value;
@@ -199,7 +172,7 @@ namespace Poderosa.Config
         {
             ConfigNode n = new ConfigNode(name)
             {
-                _data = (Hashtable)values.Clone()
+                InnerHashtable = (Hashtable)values.Clone()
             };
             return n;
         }

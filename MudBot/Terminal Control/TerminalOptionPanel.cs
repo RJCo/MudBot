@@ -172,7 +172,7 @@ namespace Poderosa.Forms
             _keepAliveCheck.FlatStyle = FlatStyle.System;
             _keepAliveCheck.Size = new Size(244, 20);
             _keepAliveCheck.TabIndex = 10;
-            _keepAliveCheck.CheckedChanged += new EventHandler(OnKeepAliveCheckChanged);
+            _keepAliveCheck.CheckedChanged += OnKeepAliveCheckChanged;
             // 
             // _keepAliveIntervalBox
             // 
@@ -246,7 +246,7 @@ namespace Poderosa.Forms
             _dirSelect.Size = new Size(19, 19);
             _dirSelect.TabIndex = 19;
             _dirSelect.Text = "...";
-            _dirSelect.Click += new EventHandler(OnSelectLogDirectory);
+            _dirSelect.Click += OnSelectLogDirectory;
             // 
             // _autoLogCheckBox
             // 
@@ -256,7 +256,7 @@ namespace Poderosa.Forms
             _autoLogCheckBox.Size = new Size(200, 24);
             _autoLogCheckBox.TabIndex = 13;
             _autoLogCheckBox.Checked = true;
-            _autoLogCheckBox.CheckedChanged += new EventHandler(OnAutoLogCheckBoxClick);
+            _autoLogCheckBox.CheckedChanged += OnAutoLogCheckBoxClick;
 
             BackColor = ThemeUtil.TabPaneBackColor;
             _defaultLogGroup.ResumeLayout();

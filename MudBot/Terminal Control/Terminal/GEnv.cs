@@ -11,12 +11,10 @@ using Poderosa.Text;
 namespace Poderosa
 {
     /// <summary>
-    /// 
     /// </summary>
     public class GEnv
     {
         //
-        private static IPoderosaContainer _frame;
 
         //•
         private static CommonOptions _options;
@@ -24,38 +22,24 @@ namespace Poderosa
         private static InterThreadUIService _interThreadUIService;
 
         //
-        private static Connections _connections;
         private static Win32.SystemMetrics _systemMetrics;
         private static RenderProfile _defaultRenderProfile;
-        private static TextSelection _textSelection;
 
         public static void Init(IPoderosaContainer container)
         {
             GConst.Init();
-            _frame = container;
-            _textSelection = new TextSelection();
-            _connections = new Connections();
+            Frame = container;
+            TextSelection = new TextSelection();
+            Connections = new Connections();
         }
 
         public static void Terminate()
         {
         }
 
-        public static Connections Connections
-        {
-            get
-            {
-                return _connections;
-            }
-        }
+        public static Connections Connections { get; private set; }
 
-        public static IPoderosaContainer Frame
-        {
-            get
-            {
-                return _frame;
-            }
-        }
+        public static IPoderosaContainer Frame { get; private set; }
 
         public static void ReloadStringResource()
         {
@@ -107,18 +91,10 @@ namespace Poderosa
 
                 return _defaultRenderProfile;
             }
-            set
-            {
-                _defaultRenderProfile = value;
-            }
+            set => _defaultRenderProfile = value;
         }
-        public static TextSelection TextSelection
-        {
-            get
-            {
-                return _textSelection;
-            }
-        }
+        public static TextSelection TextSelection { get; private set; }
+
         public static GlobalCommandTarget GlobalCommandTarget
         {
             get
@@ -130,10 +106,7 @@ namespace Poderosa
 
                 return _commandTarget;
             }
-            set
-            {
-                _commandTarget = value;
-            }
+            set => _commandTarget = value;
         }
         public static InterThreadUIService InterThreadUIService
         {
@@ -146,10 +119,7 @@ namespace Poderosa
 
                 return _interThreadUIService;
             }
-            set
-            {
-                _interThreadUIService = value;
-            }
+            set => _interThreadUIService = value;
         }
 
         // no args -> CommandTarget for active connection

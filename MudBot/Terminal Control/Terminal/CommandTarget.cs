@@ -101,13 +101,7 @@ namespace Poderosa
             _connection = con;
 
         }
-        public TerminalConnection Connection
-        {
-            get
-            {
-                return _connection;
-            }
-        }
+        public TerminalConnection Connection => _connection;
 
         public CommandResult Disconnect()
         {

@@ -12,7 +12,7 @@ namespace Poderosa.Forms
     /// <summary>
     /// WarningWithDisableOption ‚ÌŠT—v‚Ìà–¾‚Å‚·B
     /// </summary>
-    internal class WarningWithDisableOption : Form
+    internal sealed class WarningWithDisableOption : Form
     {
         private static Icon _warningIcon;
 
@@ -124,13 +124,7 @@ namespace Poderosa.Forms
             a.Graphics.DrawIcon(_warningIcon, 12, 24);
         }
 
-        public bool CheckedDisableOption
-        {
-            get
-            {
-                return _disableCheckBox.Checked;
-            }
-        }
+        public bool CheckedDisableOption => _disableCheckBox.Checked;
 
         private static void LoadWarningIcon()
         {

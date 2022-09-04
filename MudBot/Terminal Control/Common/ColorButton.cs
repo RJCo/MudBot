@@ -8,10 +8,8 @@ using System.Windows.Forms;
 
 namespace Poderosa.UI
 {
-    public class ColorButton : Button
+    public sealed class ColorButton : Button
     {
-        private Color _selectedColor;
-
         public delegate void NewColorEventHandler(object sender, Color newcolor);
         public event NewColorEventHandler ColorChanged;
 
@@ -22,17 +20,7 @@ namespace Poderosa.UI
             SetStyle(ControlStyles.UserPaint, true);
         }
 
-        public Color SelectedColor
-        {
-            get
-            {
-                return _selectedColor;
-            }
-            set
-            {
-                _selectedColor = value;
-            }
-        }
+        public Color SelectedColor { get; set; }
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -46,7 +34,7 @@ namespace Poderosa.UI
             Rectangle rc = new Rectangle(border, border,
                                         r.Width - border - right_border - 1, r.Height - border * 2 - 1);
 
-            SolidBrush centerColorBrush = new SolidBrush(Enabled ? _selectedColor : BackColor);
+            SolidBrush centerColorBrush = new SolidBrush(Enabled ? SelectedColor : BackColor);
             g.FillRectangle(centerColorBrush, rc);
             g.DrawRectangle(SystemPens.ControlDarkDark, rc);
 
@@ -87,7 +75,7 @@ namespace Poderosa.UI
             clDlg.ShowDialog(FindForm());
             if (clDlg.DialogResult == DialogResult.OK)
             {
-                _selectedColor = clDlg.Color;
+                SelectedColor = clDlg.Color;
                 if (ColorChanged != null)
                 {
                     ColorChanged(this, clDlg.Color);

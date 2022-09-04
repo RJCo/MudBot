@@ -9,16 +9,13 @@ using System.Xml;
 
 using Poderosa.Toolkit;
 using Poderosa.ConnectionParam;
-#if !MACRODOC
 using Poderosa.Config;
 using Poderosa.Text;
-#endif
 
 namespace Poderosa.Terminal
 {
 
     /// <summary>
-    /// <ja>コンソールの表示方法を指定するオブジェクトです。接続前にTerminalParamのRenderProfileプロパティにセットすることで、マクロから色・フォント・背景画像を指定できます。</ja>
     /// <en>Implements the parameters for displaying the console. By setting this object to the RenderProfile property of the TerminalParam object, the macro can control colors, fonts, and background images.</en>
     /// </summary>
     [Serializable]
@@ -29,7 +26,6 @@ namespace Poderosa.Terminal
         private string _japaneseFontName;
         private float _fontSize;
         private bool _useClearType;
-#if !MACRODOC
         private FontHandle _font;
         private FontHandle _boldfont;
         private FontHandle _underlinefont;
@@ -39,7 +35,6 @@ namespace Poderosa.Terminal
         private FontHandle _japaneseUnderlinefont;
         private FontHandle _japaneseBoldunderlinefont;
         private EscapesequenceColorSet _esColorSet;
-#endif
         private Color _forecolor;
         private Color _bgcolor;
 
@@ -53,10 +48,8 @@ namespace Poderosa.Terminal
 
         private SizeF _pitch;
         private float _chargap; //文字列を表示するときに左右につく余白
-        private bool _usingIdenticalFont; //ASCII/日本語で同じフォントを使っているかどうか
 
         /// <summary>
-        /// <ja>通常の文字を表示するためのフォント名です。</ja>
         /// <en>Gets or sets the font name for normal characters.</en>
         /// </summary>
         public string FontName
@@ -67,14 +60,11 @@ namespace Poderosa.Terminal
             }
             set
             {
-#if !MACRODOC
                 _fontName = value;
                 ClearFont();
-#endif
             }
         }
         /// <summary>
-        /// <ja>日本語文字を表示するためのフォント名です。</ja>
         /// <en>Gets or sets the font name for Japanese characters.</en>
         /// </summary>
         public string JapaneseFontName
@@ -85,14 +75,11 @@ namespace Poderosa.Terminal
             }
             set
             {
-#if !MACRODOC
                 _japaneseFontName = value;
                 ClearFont();
-#endif
             }
         }
         /// <summary>
-        /// <ja>フォントサイズです。</ja>
         /// <en>Gets or sets the font size.</en>
         /// </summary>
         public float FontSize
@@ -103,30 +90,20 @@ namespace Poderosa.Terminal
             }
             set
             {
-#if !MACRODOC
                 _fontSize = value;
                 ClearFont();
-#endif
             }
         }
         /// <summary>
-        /// <ja>trueにセットすると、フォントとOSでサポートされていれば、ClearTypeを使用して文字が描画されます。</ja>
         /// <en>If this property is true, the characters are drew by the ClearType when the font and the OS supports it.</en>
         /// </summary>
         public bool UseClearType
         {
-            get
-            {
-                return _useClearType;
-            }
-            set
-            {
-                _useClearType = value;
-            }
+            get => _useClearType;
+            set => _useClearType = value;
         }
 
         /// <summary>
-        /// <ja>文字色です。</ja>
         /// <en>Gets or sets the color of characters.</en>
         /// </summary>
         public Color ForeColor
@@ -137,25 +114,20 @@ namespace Poderosa.Terminal
             }
             set
             {
-#if !MACRODOC
                 _forecolor = value;
                 ClearBrush();
-#endif
             }
         }
         /// <summary>
-        /// <ja>JScriptではColor構造体が使用できないので、ForeColorプロパティを設定するかわりにこのメソッドを使ってください。</ja>
         /// <en>Because JScript cannot handle the Color structure, please use this method instead of the ForeColor property.</en>
         /// </summary>
         public void SetForeColor(object value)
         {
             _forecolor = (Color)value;
-#if !MACRODOC
             ClearBrush();
-#endif
         }
+
         /// <summary>
-        /// <ja>背景色です。</ja>
         /// <en>Gets or sets the background color.</en>
         /// </summary>
         public Color BackColor
@@ -166,34 +138,25 @@ namespace Poderosa.Terminal
             }
             set
             {
-#if !MACRODOC
                 _bgcolor = value;
                 ClearBrush();
-#endif
             }
         }
         /// <summary>
-        /// <ja>JScriptでは構造体が使用できないので、BackColorプロパティを設定するかわりにこのメソッドを使ってください。</ja>
         /// <en>Because JScript cannot handle the Color structure, please use this method instead of the BackColor property.</en>
         /// </summary>
         public void SetBackColor(object value)
         {
             _bgcolor = (Color)value;
-#if !MACRODOC
             ClearBrush();
-#endif
         }
 
         /// <summary>
-        /// <ja>背景画像のファイル名です。</ja>
         /// <en>Gets or set the file name of the background image.</en>
         /// </summary>
         public string BackgroundImageFileName
         {
-            get
-            {
-                return _backgroundImageFileName;
-            }
+            get => _backgroundImageFileName;
             set
             {
                 _backgroundImageFileName = value;
@@ -201,52 +164,33 @@ namespace Poderosa.Terminal
             }
         }
         /// <summary>
-        /// <ja>背景画像の位置です。</ja>
         /// <en>Gets or sets the position of the background image.</en>
         /// </summary>
         public ImageStyle ImageStyle
         {
-            get
-            {
-                return _imageStyle;
-            }
-            set
-            {
-                _imageStyle = value;
-            }
+            get => _imageStyle;
+            set => _imageStyle = value;
         }
 
-#if !MACRODOC
         public EscapesequenceColorSet ESColorSet
         {
-            get
-            {
-                return _esColorSet;
-            }
-            set
-            {
-                _esColorSet = value;
-            }
+            get => _esColorSet;
+            set => _esColorSet = value;
         }
-#endif
+
         /// <summary>
-        /// <ja>オプションダイアログで設定した内容に基づいて初期化します。</ja>
         /// <en>Initializes with default values the user sets in the option dialog.</en>
         /// </summary>
         public RenderProfile()
         {
-#if !MACRODOC
             Init(GEnv.Options);
-#endif
         }
 
         /// <summary>
-        /// <ja>コピーして作成します。</ja>
         /// <en>Initializes with another instance.</en>
         /// </summary>
         public RenderProfile(RenderProfile src)
         {
-#if !MACRODOC
             _fontName = src._fontName;
             _japaneseFontName = src._japaneseFontName;
             _fontSize = src._fontSize;
@@ -261,18 +205,18 @@ namespace Poderosa.Terminal
             _backgroundImageFileName = src._backgroundImageFileName;
             _imageLoadIsAttempted = false;
             _imageStyle = src.ImageStyle;
-#endif
         }
 
         public object Clone()
         {
             return new RenderProfile(this);
         }
-#if !MACRODOC
+
         public RenderProfile(CommonOptions opt)
         {
             Init(opt);
         }
+
         private void Init(CommonOptions opt)
         {
             //起動の高速化のため、フォントの作成は遅延評価
@@ -312,7 +256,7 @@ namespace Poderosa.Terminal
                 _japaneseFontName = opt.JapaneseFontName;
             }
 
-            _fontSize = (float)GUtil.ParseInt(data["font-size"], 10);
+            _fontSize = GUtil.ParseInt(data["font-size"], 10);
             _useClearType = GUtil.ParseBool(data["clear-type"], false);
             ClearFont();
 
@@ -395,17 +339,11 @@ namespace Poderosa.Terminal
             _japaneseUnderlinefont = new FontHandle(new Font(_japaneseFont.Font, fs | FontStyle.Underline));
             _japaneseBoldunderlinefont = new FontHandle(new Font(_japaneseFont.Font, fs | FontStyle.Underline | FontStyle.Bold));
 
-            _usingIdenticalFont = (_font.Font.Name == _japaneseFont.Font.Name);
+            UsingIdenticalFont = (_font.Font.Name == _japaneseFont.Font.Name);
 
             //通常版
             Graphics g = Graphics.FromHwnd(Win32.GetDesktopWindow());
-#if false
-			SizeF charsize1 = g.MeasureString("A", _font.Font);
-			SizeF charsize2 = g.MeasureString("AA", _font.Font);
-			
-			_pitch = new SizeF(charsize2.Width-charsize1.Width, charsize1.Height);
-			_chargap = (charsize1.Width-_pitch.Width)/2;
-#else
+
             IntPtr hdc = g.GetHdc();
             Win32.SelectObject(hdc, _font.HFONT);
             Win32.SIZE charsize1, charsize2;
@@ -415,7 +353,6 @@ namespace Poderosa.Terminal
             _pitch = new SizeF((charsize2.width - charsize1.width) / 2, charsize1.height);
             _chargap = (charsize1.width - _pitch.Width) / 2;
             g.ReleaseHdc(hdc);
-#endif
             g.Dispose();
         }
         private void CreateBrushes()
@@ -495,13 +432,7 @@ namespace Poderosa.Terminal
                 return _chargap;
             }
         }
-        public bool UsingIdenticalFont
-        {
-            get
-            {
-                return _usingIdenticalFont;
-            }
-        }
+        public bool UsingIdenticalFont { get; private set; }
 
         internal Brush CalcTextBrush(TextDecoration dec)
         {
@@ -670,17 +601,11 @@ namespace Poderosa.Terminal
                 }
             }
         }
-#endif
-
     }
 
-#if !MACRODOC
     //Escape sequence color
-
     public class EscapesequenceColorSet : ICloneable
     {
-
-        private bool _isDefault;
         private Color[] _colors;
 
         public EscapesequenceColorSet()
@@ -689,13 +614,7 @@ namespace Poderosa.Terminal
             SetDefault();
         }
 
-        public bool IsDefault
-        {
-            get
-            {
-                return _isDefault;
-            }
-        }
+        public bool IsDefault { get; private set; }
 
         public object Clone()
         {
@@ -705,22 +624,19 @@ namespace Poderosa.Terminal
                 newval._colors[i] = _colors[i];
             }
 
-            newval._isDefault = _isDefault;
+            newval.IsDefault = IsDefault;
             return newval;
         }
 
         public Color this[int index]
         {
-            get
-            {
-                return _colors[index];
-            }
+            get => _colors[index];
             set
             {
                 _colors[index] = value;
-                if (_isDefault)
+                if (IsDefault)
                 {
-                    _isDefault = GetDefaultColor(index) == value;
+                    IsDefault = GetDefaultColor(index) == value;
                 }
             }
         }
@@ -731,11 +647,11 @@ namespace Poderosa.Terminal
             {
                 _colors[i] = GetDefaultColor(i);
             }
-            _isDefault = true;
+            IsDefault = true;
         }
         public string Format()
         {
-            if (_isDefault)
+            if (IsDefault)
             {
                 return "";
             }
@@ -775,7 +691,7 @@ namespace Poderosa.Terminal
                             _colors[i] = GetDefaultColor(i);
                         }
                     }
-                    _isDefault = false;
+                    IsDefault = false;
                 }
             }
         }
@@ -805,6 +721,4 @@ namespace Poderosa.Terminal
             }
         }
     }
-#endif
-
 }

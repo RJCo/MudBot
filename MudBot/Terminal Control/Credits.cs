@@ -79,7 +79,7 @@ namespace Poderosa.Forms
             // _subtitle
             // 
             _subtitle.BackColor = SystemColors.Window;
-            _subtitle.Font = new Font("Arial", 11.25F, FontStyle.Italic, GraphicsUnit.Point, ((System.Byte)(0)));
+            _subtitle.Font = new Font("Arial", 11.25F, FontStyle.Italic, GraphicsUnit.Point, 0);
             _subtitle.Location = new Point(0, 80);
             _subtitle.Name = "_subtitle";
             _subtitle.Size = new Size(288, 24);
@@ -98,12 +98,12 @@ namespace Poderosa.Forms
             // _mainPanel
             // 
             _mainPanel.BackColor = SystemColors.Window;
-            _mainPanel.Font = new Font("MS UI Gothic", 11.25F, FontStyle.Regular, GraphicsUnit.Point, ((System.Byte)(128)));
+            _mainPanel.Font = new Font("MS UI Gothic", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 128);
             _mainPanel.Location = new Point(0, 104);
             _mainPanel.Name = "_mainPanel";
             _mainPanel.Size = new Size(288, 128);
             _mainPanel.TabIndex = 3;
-            _mainPanel.Paint += new PaintEventHandler(OnPaintCredit);
+            _mainPanel.Paint += OnPaintCredit;
             // 
             // Credits
             // 
@@ -154,8 +154,7 @@ namespace Poderosa.Forms
         {
             _creditGroups = new ArrayList();
             _creditGroups.Add(new CreditGroup(
-                "",
-                new Entry[0]));
+                ""));
             _creditGroups.Add(new CreditGroup(
                 "Project Leader & Chief Developer",
                 new Entry("Daisuke OKAJIMA", "‰ª“ˆ ‘å‰î")));
@@ -188,7 +187,7 @@ namespace Poderosa.Forms
                 _boldFont = new Font(_mainPanel.Font, FontStyle.Bold);
 
                 _timer = new Timer();
-                _timer.Tick += new EventHandler(OnTimer);
+                _timer.Tick += OnTimer;
                 _timer.Interval = 50;
                 _timer.Start();
             }

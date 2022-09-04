@@ -216,46 +216,19 @@ namespace Poderosa
 
         //定数
         public const int WM_COPYDATA = 0x4A;
-        public const int WM_NOTIFY = 0x4E;
-        public const int WM_NCACTIVATE = 0x0086;
         public const int WM_CHAR = 0x0102;
-        public const int WM_USER = 0x400;
         public const int WM_VSCROLL = 0x115;
         public const int WM_IME_STARTCOMPOSITION = 0x010D;
         public const int WM_IME_ENDCOMPOSITION = 0x010E;
 
-        public const int TCN_FIRST = -550;
-        public const int TCN_SELCHANGING = (TCN_FIRST - 2);
-
-        public const int VK_LSHIFT = 0xA0;
-        public const int VK_RSHIFT = 0xA1;
-        public const int VK_LCONTROL = 0xA2;
-        public const int VK_RCONTROL = 0xA3;
         public const int VK_LMENU = 0xA4;
         public const int VK_RMENU = 0xA5;
 
-        public const uint GENERIC_READ = (0x80000000);
-        public const uint GENERIC_WRITE = (0x40000000);
-        public const uint OPEN_EXISTING = 3;
-        public const uint FILE_ATTRIBUTE_NORMAL = 0x00000080;
-        public const uint FILE_FLAG_OVERLAPPED = 0x40000000;
-
-        public const int IDI_APPLICATION = 32512;
-        public const int IDI_HAND = 32513;
         public const int IDI_QUESTION = 32514;
         public const int IDI_EXCLAMATION = 32515;
-        public const int IDI_ASTERISK = 32516;
 
-        public static IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
-
-        public const int CFS_DEFAULT = 0x0000;
-        public const int CFS_RECT = 0x0001;
         public const int CFS_POINT = 0x0002;
-        public const int CFS_FORCE_POSITION = 0x0020;
-        public const int CFS_CANDIDATEPOS = 0x0040;
-        public const int CFS_EXCLUDE = 0x0080;
-
-        //GetSystemMetricsに渡す定数。とりあえず必要な分だけ
+        
         public const int SM_CXVSCROLL = 2;
         public const int SM_CXEDGE = 45;
         public const int SM_CYEDGE = 46;
@@ -264,42 +237,14 @@ namespace Poderosa
         public const int CPS_CANCEL = 0x0004;
 
         public const int ERROR_ALREADY_EXISTS = 183;
-        public const int ERROR_IO_PENDING = 997;
         public const int WAIT_OBJECT_0 = 0;
 
-        /*
-        #define SW_HIDE             0
-        #define SW_SHOWNORMAL       1
-        #define SW_NORMAL           1
-        #define SW_SHOWMINIMIZED    2
-        #define SW_SHOWMAXIMIZED    3
-        #define SW_MAXIMIZE         3
-        #define SW_SHOWNOACTIVATE   4
-        #define SW_SHOW             5
-        #define SW_MINIMIZE         6
-        #define SW_SHOWMINNOACTIVE  7
-        #define SW_SHOWNA           8
-        #define SW_RESTORE          9
-        #define SW_SHOWDEFAULT      10
-        #define SW_FORCEMINIMIZE    11
-        #define SW_MAX              11
-        */
-
-        //構造体
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public unsafe struct COPYDATASTRUCT
         {
             public uint dwData;
             public uint cbData;
             public void* lpData;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct NMHDR
-        {
-            public IntPtr hwndFrom;
-            public uint idFrom;
-            public int code;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -521,37 +466,17 @@ namespace Poderosa
 
         internal class SystemMetrics
         {
-            private int _vScrollBarWidth;
-            private int _controlBorderWidth;
-            private int _controlBorderHeight;
-
             public SystemMetrics()
             {
-                _vScrollBarWidth = GetSystemMetrics(SM_CXVSCROLL);
-                _controlBorderWidth = GetSystemMetrics(SM_CXEDGE);
-                _controlBorderHeight = GetSystemMetrics(SM_CYEDGE);
+                ScrollBarWidth = GetSystemMetrics(SM_CXVSCROLL);
+                ControlBorderWidth = GetSystemMetrics(SM_CXEDGE);
+                ControlBorderHeight = GetSystemMetrics(SM_CYEDGE);
             }
-            public int ScrollBarWidth
-            {
-                get
-                {
-                    return _vScrollBarWidth;
-                }
-            }
-            public int ControlBorderWidth
-            {
-                get
-                {
-                    return _controlBorderWidth;
-                }
-            }
-            public int ControlBorderHeight
-            {
-                get
-                {
-                    return _controlBorderHeight;
-                }
-            }
+            public int ScrollBarWidth { get; }
+
+            public int ControlBorderWidth { get; }
+
+            public int ControlBorderHeight { get; }
         }
     }
 }

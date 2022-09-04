@@ -36,13 +36,7 @@ namespace Poderosa.Config
             _history.Add(tp);
         }
 
-        public int Count
-        {
-            get
-            {
-                return _history.Count;
-            }
-        }
+        public int Count => _history.Count;
 
         public TCPTerminalParam TopTCPParam
         {
@@ -194,13 +188,7 @@ namespace Poderosa.Config
             return (int[])result.ToArray(typeof(int));
         }
 
-        public StringCollection Hosts
-        {
-            get
-            {
-                return CollectString(new StrProp(ReturnHost));
-            }
-        }
+        public StringCollection Hosts => CollectString(ReturnHost);
 
         public int[] Ports
         {
@@ -209,17 +197,11 @@ namespace Poderosa.Config
                 ArrayList a = new ArrayList();
                 a.Add(23);
                 a.Add(22); //Telnet‚ðæ‚É•\Ž¦‚·‚é
-                return CollectInt(new IntProp(ReturnPort), a);
+                return CollectInt(ReturnPort, a);
             }
         }
 
-        public StringCollection LogPaths
-        {
-            get
-            {
-                return CollectString(new StrProp(ReturnLogPath));
-            }
-        }
+        public StringCollection LogPaths => CollectString(ReturnLogPath);
     }
 
 

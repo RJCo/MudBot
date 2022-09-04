@@ -31,15 +31,10 @@ namespace Poderosa.Forms
         private InitialAction _initialAction;
         internal bool _firstflag;
         public MultiPaneControl _multiPaneControl;
-        private GStatusBar _gStatusBar;
-        private XModemDialog _xmodemDialog;
 
-        private TerminalConnection _commandTargetConnection;
         private ContextMenuStrip _contextMenu;
 
         private MenuStrip _menu;
-        private GDialogBar _toolBar;
-        private TabBar _tabBar;
         private StatusBar _statusBar;
         private StatusBarPanel _textStatusBarPanel;
         private StatusBarPanel _bellIndicateStatusBarPanel;
@@ -154,11 +149,11 @@ namespace Poderosa.Forms
                 {
                     Text = e
                 };
-                m.Click += new EventHandler(OnChangeEncoding);
+                m.Click += OnChangeEncoding;
                 _menuEncoding.DropDownItems.Add(m);
             }
 
-            _tabBar = new TabBar
+            TabBar = new TabBar
             {
                 Dock = DockStyle.Top,
                 Height = 25
@@ -167,7 +162,7 @@ namespace Poderosa.Forms
             ApplyOptions(null, GApp.Options);
             ApplyHotKeys();
 
-            _gStatusBar = new GStatusBar(_statusBar);
+            StatusBar = new GStatusBar(_statusBar);
             AdjustTitle(null);
             #endregion
 
@@ -1058,22 +1053,22 @@ namespace Poderosa.Forms
             Menu = mm;
             InitContextMenu();
             AdjustMRUMenu();
-            if (_toolBar != null)
+            if (ToolBar != null)
             {
-                _toolBar.ReloadLanguage(l);
+                ToolBar.ReloadLanguage(l);
             }
 
             AdjustTitle(GEnv.Connections.ActiveTag);
             AdjustMacroMenu();
 
-            if (_xmodemDialog != null)
+            if (XModemDialog != null)
             {
-                _xmodemDialog.ReloadLanguage();
+                XModemDialog.ReloadLanguage();
             }
         }
         private void CreateToolBar()
         {
-            _toolBar = new GDialogBar
+            ToolBar = new GDialogBar
             {
                 Dock = DockStyle.Top,
                 Height = 27
@@ -1090,7 +1085,7 @@ namespace Poderosa.Forms
                 ShortcutKey = GApp.Options.Commands.FindKey(CID.Copy),
                 CID = (int)CID.Copy,
             };
-            copy.Click += new EventHandler(OnMenu);
+            copy.Click += OnMenu;
 
             GMenuItem paste = new GMenuItem
             {
@@ -1098,7 +1093,7 @@ namespace Poderosa.Forms
                 ShortcutKey = GApp.Options.Commands.FindKey(CID.Paste),
                 CID = (int)CID.Paste,
             };
-            paste.Click += new EventHandler(OnMenu);
+            paste.Click += OnMenu;
 
 
             GMenuItem bar = new GMenuItem
@@ -1124,31 +1119,11 @@ namespace Poderosa.Forms
             //foreach (ToolStripMenuItem child in src.DropDownItems)
             //    CloneMenuCommand(child, dest.OwnerItem[index++]);
         }
-        public GDialogBar ToolBar
-        {
-            get
-            {
-                return _toolBar;
-            }
-        }
-        public MultiPaneControl PaneContainer
-        {
-            get
-            {
-                return _multiPaneControl;
-            }
-        }
-        public XModemDialog XModemDialog
-        {
-            get
-            {
-                return _xmodemDialog;
-            }
-            set
-            {
-                _xmodemDialog = value;
-            }
-        }
+        public GDialogBar ToolBar { get; private set; }
+
+        public MultiPaneControl PaneContainer => _multiPaneControl;
+        public XModemDialog XModemDialog { get; set; }
+
         #endregion
 
         #region properties
@@ -1164,62 +1139,22 @@ namespace Poderosa.Forms
                 return _contextMenu;
             }
         }
-        public GStatusBar StatusBar
-        {
-            get
-            {
-                return _gStatusBar;
-            }
-        }
-        public TabBar TabBar
-        {
-            get
-            {
-                return _tabBar;
-            }
-        }
-        public ToolStripMenuItem MenuNewLineCR
-        {
-            get
-            {
-                return _menuNewLine_CR;
-            }
-        }
-        public ToolStripMenuItem MenuNewLineLF
-        {
-            get
-            {
-                return _menuNewLine_LF;
-            }
-        }
-        public ToolStripMenuItem MenuNewLineCRLF
-        {
-            get
-            {
-                return _menuNewLine_CRLF;
-            }
-        }
-        public ToolStripMenuItem MenuLocalEcho
-        {
-            get
-            {
-                return _menuLocalEcho;
-            }
-        }
-        public ToolStripMenuItem MenuSuspendLog
-        {
-            get
-            {
-                return _menuSuspendLog;
-            }
-        }
-        public ToolStripMenuItem MenuMacroStop
-        {
-            get
-            {
-                return _menuStopMacro;
-            }
-        }
+        public GStatusBar StatusBar { get; }
+
+        public TabBar TabBar { get; }
+
+        public ToolStripMenuItem MenuNewLineCR => _menuNewLine_CR;
+
+        public ToolStripMenuItem MenuNewLineLF => _menuNewLine_LF;
+
+        public ToolStripMenuItem MenuNewLineCRLF => _menuNewLine_CRLF;
+
+        public ToolStripMenuItem MenuLocalEcho => _menuLocalEcho;
+
+        public ToolStripMenuItem MenuSuspendLog => _menuSuspendLog;
+
+        public ToolStripMenuItem MenuMacroStop => _menuStopMacro;
+
         #endregion
 
         #region
@@ -1242,33 +1177,33 @@ namespace Poderosa.Forms
         public void AddConnection(ConnectionTag ct)
         {
             //この順序には要注意
-            _tabBar.AddTab(ct);
+            TabBar.AddTab(ct);
             AddWindowMenu(ct);
         }
         internal void ActivateConnection(ConnectionTag ct)
         {
             if (ct != null)
             {
-                if (_tabBar != null)
+                if (TabBar != null)
                 {
-                    _tabBar.SetActiveTab(ct);
+                    TabBar.SetActiveTab(ct);
                 }
 
                 AdjustTerminalUI(true, ct);
                 _multiPaneControl.ActivateConnection(ct);
                 AdjustTitle(ct);
-                if (_xmodemDialog != null && !_xmodemDialog.Executing)
+                if (XModemDialog != null && !XModemDialog.Executing)
                 {
-                    _xmodemDialog.ConnectionTag = ct;
+                    XModemDialog.ConnectionTag = ct;
                 }
             }
             else
             {
                 AdjustTerminalUI(false, null);
                 AdjustTitle(null);
-                if (_xmodemDialog != null)
+                if (XModemDialog != null)
                 {
-                    _xmodemDialog.Close();
+                    XModemDialog.Close();
                 }
             }
 
@@ -1282,8 +1217,8 @@ namespace Poderosa.Forms
         {
             if (ct != null)
             {
-                _tabBar.RefreshConnection(ct);
-                _tabBar.ArrangeButtons();
+                TabBar.RefreshConnection(ct);
+                TabBar.ArrangeButtons();
             }
 
             if (GEnv.Connections.Count == 0)
@@ -1293,7 +1228,7 @@ namespace Poderosa.Forms
             }
             else if (ct == GEnv.Connections.ActiveTag)
             {
-                _tabBar.SetActiveTab(ct);
+                TabBar.SetActiveTab(ct);
                 AdjustTitle(ct);
             }
 
@@ -1310,7 +1245,7 @@ namespace Poderosa.Forms
         }
         public void RemoveConnection(ConnectionTag ct)
         {
-            _tabBar.RemoveTab(ct);
+            TabBar.RemoveTab(ct);
             RemoveWindowMenu(ct);
         }
         public void ReplaceConnection(ConnectionTag prev, ConnectionTag next)
@@ -1329,7 +1264,7 @@ namespace Poderosa.Forms
         }
         public void RemoveAllConnections()
         {
-            _tabBar.Clear();
+            TabBar.Clear();
             ClearWindowMenu();
             AdjustTitle(null);
             _multiPaneControl.RemoveAllConnections();
@@ -1337,9 +1272,9 @@ namespace Poderosa.Forms
         public void AdjustTerminalUI(bool enabled, ConnectionTag ct)
         {
             TerminalConnection con = ct == null ? null : ct.Connection;
-            if (_toolBar != null)
+            if (ToolBar != null)
             {
-                _toolBar.EnableTerminalUI(enabled, con);
+                ToolBar.EnableTerminalUI(enabled, con);
             }
 
             bool e = GEnv.Connections.Count > 0;
@@ -1361,17 +1296,8 @@ namespace Poderosa.Forms
             col[1].Enabled = !con.IsClosed && CanPaste();
             AdjustConsoleMenu(col, enabled, con, 3); //コピー、ペースト、区切り線の先がコンソールメニュー
         }
-        internal TerminalConnection CommandTargetConnection
-        {
-            get
-            {
-                return _commandTargetConnection;
-            }
-            set
-            {
-                _commandTargetConnection = value;
-            }
-        }
+        internal TerminalConnection CommandTargetConnection { get; set; }
+
         private void AdjustConsoleMenu(object sender, EventArgs args)
         {
             AdjustConsoleMenu(_menuConsole.DropDownItems, GEnv.Connections.ActiveTag != null, GEnv.Connections.ActiveConnection, 0);
@@ -1432,7 +1358,7 @@ namespace Poderosa.Forms
                     Text = mod.Title,
                     ShortcutKey = mod.ShortCut
                 };
-                mi.Click += new EventHandler(OnExecMacro);
+                mi.Click += OnExecMacro;
                 _menuMacro.DropDownItems.Add(mi);
             }
         }
@@ -1465,7 +1391,7 @@ namespace Poderosa.Forms
             }
 
             _windowMenuItemMap.Add(mi, ct);
-            mi.Click += new EventHandler(OnWindowItemMenuClicked);
+            mi.Click += OnWindowItemMenuClicked;
             _menuWindow.DropDownItems.Add(mi);
         }
         private void RemoveWindowMenu(ConnectionTag ct)
@@ -1509,9 +1435,9 @@ namespace Poderosa.Forms
 
             _menuWindow.DropDownItems.Remove(mi1);
             _menuWindow.DropDownItems.Insert(TagIndexToWindowMenuItemIndex(newindex), mi1);
-            if (_tabBar != null)
+            if (TabBar != null)
             {
-                _tabBar.ReorderButton(index, newindex, active_tag);
+                TabBar.ReorderButton(index, newindex, active_tag);
             }
         }
         private int TagIndexToWindowMenuItemIndex(int index)
@@ -1554,7 +1480,7 @@ namespace Poderosa.Forms
                 mru.Text = i <= 8 ?
                     String.Format("&{0} {1}", i + 1, text) :
                     String.Format("{0} {1}", i + 1, text);
-                mru.Click += new EventHandler(OnMRUMenuClicked);
+                mru.Click += OnMRUMenuClicked;
                 mi.Insert(_menuBarBeforeMRU.MergeIndex + i + 1, mru);
 
                 if (++i == count)
@@ -1590,38 +1516,38 @@ namespace Poderosa.Forms
 
             SuspendLayout();
             _multiPaneControl.ApplyOptions(opt);
-            _tabBar.ApplyOptions(opt);
+            TabBar.ApplyOptions(opt);
 
             if (!tabbar && opt.ShowTabBar)
             {
-                Controls.Add(_tabBar);
-                Controls.SetChildIndex(_tabBar, 1); //index 0は_multiPaneControl固定
+                Controls.Add(TabBar);
+                Controls.SetChildIndex(TabBar, 1); //index 0は_multiPaneControl固定
             }
             else if (tabbar && !opt.ShowTabBar)
             {
-                Controls.Remove(_tabBar);
+                Controls.Remove(TabBar);
             }
 
             if (!toolbar && opt.ShowToolBar)
             {
-                if (_toolBar == null)
+                if (ToolBar == null)
                 {
                     CreateToolBar();
                 }
 
-                Controls.Add(_toolBar);
-                Controls.SetChildIndex(_toolBar, opt.ShowTabBar ? 2 : 1);
+                Controls.Add(ToolBar);
+                Controls.SetChildIndex(ToolBar, opt.ShowTabBar ? 2 : 1);
             }
             else if (toolbar && !opt.ShowToolBar)
             {
-                if (_toolBar != null)
+                if (ToolBar != null)
                 {
-                    Controls.Remove(_toolBar);
+                    Controls.Remove(ToolBar);
                 }
             }
             if (opt.ShowToolBar)
             {
-                _toolBar.ApplyOptions(opt);
+                ToolBar.ApplyOptions(opt);
             }
 
             if (!statusbar && opt.ShowStatusBar)
@@ -1711,7 +1637,7 @@ namespace Poderosa.Forms
         protected override void OnSizeChanged(EventArgs args)
         {
             base.OnSizeChanged(args);
-            _tabBar.ArrangeButtons();
+            TabBar.ArrangeButtons();
         }
 
         protected override void OnClosing(CancelEventArgs args)
@@ -1822,7 +1748,7 @@ namespace Poderosa.Forms
                 else
                 {
                     bool context_menu = ((ToolStripMenuItem)sender).Owner is ContextMenuStrip;
-                    ContainerConnectionCommandTarget t = GApp.GetConnectionCommandTarget(context_menu ? _commandTargetConnection : GEnv.Connections.ActiveConnection);
+                    ContainerConnectionCommandTarget t = GApp.GetConnectionCommandTarget(context_menu ? CommandTargetConnection : GEnv.Connections.ActiveConnection);
                     if (t == null)
                     {
                         return; //アクティブなコネクションがなければ無視
@@ -1845,13 +1771,13 @@ namespace Poderosa.Forms
 
         private void OnChangeEncoding(object sender, EventArgs args)
         {
-            ContainerConnectionCommandTarget t = GApp.GetConnectionCommandTarget(_commandTargetConnection == null ? GEnv.Connections.ActiveConnection : _commandTargetConnection);
+            ContainerConnectionCommandTarget t = GApp.GetConnectionCommandTarget(CommandTargetConnection == null ? GEnv.Connections.ActiveConnection : CommandTargetConnection);
             t.SetEncoding(EncodingProfile.Get((EncodingType)GetIndex(sender)));
         }
 
         private void OnChangeNewLine(object sender, EventArgs args)
         {
-            ContainerConnectionCommandTarget t = GApp.GetConnectionCommandTarget(_commandTargetConnection == null ? GEnv.Connections.ActiveConnection : _commandTargetConnection);
+            ContainerConnectionCommandTarget t = GApp.GetConnectionCommandTarget(CommandTargetConnection == null ? GEnv.Connections.ActiveConnection : CommandTargetConnection);
             int i = GetIndex(sender);
             Debug.Assert(0 <= i && i <= 2);
             t.SetTransmitNewLine((NewLine)i);

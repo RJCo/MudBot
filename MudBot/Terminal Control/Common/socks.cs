@@ -15,14 +15,6 @@ namespace Poderosa.Communication
     public class Socks
     {
         private int _version;
-        private string _serverName;
-        private short _serverPort;
-        private string _account;
-        private string _password;
-        private string _destName;       //_destName, _destAddressはどちらかのみ使用
-        private string _excludingNetworks;
-        private IPAddress _destAddress;
-        private short _destPort;
 
         public Socks()
         {
@@ -30,10 +22,7 @@ namespace Poderosa.Communication
         }
         public int Version
         {
-            get
-            {
-                return _version;
-            }
+            get => _version;
             set
             {
                 if (value != 5 && value != 4)
@@ -44,96 +33,21 @@ namespace Poderosa.Communication
                 _version = value;
             }
         }
-        public string Account
-        {
-            get
-            {
-                return _account;
-            }
-            set
-            {
-                _account = value;
-            }
-        }
-        public string Password
-        {
-            get
-            {
-                return _password;
-            }
-            set
-            {
-                _password = value;
-            }
-        }
-        public string DestName
-        {
-            get
-            {
-                return _destName;
-            }
-            set
-            {
-                _destName = value;
-            }
-        }
-        public IPAddress DestAddress
-        {
-            get
-            {
-                return _destAddress;
-            }
-            set
-            {
-                _destAddress = value;
-            }
-        }
+        public string Account { get; set; }
 
-        public short DestPort
-        {
-            get
-            {
-                return _destPort;
-            }
-            set
-            {
-                _destPort = value;
-            }
-        }
+        public string Password { get; set; }
 
-        public string ServerName
-        {
-            get
-            {
-                return _serverName;
-            }
-            set
-            {
-                _serverName = value;
-            }
-        }
-        public short ServerPort
-        {
-            get
-            {
-                return _serverPort;
-            }
-            set
-            {
-                _serverPort = value;
-            }
-        }
-        public string ExcludingNetworks
-        {
-            get
-            {
-                return _excludingNetworks;
-            }
-            set
-            {
-                _excludingNetworks = value;
-            }
-        }
+        public string DestName { get; set; }
+
+        public IPAddress DestAddress { get; set; }
+
+        public short DestPort { get; set; }
+
+        public string ServerName { get; set; }
+
+        public short ServerPort { get; set; }
+
+        public string ExcludingNetworks { get; set; }
 
         public void Connect(Socket s)
         {
@@ -153,8 +67,8 @@ namespace Poderosa.Communication
             BinaryWriter wr = new BinaryWriter(u);
             wr.Write((byte)4);
             wr.Write((byte)1);
-            wr.Write(IPAddress.HostToNetworkOrder(_destPort));
-            if (_destAddress == null)
+            wr.Write(IPAddress.HostToNetworkOrder(DestPort));
+            if (DestAddress == null)
             { //hostが指定された
               //以下でよいと思ったが、どうも動かない。プロトコル4aというやつがサポートされていないのか？
                 throw new IOException("The address is not specified.");
@@ -168,8 +82,8 @@ namespace Poderosa.Communication
             }
             else
             {
-                wr.Write(_destAddress.GetAddressBytes());
-                wr.Write(Encoding.ASCII.GetBytes(_account));
+                wr.Write(DestAddress.GetAddressBytes());
+                wr.Write(Encoding.ASCII.GetBytes(Account));
                 wr.Write((byte)0); //null char
             }
             wr.Close();
@@ -231,18 +145,18 @@ namespace Poderosa.Communication
             wr.Write((byte)5);
             wr.Write((byte)1); //command
             wr.Write((byte)0);
-            if (_destAddress == null)
+            if (DestAddress == null)
             {
                 wr.Write((byte)3);
-                wr.Write((byte)_destName.Length);
-                wr.Write(Encoding.ASCII.GetBytes(_destName));
+                wr.Write((byte)DestName.Length);
+                wr.Write(Encoding.ASCII.GetBytes(DestName));
             }
             else
             {
                 wr.Write((byte)1);
-                wr.Write(_destAddress.GetAddressBytes());
+                wr.Write(DestAddress.GetAddressBytes());
             }
-            wr.Write(IPAddress.HostToNetworkOrder(_destPort));
+            wr.Write(IPAddress.HostToNetworkOrder(DestPort));
             wr.Close();
             byte[] payload = u.ToArray();
             s.Send(payload, 0, payload.Length, SocketFlags.None);
@@ -276,10 +190,10 @@ namespace Poderosa.Communication
         {
             MemoryStream u = new MemoryStream();
             u.WriteByte(1);
-            byte[] t = Encoding.ASCII.GetBytes(_account);
+            byte[] t = Encoding.ASCII.GetBytes(Account);
             u.WriteByte((byte)t.Length);
             u.Write(t, 0, t.Length);
-            t = Encoding.ASCII.GetBytes(_password);
+            t = Encoding.ASCII.GetBytes(Password);
             u.WriteByte((byte)t.Length);
             u.Write(t, 0, t.Length);
             byte[] payload = u.ToArray();
@@ -384,20 +298,9 @@ namespace Poderosa.Communication
             _v4Address = v4;
             _v6Address = v6;
         }
-        public IPAddress Primary
-        {
-            get
-            {
-                return _v6Address != null ? _v6Address : _v4Address;
-            }
-        }
-        public IPAddress Secondary
-        {
-            get
-            {
-                return _v6Address != null ? _v4Address : null;
-            }
-        }
+        public IPAddress Primary => _v6Address != null ? _v6Address : _v4Address;
+
+        public IPAddress Secondary => _v6Address != null ? _v4Address : null;
     }
 
     public class NetUtil

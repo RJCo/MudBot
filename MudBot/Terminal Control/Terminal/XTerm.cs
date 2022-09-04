@@ -583,7 +583,7 @@ namespace Poderosa.Terminal
                 }
                 else
                 {
-                    throw new ArgumentException("unknown key " + key.ToString());
+                    throw new ArgumentException("unknown key " + key);
                 }
 
                 return r;

@@ -24,7 +24,6 @@ namespace Poderosa.Forms
         private bool _initializing;
         private bool _firstFlag;
         private ConnectionHistory _history;
-        private ConnectionTag _result;
         private SocketWithTimeout _connector;
         private IntPtr _savedHWND;
 
@@ -37,16 +36,10 @@ namespace Poderosa.Forms
         private Label _methodLabel;
         public ComboBox _methodBox;
 
-        private GroupBox _sshGroup;
         private Label _usernameLabel;
         public ComboBox _userNameBox;
         private Label _authenticationLabel;
         public ComboBox _authOptions;
-        private Label _passphraseLabel;
-        public TextBox _passphraseBox;
-        private Label _privateKeyLabel;
-        public TextBox _privateKeyFile;
-        private Button _privateKeySelect;
 
         private GroupBox _terminalGroup;
         public ComboBox _encodingBox;
@@ -97,8 +90,7 @@ namespace Poderosa.Forms
         {
             _loginButton = new Button();
             _cancelButton = new Button();
-            _sshGroup = new GroupBox();
-
+            
             _hostLabel = new Label();
             _hostBox = new ComboBox();
             _methodLabel = new Label();
@@ -108,11 +100,6 @@ namespace Poderosa.Forms
 
             _authenticationLabel = new Label();
             _authOptions = new ComboBox();
-            _passphraseLabel = new Label();
-            _passphraseBox = new TextBox();
-            _privateKeyLabel = new Label();
-            _privateKeyFile = new TextBox();
-            _privateKeySelect = new Button();
             _usernameLabel = new Label();
             _userNameBox = new ComboBox();
 
@@ -131,7 +118,6 @@ namespace Poderosa.Forms
             _terminalTypeBox = new ComboBox();
             _terminalTypeLabel = new Label();
 
-            _sshGroup.SuspendLayout();
             _terminalGroup.SuspendLayout();
             SuspendLayout();
 
@@ -364,7 +350,6 @@ namespace Poderosa.Forms
             ClientSize = new Size(330, 415);
             Controls.AddRange(new Control[] {
                                                                           _terminalGroup,
-                                                                          _sshGroup,
                                                                           _hostBox,
                                                                           _methodBox,
                                                                           _portBox,
@@ -380,7 +365,6 @@ namespace Poderosa.Forms
             ShowInTaskbar = false;
             //this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             StartPosition = FormStartPosition.CenterScreen;
-            _sshGroup.ResumeLayout(false);
             _terminalGroup.ResumeLayout(false);
             ResumeLayout(false);
 
@@ -391,10 +375,7 @@ namespace Poderosa.Forms
             _hostLabel.Text = "Form.LoginDialog._hostLabel";
             _portLabel.Text = "Form.LoginDialog._portLabel";
             _methodLabel.Text = "Form.LoginDialog._methodLabel";
-            _sshGroup.Text = "Form.LoginDialog._sshGroup";
-            _privateKeyLabel.Text = "Form.LoginDialog._privateKeyLabel";
             _authenticationLabel.Text = "Form.LoginDialog._authenticationLabel";
-            _passphraseLabel.Text = "Form.LoginDialog._passphraseLabel";
             _usernameLabel.Text = "Form.LoginDialog._usernameLabel";
             _terminalGroup.Text = "Form.LoginDialog._terminalGroup";
             _localEchoLabel.Text = "Form.LoginDialog._localEchoLabel";
@@ -406,8 +387,6 @@ namespace Poderosa.Forms
             _loginButton.Text = "OK";
             _cancelButton.Text = "Cancel";
             Text = "Form.LoginDialog.Text";
-
-            _authOptions.Items.AddRange(EnumDescAttributeT.For(typeof(AuthType)).DescriptionCollection());
         }
         private void AdjustConnectionUI(object sender, EventArgs e)
         {
@@ -430,10 +409,7 @@ namespace Poderosa.Forms
             }
             EnableValidControls();
         }
-        private void AdjustAuthenticationUI(object sender, EventArgs e)
-        {
-            EnableValidControls();
-        }
+
         private void InitializeLoginParams()
         {
             StringCollection c = _history.Hosts;
@@ -505,13 +481,7 @@ namespace Poderosa.Forms
             EnableValidControls();
         }
 
-        public ConnectionTag Result
-        {
-            get
-            {
-                return _result;
-            }
-        }
+        public ConnectionTag Result { get; private set; }
 
         private void OnHostIsSelected(object sender, EventArgs e)
         {
@@ -725,7 +695,7 @@ namespace Poderosa.Forms
         //ISocketWithTimeoutClient これらはこのウィンドウとは別のスレッドで実行されるので慎重に
         public void SuccessfullyExit(object result)
         {
-            _result = (ConnectionTag)result;
+            Result = (ConnectionTag)result;
             Win32.SendMessage(_savedHWND, GConst.WMG_ASYNCCONNECT, IntPtr.Zero, new IntPtr(1));
         }
         public void ConnectionFailed(string message)

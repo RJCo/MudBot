@@ -14,13 +14,10 @@ namespace Poderosa.Forms
     /// <summary>
     /// EditEscapeSequenceColor の概要の説明です。
     /// </summary>
-    internal class EditEscapeSequenceColor : Form
+    internal sealed class EditEscapeSequenceColor : Form
     {
-        private Color _backColor;
-        private Color _foreColor;
         private ColorButton _backColorBox;
         private ColorButton _foreColorBox;
-        private EscapesequenceColorSet _esColorSet;
         private ColorButton[] _colorBoxes;
 
         private Button _setDefaultButton;
@@ -31,35 +28,11 @@ namespace Poderosa.Forms
         /// </summary>
         private Container components = null;
 
-        public EscapesequenceColorSet Result
-        {
-            get
-            {
-                return _esColorSet;
-            }
-        }
-        public Color GForeColor
-        {
-            get
-            {
-                return _foreColor;
-            }
-            set
-            {
-                _foreColor = value;
-            }
-        }
-        public Color GBackColor
-        {
-            get
-            {
-                return _backColor;
-            }
-            set
-            {
-                _backColor = value;
-            }
-        }
+        public EscapesequenceColorSet Result { get; }
+
+        public Color GForeColor { get; set; }
+
+        public Color GBackColor { get; set; }
 
         public EditEscapeSequenceColor(Color back, Color fore, EscapesequenceColorSet cs)
         {
@@ -72,9 +45,9 @@ namespace Poderosa.Forms
             // TODO: InitializeComponent 呼び出しの後に、コンストラクタ コードを追加してください。
             //
             _colorBoxes = new ColorButton[8];
-            _backColor = back;
-            _foreColor = fore;
-            _esColorSet = (EscapesequenceColorSet)cs.Clone();
+            GBackColor = back;
+            GForeColor = fore;
+            Result = (EscapesequenceColorSet)cs.Clone();
             int ti = 0;
 
             int y = 8;
@@ -93,7 +66,7 @@ namespace Poderosa.Forms
                 Left = 106,
                 Width = 144
             };
-            _setDefaultButton.Click += new EventHandler(OnSetDefault);
+            _setDefaultButton.Click += OnSetDefault;
             _setDefaultButton.Text = "Set to Default";
             _setDefaultButton.Top = y;
             _setDefaultButton.TabIndex = ti++;
@@ -142,7 +115,7 @@ namespace Poderosa.Forms
             _okButton.FlatStyle = FlatStyle.System;
             _okButton.Location = new Point(88, 232);
             _okButton.Name = "_okButton";
-            _okButton.Click += new EventHandler(OnOK);
+            _okButton.Click += OnOK;
             _okButton.TabIndex = 0;
             // 
             // _cancelButton
@@ -186,12 +159,12 @@ namespace Poderosa.Forms
 
             ColorButton col = new ColorButton
             {
-                SelectedColor = _backColor,
+                SelectedColor = GBackColor,
                 Left = 122,
                 Width = 128,
                 Top = y + 2
             };
-            col.ColorChanged += new ColorButton.NewColorEventHandler(OnNewBackColor);
+            col.ColorChanged += OnNewBackColor;
             col.TabIndex = tabindex++;
             _backColorBox = col;
 
@@ -221,19 +194,19 @@ namespace Poderosa.Forms
                 Top = y,
                 Height = 24,
                 BorderStyle = BorderStyle.FixedSingle,
-                BackColor = _backColor,
-                ForeColor = index == -1 ? _foreColor : _esColorSet[index],
+                BackColor = GBackColor,
+                ForeColor = index == -1 ? GForeColor : Result[index],
                 TabIndex = tabindex++
             };
 
             ColorButton col = new ColorButton
             {
-                SelectedColor = index == -1 ? _foreColor : _esColorSet[index],
+                SelectedColor = index == -1 ? GForeColor : Result[index],
                 Left = 122,
                 Width = 128,
                 Top = y + 2
             };
-            col.ColorChanged += new ColorButton.NewColorEventHandler(OnNewColor);
+            col.ColorChanged += OnNewColor;
             col.Tag = sample;
             col.TabIndex = tabindex++;
             if (index == -1)
@@ -277,12 +250,12 @@ namespace Poderosa.Forms
         }
         private void OnOK(object sender, EventArgs args)
         {
-            _backColor = _backColorBox.SelectedColor;
-            _foreColor = _foreColorBox.SelectedColor;
+            GBackColor = _backColorBox.SelectedColor;
+            GForeColor = _foreColorBox.SelectedColor;
             for (int i = 0; i < _colorBoxes.Length; i++)
             {
                 Color c = _colorBoxes[i].SelectedColor;
-                _esColorSet[i] = c;
+                Result[i] = c;
             }
         }
 

@@ -26,57 +26,29 @@ namespace Poderosa.UI
         protected bool _checked;
         protected Image _image;
         private const int COMBOAREA_WIDTH = 8;
-        private BorderStyle _borderstyle;
 
-        public new BorderStyle BorderStyle
-        {
-            get
-            {
-                return _borderstyle;
-            }
-            set
-            {
-                _borderstyle = value;
-            }
-        }
+        public new BorderStyle BorderStyle { get; set; }
+
         public bool Checked
         {
-            get
-            {
-                return _checked;
-            }
-            set
-            {
-                _checked = value;
-            }
+            get => _checked;
+            set => _checked = value;
         }
         public Image Image
         {
-            get
-            {
-                return _image;
-            }
-            set
-            {
-                _image = value;
-            }
+            get => _image;
+            set => _image = value;
         }
         public bool ShowComboStyle
         {
-            get
-            {
-                return _showComboStyle;
-            }
-            set
-            {
-                _showComboStyle = value;
-            }
+            get => _showComboStyle;
+            set => _showComboStyle = value;
         }
 
         public GButton()
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
-            _borderstyle = BorderStyle.None;
+            BorderStyle = BorderStyle.None;
             Debug.Assert(!InvokeRequired);
         }
 
@@ -250,7 +222,7 @@ namespace Poderosa.UI
                 {
                     ControlPaint.DrawBorder3D(g, rc, Border3DStyle.Sunken);
                 }
-                else if (_borderstyle != BorderStyle.None)
+                else if (BorderStyle != BorderStyle.None)
                 {
                     //!!g.FillRectangle(new SolidBrush(this.BackColor), rc);
                     g.DrawRectangle(state == DrawState.Disabled ? SystemPens.ControlDark : SystemPens.ControlDarkDark, rc.Left, rc.Top, rc.Width - 1, rc.Height - 1);
@@ -322,24 +294,12 @@ namespace Poderosa.UI
 
     public class ToggleButton : GButton
     {
-        private bool _autoToggle;
-
-        public bool AutoToggle
-        {
-            get
-            {
-                return _autoToggle;
-            }
-            set
-            {
-                _autoToggle = value;
-            }
-        }
+        public bool AutoToggle { get; set; }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            if (_autoToggle)
+            if (AutoToggle)
             {
                 _checked = !_checked;
             }
@@ -348,33 +308,13 @@ namespace Poderosa.UI
 
     public class TabBarButton : GButton
     {
-        private string _headText;
-        private bool _selected;
         private static DrawUtil.RoundRectColors _selectedColors;
         private static DrawUtil.RoundRectColors _hoverColors;
 
-        public string HeadText
-        {
-            get
-            {
-                return _headText;
-            }
-            set
-            {
-                _headText = value;
-            }
-        }
-        public bool Selected
-        {
-            get
-            {
-                return _selected;
-            }
-            set
-            {
-                _selected = value;
-            }
-        }
+        public string HeadText { get; set; }
+
+        public bool Selected { get; set; }
+
         public TabBarButton()
         {
             BorderStyle = BorderStyle.None;
@@ -388,7 +328,7 @@ namespace Poderosa.UI
                 CreateColor();
             }
             //border
-            if (_selected)
+            if (Selected)
             {
                 DrawUtil.DrawRoundRect(g, 0, 0, Width - 1, Height - 1, _selectedColors);
             }
@@ -408,12 +348,12 @@ namespace Poderosa.UI
             y = (Height - Image.Height) / 2;
             DrawImage(g, DrawState.Normal, Image, x, y);
             x += Image.Width + 2;
-            if (_headText != null)
+            if (HeadText != null)
             {
-                g.DrawString(_headText, Font, SystemBrushes.ControlDark, x, y + 2);
+                g.DrawString(HeadText, Font, SystemBrushes.ControlDark, x, y + 2);
                 x += 11; //Should it be configurable?
             }
-            DrawText(g, Text, _selected ? DrawState.Focused : DrawState.Normal, x, y + 2);
+            DrawText(g, Text, Selected ? DrawState.Focused : DrawState.Normal, x, y + 2);
         }
         private static void CreateColor()
         {

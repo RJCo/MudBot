@@ -45,8 +45,8 @@ namespace Poderosa.Forms
             _ignoreResize = false;
             _splitters = new Splitter[2];
             _splitterRatio = new double[2][];
-            _splitterRatio[0] = new double[] { 0.5 };
-            _splitterRatio[1] = new double[] { 0.33, 0.66 };
+            _splitterRatio[0] = new[] { 0.5 };
+            _splitterRatio[1] = new[] { 0.33, 0.66 };
             _panes = new TerminalPane[3];
         }
 
@@ -132,8 +132,8 @@ namespace Poderosa.Forms
                 {
                     Splitter s = new Splitter();
                     _splitters[i - 1] = s;
-                    s.SplitterMoving += new SplitterEventHandler(OnSplitterMoving);
-                    s.SplitterMoved += new SplitterEventHandler(OnSplitterMoved);
+                    s.SplitterMoving += OnSplitterMoving;
+                    s.SplitterMoved += OnSplitterMoved;
                     s.Dock = is_vertical ? DockStyle.Left : DockStyle.Top;
                     s.BorderStyle = BorderStyle.Fixed3D;
                     s.MinSize = 8;
@@ -364,13 +364,8 @@ namespace Poderosa.Forms
 
 
         //次にターミナルを開くとどのサイズになるかを返す
-        public Size TerminalSizeForNextConnection
-        {
-            get
-            {
-                return GetPane(PositionForNextConnection).TerminalSize;
-            }
-        }
+        public Size TerminalSizeForNextConnection => GetPane(PositionForNextConnection).TerminalSize;
+
         public int PositionForNextConnection
         {
             get

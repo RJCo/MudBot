@@ -129,13 +129,7 @@ namespace Poderosa
             }
         }
 
-        public static Language CurrentLanguage
-        {
-            get
-            {
-                return CultureInfo.CurrentUICulture.Name.StartsWith("ja") ? Language.Japanese : Language.English;
-            }
-        }
+        public static Language CurrentLanguage => CultureInfo.CurrentUICulture.Name.StartsWith("ja") ? Language.Japanese : Language.English;
 
         public static Font CreateFont(string name, float size)
         {
@@ -210,7 +204,7 @@ namespace Poderosa
             //エラーファイルに追記
             string dir = null;
             StreamWriter sw = GetDebugLog(ref dir);
-            sw.WriteLine(DateTime.Now.ToString() + remark + ex.Message);
+            sw.WriteLine(DateTime.Now + remark + ex.Message);
             sw.WriteLine(ex.StackTrace);
             //inner exceptionを順次
             Exception i = ex.InnerException;
@@ -258,7 +252,7 @@ namespace Poderosa
             }
         }
 
-        private static StreamWriter _debugLog = null;
+        private static StreamWriter _debugLog;
         public static void WriteDebugLog(string data)
         {
             string dir = null;

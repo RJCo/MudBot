@@ -20,18 +20,8 @@ namespace Poderosa.Config
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
     public class ConfigColorElementAttribute : ConfigElementAttribute
     {
-        private LateBindColors _initial;
-        public LateBindColors Initial
-        {
-            get
-            {
-                return _initial;
-            }
-            set
-            {
-                _initial = value;
-            }
-        }
+        public LateBindColors Initial { get; set; }
+
         private static Color ToColor(LateBindColors value)
         {
             switch (value)
@@ -50,18 +40,18 @@ namespace Poderosa.Config
         public override void ExportTo(object holder, ConfigNode node)
         {
             Color value = (Color)_fieldInfo.GetValue(holder);
-            if (value != ToColor(_initial))
+            if (value != ToColor(Initial))
             {
                 node[_externalName] = value.Name;
             }
         }
         public override void ImportFrom(object holder, ConfigNode node)
         {
-            _fieldInfo.SetValue(holder, GUtil.ParseColor(node[_externalName], ToColor(_initial)));
+            _fieldInfo.SetValue(holder, GUtil.ParseColor(node[_externalName], ToColor(Initial)));
         }
         public override void Reset(object holder)
         {
-            _fieldInfo.SetValue(holder, ToColor(_initial));
+            _fieldInfo.SetValue(holder, ToColor(Initial));
         }
     }
 }

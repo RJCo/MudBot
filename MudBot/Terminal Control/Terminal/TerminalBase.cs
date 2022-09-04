@@ -32,13 +32,7 @@ namespace Poderosa.Terminal
         protected GLineManipulator _manipulator;
         protected ITerminalTextLogger _logger; //Loggerプロパティとの重複を何とかしたい
 
-        public ITerminalTextLogger Logger
-        {
-            get
-            {
-                return _tag.Connection.TextLogger;
-            }
-        }
+        public ITerminalTextLogger Logger => _tag.Connection.TextLogger;
 
         protected ConnectionTag _tag;
         protected TextDecoration _currentdecoration;
@@ -46,20 +40,10 @@ namespace Poderosa.Terminal
         protected TerminalMode _terminalMode;
         protected TerminalMode _cursorKeyMode; //_terminalModeは別物。AIXでのviで、カーソルキーは不変という例が確認されている
 
-        public TerminalMode TerminalMode
-        {
-            get
-            {
-                return _terminalMode;
-            }
-        }
-        public TerminalMode CursorKeyMode
-        {
-            get
-            {
-                return _cursorKeyMode;
-            }
-        }
+        public TerminalMode TerminalMode => _terminalMode;
+
+        public TerminalMode CursorKeyMode => _cursorKeyMode;
+
         protected TerminalConnection GetConnection()
         {
             return _tag.Connection;
@@ -261,13 +245,8 @@ namespace Poderosa.Terminal
         private StringBuilder _escapeSequence;
         private ProcessCharResult _processCharResult;
 
-        public override ProcessCharResult State
-        {
-            get
-            {
-                return _processCharResult;
-            }
-        }
+        public override ProcessCharResult State => _processCharResult;
+
         protected override void ResetInternal()
         {
             _escapeSequence = new StringBuilder();

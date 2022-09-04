@@ -14,7 +14,7 @@ namespace Poderosa.Forms
     /// <summary>
     /// LineFeedStyleDialog の概要の説明です。
     /// </summary>
-    internal class LineFeedStyleDialog : Form
+    internal sealed class LineFeedStyleDialog : Form
     {
         private Label _lineFeedLabel;
         private ComboBox _lineFeedBox;
@@ -43,13 +43,7 @@ namespace Poderosa.Forms
             _lineFeedBox.SelectedIndex = (int)con.Param.LineFeedRule;
         }
 
-        public LineFeedRule LineFeedRule
-        {
-            get
-            {
-                return (LineFeedRule)_lineFeedBox.SelectedIndex;
-            }
-        }
+        public LineFeedRule LineFeedRule => (LineFeedRule)_lineFeedBox.SelectedIndex;
 
         /// <summary>
         /// 使用されているリソースに後処理を実行します。

@@ -13,17 +13,15 @@ namespace Poderosa.Forms
     /// <summary>
     /// AboutBox
     /// </summary>
-    internal class AboutBox : Form
+    internal sealed class AboutBox : Form
     {
         //private Image _bgImage;
         private Button _okButton;
         private TextBox _versionText;
-        private Container components = null;
+        private readonly Container _components = null;
         private PictureBox _pictureBox;
         private PictureBox _guevaraPicture;
         private Button _creditButton;
-
-        private bool _guevaraMode;
 
         public AboutBox()
         {
@@ -32,34 +30,13 @@ namespace Poderosa.Forms
             Text = "About Poderosa";
             _okButton.Text = "OK";
             _creditButton.Text = "Credit...";
-            _guevaraMode = GApp.Options.GuevaraMode;
-
-            //Guevara Mode
-            if (_guevaraMode)
-            {
-                System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(AboutBox));
-                _creditButton.Visible = false;
-                _okButton.Location = new Point(160, 216);
-                _versionText.BackColor = Color.White;
-                _versionText.Location = new Point(152, 8);
-                _pictureBox.Visible = false;
-                _guevaraPicture.Visible = true;
-                _guevaraPicture.Location = new Point(0, 8);
-                _guevaraPicture.Size = new Size(280, 200);
-                BackColor = Color.White;
-                ClientSize = new Size(418, 240);
-            }
-
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (components != null)
-                {
-                    components.Dispose();
-                }
+                _components?.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -109,18 +86,6 @@ namespace Poderosa.Forms
             _pictureBox.TabStop = false;
 
             // 
-            // _guevaraPicture
-            // 
-            _guevaraPicture.Image = ((Image)(resources.GetObject("_guevaraPicture.Image")));
-            _guevaraPicture.Location = new Point(0, 216);
-            _guevaraPicture.Name = "_guevaraPicture";
-            _guevaraPicture.Size = new Size(285, 400);
-            _guevaraPicture.SizeMode = PictureBoxSizeMode.StretchImage;
-            _guevaraPicture.TabIndex = 4;
-            _guevaraPicture.TabStop = false;
-            _guevaraPicture.Visible = false;
-
-            // 
             // _creditButton
             // 
             _creditButton.BackColor = SystemColors.Control;
@@ -154,13 +119,7 @@ namespace Poderosa.Forms
 
         }
         #endregion
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-        }
-
-
+        
         private void OnLoad(object sender, EventArgs e)
         {
             Assembly asm = Assembly.GetExecutingAssembly();
@@ -170,13 +129,9 @@ namespace Poderosa.Forms
             s[2] = "";
             object[] t = asm.GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
             s[3] = " Version : " + ((AssemblyDescriptionAttribute)t[0]).Description;
-            s[4] = " CLR     : " + Environment.Version.ToString();
+            s[4] = " CLR     : " + Environment.Version;
             _versionText.Lines = s;
         }
-
-
-        private int _guevaraIndex;
-        private const string _guevaraString = "guevara";
 
         protected override bool ProcessDialogChar(char charCode)
         {
@@ -185,45 +140,14 @@ namespace Poderosa.Forms
                 charCode = (char)('a' + charCode - 'A');
             }
 
-            if (charCode == _guevaraString[_guevaraIndex])
-            {
-                if (++_guevaraIndex == _guevaraString.Length)
-                {
-                    if (!GApp.Options.GuevaraMode)
-                    {
-                        GUtil.Warning(this, "Welcome to Guevara Mode");
-                    }
-                    else
-                    {
-                        GUtil.Warning(this, "Now Leaving Guevara Mode");
-                    }
-
-                    GApp.Options.GuevaraMode = !GApp.Options.GuevaraMode;
-                    GApp.Frame.ReloadIcon();
-                    Close();
-                }
-            }
-            else
-            {
-                _guevaraIndex = 0;
-            }
-
             return base.ProcessDialogChar(charCode);
         }
 
-        private bool _credit;
         private void OnCreditButton(object sender, EventArgs args)
         {
-            _credit = true;
+            CreditButtonClicked = true;
             Close();
         }
-        public bool CreditButtonClicked
-        {
-            get
-            {
-                return _credit;
-            }
-        }
-
+        public bool CreditButtonClicked { get; private set; }
     }
 }

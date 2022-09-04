@@ -20,23 +20,15 @@ namespace Poderosa.Config
 
         public FieldInfo FieldInfo
         {
-            get
-            {
-                return _fieldInfo;
-            }
+            get => _fieldInfo;
             set
             {
                 _fieldInfo = value;
                 _externalName = ToExternalName(_fieldInfo.Name);
             }
         }
-        public string ExternalName
-        {
-            get
-            {
-                return _externalName;
-            }
-        }
+        public string ExternalName => _externalName;
+
         public static string ToExternalName(string value)
         {
             //if the field name starts with '_', strip it off
@@ -58,100 +50,69 @@ namespace Poderosa.Config
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
     public class ConfigIntElementAttribute : ConfigElementAttribute
     {
-        private int _initial;
-        public int Initial
-        {
-            get
-            {
-                return _initial;
-            }
-            set
-            {
-                _initial = value;
-            }
-        }
+        public int Initial { get; set; }
 
         public override void ExportTo(object holder, ConfigNode node)
         {
             int value = (int)_fieldInfo.GetValue(holder);
-            if (value != _initial)
+            if (value != Initial)
             {
                 node[_externalName] = value.ToString();
             }
         }
         public override void ImportFrom(object holder, ConfigNode node)
         {
-            _fieldInfo.SetValue(holder, ParseInt(node[_externalName], _initial));
+            _fieldInfo.SetValue(holder, ParseInt(node[_externalName], Initial));
         }
         public override void Reset(object holder)
         {
-            _fieldInfo.SetValue(holder, _initial);
+            _fieldInfo.SetValue(holder, Initial);
         }
 
         public static int ParseInt(string value, int defaultvalue)
         {
-            try
-            {
-                if (value == null || value.Length == 0)
-                {
-                    return defaultvalue;
-                }
-                else
-                {
-                    return Int32.Parse(value);
-                }
-            }
-            catch (Exception)
+            if (string.IsNullOrEmpty(value))
             {
                 return defaultvalue;
             }
+
+            return int.TryParse(value, out int goodParse) 
+                ? goodParse 
+                : defaultvalue;
         }
     }
 
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
     public class ConfigBoolElementAttribute : ConfigElementAttribute
     {
-        private bool _initial;
-        public bool Initial
-        {
-            get
-            {
-                return _initial;
-            }
-            set
-            {
-                _initial = value;
-            }
-        }
+        public bool Initial { get; set; }
 
         public override void ExportTo(object holder, ConfigNode node)
         {
             bool value = (bool)_fieldInfo.GetValue(holder);
-            if (value != _initial)
+            if (value != Initial)
             {
                 node[_externalName] = value.ToString();
             }
         }
         public override void ImportFrom(object holder, ConfigNode node)
         {
-            _fieldInfo.SetValue(holder, ParseBool(node[_externalName], _initial));
+            _fieldInfo.SetValue(holder, ParseBool(node[_externalName], Initial));
         }
         public override void Reset(object holder)
         {
-            _fieldInfo.SetValue(holder, _initial);
+            _fieldInfo.SetValue(holder, Initial);
         }
         public static bool ParseBool(string value, bool defaultvalue)
         {
             try
             {
-                if (value == null || value.Length == 0)
+                if (string.IsNullOrEmpty(value))
                 {
                     return defaultvalue;
                 }
-                else
-                {
-                    return Boolean.Parse(value);
-                }
+
+                return bool.Parse(value);
             }
             catch (Exception)
             {
@@ -163,40 +124,29 @@ namespace Poderosa.Config
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
     public class ConfigFloatElementAttribute : ConfigElementAttribute
     {
-        private float _initial;
-        public float Initial
-        {
-            get
-            {
-                return _initial;
-            }
-            set
-            {
-                _initial = value;
-            }
-        }
+        public float Initial { get; set; }
 
         public override void ExportTo(object holder, ConfigNode node)
         {
             float value = (float)_fieldInfo.GetValue(holder);
-            if (value != _initial)
+            if (value != Initial)
             {
                 node[_externalName] = value.ToString();
             }
         }
         public override void ImportFrom(object holder, ConfigNode node)
         {
-            _fieldInfo.SetValue(holder, ParseFloat(node[_externalName], _initial));
+            _fieldInfo.SetValue(holder, ParseFloat(node[_externalName], Initial));
         }
         public override void Reset(object holder)
         {
-            _fieldInfo.SetValue(holder, _initial);
+            _fieldInfo.SetValue(holder, Initial);
         }
         public static float ParseFloat(string value, float defaultvalue)
         {
             try
             {
-                if (value == null || value.Length == 0)
+                if (string.IsNullOrEmpty(value))
                 {
                     return defaultvalue;
                 }
@@ -215,23 +165,12 @@ namespace Poderosa.Config
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
     public class ConfigStringElementAttribute : ConfigElementAttribute
     {
-        private string _initial;
-        public string Initial
-        {
-            get
-            {
-                return _initial;
-            }
-            set
-            {
-                _initial = value;
-            }
-        }
+        public string Initial { get; set; }
 
         public override void ExportTo(object holder, ConfigNode node)
         {
             string value = _fieldInfo.GetValue(holder) as string;
-            if (value != _initial)
+            if (value != Initial)
             {
                 node[_externalName] = value == null ? "" : value;
             }
@@ -239,29 +178,18 @@ namespace Poderosa.Config
         public override void ImportFrom(object holder, ConfigNode node)
         {
             string t = node[_externalName];
-            _fieldInfo.SetValue(holder, t == null ? _initial : t);
+            _fieldInfo.SetValue(holder, t == null ? Initial : t);
         }
         public override void Reset(object holder)
         {
-            _fieldInfo.SetValue(holder, _initial);
+            _fieldInfo.SetValue(holder, Initial);
         }
     }
 
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
     public class ConfigStringArrayElementAttribute : ConfigElementAttribute
     {
-        private string[] _initial;
-        public string[] Initial
-        {
-            get
-            {
-                return _initial;
-            }
-            set
-            {
-                _initial = value;
-            }
-        }
+        public string[] Initial { get; set; }
 
         public override void ExportTo(object holder, ConfigNode node)
         {
@@ -281,11 +209,11 @@ namespace Poderosa.Config
         public override void ImportFrom(object holder, ConfigNode node)
         {
             string t = node[_externalName];
-            _fieldInfo.SetValue(holder, t == null ? _initial : t.Split(','));
+            _fieldInfo.SetValue(holder, t == null ? Initial : t.Split(','));
         }
         public override void Reset(object holder)
         {
-            _fieldInfo.SetValue(holder, _initial);
+            _fieldInfo.SetValue(holder, Initial);
         }
     }
 
@@ -293,31 +221,19 @@ namespace Poderosa.Config
     public class ConfigEnumElementAttribute : ConfigElementAttribute
     {
         private ValueType _initial;
-        private Type _enumType;
 
         public ConfigEnumElementAttribute(Type t)
         {
-            _enumType = t;
+            Type = t;
         }
 
         public int InitialAsInt
         {
-            get
-            {
-                return (int)_initial;
-            }
-            set
-            {
-                _initial = (ValueType)value;
-            }
+            get => (int)_initial;
+            set => _initial = value;
         }
-        public Type Type
-        {
-            get
-            {
-                return _enumType;
-            }
-        }
+        public Type Type { get; }
+
         public override void ExportTo(object holder, ConfigNode node)
         {
             ValueType value = (ValueType)_fieldInfo.GetValue(holder);
@@ -328,19 +244,19 @@ namespace Poderosa.Config
         }
         public override void ImportFrom(object holder, ConfigNode node)
         {
-            object v = ParseEnum(_enumType, node[_externalName], _initial);
+            object v = ParseEnum(Type, node[_externalName], _initial);
             _fieldInfo.SetValue(holder, v);
         }
         public override void Reset(object holder)
         {
-            _fieldInfo.SetValue(holder, Enum.ToObject(_enumType, (int)_initial));
+            _fieldInfo.SetValue(holder, Enum.ToObject(Type, (int)_initial));
         }
 
         public static ValueType ParseEnum(Type enumtype, string t, ValueType defaultvalue)
         {
             try
             {
-                if (t == null || t.Length == 0)
+                if (string.IsNullOrEmpty(t))
                 {
                     return (ValueType)Enum.ToObject(enumtype, (int)defaultvalue);
                 }
@@ -359,49 +275,22 @@ namespace Poderosa.Config
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
     public class ConfigFlagElementAttribute : ConfigElementAttribute
     {
-        private int _initial;
-        private int _max;
-        private Type _enumType;
-
         public ConfigFlagElementAttribute(Type t)
         {
-            _enumType = t;
+            Type = t;
         }
 
-        public int Initial
-        {
-            get
-            {
-                return _initial;
-            }
-            set
-            {
-                _initial = value;
-            }
-        }
-        public int Max
-        {
-            get
-            {
-                return _max;
-            }
-            set
-            {
-                _max = value;
-            }
-        }
-        public Type Type
-        {
-            get
-            {
-                return _enumType;
-            }
-        }
+        public int Initial { get; set; }
+
+        public int Max { get; set; }
+
+        public Type Type { get; }
+
         public override void ExportTo(object holder, ConfigNode node)
         {
             int value = (int)_fieldInfo.GetValue(holder);
             StringBuilder bld = new StringBuilder();
-            for (int i = 1; i <= _max; i <<= 1)
+            for (int i = 1; i <= Max; i <<= 1)
             {
                 if ((i & value) != 0)
                 {
@@ -410,7 +299,7 @@ namespace Poderosa.Config
                         bld.Append(',');
                     }
 
-                    bld.Append(Enum.GetName(_enumType, i));
+                    bld.Append(Enum.GetName(Type, i));
                 }
             }
             node[_externalName] = bld.ToString();
@@ -420,22 +309,22 @@ namespace Poderosa.Config
             string value = node[_externalName];
             if (value == null)
             {
-                _fieldInfo.SetValue(holder, Enum.ToObject(_enumType, (int)_initial));
+                _fieldInfo.SetValue(holder, Enum.ToObject(Type, Initial));
             }
             else
             {
                 int r = 0;
                 foreach (string t in value.Split(','))
                 {
-                    r |= (int)Enum.Parse(_enumType, t, false);
+                    r |= (int)Enum.Parse(Type, t, false);
                 }
 
-                _fieldInfo.SetValue(holder, Enum.ToObject(_enumType, (int)r));
+                _fieldInfo.SetValue(holder, Enum.ToObject(Type, r));
             }
         }
         public override void Reset(object holder)
         {
-            _fieldInfo.SetValue(holder, Enum.ToObject(_enumType, (int)_initial));
+            _fieldInfo.SetValue(holder, Enum.ToObject(Type, Initial));
         }
     }
 

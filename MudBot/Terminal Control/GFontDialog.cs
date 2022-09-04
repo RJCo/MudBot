@@ -15,7 +15,7 @@ namespace Poderosa.Forms
     /// <summary>
     /// GFontDialog の概要の説明です。
     /// </summary>
-    internal class GFontDialog : Form
+    internal sealed class GFontDialog : Form
     {
 
         //このダイアログは言語によって様子が違ってくる
@@ -40,35 +40,17 @@ namespace Poderosa.Forms
         private bool _ignoreEvent;
 
 
-        private Font _japaneseFont;
-        private Font _asciiFont;
-        public Font JapaneseFont
-        {
-            get
-            {
-                return _japaneseFont;
-            }
-        }
-        public Font ASCIIFont
-        {
-            get
-            {
-                return _asciiFont;
-            }
-        }
-        public bool UseClearType
-        {
-            get
-            {
-                return _checkClearType.Checked;
-            }
-        }
+        public Font JapaneseFont { get; private set; }
+
+        public Font ASCIIFont { get; private set; }
+
+        public bool UseClearType => _checkClearType.Checked;
 
         public void SetFont(bool cleartype, Font ascii, Font japanese)
         {
             _ignoreEvent = true;
-            _asciiFont = ascii;
-            _japaneseFont = japanese;
+            ASCIIFont = ascii;
+            JapaneseFont = japanese;
             _checkClearType.Checked = cleartype;
             _lASCIISample.ClearType = cleartype;
             _lJapaneseSample.ClearType = cleartype;
@@ -328,7 +310,7 @@ namespace Poderosa.Forms
             Graphics g = CreateGraphics();
             IntPtr hDC = g.GetHdc();
 
-            Win32.EnumFontFamExProc proc = new Win32.EnumFontFamExProc(FontProc);
+            Win32.EnumFontFamExProc proc = FontProc;
             IntPtr lParam = new IntPtr(0);
             lf.lfCharSet = 1; //default
             Win32.EnumFontFamiliesEx(hDC, ref lf, proc, lParam, 0);
@@ -389,8 +371,8 @@ namespace Poderosa.Forms
             }
 
             string fontname = (string)_japaneseFontList.Items[_japaneseFontList.SelectedIndex];
-            _japaneseFont = GUtil.CreateFont(fontname, GetFontSize());
-            _lJapaneseSample.Font = _japaneseFont;
+            JapaneseFont = GUtil.CreateFont(fontname, GetFontSize());
+            _lJapaneseSample.Font = JapaneseFont;
         }
         private void OnASCIIFontChange(object sender, EventArgs args)
         {
@@ -400,8 +382,8 @@ namespace Poderosa.Forms
             }
 
             string fontname = (string)_asciiFontList.Items[_asciiFontList.SelectedIndex];
-            _asciiFont = GUtil.CreateFont(fontname, GetFontSize());
-            _lASCIISample.Font = _asciiFont;
+            ASCIIFont = GUtil.CreateFont(fontname, GetFontSize());
+            _lASCIISample.Font = ASCIIFont;
         }
         private void OnOK(object sender, EventArgs args)
         {
@@ -433,7 +415,7 @@ namespace Poderosa.Forms
         //allowed_sizesはサイズ指定のリストに含まれているものを使用すること！
         private bool CheckFixedSizeFont(string name, params float[] allowed_sizes)
         {
-            if (_asciiFont.Name == name || _japaneseFont.Name == name)
+            if (ASCIIFont.Name == name || JapaneseFont.Name == name)
             {
                 float sz = GetFontSize();
                 bool contained = false;
@@ -483,22 +465,12 @@ namespace Poderosa.Forms
 
     internal class ClearTypeAwareLabel : Label
     {
-        private bool _clearType;
-        public bool ClearType
-        {
-            get
-            {
-                return _clearType;
-            }
-            set
-            {
-                _clearType = value;
-            }
-        }
+        public bool ClearType { get; set; }
+
         protected override void OnPaint(PaintEventArgs args)
         {
             base.OnPaint(args);
-            args.Graphics.TextRenderingHint = _clearType ? TextRenderingHint.ClearTypeGridFit : TextRenderingHint.SystemDefault;
+            args.Graphics.TextRenderingHint = ClearType ? TextRenderingHint.ClearTypeGridFit : TextRenderingHint.SystemDefault;
         }
     }
 }

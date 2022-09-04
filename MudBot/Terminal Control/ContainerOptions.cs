@@ -22,36 +22,56 @@ namespace Poderosa.Config
         [ConfigEnumElement(typeof(OptionPreservePlace), InitialAsInt = (int)OptionPreservePlace.InstalledDir)]
         protected OptionPreservePlace _optionPreservePlace;
 
-        [ConfigStringElement(Initial = "")] protected string _defaultKeyDir;
-        [ConfigStringElement(Initial = "")] protected string _defaultFileDir;
+        [ConfigStringElement(Initial = "")]
+        protected string _defaultKeyDir;
+
+        [ConfigStringElement(Initial = "")]
+        protected string _defaultFileDir;
+
         [ConfigEnumElement(typeof(FormWindowState), InitialAsInt = (int)FormWindowState.Normal)]
         protected FormWindowState _frameState;
-        [ConfigBoolElement(Initial = false)] protected bool _guevaraMode;
-        [ConfigBoolElement(Initial = true)] protected bool _showWelcomeDialog;
-        [ConfigBoolElement(Initial = false)] protected bool _hideDialogForSP1Issue;
+
+        [ConfigBoolElement(Initial = false)] 
+        protected bool _guevaraMode;
+
+        [ConfigBoolElement(Initial = true)]
+        protected bool _showWelcomeDialog;
+
+        [ConfigBoolElement(Initial = false)] 
+        protected bool _hideDialogForSP1Issue;
 
         [ConfigEnumElement(typeof(GFrameStyle), InitialAsInt = (int)GFrameStyle.Single)]
         protected GFrameStyle _frameStyle;
+
         [ConfigEnumElement(typeof(TabBarStyle), InitialAsInt = (int)TabBarStyle.MultiRow)]
         protected TabBarStyle _tabBarStyle;
-        [ConfigBoolElement(Initial = false)] protected bool _splitterPreservesRatio; //フレームをリサイズしたときスプリッタが連動するかどうか
 
-        [ConfigBoolElement(Initial = true)] protected bool _showToolBar;
-        [ConfigBoolElement(Initial = true)] protected bool _showTabBar;
-        [ConfigBoolElement(Initial = true)] protected bool _showStatusBar;
-        [ConfigIntElement(Initial = 8)] protected int _MRUSize;
-        [ConfigIntElement(Initial = 4)] protected int _serialCount;
+        [ConfigBoolElement(Initial = false)] 
+        protected bool _splitterPreservesRatio; //フレームをリサイズしたときスプリッタが連動するかどうか
 
-        [ConfigEnumElement(typeof(CID), InitialAsInt = (int)CID.NOP)] protected CID _actionOnLaunch;
+        [ConfigBoolElement(Initial = true)] 
+        protected bool _showToolBar;
+
+        [ConfigBoolElement(Initial = true)] 
+        protected bool _showTabBar;
+
+        [ConfigBoolElement(Initial = true)]
+        protected bool _showStatusBar;
+
+        [ConfigIntElement(Initial = 8)] 
+        protected int _MRUSize;
+
+        [ConfigIntElement(Initial = 4)] 
+        protected int _serialCount;
+
+        [ConfigEnumElement(typeof(CID), InitialAsInt = (int)CID.NOP)] 
+        protected CID _actionOnLaunch;
 
         private static ArrayList _configAttributes;
 
         public Commands Commands
         {
-            get
-            {
-                return _commands;
-            }
+            get => _commands;
             set
             {
                 _commands = value;
@@ -60,98 +80,47 @@ namespace Poderosa.Config
         }
         public bool GuevaraMode
         {
-            get
-            {
-                return _guevaraMode;
-            }
-            set
-            {
-                _guevaraMode = value;
-            }
+            get => _guevaraMode;
+            set => _guevaraMode = value;
         }
         public bool HideDialogForSP1Issue
         {
-            get
-            {
-                return _hideDialogForSP1Issue;
-            }
-            set
-            {
-                _hideDialogForSP1Issue = value;
-            }
+            get => _hideDialogForSP1Issue;
+            set => _hideDialogForSP1Issue = value;
         }
         public GFrameStyle FrameStyle
         {
-            get
-            {
-                return _frameStyle;
-            }
-            set
-            {
-                _frameStyle = value;
-            }
+            get => _frameStyle;
+            set => _frameStyle = value;
         }
         public Rectangle FramePosition
         {
-            get
-            {
-                return _framePosition;
-            }
-            set
-            {
-                _framePosition = value;
-            }
+            get => _framePosition;
+            set => _framePosition = value;
         }
         public string DefaultKeyDir
         {
-            get
-            {
-                return _defaultKeyDir;
-            }
-            set
-            {
-                _defaultKeyDir = value;
-            }
+            get => _defaultKeyDir;
+            set => _defaultKeyDir = value;
         }
         public string DefaultFileDir
         {
-            get
-            {
-                return _defaultFileDir;
-            }
-            set
-            {
-                _defaultFileDir = value;
-            }
+            get => _defaultFileDir;
+            set => _defaultFileDir = value;
         }
         public FormWindowState FrameState
         {
-            get
-            {
-                return _frameState;
-            }
-            set
-            {
-                _frameState = value;
-            }
+            get => _frameState;
+            set => _frameState = value;
         }
         public OptionPreservePlace OptionPreservePlace
         {
-            get
-            {
-                return _optionPreservePlace;
-            }
-            set
-            {
-                _optionPreservePlace = value;
-            }
+            get => _optionPreservePlace;
+            set => _optionPreservePlace = value;
         }
         public int MRUSize
         {
-            get
-            {
-                return _MRUSize;
-            }
+            get => _MRUSize;
             set
             {
                 if (value < 0 || value > 20)
@@ -164,10 +133,7 @@ namespace Poderosa.Config
         }
         public int SerialCount
         {
-            get
-            {
-                return _serialCount;
-            }
+            get => _serialCount;
             set
             {
                 if (value < 1 || value > 99)
@@ -180,91 +146,43 @@ namespace Poderosa.Config
         }
         public CID ActionOnLaunch
         {
-            get
-            {
-                return _actionOnLaunch;
-            }
-            set
-            {
-                _actionOnLaunch = value;
-            }
+            get => _actionOnLaunch;
+            set => _actionOnLaunch = value;
         }
         public bool SplitterPreservesRatio
         {
-            get
-            {
-                return _splitterPreservesRatio;
-            }
-            set
-            {
-                _splitterPreservesRatio = value;
-            }
+            get => _splitterPreservesRatio;
+            set => _splitterPreservesRatio = value;
         }
         public bool ShowToolBar
         {
-            get
-            {
-                return _showToolBar;
-            }
-            set
-            {
-                _showToolBar = value;
-            }
+            get => _showToolBar;
+            set => _showToolBar = value;
         }
         public bool ShowTabBar
         {
-            get
-            {
-                return _showTabBar;
-            }
-            set
-            {
-                _showTabBar = value;
-            }
+            get => _showTabBar;
+            set => _showTabBar = value;
         }
         public bool ShowStatusBar
         {
-            get
-            {
-                return _showStatusBar;
-            }
-            set
-            {
-                _showStatusBar = value;
-            }
+            get => _showStatusBar;
+            set => _showStatusBar = value;
         }
         public TabBarStyle TabBarStyle
         {
-            get
-            {
-                return _tabBarStyle;
-            }
-            set
-            {
-                _tabBarStyle = value;
-            }
+            get => _tabBarStyle;
+            set => _tabBarStyle = value;
         }
         public Language EnvLanguage
         {
-            get
-            {
-                return _envLanguage;
-            }
-            set
-            {
-                _envLanguage = value;
-            }
+            get => _envLanguage;
+            set => _envLanguage = value;
         }
         public bool ShowWelcomeDialog
         {
-            get
-            {
-                return _showWelcomeDialog;
-            }
-            set
-            {
-                _showWelcomeDialog = value;
-            }
+            get => _showWelcomeDialog;
+            set => _showWelcomeDialog = value;
         }
 
         public ContainerOptions()
@@ -322,7 +240,7 @@ namespace Poderosa.Config
             }
         }
 
-        public override sealed void Save(ConfigNode parent)
+        public sealed override void Save(ConfigNode parent)
         {
             ConfigNode node = new ConfigNode("poderosa-container");
             foreach (ConfigElementAttribute attr in _configAttributes)
@@ -336,7 +254,7 @@ namespace Poderosa.Config
 
             base.Save(parent);
         }
-        public override sealed void Load(ConfigNode parent)
+        public sealed override void Load(ConfigNode parent)
         {
             ConfigNode node = parent.FindChildConfigNode("poderosa-container");
             if (node != null)

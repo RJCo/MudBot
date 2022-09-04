@@ -20,28 +20,19 @@ namespace Poderosa.Connection
     {
         //接続を開いた順に格納されるConnectionTag配列
         private ArrayList _connections;
-        private int _activeIndex;
 
         //Activeな逆順に格納される配列
         private ArrayList _activatedOrder;
 
-        private KeepAlive _keepAlive;
-
         internal Connections()
         {
             _connections = new ArrayList();
-            _activeIndex = -1;
-            _keepAlive = new KeepAlive();
+            ActiveIndex = -1;
+            KeepAlive = new KeepAlive();
 
             _activatedOrder = new ArrayList();
         }
-        internal KeepAlive KeepAlive
-        {
-            get
-            {
-                return _keepAlive;
-            }
-        }
+        internal KeepAlive KeepAlive { get; }
 
         public void Add(ConnectionTag t)
         {
@@ -63,7 +54,7 @@ namespace Poderosa.Connection
             ConnectionTag ct = TagAt(i);
             _connections.RemoveAt(i);
             _activatedOrder.Remove(ct);
-            _activeIndex = Math.Min(_activeIndex, _connections.Count - 1);
+            ActiveIndex = Math.Min(ActiveIndex, _connections.Count - 1);
         }
         public void Replace(ConnectionTag old, ConnectionTag ct)
         {
@@ -79,7 +70,7 @@ namespace Poderosa.Connection
         {
             _connections.Clear();
             _activatedOrder.Clear();
-            _activeIndex = -1;
+            ActiveIndex = -1;
         }
         public void CloseAllConnections()
         {
@@ -94,13 +85,8 @@ namespace Poderosa.Connection
         {
             return new ArrayList(_connections);
         }
-        public int Count
-        {
-            get
-            {
-                return _connections.Count;
-            }
-        }
+        public int Count => _connections.Count;
+
         public bool LiveConnectionsExist
         {
             get
@@ -130,16 +116,11 @@ namespace Poderosa.Connection
                 return t;
             }
         }
-        public int ActiveIndex
-        {
-            get
-            {
-                return _activeIndex;
-            }
-        }
+        public int ActiveIndex { get; private set; }
+
         public void BringToActivationOrderTop(ConnectionTag ct)
         {
-            _activeIndex = _connections.IndexOf(ct);
+            ActiveIndex = _connections.IndexOf(ct);
             _activatedOrder.Remove(ct);
             _activatedOrder.Add(ct);
         }
@@ -147,13 +128,13 @@ namespace Poderosa.Connection
         {
             get
             {
-                if (_activeIndex == -1)
+                if (ActiveIndex == -1)
                 {
                     return null;
                 }
                 else
                 {
-                    return TagAt(_activeIndex).Connection;
+                    return TagAt(ActiveIndex).Connection;
                 }
             }
         }
@@ -190,13 +171,13 @@ namespace Poderosa.Connection
         {
             get
             {
-                if (_activeIndex == -1)
+                if (ActiveIndex == -1)
                 {
                     return null;
                 }
                 else
                 {
-                    return TagAt(_activeIndex);
+                    return TagAt(ActiveIndex);
                 }
             }
         }
@@ -261,9 +242,9 @@ namespace Poderosa.Connection
             ConnectionTag ct = (ConnectionTag)_connections[index];
             _connections.RemoveAt(index);
             _connections.Insert(newindex, ct);
-            if (_activeIndex == index)
+            if (ActiveIndex == index)
             {
-                _activeIndex = newindex;
+                ActiveIndex = newindex;
             }
         }
 
@@ -326,18 +307,11 @@ namespace Poderosa.Connection
     [Serializable]
     public class ConnectionTag
     {
-        private TerminalConnection _connection;
         private Control _tabButton; //タブの中に入るボタン
 
-        private TerminalPane _pane; //ペイン。非表示のときはnull
-        private TerminalDocument _document;
-        private ITerminal _terminal;
-        private TerminalDataReceiver _receiver;
         private RenderProfile _renderProfile;
         private IModalTerminalTask _modalTerminalTask;
         private Process _childProcess;
-
-        private InvalidateParam _invalidateParam;
 
         //ウィンドウの表示用テキスト
         internal string _windowTitle; //ホストOSCシーケンスで指定されたタイトル
@@ -350,12 +324,12 @@ namespace Poderosa.Connection
 
         public ConnectionTag(TerminalConnection c)
         {
-            _connection = c;
-            _pane = null;
-            _invalidateParam = new InvalidateParam();
+            Connection = c;
+            AttachedPane = null;
+            InvalidateParam = new InvalidateParam();
             _tabButton = null;
-            _document = new TerminalDocument(_connection);
-            _receiver = new TerminalDataReceiver(this);
+            Document = new TerminalDocument(Connection);
+            Receiver = new TerminalDataReceiver(this);
             _terminated = false;
             _timer = null;
             _windowTitle = "";
@@ -364,7 +338,7 @@ namespace Poderosa.Connection
             _renderProfile = c.Param.RenderProfile;
 
             //VT100指定でもxtermシーケンスを送ってくるアプリケーションが後をたたないので
-            _terminal = new XTerm(this, new JapaneseCharDecoder(_connection));
+            Terminal = new XTerm(this, new JapaneseCharDecoder(Connection));
             /*
 			if(c.Param.TerminalType==TerminalType.XTerm || c.Param.TerminalType==TerminalType.KTerm)
 				_terminal = new XTerm(this, new JapaneseCharDecoder(_connection));
@@ -384,67 +358,37 @@ namespace Poderosa.Connection
 
         public IEventReceiver EventReceiver
         {
-            get
-            {
-                return _eventReceiver;
-            }
-            set
-            {
-                _eventReceiver = value;
-            }
+            get => _eventReceiver;
+            set => _eventReceiver = value;
         }
         public IModalTerminalTask ModalTerminalTask
         {
-            get
-            {
-                return _modalTerminalTask;
-            }
-            set
-            {
-                _modalTerminalTask = value;
-            }
+            get => _modalTerminalTask;
+            set => _modalTerminalTask = value;
         }
         public Process ChildProcess
         {
-            get
-            {
-                return _childProcess;
-            }
-            set
-            {
-                _childProcess = value;
-            }
+            get => _childProcess;
+            set => _childProcess = value;
         }
 
-        internal InvalidateParam InvalidateParam
-        {
-            get
-            {
-                return _invalidateParam;
-            }
-        }
+        internal InvalidateParam InvalidateParam { get; }
 
 
         public string WindowTitle
         {
-            get
-            {
-                return _windowTitle;
-            }
-            set
-            {
-                _windowTitle = value;
-            }
+            get => _windowTitle;
+            set => _windowTitle = value;
         }
         public string FormatTabText()
         {
-            string t = _connection.Param.Caption;
+            string t = Connection.Param.Caption;
             if (t == null || t.Length == 0)
             {
-                t = _connection.Param.ShortDescription;
+                t = Connection.Param.ShortDescription;
             }
 
-            if (_connection.IsClosed)
+            if (Connection.IsClosed)
             {
                 t += "Caption.ConnectionTag.Disconnected";
             }
@@ -460,7 +404,7 @@ namespace Poderosa.Connection
         public string FormatFrameText()
         {
             string t = FormatTabText();
-            if (_windowTitle.Length != 0 && _connection.Param.Caption != _windowTitle) //TabCaptionをWindowTitleに一致させるオプションを使っていると鬱陶しくなるので異なるときのみ表示
+            if (_windowTitle.Length != 0 && Connection.Param.Caption != _windowTitle) //TabCaptionをWindowTitleに一致させるオプションを使っていると鬱陶しくなるので異なるときのみ表示
             {
                 t += "[" + _windowTitle + "]";
             }
@@ -470,61 +414,26 @@ namespace Poderosa.Connection
 
         public Control Button
         {
-            get
-            {
-                return _tabButton;
-            }
-            set
-            {
-                _tabButton = value;
-            }
+            get => _tabButton;
+            set => _tabButton = value;
         }
-        public TerminalDocument Document
-        {
-            get
-            {
-                return _document;
-            }
-        }
-        public TerminalConnection Connection
-        {
-            get
-            {
-                return _connection;
-            }
-        }
-        public TerminalPane AttachedPane
-        {
-            get
-            {
-                return _pane;
-            }
-        }
-        public ITerminal Terminal
-        {
-            get
-            {
-                return _terminal;
-            }
-        }
-        public TerminalDataReceiver Receiver
-        {
-            get
-            {
-                return _receiver;
-            }
-        }
+        public TerminalDocument Document { get; }
+
+        public TerminalConnection Connection { get; }
+
+        public TerminalPane AttachedPane { get; private set; }
+
+        public ITerminal Terminal { get; }
+
+        public TerminalDataReceiver Receiver { get; }
 
         public RenderProfile RenderProfile
         {
-            get
-            {
-                return _renderProfile;
-            }
+            get => _renderProfile;
             set
             {
                 _renderProfile = value;
-                _connection.Param.RenderProfile = value;
+                Connection.Param.RenderProfile = value;
             }
         }
         internal RenderProfile GetCurrentRenderProfile()
@@ -534,35 +443,23 @@ namespace Poderosa.Connection
 
         internal TerminalPane Pane
         {
-            get
-            {
-                return _pane;
-            }
-            set
-            {
-                _pane = value;
-            }
+            get => AttachedPane;
+            set => AttachedPane = value;
         }
         internal ThTimer Timer
         {
-            get
-            {
-                return _timer;
-            }
-            set
-            {
-                _timer = value;
-            }
+            get => _timer;
+            set => _timer = value;
         }
 
         internal void NotifyUpdate()
         {
-            if (_pane != null)
+            if (AttachedPane != null)
             {
-                _pane.DataArrived();
+                AttachedPane.DataArrived();
             }
 
-            _terminal.SignalData();
+            Terminal.SignalData();
 
             if (_eventReceiver != null)
             {
@@ -580,33 +477,18 @@ namespace Poderosa.Connection
 
         public int PositionIndex
         {
-            get
-            {
-                return _positionIndex;
-            }
-            set
-            {
-                _positionIndex = value;
-            }
+            get => _positionIndex;
+            set => _positionIndex = value;
         }
 
         public int PreservedPositionIndex
         {
-            get
-            {
-                return _preservedPositionIndex;
-            }
-            set
-            {
-                _preservedPositionIndex = value;
-            }
+            get => _preservedPositionIndex;
+            set => _preservedPositionIndex = value;
         }
         public bool IsTerminated
         {
-            get
-            {
-                return _terminated;
-            }
+            get => _terminated;
             set
             {
                 _terminated = value;

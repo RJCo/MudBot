@@ -13,16 +13,14 @@ namespace WalburySoftware
     public class TerminalControl : Control
     {
         #region fields
-        private string _hostname = "";
-        private int _port = 23; // default to telnet
-        private TerminalPane _terminalPane;
+
         #endregion
 
         #region Constructors
         public TerminalControl(string Hostname, int Port)
         {
-            _hostname = Hostname;
-            _port = Port;
+            Host = Hostname;
+            this.Port = Port;
 
             InitializeTerminalPane();
         }
@@ -41,7 +39,7 @@ namespace WalburySoftware
                 GApp._frame._multiPaneControl.InitUI(null, GApp.Options);
                 GEnv.InterThreadUIService.MainFrameHandle = GApp._frame.Handle;
             }
-            _terminalPane = new TerminalPane();
+            TerminalPane = new TerminalPane();
             TerminalPane.Dock = DockStyle.Fill;
             Controls.Add(TerminalPane);
         }
@@ -76,7 +74,7 @@ namespace WalburySoftware
                 connParam = new TelnetTerminalParam(Host)
                 {
                     Encoding = EncodingType.ISO8859_1,
-                    Port = _port,
+                    Port = Port,
                     RenderProfile = new RenderProfile(),
                     TerminalType = TerminalType.XTerm
                 };
@@ -211,42 +209,16 @@ namespace WalburySoftware
         #endregion
 
         #region Properties
-        public TerminalPane TerminalPane
-        {
-            get
-            {
-                return _terminalPane;
-            }
-        }
+        public TerminalPane TerminalPane { get; private set; }
 
-        public string Host
-        {
-            get
-            {
-                return _hostname;
-            }
-            set
-            {
-                _hostname = value;
-            }
-        }
+        public string Host { get; set; } = "";
 
-        public int Port
-        {
-            get { return _port; }
-            set { _port = value; }
-        }
+        public int Port { get; set; } = 23;
 
         public static int ScrollBackBuffer
         {
-            get
-            {
-                return GApp.Options.TerminalBufferSize;
-            }
-            set
-            {
-                GApp.Options.TerminalBufferSize = value;
-            }
+            get => GApp.Options.TerminalBufferSize;
+            set => GApp.Options.TerminalBufferSize = value;
         }
         #endregion
 

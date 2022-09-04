@@ -469,7 +469,7 @@ namespace Poderosa
             GCUtil.ShowModalDialog(_frame, dlg);
             return CommandResult.Success;
         }
-        
+
         public CommandResult ShowReceiveFileDialog()
         {
             if (_frame.XModemDialog != null)
@@ -628,7 +628,7 @@ namespace Poderosa
         {
             if (ent.Category == Commands.Category.Fixed)
             {
-                int n = (int)(ent.CID - CID.ActivateConnection0);
+                int n = ent.CID - CID.ActivateConnection0;
                 if (n < GEnv.Connections.Count)
                 {
                     return ActivateConnection2(GEnv.Connections.TagAt(n));
@@ -668,7 +668,6 @@ namespace Poderosa
         {
             switch (id)
             {
-                #region Poderosa stuff
                 case CID.PrevPane:
                     return MoveToPrevPane();
                 case CID.NextPane:
@@ -749,12 +748,9 @@ namespace Poderosa
                     {
                         return ExecMacro(n);
                     }
-                    else
-                    {
-                        Debug.WriteLine("unknown connection command " + id);
-                        return CommandResult.Ignored;
-                    }
-                    #endregion
+
+                    Debug.WriteLine("unknown connection command " + id);
+                    return CommandResult.Ignored;
             }
         }
         #region other stuff

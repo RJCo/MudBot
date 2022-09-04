@@ -8,49 +8,9 @@ namespace Poderosa.UI
 {
     public class ColorUtil
     {
+        public static Color VSNetSelectionColor => CalculateColor(SystemColors.Highlight, SystemColors.Window, 70);
 
-        static public Color VSNetBackgroundColor
-        {
-            get
-            {
-                return CalculateColor(SystemColors.Window, SystemColors.Control, 220);
-            }
-        }
-
-        static public Color VSNetSelectionColor
-        {
-            get
-            {
-                return CalculateColor(SystemColors.Highlight, SystemColors.Window, 70);
-            }
-        }
-
-
-        static public Color VSNetControlColor
-        {
-            get
-            {
-                return CalculateColor(SystemColors.Control, VSNetBackgroundColor, 195);
-            }
-
-        }
-
-        static public Color VSNetPressedColor
-        {
-            get
-            {
-                return CalculateColor(SystemColors.Highlight, VSNetSelectionColor, 70);
-            }
-        }
-
-
-        static public Color VSNetCheckedColor
-        {
-            get
-            {
-                return CalculateColor(SystemColors.Highlight, SystemColors.Window, 30);
-            }
-        }
+        public static Color VSNetPressedColor => CalculateColor(SystemColors.Highlight, VSNetSelectionColor, 70);
 
         public static Color CalculateColor(Color front, Color back, int alpha)
         {

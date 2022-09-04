@@ -79,7 +79,7 @@ namespace Poderosa.Forms
             _cancelButton.Location = new Point(208, 56);
             _cancelButton.Name = "_cancelButton";
             _cancelButton.TabIndex = 0;
-            _cancelButton.Click += new EventHandler(OnCancel);
+            _cancelButton.Click += OnCancel;
             // 
             // _progressBar
             // 
@@ -117,7 +117,7 @@ namespace Poderosa.Forms
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            _proc.LineProcessed += new PasteProcessor.EventHandler(OnLineProcessed);
+            _proc.LineProcessed += OnLineProcessed;
             _proc.Perform();
         }
 

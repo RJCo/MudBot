@@ -112,7 +112,7 @@ namespace Poderosa.Forms
             _okButton.Location = new Point(336, 384);
             _okButton.Name = "_okButton";
             _okButton.TabIndex = 1;
-            _okButton.Click += new EventHandler(OnOK);
+            _okButton.Click += OnOK;
             // 
             // _cancelButton
             // 
@@ -301,7 +301,6 @@ namespace Poderosa.Forms
 
     internal class PanelItem : UserControl
     {
-        private int _index;
         private Image _image;
         private OptionDialog _parent;
         private string _caption;
@@ -317,26 +316,18 @@ namespace Poderosa.Forms
         public PanelItem(OptionDialog parent, int index, Image image, string caption)
         {
             _parent = parent;
-            _index = index;
+            Index = index;
             _image = image;
             _caption = caption;
             Size = _defaultSize;
             TabStop = true;
             AdjustBackColor();
         }
-        public int Index
-        {
-            get
-            {
-                return _index;
-            }
-        }
+        public int Index { get; }
+
         public bool Selected
         {
-            get
-            {
-                return _selected;
-            }
+            get => _selected;
             set
             {
                 _selected = value;
@@ -346,10 +337,7 @@ namespace Poderosa.Forms
 
         public bool Hilight
         {
-            get
-            {
-                return _hilight;
-            }
+            get => _hilight;
             set
             {
                 _hilight = value;
@@ -360,26 +348,26 @@ namespace Poderosa.Forms
         protected override void OnMouseEnter(EventArgs e)
         {
             base.OnMouseEnter(e);
-            _parent.SetHilightingItemIndex(_selected ? -1 : _index);
+            _parent.SetHilightingItemIndex(_selected ? -1 : Index);
         }
 
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
-            _parent.SetHilightingItemIndex(_selected ? -1 : _index);
+            _parent.SetHilightingItemIndex(_selected ? -1 : Index);
         }
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
             if (e.KeyCode == Keys.Space)
             {
-                _parent.SelectItem(_index);
+                _parent.SelectItem(Index);
             }
         }
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
-            _parent.SelectItem(_index);
+            _parent.SelectItem(Index);
         }
 
         protected override void OnPaint(PaintEventArgs e)

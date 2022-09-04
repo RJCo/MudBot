@@ -7,7 +7,7 @@ namespace MudBot
 {
     public partial class MudBot : Form
     {
-        private DebugForm dform = null;
+        private DebugForm dform;
         private static Database _database = new Database();
 
 
@@ -19,17 +19,17 @@ namespace MudBot
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.terminalControl.Host = this.servertextBox1.Text;
-            this.terminalControl.Port = int.Parse(this.PorttextBox.Text);
+            terminalControl.Host = servertextBox1.Text;
+            terminalControl.Port = int.Parse(PorttextBox.Text);
 
-            this.terminalControl.Connect();
+            terminalControl.Connect();
 
-            this.terminalControl.SetPaneColors(Color.Blue, Color.Black);
-            this.terminalControl.Focus();
+            terminalControl.SetPaneColors(Color.Blue, Color.Black);
+            terminalControl.Focus();
 
             //terminalControl.SetLog(WalburySoftware.LogType.Default, @"C:\logfile.txt", true);
 
-            this.terminalControl.TerminalPane.TextChanged += terminalControl_TextChanged;
+            terminalControl.TerminalPane.TextChanged += terminalControl_TextChanged;
             //this.terminalControl.TerminalPane.
         }
 
@@ -45,20 +45,20 @@ namespace MudBot
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (this.terminalControl.TerminalPane.ConnectionTag == null) // it will be null if you're not connected to anything
+            if (terminalControl.TerminalPane.ConnectionTag == null) // it will be null if you're not connected to anything
             {
                 return;
             }
 
-            Poderosa.Forms.EditRenderProfile dlg = new Poderosa.Forms.EditRenderProfile(this.terminalControl.TerminalPane.ConnectionTag.RenderProfile);
+            Poderosa.Forms.EditRenderProfile dlg = new Poderosa.Forms.EditRenderProfile(terminalControl.TerminalPane.ConnectionTag.RenderProfile);
 
             if (dlg.ShowDialog() != DialogResult.OK)
             {
                 return;
             }
 
-            this.terminalControl.TerminalPane.ConnectionTag.RenderProfile = dlg.Result;
-            this.terminalControl.TerminalPane.ApplyRenderProfile(dlg.Result);
+            terminalControl.TerminalPane.ConnectionTag.RenderProfile = dlg.Result;
+            terminalControl.TerminalPane.ApplyRenderProfile(dlg.Result);
         }
 
         private void DebugButton_Click(object sender, EventArgs e)

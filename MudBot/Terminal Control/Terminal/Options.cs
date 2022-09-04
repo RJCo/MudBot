@@ -79,9 +79,9 @@ namespace Poderosa.Config
 
         //SSH
         [ConfigBoolElement(Initial = false)] protected bool _retainsPassphrase;
-        [ConfigStringArrayElement(Initial = new string[] { "AES128", "Blowfish", "TripleDES" })]
+        [ConfigStringArrayElement(Initial = new[] { "AES128", "Blowfish", "TripleDES" })]
         protected string[] _cipherAlgorithmOrder;
-        [ConfigStringArrayElement(Initial = new string[] { "DSA", "RSA" })]
+        [ConfigStringArrayElement(Initial = new[] { "DSA", "RSA" })]
         protected string[] _hostKeyAlgorithmOrder;
         [ConfigIntElement(Initial = 4096)] protected int _sshWindowSize;
         [ConfigBoolElement(Initial = true)] protected bool _sshCheckMAC;
@@ -106,168 +106,81 @@ namespace Poderosa.Config
         }
         public Language Language
         {
-            get
-            {
-                return _language;
-            }
-            set
-            {
-                _language = value;
-            }
+            get => _language;
+            set => _language = value;
         }
         public bool CloseOnDisconnect
         {
-            get
-            {
-                return _closeOnDisconnect;
-            }
-            set
-            {
-                _closeOnDisconnect = value;
-            }
+            get => _closeOnDisconnect;
+            set => _closeOnDisconnect = value;
         }
         public DisconnectNotification DisconnectNotification
         {
-            get
-            {
-                return _disconnectNotification;
-            }
-            set
-            {
-                _disconnectNotification = value;
-            }
+            get => _disconnectNotification;
+            set => _disconnectNotification = value;
         }
         public bool BeepOnBellChar
         {
-            get
-            {
-                return _beepOnBellChar;
-            }
-            set
-            {
-                _beepOnBellChar = value;
-            }
+            get => _beepOnBellChar;
+            set => _beepOnBellChar = value;
         }
         public bool AskCloseOnExit
         {
-            get
-            {
-                return _askCloseOnExit;
-            }
-            set
-            {
-                _askCloseOnExit = value;
-            }
+            get => _askCloseOnExit;
+            set => _askCloseOnExit = value;
         }
         public bool QuitAppWithLastPane
         {
-            get
-            {
-                return _quitAppWithLastPane;
-            }
-            set
-            {
-                _quitAppWithLastPane = value;
-            }
+            get => _quitAppWithLastPane;
+            set => _quitAppWithLastPane = value;
         }
         public bool Send0x7FByDel
         {
-            get
-            {
-                return _send0x7FByDel;
-            }
-            set
-            {
-                _send0x7FByDel = value;
-            }
+            get => _send0x7FByDel;
+            set => _send0x7FByDel = value;
         }
 
         public AltKeyAction LeftAltKey
         {
-            get
-            {
-                return _leftAltKey;
-            }
-            set
-            {
-                _leftAltKey = value;
-            }
+            get => _leftAltKey;
+            set => _leftAltKey = value;
         }
         public AltKeyAction RightAltKey
         {
-            get
-            {
-                return _rightAltKey;
-            }
-            set
-            {
-                _rightAltKey = value;
-            }
+            get => _rightAltKey;
+            set => _rightAltKey = value;
         }
         public bool AutoCopyByLeftButton
         {
-            get
-            {
-                return _autoCopyByLeftButton;
-            }
-            set
-            {
-                _autoCopyByLeftButton = value;
-            }
+            get => _autoCopyByLeftButton;
+            set => _autoCopyByLeftButton = value;
         }
         public RightButtonAction RightButtonAction
         {
-            get
-            {
-                return _rightButtonAction;
-            }
-            set
-            {
-                _rightButtonAction = value;
-            }
+            get => _rightButtonAction;
+            set => _rightButtonAction = value;
         }
         public string AdditionalWordElement
         {
-            get
-            {
-                return _additionalWordElement;
-            }
-            set
-            {
-                _additionalWordElement = value;
-            }
+            get => _additionalWordElement;
+            set => _additionalWordElement = value;
         }
 
 
         public bool AdjustsTabTitleToWindowTitle
         {
-            get
-            {
-                return _adjustsTabTitleToWindowTitle;
-            }
-            set
-            {
-                _adjustsTabTitleToWindowTitle = value;
-            }
+            get => _adjustsTabTitleToWindowTitle;
+            set => _adjustsTabTitleToWindowTitle = value;
         }
         public bool AllowsScrollInAppMode
         {
-            get
-            {
-                return _allowsScrollInAppMode;
-            }
-            set
-            {
-                _allowsScrollInAppMode = value;
-            }
+            get => _allowsScrollInAppMode;
+            set => _allowsScrollInAppMode = value;
         }
 
         public int WheelAmount
         {
-            get
-            {
-                return _wheelAmount;
-            }
+            get => _wheelAmount;
             set
             {
                 if (value < 1 || value > 99)
@@ -281,10 +194,7 @@ namespace Poderosa.Config
 
         public int TerminalBufferSize
         {
-            get
-            {
-                return _terminalBufferSize;
-            }
+            get => _terminalBufferSize;
             set
             {
                 if (value < 0 || value > 9999)
@@ -332,298 +242,138 @@ namespace Poderosa.Config
             }
         }
         //‚±‚ê‚ç‚ÍRenderProfile‚ªŽæ“¾‚·‚é–Ú“I
-        public string FontName
-        {
-            get
-            {
-                return _fontName;
-            }
-        }
-        public string JapaneseFontName
-        {
-            get
-            {
-                return _japaneseFontName;
-            }
-        }
-        public float FontSize
-        {
-            get
-            {
-                return _fontSize;
-            }
-        }
+        public string FontName => _fontName;
+
+        public string JapaneseFontName => _japaneseFontName;
+
+        public float FontSize => _fontSize;
 
         public bool UseClearType
         {
-            get
-            {
-                return _useClearType;
-            }
-            set
-            {
-                _useClearType = value;
-            }
+            get => _useClearType;
+            set => _useClearType = value;
         }
 
         public Color BGColor
         {
-            get
-            {
-                return _bgColor;
-            }
-            set
-            {
-                _bgColor = value;
-            }
+            get => _bgColor;
+            set => _bgColor = value;
         }
         public Color TextColor
         {
-            get
-            {
-                return _textColor;
-            }
-            set
-            {
-                _textColor = value;
-            }
+            get => _textColor;
+            set => _textColor = value;
         }
         public EscapesequenceColorSet ESColorSet
         {
-            get
-            {
-                return _esColorSet;
-            }
-            set
-            {
-                _esColorSet = value;
-            }
+            get => _esColorSet;
+            set => _esColorSet = value;
         }
 
         public string BackgroundImageFileName
         {
-            get
-            {
-                return _backgroundImageFileName;
-            }
-            set
-            {
-                _backgroundImageFileName = value;
-            }
+            get => _backgroundImageFileName;
+            set => _backgroundImageFileName = value;
         }
         public ImageStyle ImageStyle
         {
-            get
-            {
-                return _imageStyle;
-            }
-            set
-            {
-                _imageStyle = value;
-            }
+            get => _imageStyle;
+            set => _imageStyle = value;
         }
 
         public CaretType CaretType
         {
-            get
-            {
-                return _caretType;
-            }
-            set
-            {
-                _caretType = value;
-            }
+            get => _caretType;
+            set => _caretType = value;
         }
         public Color CaretColor
         {
-            get
-            {
-                return _caretColor;
-            }
-            set
-            {
-                _caretColor = value;
-            }
+            get => _caretColor;
+            set => _caretColor = value;
         }
         public string[] CipherAlgorithmOrder
         {
-            get
-            {
-                return _cipherAlgorithmOrder;
-            }
-            set
-            {
-                _cipherAlgorithmOrder = value;
-            }
+            get => _cipherAlgorithmOrder;
+            set => _cipherAlgorithmOrder = value;
         }
 
         public string[] HostKeyAlgorithmOrder
         {
-            get
-            {
-                return _hostKeyAlgorithmOrder;
-            }
-            set
-            {
-                _hostKeyAlgorithmOrder = value;
-            }
+            get => _hostKeyAlgorithmOrder;
+            set => _hostKeyAlgorithmOrder = value;
         }
         public int SSHWindowSize
         {
-            get
-            {
-                return _sshWindowSize;
-            }
-            set
-            {
-                _sshWindowSize = value;
-            }
+            get => _sshWindowSize;
+            set => _sshWindowSize = value;
         }
         public bool SSHCheckMAC
         {
-            get
-            {
-                return _sshCheckMAC;
-            }
-            set
-            {
-                _sshCheckMAC = value;
-            }
+            get => _sshCheckMAC;
+            set => _sshCheckMAC = value;
         }
 
         public bool RetainsPassphrase
         {
-            get
-            {
-                return _retainsPassphrase;
-            }
-            set
-            {
-                _retainsPassphrase = value;
-            }
+            get => _retainsPassphrase;
+            set => _retainsPassphrase = value;
         }
         public WarningOption WarningOption
         {
-            get
-            {
-                return _warningOption;
-            }
-            set
-            {
-                _warningOption = value;
-            }
+            get => _warningOption;
+            set => _warningOption = value;
         }
         public LogType DefaultLogType
         {
-            get
-            {
-                return _defaultLogType;
-            }
-            set
-            {
-                _defaultLogType = value;
-            }
+            get => _defaultLogType;
+            set => _defaultLogType = value;
         }
         public string DefaultLogDirectory
         {
-            get
-            {
-                return _defaultLogDirectory;
-            }
-            set
-            {
-                _defaultLogDirectory = value;
-            }
+            get => _defaultLogDirectory;
+            set => _defaultLogDirectory = value;
         }
 
 
         public bool UseSocks
         {
-            get
-            {
-                return _useSocks;
-            }
-            set
-            {
-                _useSocks = value;
-            }
+            get => _useSocks;
+            set => _useSocks = value;
         }
         public string SocksServer
         {
-            get
-            {
-                return _socksServer;
-            }
-            set
-            {
-                _socksServer = value;
-            }
+            get => _socksServer;
+            set => _socksServer = value;
         }
         public int SocksPort
         {
-            get
-            {
-                return _socksPort;
-            }
-            set
-            {
-                _socksPort = value;
-            }
+            get => _socksPort;
+            set => _socksPort = value;
         }
         public string SocksAccount
         {
-            get
-            {
-                return _socksAccount;
-            }
-            set
-            {
-                _socksAccount = value;
-            }
+            get => _socksAccount;
+            set => _socksAccount = value;
         }
         public string SocksPassword
         {
-            get
-            {
-                return _socksPassword;
-            }
-            set
-            {
-                _socksPassword = value;
-            }
+            get => _socksPassword;
+            set => _socksPassword = value;
         }
         public string SocksNANetworks
         {
-            get
-            {
-                return _socksNANetworks;
-            }
-            set
-            {
-                _socksNANetworks = value;
-            }
+            get => _socksNANetworks;
+            set => _socksNANetworks = value;
         }
         public int KeepAliveInterval
         {
-            get
-            {
-                return _keepAliveInterval;
-            }
-            set
-            {
-                _keepAliveInterval = value;
-            }
+            get => _keepAliveInterval;
+            set => _keepAliveInterval = value;
         }
         public Keys LocalBufferScrollModifier
         {
-            get
-            {
-                return _localBufferScrollModifier;
-            }
-            set
-            {
-                _localBufferScrollModifier = value;
-            }
+            get => _localBufferScrollModifier;
+            set => _localBufferScrollModifier = value;
         }
 
         public virtual object Clone()

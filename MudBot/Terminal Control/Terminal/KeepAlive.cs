@@ -27,7 +27,7 @@ namespace Poderosa.Terminal
             {
                 if (ct.Timer == null)
                 {
-                    ct.Timer = new Timer(new TimerCallback(OnTimer), ct, GEnv.Options.KeepAliveInterval, Timeout.Infinite);
+                    ct.Timer = new Timer(OnTimer, ct, GEnv.Options.KeepAliveInterval, Timeout.Infinite);
                 }
                 else
                 {

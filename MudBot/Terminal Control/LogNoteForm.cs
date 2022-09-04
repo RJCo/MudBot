@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Poderosa.Forms
 {
-    internal class LogNoteForm : Form
+    internal sealed class LogNoteForm : Form
     {
         private TextBox _textBox;
         private Button _okButton;
@@ -130,19 +130,13 @@ namespace Poderosa.Forms
             }
         }
 
-        public string ResultText
-        {
-            get
-            {
-                return _textBox.Text;
-            }
-        }
+        public string ResultText => _textBox.Text;
 
         private void OnClickInsertButton(object sender, EventArgs args)
         {
             ContextMenuStrip menu = new ContextMenuStrip();
-            menu.Items.Add(CreateMenuItem(0, "&Time", new EventHandler(OnInsertTime)));
-            menu.Items.Add(CreateMenuItem(1, "&Date and Time", new EventHandler(OnInsertDateTime)));
+            menu.Items.Add(CreateMenuItem(0, "&Time", OnInsertTime));
+            menu.Items.Add(CreateMenuItem(1, "&Date and Time", OnInsertDateTime));
             menu.Show(this, new Point(_insertButton.Left, _insertButton.Bottom));
         }
 
@@ -171,7 +165,7 @@ namespace Poderosa.Forms
         {
             for (int i = 0; i < t.Length; i++)
             {
-                Win32.SendMessage(_textBox.Handle, Win32.WM_CHAR, new IntPtr((int)t[i]), IntPtr.Zero);
+                Win32.SendMessage(_textBox.Handle, Win32.WM_CHAR, new IntPtr(t[i]), IntPtr.Zero);
             }
 
             _textBox.Focus();

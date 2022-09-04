@@ -38,14 +38,7 @@ namespace Poderosa.Communication
         }
 
         //Ú‘±‚ð’†’f‚·‚é‚Ù‚Ç‚Å‚Í‚È‚¢‚ªŠú‘Ò‚Ç‚¨‚è‚Å‚È‚©‚Á‚½ê‡‚ÉŒx‚ðo‚·
-        private ArrayList _warnings;
-        public ArrayList Warnings
-        {
-            get
-            {
-                return _warnings;
-            }
-        }
+        public ArrayList Warnings { get; }
 
         private ArrayList _refusedOptions;
         /*
@@ -62,7 +55,7 @@ namespace Poderosa.Communication
             _refusedOptions = new ArrayList();
             _width = width;
             _height = height;
-            _warnings = new ArrayList();
+            Warnings = new ArrayList();
             _state = TelnetCode.NA;
             _sequenceBuffer = new MemoryStream();
             _optionWriter = new TelnetOptionWriter();
@@ -93,13 +86,8 @@ namespace Poderosa.Communication
             _optionWriter.Write(TelnetCode.WILL, TelnetOption.NAWS);
         }
 
-        public bool InProcessing
-        {
-            get
-            {
-                return _state != TelnetCode.NA;
-            }
-        }
+        public bool InProcessing => _state != TelnetCode.NA;
+
         public void StartNegotiate()
         {
             _state = TelnetCode.IAC;
@@ -173,7 +161,7 @@ namespace Poderosa.Communication
                     }
                     else
                     {
-                        _warnings.Add("Message.Telnet.FailedToSendTerminalType");
+                        Warnings.Add("Message.Telnet.FailedToSendTerminalType");
                     }
 
                     break;
@@ -184,14 +172,14 @@ namespace Poderosa.Communication
                     }
                     else
                     {
-                        _warnings.Add("Message.Telnet.FailedToSendWidnowSize");
+                        Warnings.Add("Message.Telnet.FailedToSendWidnowSize");
                     }
 
                     break;
                 case TelnetOption.SuppressGoAhead:
                     if (_state != TelnetCode.WILL && _state != TelnetCode.DO) //!!—¼•û‚ª—ˆ‚½‚±‚Æ‚ðŠm”F‚·‚é
                     {
-                        _warnings.Add("Message.Telnet.FailedToSendSuppressGoAhead");
+                        Warnings.Add("Message.Telnet.FailedToSendSuppressGoAhead");
                     }
 
                     break;
@@ -226,13 +214,8 @@ namespace Poderosa.Communication
         {
             _strm = new MemoryStream();
         }
-        public long Length
-        {
-            get
-            {
-                return _strm.Length;
-            }
-        }
+        public long Length => _strm.Length;
+
         public void Clear()
         {
             _strm.SetLength(0);

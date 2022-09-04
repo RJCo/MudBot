@@ -11,55 +11,35 @@ namespace Poderosa.Communication
     //encodingä÷åW
     public abstract class EncodingProfile
     {
-
-        private Encoding _encoding;
-        private EncodingType _type;
-        private byte[] _buffer;
         private int _cursor;
         private int _byte_len;
 
         protected EncodingProfile(EncodingType t, Encoding enc)
         {
-            _type = t;
-            _encoding = enc;
-            _buffer = new byte[3]; //ç°ÇÕÇPï∂éöÇÕç≈ëÂÇRÉoÉCÉg
+            Type = t;
+            Encoding = enc;
+            Buffer = new byte[3]; //ç°ÇÕÇPï∂éöÇÕç≈ëÂÇRÉoÉCÉg
             _cursor = 0;
         }
 
         public abstract bool IsLeadByte(byte b);
         public abstract int GetCharLength(byte b);
 
-        public Encoding Encoding
-        {
-            get
-            {
-                return _encoding;
-            }
-        }
-        public EncodingType Type
-        {
-            get
-            {
-                return _type;
-            }
-        }
-        internal byte[] Buffer
-        {
-            get
-            {
-                return _buffer;
-            }
-        }
+        public Encoding Encoding { get; }
+
+        public EncodingType Type { get; }
+
+        internal byte[] Buffer { get; }
 
         internal byte[] GetBytes(char[] chars)
         {
-            return _encoding.GetBytes(chars);
+            return Encoding.GetBytes(chars);
         }
         internal byte[] GetBytes(char ch)
         {
             char[] t = new char[1];
             t[0] = ch;
-            return _encoding.GetBytes(t);
+            return Encoding.GetBytes(t);
         }
 
         internal bool IsInterestingByte(byte b)
@@ -69,7 +49,7 @@ namespace Poderosa.Communication
 
         internal int Decode(byte[] data, char[] result)
         {
-            return _encoding.GetChars(data, 0, data.Length, result, 0);
+            return Encoding.GetChars(data, 0, data.Length, result, 0);
         }
 
         internal void Reset()
@@ -86,11 +66,11 @@ namespace Poderosa.Communication
                 _byte_len = GetCharLength(b);
             }
 
-            _buffer[_cursor++] = b;
+            Buffer[_cursor++] = b;
             if (_cursor == _byte_len)
             {
                 char[] result = new Char[1];
-                _encoding.GetChars(_buffer, 0, _byte_len, result, 0);
+                Encoding.GetChars(Buffer, 0, _byte_len, result, 0);
                 _cursor = 0;
                 return result[0];
             }

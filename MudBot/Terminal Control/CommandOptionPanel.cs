@@ -55,18 +55,23 @@ namespace Poderosa.Forms
 
             _commandConfigGroup.SuspendLayout();
 
-            Controls.AddRange(new Control[] {
-                                                                                       _keyConfigList,
-                                                                                       _resetKeyConfigButton,
-                                                                                       _clearKeyConfigButton,
-                                                                                       _commandConfigGroup});
+            Controls.AddRange(new Control[]
+            {
+                _keyConfigList,
+                _resetKeyConfigButton,
+                _clearKeyConfigButton,
+                _commandConfigGroup
+            });
+
             // 
             // _keyConfigList
             // 
-            _keyConfigList.Columns.AddRange(new ColumnHeader[] {
-                                                                                             _commandCategoryHeader,
-                                                                                             _commandNameHeader,
-                                                                                             _commandConfigHeader});
+            _keyConfigList.Columns.AddRange(new[]
+            {
+                _commandCategoryHeader,
+                _commandNameHeader,
+                _commandConfigHeader
+            });
             _keyConfigList.FullRowSelect = true;
             _keyConfigList.GridLines = true;
             _keyConfigList.HeaderStyle = ColumnHeaderStyle.Nonclickable;
@@ -75,89 +80,80 @@ namespace Poderosa.Forms
             _keyConfigList.Size = new System.Drawing.Size(432, 172);
             _keyConfigList.TabIndex = 0;
             _keyConfigList.View = View.Details;
-            _keyConfigList.SelectedIndexChanged += new EventHandler(OnKeyMapItemActivated);
-            // 
+            _keyConfigList.SelectedIndexChanged += OnKeyMapItemActivated;
+            
             // _commandCategoryHeader
-            // 
             _commandCategoryHeader.Width = 80;
-            // 
+            
             // _commandNameHeader
-            // 
             _commandNameHeader.Width = 188;
-            // 
+            
             // _commandConfigHeader
-            // 
             _commandConfigHeader.Width = 136;
-            // 
+            
             // _resetKeyConfigButton
-            // 
             _resetKeyConfigButton.Location = new System.Drawing.Point(216, 172);
             _resetKeyConfigButton.Name = "_resetKeyConfigButton";
             _resetKeyConfigButton.FlatStyle = FlatStyle.System;
             _resetKeyConfigButton.Size = new System.Drawing.Size(104, 23);
             _resetKeyConfigButton.TabIndex = 1;
-            _resetKeyConfigButton.Click += new EventHandler(OnResetKeyConfig);
-            // 
+            _resetKeyConfigButton.Click += OnResetKeyConfig;
+            
             // _clearKeyConfigButton
-            // 
             _clearKeyConfigButton.Location = new System.Drawing.Point(336, 172);
             _clearKeyConfigButton.Name = "_clearKeyConfigButton";
             _clearKeyConfigButton.FlatStyle = FlatStyle.System;
             _clearKeyConfigButton.Size = new System.Drawing.Size(88, 23);
             _clearKeyConfigButton.TabIndex = 2;
-            _clearKeyConfigButton.Click += new EventHandler(OnClearKeyConfig);
-            // 
+            _clearKeyConfigButton.Click += OnClearKeyConfig;
+            
             // _commandConfigGroup
-            // 
-            _commandConfigGroup.Controls.AddRange(new Control[] {
-                                                                                              _commandNameLabel,
-                                                                                              _commandName,
-                                                                                              _currentConfigLabel,
-                                                                                              _currentCommand,
-                                                                                              _hotKey,
-                                                                                              _newAllocationLabel,
-                                                                                              _allocateKeyButton});
+            _commandConfigGroup.Controls.AddRange(new Control[] 
+            {
+                _commandNameLabel,
+                _commandName,
+                _currentConfigLabel,
+                _currentCommand,
+                _hotKey,
+                _newAllocationLabel,
+                _allocateKeyButton
+            });
             _commandConfigGroup.Location = new System.Drawing.Point(8, 196);
             _commandConfigGroup.Name = "_commandConfigGroup";
             _commandConfigGroup.FlatStyle = FlatStyle.System;
             _commandConfigGroup.Size = new System.Drawing.Size(416, 96);
             _commandConfigGroup.TabIndex = 3;
             _commandConfigGroup.TabStop = false;
-            // 
+
             // _commandNameLabel
-            // 
             _commandNameLabel.Location = new System.Drawing.Point(8, 16);
             _commandNameLabel.Name = "_commandNameLabel";
             _commandNameLabel.Size = new System.Drawing.Size(88, 23);
             _commandNameLabel.TabIndex = 4;
             _commandNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            
             // _commandName
-            // 
             _commandName.Location = new System.Drawing.Point(112, 16);
             _commandName.Name = "_commandName";
             _commandName.Size = new System.Drawing.Size(248, 23);
             _commandName.TabIndex = 5;
             _commandName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            
             // _currentConfigLabel
-            // 
             _currentConfigLabel.Location = new System.Drawing.Point(8, 40);
             _currentConfigLabel.Name = "_currentConfigLabel";
             _currentConfigLabel.Size = new System.Drawing.Size(88, 23);
             _currentConfigLabel.TabIndex = 6;
             _currentConfigLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            
             // _currentCommand
-            // 
             _currentCommand.Location = new System.Drawing.Point(112, 40);
             _currentCommand.Name = "_currentCommand";
             _currentCommand.Size = new System.Drawing.Size(248, 23);
             _currentCommand.TabIndex = 7;
             _currentCommand.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            
             // _hotKey
-            // 
             _hotKey.DebugTextBox = null;
             _hotKey.ImeMode = ImeMode.Disable;
             _hotKey.Key = Keys.None;
@@ -166,24 +162,22 @@ namespace Poderosa.Forms
             _hotKey.Size = new System.Drawing.Size(168, 19);
             _hotKey.TabIndex = 8;
             _hotKey.Text = "";
-            // 
+            
             // _newAllocationLabel
-            // 
             _newAllocationLabel.Location = new System.Drawing.Point(8, 64);
             _newAllocationLabel.Name = "_newAllocationLabel";
             _newAllocationLabel.Size = new System.Drawing.Size(88, 23);
             _newAllocationLabel.TabIndex = 9;
             _newAllocationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            
             // _allocateKeyButton
-            // 
             _allocateKeyButton.Enabled = false;
             _allocateKeyButton.Location = new System.Drawing.Point(288, 64);
             _allocateKeyButton.Name = "_allocateKeyButton";
             _allocateKeyButton.FlatStyle = FlatStyle.System;
             _allocateKeyButton.Size = new System.Drawing.Size(75, 24);
             _allocateKeyButton.TabIndex = 10;
-            _allocateKeyButton.Click += new EventHandler(OnAllocateKey);
+            _allocateKeyButton.Click += OnAllocateKey;
 
             BackColor = ThemeUtil.TabPaneBackColor;
             _commandConfigGroup.ResumeLayout();

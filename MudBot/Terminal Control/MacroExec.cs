@@ -45,11 +45,11 @@ namespace Poderosa.MacroEnv
                 //}
 
                 //return result.CompiledAssembly;
-                throw new Exception("Unsupported macro module type " + mod.Type.ToString() + " is specified.");
+                throw new Exception("Unsupported macro module type " + mod.Type + " is specified.");
             }
             else
             {
-                throw new Exception("Unsupported macro module type " + mod.Type.ToString() + " is specified.");
+                throw new Exception("Unsupported macro module type " + mod.Type + " is specified.");
             }
         }
         private static string GetMyExePath()
@@ -71,15 +71,13 @@ namespace Poderosa.MacroEnv
     }
     internal class MacroExecutor
     {
-
-        private MacroModule _module;
         private MethodInfo _entryPoint;
         private MacroTraceWindow _traceWindow;
         private Thread _macroThread;
 
         public MacroExecutor(MacroModule mod, MethodInfo ep)
         {
-            _module = mod;
+            Module = mod;
             _entryPoint = ep;
             if (mod.DebugMode)
             {
@@ -89,18 +87,12 @@ namespace Poderosa.MacroEnv
                 _traceWindow.Show();
             }
         }
-        public MacroModule Module
-        {
-            get
-            {
-                return _module;
-            }
-        }
+        public MacroModule Module { get; }
 
 
         public void AsyncExec()
         {
-            _macroThread = new Thread(new ThreadStart(MacroMain));
+            _macroThread = new Thread(MacroMain);
             _macroThread.Start();
         }
 

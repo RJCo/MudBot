@@ -16,7 +16,7 @@ namespace Poderosa.Forms
     /// <summary>
     /// TabBar の概要の説明です。
     /// </summary>
-    internal class TabBar : UserControl
+    internal sealed class TabBar : UserControl
     {
         private ToolTip _tabToolTip;
         private const int UNITHEIGHT = 25; //!!これはフォントからちゃんと計算しないといけないだろう
@@ -80,7 +80,7 @@ namespace Poderosa.Forms
                 Height = SCROLLBUTTON_SIZE
             };
             _leftScrollButton.BringToFront();
-            _leftScrollButton.Click += new EventHandler(OnLeftScrollButtonClicked);
+            _leftScrollButton.Click += OnLeftScrollButtonClicked;
             Controls.Add(_leftScrollButton);
             _rightScrollButton = new TabBarScrollButton
             {
@@ -90,7 +90,7 @@ namespace Poderosa.Forms
                 Height = SCROLLBUTTON_SIZE
             };
             _rightScrollButton.BringToFront();
-            _rightScrollButton.Click += new EventHandler(OnRightScrollButtonClicked);
+            _rightScrollButton.Click += OnRightScrollButtonClicked;
             Controls.Add(_rightScrollButton);
         }
 
@@ -184,10 +184,10 @@ namespace Poderosa.Forms
             b.Width = GetNecessaryButtonWidth(b);
             b.Visible = true;
             b.TabStop = false;
-            b.Click += new EventHandler(OnButtonClick);
-            b.MouseDown += new MouseEventHandler(OnMouseDown);
-            b.MouseUp += new MouseEventHandler(OnMouseUp);
-            b.MouseMove += new MouseEventHandler(OnMouseMove);
+            b.Click += OnButtonClick;
+            b.MouseDown += OnMouseDown;
+            b.MouseUp += OnMouseUp;
+            b.MouseMove += OnMouseMove;
             return b;
         }
         private int GetNecessaryButtonWidth(Control b)
@@ -196,7 +196,7 @@ namespace Poderosa.Forms
         }
         private int GetNecessaryButtonWidth(ConnectionTag ct)
         {
-            return (int)ct.Button.CreateGraphics().MeasureString((GEnv.Connections.IndexOf(ct) + 1).ToString() + ct.FormatTabText(), _activeTabFont).Width + 37;//37はアイコン、インデクス、左右マージンの合計
+            return (int)ct.Button.CreateGraphics().MeasureString((GEnv.Connections.IndexOf(ct) + 1) + ct.FormatTabText(), _activeTabFont).Width + 37;//37はアイコン、インデクス、左右マージンの合計
         }
         private int GetTabAreaWidth()
         {
@@ -277,7 +277,7 @@ namespace Poderosa.Forms
             {
                 Interval = 20
             };
-            t.Tick += new EventHandler(OnLeftScrollAnimation);
+            t.Tick += OnLeftScrollAnimation;
             t.Start();
         }
         private void OnRightScrollButtonClicked(object sender, EventArgs args)
@@ -293,7 +293,7 @@ namespace Poderosa.Forms
             {
                 Interval = 20
             };
-            t.Tick += new EventHandler(OnRightScrollAnimation);
+            t.Tick += OnRightScrollAnimation;
             t.Start();
 
             //_scrollButtonOffset++;
@@ -579,7 +579,7 @@ namespace Poderosa.Forms
         }
     }
 
-    internal class TabBarScrollButton : Button
+    internal sealed class TabBarScrollButton : Button
     {
 
         /* この形

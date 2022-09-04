@@ -58,7 +58,7 @@ namespace Poderosa.Forms
             _useSocks.FlatStyle = FlatStyle.System;
             _useSocks.Size = new System.Drawing.Size(160, 23);
             _useSocks.TabIndex = 1;
-            _useSocks.CheckedChanged += new EventHandler(OnUseSocksOptionChanged);
+            _useSocks.CheckedChanged += OnUseSocksOptionChanged;
             //
             //_socksGroup
             //

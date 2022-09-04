@@ -87,7 +87,6 @@ namespace Poderosa.Terminal
 
 
     /// <summary>
-    /// 
     /// </summary>
     internal class JapaneseCharDecoder : ICharDecoder
     {
@@ -108,7 +107,6 @@ namespace Poderosa.Terminal
         private MemoryStream _jisbuf;
 
         //MBCSÇÃèÛë‘ä«óù
-        private EncodingProfile _encoding;
 
         private static char[] DEC_SPECIAL_LINES;
 
@@ -122,21 +120,15 @@ namespace Poderosa.Terminal
             _jisbuf = new MemoryStream(0x1000);
             _state = State.Normal;
             _connection = con;
-            _encoding = con.Param.EncodingProfile;
+            Encoding = con.Param.EncodingProfile;
 
-            _iso2022jpByteProcessor = new ByteProcessor(ProcessByteAsISO2022JP);
-            _DECLineByteProcessor = new ByteProcessor(ProcessByteAsDECLine);
+            _iso2022jpByteProcessor = ProcessByteAsISO2022JP;
+            _DECLineByteProcessor = ProcessByteAsDECLine;
             _currentByteProcessor = null;
             _G0ByteProcessor = null;
             _G1ByteProcessor = null;
         }
-        public EncodingProfile Encoding
-        {
-            get
-            {
-                return _encoding;
-            }
-        }
+        public EncodingProfile Encoding { get; private set; }
 
 
         private delegate void ByteProcessor(byte b);
@@ -167,7 +159,7 @@ namespace Poderosa.Terminal
             }
             else
             {
-                if (_state == State.Normal && !IsControlChar(b) && _encoding.IsInterestingByte(b))
+                if (_state == State.Normal && !IsControlChar(b) && Encoding.IsInterestingByte(b))
                 {
                     PutMBCSByte(b);
                 }
@@ -284,7 +276,7 @@ namespace Poderosa.Terminal
                     DEC_SPECIAL_LINES[9] = (char)0x0B;
                     DEC_SPECIAL_LINES[31] = (char)0x7F;
                 }
-                char linechar = DEC_SPECIAL_LINES[(int)(ch - 0x60)];
+                char linechar = DEC_SPECIAL_LINES[ch - 0x60];
                 _terminal.ProcessChar(linechar);
             }
             else
@@ -325,9 +317,9 @@ namespace Poderosa.Terminal
 
         public void Reset(EncodingProfile enc)
         {
-            _encoding.Reset();
-            _encoding = enc;
-            _encoding.Reset();
+            Encoding.Reset();
+            Encoding = enc;
+            Encoding.Reset();
         }
 
         private static bool IsControlChar(byte b)
@@ -360,7 +352,7 @@ namespace Poderosa.Terminal
             char[] t = new char[2];
             try
             {
-                char ch = _encoding.PutByte(b);
+                char ch = Encoding.PutByte(b);
                 if (ch != '\0')
                 {
                     _terminal.ProcessChar(ch);
@@ -368,8 +360,8 @@ namespace Poderosa.Terminal
             }
             catch (Exception)
             {
-                _terminal.InvalidCharDetected(_encoding.Encoding, _encoding.Buffer);
-                _encoding.Reset();
+                _terminal.InvalidCharDetected(Encoding.Encoding, Encoding.Buffer);
+                Encoding.Reset();
             }
         }
     }

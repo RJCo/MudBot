@@ -122,47 +122,23 @@ namespace Poderosa.Forms
 
         public string YesButtonText
         {
-            get
-            {
-                return _button1.Text;
-            }
-            set
-            {
-                _button1.Text = value;
-            }
+            get => _button1.Text;
+            set => _button1.Text = value;
         }
         public string NoButtonText
         {
-            get
-            {
-                return _button2.Text;
-            }
-            set
-            {
-                _button2.Text = value;
-            }
+            get => _button2.Text;
+            set => _button2.Text = value;
         }
         public string CancelButtonText
         {
-            get
-            {
-                return _button3.Text;
-            }
-            set
-            {
-                _button3.Text = value;
-            }
+            get => _button3.Text;
+            set => _button3.Text = value;
         }
         public string Message
         {
-            get
-            {
-                return _message.Text;
-            }
-            set
-            {
-                _message.Text = value;
-            }
+            get => _message.Text;
+            set => _message.Text = value;
         }
         protected override void OnPaint(PaintEventArgs a)
         {

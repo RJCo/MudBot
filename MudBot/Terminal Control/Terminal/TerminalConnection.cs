@@ -44,13 +44,7 @@ namespace Poderosa.Communication
             _socket = s;
             _buf = new byte[0x1000];
         }
-        internal override bool DataAvailable
-        {
-            get
-            {
-                return _socket.Available > 0;
-            }
-        }
+        internal override bool DataAvailable => _socket.Available > 0;
 
         internal override void Transmit(byte[] data, int offset, int length)
         {
@@ -66,7 +60,7 @@ namespace Poderosa.Communication
         internal override void RepeatAsyncRead(IDataReceiver receiver)
         {
             _callback = receiver;
-            _socket.BeginReceive(_buf, 0, _buf.Length, SocketFlags.None, new AsyncCallback(RepeatCallback), null);
+            _socket.BeginReceive(_buf, 0, _buf.Length, SocketFlags.None, RepeatCallback, null);
         }
 
         private void RepeatCallback(IAsyncResult result)
@@ -80,12 +74,12 @@ namespace Poderosa.Communication
                 if (n > 0)
                 {
                     _callback.DataArrived(_buf, 0, n);
-                    _socket.BeginReceive(_buf, 0, _buf.Length, SocketFlags.None, new AsyncCallback(RepeatCallback), null);
+                    _socket.BeginReceive(_buf, 0, _buf.Length, SocketFlags.None, RepeatCallback, null);
                 }
                 else if (n < 0)
                 {
                     //WindowsMEにおいては、ときどきここで-1が返ってきていることが発覚した。
-                    _socket.BeginReceive(_buf, 0, _buf.Length, SocketFlags.None, new AsyncCallback(RepeatCallback), null);
+                    _socket.BeginReceive(_buf, 0, _buf.Length, SocketFlags.None, RepeatCallback, null);
                 }
                 else
                 {
@@ -97,7 +91,7 @@ namespace Poderosa.Communication
                 if ((ex is SocketException) && ((SocketException)ex).ErrorCode == 995)
                 {
                     //GUtil.WriteDebugLog(String.Format("t={0} error995", DateTime.Now.ToString()));
-                    _socket.BeginReceive(_buf, 0, _buf.Length, SocketFlags.None, new AsyncCallback(RepeatCallback), null);
+                    _socket.BeginReceive(_buf, 0, _buf.Length, SocketFlags.None, RepeatCallback, null);
                 }
                 else
                 {
@@ -142,102 +136,39 @@ namespace Poderosa.Communication
             _logsuspended = false;
         }
 
-        public IPAddress ServerAddress
-        {
-            get
-            {
-                return _serverAddress;
-            }
-        }
-        public string ServerName
-        {
-            get
-            {
-                return _serverName;
-            }
-        }
+        public IPAddress ServerAddress => _serverAddress;
+
+        public string ServerName => _serverName;
+
         public abstract string ProtocolDescription
         {
             get;
         }
 
-        public int SentPacketCount
-        {
-            get
-            {
-                return _sentPacketCount;
-            }
-        }
-        public int SentDataSize
-        {
-            get
-            {
-                return _sentDataSize;
-            }
-        }
-        public int ReceivedPacketCount
-        {
-            get
-            {
-                return _receivedPacketCount;
-            }
-        }
-        public int ReceivedDataSize
-        {
-            get
-            {
-                return _receivedDataSize;
-            }
-        }
+        public int SentPacketCount => _sentPacketCount;
 
-        public TerminalParam Param
-        {
-            get
-            {
-                return _param;
-            }
-        }
-        public int TerminalHeight
-        {
-            get
-            {
-                return _height;
-            }
-        }
-        public int TerminalWidth
-        {
-            get
-            {
-                return _width;
-            }
-        }
+        public int SentDataSize => _sentDataSize;
+
+        public int ReceivedPacketCount => _receivedPacketCount;
+
+        public int ReceivedDataSize => _receivedDataSize;
+
+        public TerminalParam Param => _param;
+
+        public int TerminalHeight => _height;
+
+        public int TerminalWidth => _width;
 
         public bool LogSuspended
         {
-            get
-            {
-                return _logsuspended;
-            }
-            set
-            {
-                _logsuspended = value;
-            }
+            get => _logsuspended;
+            set => _logsuspended = value;
         }
 
-        public LogType LogType
-        {
-            get
-            {
-                return _logType;
-            }
-        }
-        public string LogPath
-        {
-            get
-            {
-                return _logPath;
-            }
-        }
+        public LogType LogType => _logType;
+
+        public string LogPath => _logPath;
+
         public void SetServerInfo(string host, IPAddress address)
         {
             _serverName = host;
@@ -248,29 +179,11 @@ namespace Poderosa.Communication
             _loggerT.Comment(comment);
             _loggerB.Comment(comment);
         }
-        public ITerminalTextLogger TextLogger
-        {
-            get
-            {
-                return _loggerT;
-            }
-        }
-        public ITerminalBinaryLogger BinaryLogger
-        {
-            get
-            {
-                return _loggerB;
-            }
-        }
+        public ITerminalTextLogger TextLogger => _loggerT;
 
-        public bool IsClosed
-        {
-            get
-            {
-                return _closed;
-            }
-        }
+        public ITerminalBinaryLogger BinaryLogger => _loggerB;
 
+        public bool IsClosed => _closed;
 
 
         public abstract string[] ConnectionParameter { get; }
@@ -456,13 +369,8 @@ namespace Poderosa.Communication
             {
                 _logger.Close();
             }
-            public bool IsActive
-            {
-                get
-                {
-                    return _logger.IsActive;
-                }
-            }
+            public bool IsActive => _logger.IsActive;
+
             public void PacketDelimiter()
             {
                 if (!_parent.LogSuspended)
@@ -519,13 +427,7 @@ namespace Poderosa.Communication
             {
                 _logger.Close();
             }
-            public bool IsActive
-            {
-                get
-                {
-                    return _logger.IsActive;
-                }
-            }
+            public bool IsActive => _logger.IsActive;
         }
     }
 
@@ -538,13 +440,8 @@ namespace Poderosa.Communication
         {
             _usingSocks = false;
         }
-        public TCPTerminalParam TCPParam
-        {
-            get
-            {
-                return _param as TCPTerminalParam;
-            }
-        }
+        public TCPTerminalParam TCPParam => _param as TCPTerminalParam;
+
         public override string ProtocolDescription
         {
             get
@@ -562,14 +459,8 @@ namespace Poderosa.Communication
         //設定は最初だけ行う
         public bool UsingSocks
         {
-            get
-            {
-                return _usingSocks;
-            }
-            set
-            {
-                _usingSocks = value;
-            }
+            get => _usingSocks;
+            set => _usingSocks = value;
         }
     }
 
@@ -631,13 +522,7 @@ namespace Poderosa.Communication
             }
         }
 
-        public override bool Available
-        {
-            get
-            {
-                return !_closed && _socket.DataAvailable;
-            }
-        }
+        public override bool Available => !_closed && _socket.DataAvailable;
 
         private IDataReceiver _callback;
         internal override void RepeatAsyncRead(IDataReceiver cb)
@@ -810,20 +695,10 @@ namespace Poderosa.Communication
                 return new string[1] { "fake connection" };
             }
         }
-        public override bool Available
-        {
-            get
-            {
-                return false;
-            }
-        }
-        public override string ProtocolDescription
-        {
-            get
-            {
-                return "";
-            }
-        }
+        public override bool Available => false;
+
+        public override string ProtocolDescription => "";
+
         public override ConnectionTag Reproduce()
         {
             throw new NotSupportedException();
