@@ -1,28 +1,13 @@
 using System;
-using System.Resources;
-using System.Text;
 using System.Drawing;
-using System.Collections;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 using System.Windows.Forms;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using Microsoft.Win32;
 
 using Poderosa;
 using Poderosa.Toolkit;
 using Poderosa.Connection;
 using Poderosa.ConnectionParam;
 using Poderosa.Terminal;
-using Poderosa.Forms;
 using Poderosa.Communication;
-using Poderosa.Config;
-using Poderosa.MacroEnv;
-using Poderosa.Text;
-using Poderosa.UI;
 using Granados.SSHC;
 
 namespace WalburySoftware
@@ -43,18 +28,18 @@ namespace WalburySoftware
         #region Constructors
         public TerminalControl(string UserName, string Password, string Hostname, int Port, ConnectionMethod Method)
         {
-            this._connectionMethod = Method;
-            this._hostname = Hostname;
-            this._password = Password;
-            this._username = UserName;
-            this._port = Port;
+            _connectionMethod = Method;
+            _hostname = Hostname;
+            _password = Password;
+            _username = UserName;
+            _port = Port;
 
-            this.InitializeTerminalPane();
+            InitializeTerminalPane();
         }
 
         public TerminalControl()
         {
-            this.InitializeTerminalPane();
+            InitializeTerminalPane();
         }
 
         private void InitializeTerminalPane()
@@ -66,9 +51,9 @@ namespace WalburySoftware
                 GApp._frame._multiPaneControl.InitUI(null, GApp.Options);
                 GEnv.InterThreadUIService.MainFrameHandle = GApp._frame.Handle;
             }
-            this._terminalPane = new TerminalPane();
-            this.TerminalPane.Dock = DockStyle.Fill;
-            this.Controls.Add(this.TerminalPane);
+            _terminalPane = new TerminalPane();
+            TerminalPane.Dock = DockStyle.Fill;
+            Controls.Add(TerminalPane);
         }
         #endregion
 
@@ -107,13 +92,13 @@ namespace WalburySoftware
             // Save old log info in case this is a reconnect
             Poderosa.ConnectionParam.LogType logType = Poderosa.ConnectionParam.LogType.Default;
             string file = null;
-            if (this.TerminalPane.Connection != null)
+            if (TerminalPane.Connection != null)
             {
-                logType = this.TerminalPane.Connection.LogType;
-                file = this.TerminalPane.Connection.LogPath;
+                logType = TerminalPane.Connection.LogType;
+                file = TerminalPane.Connection.LogPath;
                 //GApp.GetConnectionCommandTarget().Close();
-                this.TerminalPane.Connection.Close();
-                this.TerminalPane.Detach();
+                TerminalPane.Connection.Close();
+                TerminalPane.Detach();
             }
 
             try
@@ -121,23 +106,25 @@ namespace WalburySoftware
                 TCPTerminalParam connParam = null;
                 SocketWithTimeout swt = null;
                 CommunicationUtil.SilentClient s = new CommunicationUtil.SilentClient();
-                Size sz = this.Size;
+                Size sz = Size;
                 
                 if (Method == ConnectionMethod.Telnet)
                 {
-                    connParam = new TelnetTerminalParam(this.Host);
-                    connParam.Encoding = EncodingType.ISO8859_1;
-                    connParam.Port = _port;
-                    connParam.RenderProfile = new RenderProfile();
-                    connParam.TerminalType = TerminalType.XTerm;
+                    connParam = new TelnetTerminalParam(Host)
+                    {
+                        Encoding = EncodingType.ISO8859_1,
+                        Port = _port,
+                        RenderProfile = new RenderProfile(),
+                        TerminalType = TerminalType.XTerm
+                    };
 
                     swt = new TelnetConnector((TelnetTerminalParam)connParam, sz);
                 }
                 else if (Method == ConnectionMethod.SSH1 || Method == ConnectionMethod.SSH2)
                 {
-                    connParam = new SSHTerminalParam((Poderosa.ConnectionParam.ConnectionMethod)this.Method, this.Host, this.UserName, this.Password);
-                    ((SSHTerminalParam)connParam).AuthType = this.AuthType;
-                    ((SSHTerminalParam)connParam).IdentityFile = this.IdentifyFile;
+                    connParam = new SSHTerminalParam((Poderosa.ConnectionParam.ConnectionMethod)Method, Host, UserName, Password);
+                    ((SSHTerminalParam)connParam).AuthType = AuthType;
+                    ((SSHTerminalParam)connParam).IdentityFile = IdentifyFile;
                     connParam.Encoding = EncodingType.ISO8859_1;
                     connParam.Port = _port;
                     connParam.RenderProfile = new RenderProfile();
@@ -150,16 +137,16 @@ namespace WalburySoftware
 
                 ConnectionTag ct = s.Wait(swt);
 
-                this.TerminalPane.FakeVisible = true;
+                TerminalPane.FakeVisible = true;
 
-                this.TerminalPane.Attach(ct);
+                TerminalPane.Attach(ct);
                 ct.Receiver.Listen();
 
                 //-------------------------------------------------------------
                 if (file != null)
-                    this.SetLog((LogType)logType, file, true);
-                this.TerminalPane.ConnectionTag.RenderProfile = new RenderProfile();
-                this.SetPaneColors(Color.LightBlue, Color.Black);
+                    SetLog((LogType)logType, file, true);
+                TerminalPane.ConnectionTag.RenderProfile = new RenderProfile();
+                SetPaneColors(Color.LightBlue, Color.Black);
             }
             catch
             {
@@ -170,22 +157,22 @@ namespace WalburySoftware
 
         public void Close()
         {
-            if (this.TerminalPane.Connection != null)
+            if (TerminalPane.Connection != null)
             {
-                this.TerminalPane.Connection.Close();
-                this.TerminalPane.Detach();
+                TerminalPane.Connection.Close();
+                TerminalPane.Detach();
             }
         }
 
         public void SendText(string command)
         {
             //GApp.GetConnectionCommandTarget().Connection.WriteChars(command.ToCharArray());
-            this.TerminalPane.Connection.WriteChars(command.ToCharArray());
+            TerminalPane.Connection.WriteChars(command.ToCharArray());
         }
 
         public string GetLastLine()
         {
-            return new string(this.TerminalPane.Document.LastLine.Text);
+            return new string(TerminalPane.Document.LastLine.Text);
         }
 
         /// <summary>
@@ -193,7 +180,7 @@ namespace WalburySoftware
         /// </summary>
         public void WaitConnected()
         {
-            while (this.TerminalPane.Connection.ReceivedDataSize == 0)
+            while (TerminalPane.Connection.ReceivedDataSize == 0)
             { }
         }
 
@@ -210,7 +197,7 @@ namespace WalburySoftware
             if (!System.IO.Directory.Exists(dir))
               System.IO.Directory.CreateDirectory(dir);
 
-            this.TerminalPane.Connection.ResetLog((Poderosa.ConnectionParam.LogType)logType, File, append);
+            TerminalPane.Connection.ResetLog((Poderosa.ConnectionParam.LogType)logType, File, append);
             //this.TerminalPane.Connection.ResetLog(Poderosa.ConnectionParam.LogType.Default, File, append);
         }
 
@@ -219,26 +206,26 @@ namespace WalburySoftware
             DateTime dt = new DateTime();
             string s = "\r\n----- Comment added " + dt.Date + " -----\r\n";
 
-            this.TerminalPane.Connection.TextLogger.Comment(s);
-            this.TerminalPane.Connection.BinaryLogger.Comment(s);
+            TerminalPane.Connection.TextLogger.Comment(s);
+            TerminalPane.Connection.BinaryLogger.Comment(s);
 
 
-            this.TerminalPane.Connection.TextLogger.Comment(comment);
-            this.TerminalPane.Connection.BinaryLogger.Comment(comment);
+            TerminalPane.Connection.TextLogger.Comment(comment);
+            TerminalPane.Connection.BinaryLogger.Comment(comment);
 
             s = "\r\n----------------------------------------------\r\n";
-            this.TerminalPane.Connection.TextLogger.Comment(s);
-            this.TerminalPane.Connection.BinaryLogger.Comment(s);
+            TerminalPane.Connection.TextLogger.Comment(s);
+            TerminalPane.Connection.BinaryLogger.Comment(s);
 
         }
 
         public void SetPaneColors(Color TextColor, Color BackColor)
         {
-            RenderProfile prof = this.TerminalPane.ConnectionTag.RenderProfile;
+            RenderProfile prof = TerminalPane.ConnectionTag.RenderProfile;
             prof.BackColor = BackColor;
             prof.ForeColor = TextColor;
             
-            this.TerminalPane.ApplyRenderProfile(prof);
+            TerminalPane.ApplyRenderProfile(prof);
         }
 
         public void CopySelectedTextToClipboard()
@@ -257,9 +244,9 @@ namespace WalburySoftware
         {
             //GApp.GetConnectionCommandTarget().Paste();
             string value = (string)Clipboard.GetDataObject().GetData("Text");
-            if (value == null || value.Length == 0 || this.TerminalPane == null || this.TerminalPane.ConnectionTag == null) return ;
+            if (value == null || value.Length == 0 || TerminalPane == null || TerminalPane.ConnectionTag == null) return ;
 
-            PasteProcessor p = new PasteProcessor(this.TerminalPane.ConnectionTag, value);
+            PasteProcessor p = new PasteProcessor(TerminalPane.ConnectionTag, value);
             p.Perform();
             
         }
@@ -270,11 +257,11 @@ namespace WalburySoftware
         {
             get
             {
-                return this._authType;
+                return _authType;
             }
             set
             {
-                this._authType = value; ;
+                _authType = value; ;
             }
         }
 
@@ -282,11 +269,11 @@ namespace WalburySoftware
         {
             get
             {
-                return this._identifyFile;
+                return _identifyFile;
             }
             set
             {
-                this._identifyFile = value;
+                _identifyFile = value;
             }
         }
 
@@ -294,7 +281,7 @@ namespace WalburySoftware
         {
             get
             {
-                return this._terminalPane;
+                return _terminalPane;
             }
         }
 
@@ -302,11 +289,11 @@ namespace WalburySoftware
         {
             get
             {
-                return this._username;
+                return _username;
             }
             set
             {
-                this._username = value;
+                _username = value;
             }
         }
 
@@ -314,11 +301,11 @@ namespace WalburySoftware
         {
             get
             {
-                return this._password;
+                return _password;
             }
             set
             {
-                this._password = value;
+                _password = value;
             }
         }
 
@@ -326,28 +313,28 @@ namespace WalburySoftware
         {
             get
             {
-                return this._hostname;
+                return _hostname;
             }
             set
             {
-                this._hostname = value;
+                _hostname = value;
             }
         }
 
         public int Port {
-            get { return this._port; }
-            set { this._port = value; }
+            get { return _port; }
+            set { _port = value; }
         }
 
         public ConnectionMethod Method
         {
             get
             {
-                return this._connectionMethod;
+                return _connectionMethod;
             }
             set
             {
-                this._connectionMethod = value;
+                _connectionMethod = value;
             }
         }
 
@@ -382,7 +369,7 @@ namespace WalburySoftware
 
             base.OnGotFocus(e);
 
-            this.TerminalPane.Focus();
+            TerminalPane.Focus();
         }
         #endregion
     }

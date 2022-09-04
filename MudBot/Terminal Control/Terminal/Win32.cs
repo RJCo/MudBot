@@ -467,12 +467,14 @@ namespace Poderosa
 			public int bottom;
 		}
 		public static RECT CreateRect(ref Rectangle rc) {
-			RECT r = new RECT();
-			r.left = rc.Left;
-			r.right = rc.Right;
-			r.top = rc.Top;
-			r.bottom = rc.Bottom;
-			return r;
+            RECT r = new RECT
+            {
+                left = rc.Left,
+                right = rc.Right,
+                top = rc.Top,
+                bottom = rc.Bottom
+            };
+            return r;
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -505,9 +507,9 @@ namespace Poderosa
 			private int _controlBorderHeight;
 
 			public SystemMetrics() {
-				_vScrollBarWidth     = Win32.GetSystemMetrics(Win32.SM_CXVSCROLL);
-				_controlBorderWidth  = Win32.GetSystemMetrics(Win32.SM_CXEDGE);
-				_controlBorderHeight = Win32.GetSystemMetrics(Win32.SM_CYEDGE);
+				_vScrollBarWidth     = GetSystemMetrics(SM_CXVSCROLL);
+				_controlBorderWidth  = GetSystemMetrics(SM_CXEDGE);
+				_controlBorderHeight = GetSystemMetrics(SM_CYEDGE);
 			}
 			public int ScrollBarWidth {
 				get {

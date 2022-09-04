@@ -4,30 +4,29 @@
 */
 using System;
 using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace Poderosa.Forms
 {
-	/// <summary>
-	/// EditEnvVariable の概要の説明です。
-	/// </summary>
-	internal class EditEnvVariable : System.Windows.Forms.Form
-	{
+    /// <summary>
+    /// EditEnvVariable の概要の説明です。
+    /// </summary>
+    internal class EditEnvVariable : Form
+    {
 		private bool _isNew;
 		private EnvVariableList _parent;
 
-		private System.Windows.Forms.Label _nameLabel;
+		private Label _nameLabel;
 		private TextBox _nameBox;
-		private System.Windows.Forms.Label _valueLabel;
+		private Label _valueLabel;
 		private TextBox _valueBox;
-		private System.Windows.Forms.Button _okButton;
-		private System.Windows.Forms.Button _cancelButton;
+		private Button _okButton;
+		private Button _cancelButton;
 		/// <summary>
 		/// 必要なデザイナ変数です。
 		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 
 		public EditEnvVariable(EnvVariableList p)
 		{
@@ -40,11 +39,11 @@ namespace Poderosa.Forms
 			//
 			// TODO: InitializeComponent 呼び出しの後に、コンストラクタ コードを追加してください。
 			//
-			this._nameLabel.Text = GApp.Strings.GetString("Form.EditEnvVariable._nameLabel");
-			this._valueLabel.Text = GApp.Strings.GetString("Form.EditEnvVariable._valueLabel");
-			this._okButton.Text = GApp.Strings.GetString("Common.OK");
-			this._cancelButton.Text = GApp.Strings.GetString("Common.Cancel");
-			this.Text = GApp.Strings.GetString("Form.EditEnvVariable.Text");
+			_nameLabel.Text = "Name";
+			_valueLabel.Text = "Value";
+			_okButton.Text = "OK";
+			_cancelButton.Text = "Cancel";
+			Text = "Edit Value";
 		}
 
 		/// <summary>
@@ -69,83 +68,83 @@ namespace Poderosa.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this._nameLabel = new System.Windows.Forms.Label();
-			this._nameBox = new TextBox();
-			this._valueLabel = new System.Windows.Forms.Label();
-			this._valueBox = new TextBox();
-			this._okButton = new System.Windows.Forms.Button();
-			this._cancelButton = new System.Windows.Forms.Button();
-			this.SuspendLayout();
+			_nameLabel = new Label();
+			_nameBox = new TextBox();
+			_valueLabel = new Label();
+			_valueBox = new TextBox();
+			_okButton = new Button();
+			_cancelButton = new Button();
+			SuspendLayout();
 			// 
 			// _nameLabel
 			// 
-			this._nameLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._nameLabel.Location = new System.Drawing.Point(8, 8);
-			this._nameLabel.Name = "_nameLabel";
-			this._nameLabel.Size = new System.Drawing.Size(56, 16);
-			this._nameLabel.TabIndex = 0;
+			_nameLabel.ImageAlign = ContentAlignment.MiddleLeft;
+			_nameLabel.Location = new Point(8, 8);
+			_nameLabel.Name = "_nameLabel";
+			_nameLabel.Size = new Size(56, 16);
+			_nameLabel.TabIndex = 0;
 			// 
 			// _nameBox
 			// 
-			this._nameBox.Location = new System.Drawing.Point(72, 8);
-			this._nameBox.Name = "_nameBox";
-			this._nameBox.Size = new System.Drawing.Size(216, 19);
-			this._nameBox.TabIndex = 1;
-			this._nameBox.Text = "";
+			_nameBox.Location = new Point(72, 8);
+			_nameBox.Name = "_nameBox";
+			_nameBox.Size = new Size(216, 19);
+			_nameBox.TabIndex = 1;
+			_nameBox.Text = "";
 			// 
 			// _valueLabel
 			// 
-			this._valueLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._valueLabel.Location = new System.Drawing.Point(8, 32);
-			this._valueLabel.Name = "_valueLabel";
-			this._valueLabel.Size = new System.Drawing.Size(56, 16);
-			this._valueLabel.TabIndex = 2;
+			_valueLabel.ImageAlign = ContentAlignment.MiddleLeft;
+			_valueLabel.Location = new Point(8, 32);
+			_valueLabel.Name = "_valueLabel";
+			_valueLabel.Size = new Size(56, 16);
+			_valueLabel.TabIndex = 2;
 			// 
 			// _valueBox
 			// 
-			this._valueBox.Location = new System.Drawing.Point(72, 32);
-			this._valueBox.Name = "_valueBox";
-			this._valueBox.Size = new System.Drawing.Size(216, 19);
-			this._valueBox.TabIndex = 3;
-			this._valueBox.Text = "";
+			_valueBox.Location = new Point(72, 32);
+			_valueBox.Name = "_valueBox";
+			_valueBox.Size = new Size(216, 19);
+			_valueBox.TabIndex = 3;
+			_valueBox.Text = "";
 			// 
 			// _okButton
 			// 
-			this._okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this._okButton.Location = new System.Drawing.Point(136, 64);
-			this._okButton.Name = "_okButton";
-			this._okButton.FlatStyle = FlatStyle.System;
-			this._okButton.TabIndex = 4;
-			this._okButton.Click += new EventHandler(OnOK);
+			_okButton.DialogResult = DialogResult.OK;
+			_okButton.Location = new Point(136, 64);
+			_okButton.Name = "_okButton";
+			_okButton.FlatStyle = FlatStyle.System;
+			_okButton.TabIndex = 4;
+			_okButton.Click += new EventHandler(OnOK);
 			// 
 			// _cancelButton
 			// 
-			this._cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this._cancelButton.Location = new System.Drawing.Point(216, 64);
-			this._cancelButton.Name = "_cancelButton";
-			this._cancelButton.FlatStyle = FlatStyle.System;
-			this._cancelButton.TabIndex = 5;
+			_cancelButton.DialogResult = DialogResult.Cancel;
+			_cancelButton.Location = new Point(216, 64);
+			_cancelButton.Name = "_cancelButton";
+			_cancelButton.FlatStyle = FlatStyle.System;
+			_cancelButton.TabIndex = 5;
 			// 
 			// EditEnvVariable
 			// 
-			this.AcceptButton = this._okButton;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 12);
-			this.CancelButton = this._cancelButton;
-			this.ClientSize = new System.Drawing.Size(292, 93);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this._cancelButton,
-																		  this._okButton,
-																		  this._valueBox,
-																		  this._valueLabel,
-																		  this._nameBox,
-																		  this._nameLabel});
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "EditEnvVariable";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.ResumeLayout(false);
+			AcceptButton = _okButton;
+			AutoScaleBaseSize = new Size(5, 12);
+			CancelButton = _cancelButton;
+			ClientSize = new Size(292, 93);
+			Controls.AddRange(new Control[] {
+																		  _cancelButton,
+																		  _okButton,
+																		  _valueBox,
+																		  _valueLabel,
+																		  _nameBox,
+																		  _nameLabel});
+			FormBorderStyle = FormBorderStyle.FixedDialog;
+			MaximizeBox = false;
+			MinimizeBox = false;
+			Name = "EditEnvVariable";
+			ShowInTaskbar = false;
+			StartPosition = FormStartPosition.CenterParent;
+			ResumeLayout(false);
 
 		}
 		#endregion
@@ -177,16 +176,16 @@ namespace Poderosa.Forms
 		}
 
 		private void OnOK(object sender, EventArgs args) {
-			this.DialogResult = DialogResult.None;
+			DialogResult = DialogResult.None;
 			string n = _nameBox.Text;
 			if(n.Length==0)
-				GUtil.Warning(this, GApp.Strings.GetString("Message.EditEnvVariable.EmptyName"));
+				GUtil.Warning(this, "The variable name must not be empty.");
 			else if(n.IndexOf('=')!=-1 || n.IndexOf(' ')!=-1)
-				GUtil.Warning(this, GApp.Strings.GetString("Message.EditEnvVariable.InvalidChars"));
+				GUtil.Warning(this, "The variable name must not contain '=' or space.");
 			else if(_isNew && _parent.HasVariable(n))
-				GUtil.Warning(this, GApp.Strings.GetString("Message.EditEnvVariable.DuplicatedName"));
+				GUtil.Warning(this, "An identical name already exists.");
 			else //success
-				this.DialogResult = DialogResult.OK;
+				DialogResult = DialogResult.OK;
 		}
 	}
 }

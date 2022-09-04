@@ -1,0 +1,45 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+Debug/**
+
+# Other
+*.user
+*.suo
+*.bak
+Backup/**
+*/.vs/**
+enc_temp_folder/**
+**/bin/*
+**/obj/*
+**/Debug/*
+

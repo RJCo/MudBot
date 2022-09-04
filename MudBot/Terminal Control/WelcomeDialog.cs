@@ -5,116 +5,115 @@ using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics;
-using Microsoft.Win32;
 
 using Poderosa.Config;
 using Poderosa.ConnectionParam;
 
 namespace Poderosa.Forms
 {
-	/// <summary>
-	/// ConfigConverter ÇÃäTóvÇÃê‡ñæÇ≈Ç∑ÅB
-	/// </summary>
-	internal class WelcomeDialog : Form
+    /// <summary>
+    /// ConfigConverter ÇÃäTóvÇÃê‡ñæÇ≈Ç∑ÅB
+    /// </summary>
+    internal class WelcomeDialog : Form
 	{
 		private CID _cid;
 
-		private System.Windows.Forms.Label _welcomeMessage;
-		private System.Windows.Forms.RadioButton _optNewConnection;
-		private System.Windows.Forms.RadioButton _optCygwin;
-		private System.Windows.Forms.RadioButton _optConvert;
-		private System.Windows.Forms.Button _cancelButton;
-		private System.Windows.Forms.Button _okButton;
-		private System.Windows.Forms.CheckBox _checkNext;
+		private Label _welcomeMessage;
+		private RadioButton _optNewConnection;
+		private RadioButton _optCygwin;
+		private RadioButton _optConvert;
+		private Button _cancelButton;
+		private Button _okButton;
+		private CheckBox _checkNext;
 
 		private void InitializeComponent() {
-			this._welcomeMessage = new System.Windows.Forms.Label();
-			this._optNewConnection = new System.Windows.Forms.RadioButton();
-			this._optCygwin = new System.Windows.Forms.RadioButton();
-			this._optConvert = new System.Windows.Forms.RadioButton();
-			this._cancelButton = new System.Windows.Forms.Button();
-			this._okButton = new System.Windows.Forms.Button();
-			this._checkNext = new System.Windows.Forms.CheckBox();
-			this.SuspendLayout();
+			_welcomeMessage = new Label();
+			_optNewConnection = new RadioButton();
+			_optCygwin = new RadioButton();
+			_optConvert = new RadioButton();
+			_cancelButton = new Button();
+			_okButton = new Button();
+			_checkNext = new CheckBox();
+			SuspendLayout();
 			// 
 			// _welcomeMessage
 			// 
-			this._welcomeMessage.Location = new System.Drawing.Point(8, 8);
-			this._welcomeMessage.Name = "_welcomeMessage";
-			this._welcomeMessage.Size = new System.Drawing.Size(336, 56);
-			this._welcomeMessage.TabIndex = 0;
+			_welcomeMessage.Location = new Point(8, 8);
+			_welcomeMessage.Name = "_welcomeMessage";
+			_welcomeMessage.Size = new Size(336, 56);
+			_welcomeMessage.TabIndex = 0;
 			// 
 			// _optNewConnection
 			// 
-			this._optNewConnection.Checked = true;
-			this._optNewConnection.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this._optNewConnection.Location = new System.Drawing.Point(16, 72);
-			this._optNewConnection.Name = "_optNewConnection";
-			this._optNewConnection.Size = new System.Drawing.Size(320, 24);
-			this._optNewConnection.TabIndex = 1;
-			this._optNewConnection.TabStop = true;
+			_optNewConnection.Checked = true;
+			_optNewConnection.FlatStyle = FlatStyle.System;
+			_optNewConnection.Location = new Point(16, 72);
+			_optNewConnection.Name = "_optNewConnection";
+			_optNewConnection.Size = new Size(320, 24);
+			_optNewConnection.TabIndex = 1;
+			_optNewConnection.TabStop = true;
 			// 
 			// _optCygwin
 			// 
-			this._optCygwin.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this._optCygwin.Location = new System.Drawing.Point(16, 96);
-			this._optCygwin.Name = "_optCygwin";
-			this._optCygwin.Size = new System.Drawing.Size(320, 24);
-			this._optCygwin.TabIndex = 2;
+			_optCygwin.FlatStyle = FlatStyle.System;
+			_optCygwin.Location = new Point(16, 96);
+			_optCygwin.Name = "_optCygwin";
+			_optCygwin.Size = new Size(320, 24);
+			_optCygwin.TabIndex = 2;
 			// 
 			// _optConvert
 			// 
-			this._optConvert.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this._optConvert.Location = new System.Drawing.Point(16, 120);
-			this._optConvert.Name = "_optConvert";
-			this._optConvert.Size = new System.Drawing.Size(320, 24);
-			this._optConvert.TabIndex = 3;
+			_optConvert.FlatStyle = FlatStyle.System;
+			_optConvert.Location = new Point(16, 120);
+			_optConvert.Name = "_optConvert";
+			_optConvert.Size = new Size(320, 24);
+			_optConvert.TabIndex = 3;
 			// 
 			// _cancelButton
 			// 
-			this._cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this._cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this._cancelButton.Location = new System.Drawing.Point(264, 184);
-			this._cancelButton.Name = "_cancelButton";
-			this._cancelButton.TabIndex = 4;
+			_cancelButton.DialogResult = DialogResult.Cancel;
+			_cancelButton.FlatStyle = FlatStyle.System;
+			_cancelButton.Location = new Point(264, 184);
+			_cancelButton.Name = "_cancelButton";
+			_cancelButton.TabIndex = 4;
 			// 
 			// _okButton
 			// 
-			this._okButton.DialogResult = DialogResult.OK;
-			this._okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this._okButton.Location = new System.Drawing.Point(168, 184);
-			this._okButton.Name = "_okButton";
-			this._okButton.TabIndex = 5;
-			this._okButton.Click += new System.EventHandler(this.OnOK);
+			_okButton.DialogResult = DialogResult.OK;
+			_okButton.FlatStyle = FlatStyle.System;
+			_okButton.Location = new Point(168, 184);
+			_okButton.Name = "_okButton";
+			_okButton.TabIndex = 5;
+			_okButton.Click += new EventHandler(OnOK);
 			// 
 			// _checkNext
 			// 
-			this._checkNext.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this._checkNext.Location = new System.Drawing.Point(144, 160);
-			this._checkNext.Name = "_checkNext";
-			this._checkNext.Size = new System.Drawing.Size(200, 16);
-			this._checkNext.TabIndex = 6;
+			_checkNext.FlatStyle = FlatStyle.System;
+			_checkNext.Location = new Point(144, 160);
+			_checkNext.Name = "_checkNext";
+			_checkNext.Size = new Size(200, 16);
+			_checkNext.TabIndex = 6;
 			// 
 			// WelcomeDialog
 			// 
-			this.AcceptButton = this._okButton;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 12);
-			this.CancelButton = this._cancelButton;
-			this.ClientSize = new System.Drawing.Size(354, 216);
-			this.Controls.Add(this._checkNext);
-			this.Controls.Add(this._okButton);
-			this.Controls.Add(this._cancelButton);
-			this.Controls.Add(this._optConvert);
-			this.Controls.Add(this._optCygwin);
-			this.Controls.Add(this._optNewConnection);
-			this.Controls.Add(this._welcomeMessage);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "WelcomeDialog";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.ResumeLayout(false);
+			AcceptButton = _okButton;
+			AutoScaleBaseSize = new Size(5, 12);
+			CancelButton = _cancelButton;
+			ClientSize = new Size(354, 216);
+			Controls.Add(_checkNext);
+			Controls.Add(_okButton);
+			Controls.Add(_cancelButton);
+			Controls.Add(_optConvert);
+			Controls.Add(_optCygwin);
+			Controls.Add(_optNewConnection);
+			Controls.Add(_welcomeMessage);
+			FormBorderStyle = FormBorderStyle.FixedDialog;
+			MaximizeBox = false;
+			MinimizeBox = false;
+			Name = "WelcomeDialog";
+			ShowInTaskbar = false;
+			StartPosition = FormStartPosition.CenterParent;
+			ResumeLayout(false);
 
 		}
 		public CID CID {
@@ -134,14 +133,14 @@ namespace Poderosa.Forms
 			_checkNext.Checked = GApp.Options.ShowWelcomeDialog;
 		}
 		private void InitializeText() {
-			this.Text = GApp.Strings.GetString("Form.WelcomeDialog.Text");
-			_welcomeMessage.Text = GApp.Strings.GetString("Form.WelcomeDialog._welcomeMessage");
-			_optNewConnection.Text = GApp.Strings.GetString("Form.WelcomeDialog._optNewConnection");
-			_optCygwin.Text = GApp.Strings.GetString("Form.WelcomeDialog._optCygwin");
-			_optConvert.Text = GApp.Strings.GetString("Form.WelcomeDialog._optConvert");
-			_cancelButton.Text = GApp.Strings.GetString("Common.Cancel");
-			_okButton.Text = GApp.Strings.GetString("Common.OK");
-			_checkNext.Text = GApp.Strings.GetString("Form.WelcomeDialog._checkNext");
+			Text = "Form.WelcomeDialog.Text";
+			_welcomeMessage.Text = "Form.WelcomeDialog._welcomeMessage";
+			_optNewConnection.Text = "Form.WelcomeDialog._optNewConnection";
+			_optCygwin.Text = "Form.WelcomeDialog._optCygwin";
+			_optConvert.Text = "Form.WelcomeDialog._optConvert";
+			_cancelButton.Text = "Cancel";
+			_okButton.Text = "OK";
+			_checkNext.Text = "Form.WelcomeDialog._checkNext";
 		}
 
 		private void OnOK(object sender, EventArgs args) {
@@ -161,7 +160,7 @@ namespace Poderosa.Forms
 		private void StartConvert() {
 			string dir = SelectDirectory();
 			if(dir==null) {
-				this.DialogResult = DialogResult.None;
+				DialogResult = DialogResult.None;
 				return;
 			}
 
@@ -171,15 +170,17 @@ namespace Poderosa.Forms
 			catch(Exception ex) {
 				Debug.WriteLine(ex.StackTrace);
 				GUtil.Warning(this, ex.Message);
-				this.DialogResult = DialogResult.None;
+				DialogResult = DialogResult.None;
 				return;
 			}
 		}
 		public string SelectDirectory() {
-			FolderBrowserDialog dlg = new FolderBrowserDialog();
-			dlg.ShowNewFolderButton = false;
-			dlg.Description = GApp.Strings.GetString("Caption.WelcomeDialog.SelectConfigDirectory");
-			string initial_dir = GuessVaraTermDir();
+            FolderBrowserDialog dlg = new FolderBrowserDialog
+            {
+                ShowNewFolderButton = false,
+                Description = "Caption.WelcomeDialog.SelectConfigDirectory"
+            };
+            string initial_dir = GuessVaraTermDir();
 			if(initial_dir!=null) dlg.SelectedPath = initial_dir;
 			if(GCUtil.ShowModalDialog(this, dlg)==DialogResult.OK)
 				return dlg.SelectedPath;
@@ -273,7 +274,7 @@ namespace Poderosa.Forms
 		}
 
 		private string GuessVaraTermDir() {
-			string candidate1 = Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) + "\\Terminal Emulator VaraTerm";
+			string candidate1 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + "\\Terminal Emulator VaraTerm";
 			string candidate2 = candidate1 + "\\" + Environment.UserName;
 			if(Directory.Exists(candidate2))
 				return candidate2;

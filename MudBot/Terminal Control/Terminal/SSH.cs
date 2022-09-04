@@ -132,7 +132,7 @@ namespace Poderosa.SSH
 			string keystr = ci.DumpHostKeyInKnownHostsStyle();
 			KeyCheckResult r = GEnv.SSHKnownHosts.Check(_tryingParam, keystr);
 			if(r==KeyCheckResult.NotExists) {
-				if(GEnv.InterThreadUIService.AskUserYesNo(GEnv.Strings.GetString("Message.HostKeyChecker.AskHostKeyRegister"))==DialogResult.Yes) {
+				if(GEnv.InterThreadUIService.AskUserYesNo("Message.HostKeyChecker.AskHostKeyRegister")==DialogResult.Yes) {
 					GEnv.SSHKnownHosts.Update(_tryingParam, keystr);
 					return true;
 				}
@@ -140,7 +140,7 @@ namespace Poderosa.SSH
 					return false;
 			}
 			else if(r==KeyCheckResult.Different) {
-				if(GEnv.InterThreadUIService.AskUserYesNo(GEnv.Strings.GetString("Message.HostKeyChecker.AskHostKeyRenew"))==DialogResult.Yes) {
+				if(GEnv.InterThreadUIService.AskUserYesNo("Message.HostKeyChecker.AskHostKeyRenew")==DialogResult.Yes) {
 					GEnv.SSHKnownHosts.Update(_tryingParam, keystr);
 					return true;
 				}

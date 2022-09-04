@@ -4,22 +4,17 @@
 */
 using System;
 using System.Resources;
-using System.Collections;
 using System.IO;
 using System.Text;
 using System.Diagnostics;
-using System.Drawing;
 using System.Windows.Forms;
 
 using Poderosa.Log;
-using Poderosa.Forms;
-using Poderosa.Config;
-using Poderosa.Text;
 using Poderosa.Communication;
 
 namespace Poderosa.Terminal
 {
-	public interface ITerminal {
+    public interface ITerminal {
 
 		/// <summary>
 		/// ÉzÉXÉgÇ©ÇÁÇÃì¸óÕèàóù
@@ -124,8 +119,8 @@ namespace Poderosa.Terminal
 			_connection = con;
 			_encoding = con.Param.EncodingProfile;
 
-			_iso2022jpByteProcessor   = new ByteProcessor(this.ProcessByteAsISO2022JP);
-			_DECLineByteProcessor     = new ByteProcessor(this.ProcessByteAsDECLine);
+			_iso2022jpByteProcessor   = new ByteProcessor(ProcessByteAsISO2022JP);
+			_DECLineByteProcessor     = new ByteProcessor(ProcessByteAsDECLine);
 			_currentByteProcessor = null;
 			_G0ByteProcessor = null;
 			_G1ByteProcessor = null;

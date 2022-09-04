@@ -5,13 +5,12 @@
 */
 using System;
 using System.Diagnostics;
-using System.Reflection;
 using System.Drawing;
 
 namespace Poderosa.Config
 {
-	//Colorを直接Attributeの定義に使うことはできない！
-	public enum LateBindColors {
+    //Colorを直接Attributeの定義に使うことはできない！
+    public enum LateBindColors {
 		Empty,
 		Window,
 		WindowText

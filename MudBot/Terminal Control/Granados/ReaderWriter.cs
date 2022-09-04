@@ -144,7 +144,7 @@ namespace Granados.SSHC {
 
 namespace Granados.SSHCV1 {
 
-	internal class SSH1DataReader : Granados.SSHC.SSHDataReader {
+	internal class SSH1DataReader : SSHC.SSHDataReader {
 
 		public SSH1DataReader(byte[] image) : base(image) {}
 
@@ -157,7 +157,7 @@ namespace Granados.SSHCV1 {
 		}
 	}
 
-	internal class SSH1DataWriter : Granados.SSHC.SSHDataWriter {
+	internal class SSH1DataWriter : SSHC.SSHDataWriter {
 		public override void Write(BigInteger data) {
 			byte[] image = data.getBytes();
 			int off = (image[0]==0? 1 : 0);
@@ -177,7 +177,7 @@ namespace Granados.SSHCV1 {
 
 namespace Granados.SSHCV2 {
 
-	internal class SSH2DataReader : Granados.SSHC.SSHDataReader {
+	internal class SSH2DataReader : SSHC.SSHDataReader {
 
 		public SSH2DataReader(byte[] image) : base(image) {}
 
@@ -195,7 +195,7 @@ namespace Granados.SSHCV2 {
 		}
 	}
 
-	internal class SSH2DataWriter : Granados.SSHC.SSHDataWriter {
+	internal class SSH2DataWriter : SSHC.SSHDataWriter {
 		//writes mpint in SSH2 format
 		public override void Write(BigInteger data) {
 			byte[] t = data.getBytes();

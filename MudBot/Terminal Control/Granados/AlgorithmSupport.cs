@@ -7,18 +7,17 @@
 * $Id: AlgorithmSupport.cs,v 1.2 2005/04/20 08:58:50 okajima Exp $
 */
 
-using System;
 using HMACSHA1 = System.Security.Cryptography.HMACSHA1;
 using Granados.Crypto;
 
 namespace Granados.SSHC
 {
-	/*
+    /*
 	 * Cipher
 	 *  The numbers at the tail of the class names indicates the version of SSH protocol.
 	 *  The difference between V1 and V2 is the CBC procedure
 	 */
-	internal interface Cipher {
+    internal interface Cipher {
 		void Encrypt(byte[] data, int offset, int len, byte[] result, int result_offset);
 		void Decrypt(byte[] data, int offset, int len, byte[] result, int result_offset);
 		int BlockSize { get; }

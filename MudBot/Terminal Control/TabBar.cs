@@ -5,28 +5,26 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
 using Poderosa.Connection;
 using Poderosa.ConnectionParam;
-using Poderosa.Communication;
-using Poderosa.Terminal;
 using Poderosa.Config;
 using Poderosa.UI;
 
-namespace Poderosa.Forms {
-	/// <summary>
-	/// TabBar の概要の説明です。
-	/// </summary>
-	internal class TabBar : UserControl {
+namespace Poderosa.Forms
+{
+    /// <summary>
+    /// TabBar の概要の説明です。
+    /// </summary>
+    internal class TabBar : UserControl {
 		private ToolTip _tabToolTip;
 		private const int UNITHEIGHT = 25; //!!これはフォントからちゃんと計算しないといけないだろう
 		private const int SCROLLBUTTON_SIZE = 18;
 		private const int BUTTON_MARGIN = 4;
 
-		private System.ComponentModel.IContainer components;
+		private IContainer components;
 
 		private int _scrollStep; //スクロールボタンを押したときのアニメーションに使うカウント
 		private const int ANIMATION_COUNT = 15;
@@ -58,7 +56,7 @@ namespace Poderosa.Forms {
 			//
 			Color c = SystemColors.Control;
 			_activeTabColor = Color.FromArgb((c.R+255)/2, (c.G+255)/2, (c.B+255)/2); //白との中間をとる
-			_basicFont = (Font)this.Font.Clone();
+			_basicFont = (Font)Font.Clone();
 			_activeTabFont = new Font(_basicFont, _basicFont.Style|FontStyle.Bold);
 			_tabToolTip = new ToolTip();
 
@@ -82,22 +80,26 @@ namespace Poderosa.Forms {
 				return _tabIconDefault;
 		}
 		private void InitScrollButtons() {
-			_leftScrollButton = new TabBarScrollButton();
-			_leftScrollButton._isRight = false;
-			_leftScrollButton.Enabled = false;
-			_leftScrollButton.Width = SCROLLBUTTON_SIZE;
-			_leftScrollButton.Height = SCROLLBUTTON_SIZE;
-			_leftScrollButton.BringToFront();
+            _leftScrollButton = new TabBarScrollButton
+            {
+                _isRight = false,
+                Enabled = false,
+                Width = SCROLLBUTTON_SIZE,
+                Height = SCROLLBUTTON_SIZE
+            };
+            _leftScrollButton.BringToFront();
 			_leftScrollButton.Click += new EventHandler(OnLeftScrollButtonClicked);
-			this.Controls.Add(_leftScrollButton);
-			_rightScrollButton = new TabBarScrollButton();
-			_rightScrollButton._isRight = true;
-			_rightScrollButton.Enabled = false;
-			_rightScrollButton.Width = SCROLLBUTTON_SIZE;
-			_rightScrollButton.Height = SCROLLBUTTON_SIZE;
-			_rightScrollButton.BringToFront();
+			Controls.Add(_leftScrollButton);
+            _rightScrollButton = new TabBarScrollButton
+            {
+                _isRight = true,
+                Enabled = false,
+                Width = SCROLLBUTTON_SIZE,
+                Height = SCROLLBUTTON_SIZE
+            };
+            _rightScrollButton.BringToFront();
 			_rightScrollButton.Click += new EventHandler(OnRightScrollButtonClicked);
-			this.Controls.Add(_rightScrollButton);
+			Controls.Add(_rightScrollButton);
 		}
 
 		public void AddTab(ConnectionTag ct) {
@@ -159,7 +161,7 @@ namespace Poderosa.Forms {
 			b.Width = GetNecessaryButtonWidth(b); 
 			b.Visible = true;
 			b.TabStop = false;
-			b.Click += new EventHandler(this.OnButtonClick);
+			b.Click += new EventHandler(OnButtonClick);
 			b.MouseDown += new MouseEventHandler(OnMouseDown);
 			b.MouseUp += new MouseEventHandler(OnMouseUp);
 			b.MouseMove += new MouseEventHandler(OnMouseMove);
@@ -172,7 +174,7 @@ namespace Poderosa.Forms {
 			return (int)ct.Button.CreateGraphics().MeasureString((GEnv.Connections.IndexOf(ct)+1).ToString()+ct.FormatTabText(), _activeTabFont).Width + 37;//37はアイコン、インデクス、左右マージンの合計
 		}
 		private int GetTabAreaWidth() {
-			int b = this.Width-4;
+			int b = Width-4;
 			if(GApp.Options.TabBarStyle==TabBarStyle.ScrollButton)
 				b -= SCROLLBUTTON_SIZE*2;
 			return b;
@@ -186,14 +188,14 @@ namespace Poderosa.Forms {
 			if(args.Button!=MouseButtons.Right) return;
 
 			TabBarButton b = (TabBarButton)sender;
-			int tx = this.Left + b.Left;
-			int ty = this.Top + b.Top;
+			int tx = Left + b.Left;
+			int ty = Top + b.Top;
 			ConnectionTag t = (ConnectionTag)b.Tag;
 			Debug.Assert(t!=null);
 			GApp.Frame.CommandTargetConnection = t.Connection;
 			//メニューのUI調整
 			GApp.Frame.AdjustContextMenu(true, t.Connection);
-			GApp.Frame.ContextMenu.Show(GApp.Frame, new Point(tx+args.X, ty+args.Y)); //ボタンやタブバーをコンテナにするとキーボードで選択できなくなる
+			GApp.Frame.ContextMenuStrip.Show(GApp.Frame, new Point(tx+args.X, ty+args.Y)); //ボタンやタブバーをコンテナにするとキーボードで選択できなくなる
 		}
 
 		//ただクリックしただけでMouseMoveが発生してしまうので、正しくドラッグ開始を判定できない
@@ -209,7 +211,7 @@ namespace Poderosa.Forms {
 
 			if(Math.Abs(_dragStartPosX-args.X) + Math.Abs(_dragStartPosY-args.Y) >= 3) {
 				object tag = ((TabBarButton)sender).Tag;
-				this.DoDragDrop(tag, DragDropEffects.Move);
+				DoDragDrop(tag, DragDropEffects.Move);
 				TabBarButton btn = sender as TabBarButton;
 				if(btn!=null) btn.Reset();
 			}
@@ -222,10 +224,12 @@ namespace Poderosa.Forms {
 
 			int w = GEnv.Connections.TagAt(_scrollButtonOffset).Button.Width;
 			ArrangeButtonsForScrollStyle(true, -(w * _scrollStep / ANIMATION_COUNT));
-			
-			Timer t = new Timer();
-			t.Interval = 20;
-			t.Tick += new EventHandler(OnLeftScrollAnimation);
+
+            Timer t = new Timer
+            {
+                Interval = 20
+            };
+            t.Tick += new EventHandler(OnLeftScrollAnimation);
 			t.Start();
 		}
 		private void OnRightScrollButtonClicked(object sender, EventArgs args) {
@@ -235,10 +239,12 @@ namespace Poderosa.Forms {
 
 			int w = GEnv.Connections.TagAt(_scrollButtonOffset).Button.Width;
 			ArrangeButtonsForScrollStyle(true, -(w * (ANIMATION_COUNT-_scrollStep) / ANIMATION_COUNT));
-			
-			Timer t = new Timer();
-			t.Interval = 20;
-			t.Tick += new EventHandler(OnRightScrollAnimation);
+
+            Timer t = new Timer
+            {
+                Interval = 20
+            };
+            t.Tick += new EventHandler(OnRightScrollAnimation);
 			t.Start();
 
 			//_scrollButtonOffset++;
@@ -312,7 +318,7 @@ namespace Poderosa.Forms {
 		}
 		//順番の入れ替え
 		public void ReorderButton(int index, int new_index, ConnectionTag active_tag) {
-			this.Controls.SetChildIndex(this.Controls[index], new_index);
+			Controls.SetChildIndex(Controls[index], new_index);
 			ArrangeButtons();
 			SetActiveTab(active_tag);
 		}
@@ -333,8 +339,8 @@ namespace Poderosa.Forms {
 
 		private void ArrangeButtonsForMultiRowStyle() {
 			if(_leftScrollButton!=null) {
-				this.Controls.Remove(_leftScrollButton);
-				this.Controls.Remove(_rightScrollButton);
+				Controls.Remove(_leftScrollButton);
+				Controls.Remove(_rightScrollButton);
 				_leftScrollButton = _rightScrollButton = null;
 			}
 
@@ -346,7 +352,7 @@ namespace Poderosa.Forms {
 				if(button==null) continue;
 
 				SetButtonText(button, i, (ConnectionTag)button.Tag);
-				if(x + button.Width >= this.Width) {
+				if(x + button.Width >= Width) {
 					x = 2;
 					y += UNITHEIGHT;
 				}
@@ -359,7 +365,7 @@ namespace Poderosa.Forms {
 				button.Invalidate();
 				i++;
 			}
-			this.Height = y + UNITHEIGHT;
+			Height = y + UNITHEIGHT;
 		}
 		private void ArrangeButtonsForScrollStyle(bool animation, int animation_offset) {
 			if(_leftScrollButton==null) InitScrollButtons();
@@ -390,11 +396,11 @@ namespace Poderosa.Forms {
 			
 			for(int i=offset; i<GEnv.Connections.Count; i++) GEnv.Connections.TagAt(i).Button.Visible = false;
 			
-			_leftScrollButton.Left = this.Width-SCROLLBUTTON_SIZE*2;
+			_leftScrollButton.Left = Width-SCROLLBUTTON_SIZE*2;
 			_leftScrollButton.Top  = y+2;
 			_leftScrollButton.BringToFront();
 			_leftScrollButton.Enabled = !animation && _scrollButtonOffset>0;
-			_rightScrollButton.Left = this.Width-SCROLLBUTTON_SIZE;
+			_rightScrollButton.Left = Width-SCROLLBUTTON_SIZE;
 			_rightScrollButton.Top  = y+2;
 			_rightScrollButton.BringToFront();
 			_rightScrollButton.Enabled = !animation && offset<GEnv.Connections.Count;
@@ -404,7 +410,7 @@ namespace Poderosa.Forms {
 				_scrollButtonOffset--;
 				ArrangeButtonsForScrollStyle(false, 0);
 			}
-			this.Height = y + UNITHEIGHT;
+			Height = y + UNITHEIGHT;
 		}
 
 		private void SetButtonText(TabBarButton btn, int index, ConnectionTag tag) {
@@ -431,13 +437,13 @@ namespace Poderosa.Forms {
 		/// コード エディタで変更しないでください。
 		/// </summary>
 		private void InitializeComponent() {
-			this.components = new System.ComponentModel.Container();
+			components = new Container();
 			// 
 			// TabBar
 			// 
-			this.Name = "TabBar";
-			this.Size = new System.Drawing.Size(292, 248);
-			this.TabStop = false;
+			Name = "TabBar";
+			Size = new Size(292, 248);
+			TabStop = false;
 
 		}
 		#endregion
@@ -470,19 +476,19 @@ namespace Poderosa.Forms {
 		internal bool _isRight; //右向きのときtrue
 
 		public TabBarScrollButton() {
-			this.Image = null;
-			this.Text = "";
+			Image = null;
+			Text = "";
 		}
 
 		protected override void OnPaint(PaintEventArgs args) {
 			base.OnPaint(args);
 
-			KnownColor col = this.Enabled? KnownColor.ControlText : KnownColor.ControlDark;
+			KnownColor col = Enabled? KnownColor.ControlText : KnownColor.ControlDark;
 			Pen p = new Pen(Color.FromKnownColor(col));
 
 			Graphics g = args.Graphics;
-			int x = this.Width/2 + (_isRight? -1 : 1);
-			int y = this.Height/2-4;
+			int x = Width/2 + (_isRight? -1 : 1);
+			int y = Height/2-4;
 			for(int i=0; i<4; i++) { //縦線を描画
 				int len = 7-i*2;
 				g.DrawLine(p, x, y+i, x, y+i+len);

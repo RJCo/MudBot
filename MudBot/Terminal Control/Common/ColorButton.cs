@@ -3,22 +3,21 @@
  * $Id: ColorButton.cs,v 1.2 2005/04/20 08:45:45 okajima Exp $
  */
 using System;
-using System.Diagnostics;
 using System.Windows.Forms;
 using System.Drawing;
 
 namespace Poderosa.UI
 {
-	public class ColorButton : Button {			
+    public class ColorButton : Button {			
 		private Color _selectedColor;
 
 		public delegate void NewColorEventHandler(object sender, Color newcolor);
 		public event NewColorEventHandler ColorChanged;
 		
 		public ColorButton() {
-			this.BackColor = SystemColors.Control;
-			this.FlatStyle = FlatStyle.Standard;
-			this.SetStyle(ControlStyles.UserPaint, true);
+			BackColor = SystemColors.Control;
+			FlatStyle = FlatStyle.Standard;
+			SetStyle(ControlStyles.UserPaint, true);
 		}
 		
 		public Color SelectedColor {
@@ -33,7 +32,7 @@ namespace Poderosa.UI
 		protected override void OnPaint(PaintEventArgs e) {
 			base.OnPaint(e);
 			Graphics g = e.Graphics;
-			Rectangle r = this.ClientRectangle;
+			Rectangle r = ClientRectangle;
 			
 			const int border = 3;
 			const int right_border = 15;
@@ -41,11 +40,11 @@ namespace Poderosa.UI
 			Rectangle rc = new Rectangle(border, border,
 										r.Width - border - right_border - 1, r.Height - border * 2 - 1);
 		
-			SolidBrush centerColorBrush = new SolidBrush( this.Enabled? _selectedColor : this.BackColor);
+			SolidBrush centerColorBrush = new SolidBrush( Enabled? _selectedColor : BackColor);
 			g.FillRectangle(centerColorBrush, rc);	
 			g.DrawRectangle( SystemPens.ControlDarkDark, rc );
 			
-			Pen pen = new Pen( this.Enabled? Color.Black : SystemColors.ControlDark ); 
+			Pen pen = new Pen( Enabled? Color.Black : SystemColors.ControlDark ); 
 
 			//draw the arrow
 			Point p1 = new Point( r.Width - 9, r.Height / 2 - 1 );
@@ -76,12 +75,12 @@ namespace Poderosa.UI
 		}
 	    
 		protected override void OnClick(EventArgs e) {
-			Point p = PointToScreen(new Point(0, this.Height));
+			Point p = PointToScreen(new Point(0, Height));
 			ColorPaletteDialog clDlg = new ColorPaletteDialog(p.X, p.Y);
 			clDlg.ShowDialog(FindForm());
 			if(clDlg.DialogResult == DialogResult.OK) {
 				_selectedColor = clDlg.Color;
-				if(this.ColorChanged != null) this.ColorChanged(this, clDlg.Color);
+				if(ColorChanged != null) ColorChanged(this, clDlg.Color);
 			}
 			Invalidate();
 			clDlg.Dispose();

@@ -8,14 +8,11 @@
  $Id: PKIBase.cs,v 1.2 2005/04/20 08:58:56 okajima Exp $
 */
 using System;
-using System.IO;
-using System.Diagnostics;
-using System.Security.Cryptography;
 
 namespace Granados.PKI
 {
 
-	public interface ISigner {
+    public interface ISigner {
 		byte[] Sign(byte[] data);
 	}
 	public interface IVerifier {

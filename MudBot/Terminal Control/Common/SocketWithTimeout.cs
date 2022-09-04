@@ -3,8 +3,6 @@
 * $Id: SocketWithTimeout.cs,v 1.2 2005/04/20 08:45:46 okajima Exp $
 */
 using System;
-using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Threading;
 using System.Net;
 using System.Net.Sockets;
@@ -12,7 +10,7 @@ using System.Net.Sockets;
 namespace Poderosa.Communication
 {
 
-	public interface ISocketWithTimeoutClient {
+    public interface ISocketWithTimeoutClient {
 		void SuccessfullyExit(object result);
 		void ConnectionFailed(string message);
 		void CancelTimer();
@@ -32,7 +30,7 @@ namespace Poderosa.Communication
 			_port = port;
 			_socks = null;
 
-			UI.UILibUtil.CreateThread(new ThreadStart(this.Run)).Start();
+			UI.UILibUtil.CreateThread(new ThreadStart(Run)).Start();
 		}
 		public void AsyncConnect(ISocketWithTimeoutClient client, Socks socks) {
 			_async = true;
@@ -40,14 +38,14 @@ namespace Poderosa.Communication
 			_event = null;
 			_socks = socks;
 
-			UI.UILibUtil.CreateThread(new ThreadStart(this.Run)).Start();
+			UI.UILibUtil.CreateThread(new ThreadStart(Run)).Start();
 		}
 
 
 		private void ExitProcess() {
 			if(!_interrupted) {
 				if(_succeeded)
-					_client.SuccessfullyExit(this.Result);
+					_client.SuccessfullyExit(Result);
 				else
 					_client.ConnectionFailed(_errorMessage);
 			}

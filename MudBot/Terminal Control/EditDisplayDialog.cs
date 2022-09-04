@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Poderosa
@@ -13,10 +7,12 @@ namespace Poderosa
         public EditDisplayDialog()
         {
             InitializeComponent();
-            Forms.DisplayOptionPanel panel = new Poderosa.Forms.DisplayOptionPanel();
-            panel.Dock = DockStyle.Fill;
-            
-            this.Controls.Add(panel);
+            Forms.DisplayOptionPanel panel = new Forms.DisplayOptionPanel
+            {
+                Dock = DockStyle.Fill
+            };
+
+            Controls.Add(panel);
         }
     }
 }

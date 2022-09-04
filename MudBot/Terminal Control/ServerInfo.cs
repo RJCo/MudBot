@@ -4,46 +4,41 @@
 */
 using System;
 using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Net;
 using System.Text;
-
-using Poderosa;
-using Poderosa.Toolkit;
 using EnumDescAttributeT = Poderosa.Toolkit.EnumDescAttribute;
 using Poderosa.Communication;
 using Poderosa.ConnectionParam;
-using Poderosa.Terminal;
 
 namespace Poderosa.Forms
 {
-	/// <summary>
-	/// ServerInfo の概要の説明です。
-	/// </summary>
-	internal class ServerInfo : System.Windows.Forms.Form
-	{
-		private System.Windows.Forms.Button _okButton;
-		private System.Windows.Forms.Label _serverNamesLabel;
-		private System.Windows.Forms.TextBox _serverNamesBox;
-		private System.Windows.Forms.Label _IPAddressLabel;
-		private System.Windows.Forms.TextBox _IPAddressBox;
-		private System.Windows.Forms.TextBox _protocolBox;
-		private System.Windows.Forms.Label _protocolLabel;
-		private System.Windows.Forms.TextBox _terminalTypeBox;
-		private System.Windows.Forms.Label _terminalTypeLabel;
-		private System.Windows.Forms.Label _parameterLabel;
-		private System.Windows.Forms.TextBox _parameterBox;
-		private System.Windows.Forms.Label _statsLabel;
-		private System.Windows.Forms.Label _transmitBytes;
-		private System.Windows.Forms.Label _receiveBytes;
-		private System.Windows.Forms.Label _logLabel;
-		private System.Windows.Forms.TextBox _logBox;
+    /// <summary>
+    /// ServerInfo の概要の説明です。
+    /// </summary>
+    internal class ServerInfo : Form
+    {
+		private Button _okButton;
+		private Label _serverNamesLabel;
+		private TextBox _serverNamesBox;
+		private Label _IPAddressLabel;
+		private TextBox _IPAddressBox;
+		private TextBox _protocolBox;
+		private Label _protocolLabel;
+		private TextBox _terminalTypeBox;
+		private Label _terminalTypeLabel;
+		private Label _parameterLabel;
+		private TextBox _parameterBox;
+		private Label _statsLabel;
+		private Label _transmitBytes;
+		private Label _receiveBytes;
+		private Label _logLabel;
+		private TextBox _logBox;
 		/// <summary>
 		/// 必要なデザイナ変数です。
 		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 
 		public ServerInfo(TerminalConnection con)
 		{
@@ -63,18 +58,18 @@ namespace Poderosa.Forms
 			string li = EnumDescAttributeT.For(typeof(LogType)).GetDescription(con.LogType);
 			if(con.LogType!=LogType.None) li += "(" + con.LogPath + ")";
 			_logBox.Text = li;
-			_receiveBytes.Text = String.Format("{0,10}{1}", con.ReceivedDataSize, GApp.Strings.GetString("Caption.ServerInfo.BytesReceived"));
-			_transmitBytes.Text = String.Format("{0,10}{1}", con.SentDataSize, GApp.Strings.GetString("Caption.ServerInfo.BytesSent"));
+			_receiveBytes.Text = String.Format("{0,10}{1}", con.ReceivedDataSize, "Caption.ServerInfo.BytesReceived");
+			_transmitBytes.Text = String.Format("{0,10}{1}", con.SentDataSize, "Caption.ServerInfo.BytesSent");
 
-			this._okButton.Text = GApp.Strings.GetString("Common.OK");
-			this._serverNamesLabel.Text = GApp.Strings.GetString("Form.ServerInfo._serverNamesLabel");
-			this._IPAddressLabel.Text = GApp.Strings.GetString("Form.ServerInfo._IPAddressLabel");
-			this._protocolLabel.Text = GApp.Strings.GetString("Form.ServerInfo._protocolLabel");
-			this._terminalTypeLabel.Text = GApp.Strings.GetString("Form.ServerInfo._terminalTypeLabel");
-			this._parameterLabel.Text = GApp.Strings.GetString("Form.ServerInfo._parameterLabel");
-			this._statsLabel.Text = GApp.Strings.GetString("Form.ServerInfo._statsLabel");
-			this._logLabel.Text = GApp.Strings.GetString("Form.ServerInfo._logLabel");
-			this.Text = GApp.Strings.GetString("Form.ServerInfo.Text");
+			_okButton.Text = "OK";
+			_serverNamesLabel.Text = "Form.ServerInfo._serverNamesLabel";
+			_IPAddressLabel.Text = "Form.ServerInfo._IPAddressLabel";
+			_protocolLabel.Text = "Form.ServerInfo._protocolLabel";
+			_terminalTypeLabel.Text = "Form.ServerInfo._terminalTypeLabel";
+			_parameterLabel.Text = "Form.ServerInfo._parameterLabel";
+			_statsLabel.Text = "Form.ServerInfo._statsLabel";
+			_logLabel.Text = "Form.ServerInfo._logLabel";
+			Text = "Form.ServerInfo.Text";
 		}
 
 		/// <summary>
@@ -99,192 +94,192 @@ namespace Poderosa.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this._okButton = new System.Windows.Forms.Button();
-			this._serverNamesLabel = new System.Windows.Forms.Label();
-			this._serverNamesBox = new System.Windows.Forms.TextBox();
-			this._IPAddressLabel = new System.Windows.Forms.Label();
-			this._IPAddressBox = new System.Windows.Forms.TextBox();
-			this._protocolBox = new System.Windows.Forms.TextBox();
-			this._protocolLabel = new System.Windows.Forms.Label();
-			this._terminalTypeBox = new System.Windows.Forms.TextBox();
-			this._terminalTypeLabel = new System.Windows.Forms.Label();
-			this._parameterLabel = new System.Windows.Forms.Label();
-			this._parameterBox = new System.Windows.Forms.TextBox();
-			this._statsLabel = new System.Windows.Forms.Label();
-			this._transmitBytes = new System.Windows.Forms.Label();
-			this._receiveBytes = new System.Windows.Forms.Label();
-			this._logLabel = new System.Windows.Forms.Label();
-			this._logBox = new System.Windows.Forms.TextBox();
-			this.SuspendLayout();
+			_okButton = new Button();
+			_serverNamesLabel = new Label();
+			_serverNamesBox = new TextBox();
+			_IPAddressLabel = new Label();
+			_IPAddressBox = new TextBox();
+			_protocolBox = new TextBox();
+			_protocolLabel = new Label();
+			_terminalTypeBox = new TextBox();
+			_terminalTypeLabel = new Label();
+			_parameterLabel = new Label();
+			_parameterBox = new TextBox();
+			_statsLabel = new Label();
+			_transmitBytes = new Label();
+			_receiveBytes = new Label();
+			_logLabel = new Label();
+			_logBox = new TextBox();
+			SuspendLayout();
 			// 
 			// _okButton
 			// 
-			this._okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this._okButton.Location = new System.Drawing.Point(112, 256);
-			this._okButton.Name = "_okButton";
-			this._okButton.FlatStyle = FlatStyle.System;
-			this._okButton.TabIndex = 0;
+			_okButton.DialogResult = DialogResult.OK;
+			_okButton.Location = new Point(112, 256);
+			_okButton.Name = "_okButton";
+			_okButton.FlatStyle = FlatStyle.System;
+			_okButton.TabIndex = 0;
 			// 
 			// _serverNamesLabel
 			// 
-			this._serverNamesLabel.Location = new System.Drawing.Point(8, 8);
-			this._serverNamesLabel.Name = "_serverNamesLabel";
-			this._serverNamesLabel.Size = new System.Drawing.Size(80, 16);
-			this._serverNamesLabel.TabIndex = 1;
-			this._serverNamesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_serverNamesLabel.Location = new Point(8, 8);
+			_serverNamesLabel.Name = "_serverNamesLabel";
+			_serverNamesLabel.Size = new Size(80, 16);
+			_serverNamesLabel.TabIndex = 1;
+			_serverNamesLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _serverNamesBox
 			// 
-			this._serverNamesBox.Location = new System.Drawing.Point(88, 8);
-			this._serverNamesBox.Name = "_serverNamesBox";
-			this._serverNamesBox.ReadOnly = true;
-			this._serverNamesBox.Size = new System.Drawing.Size(224, 19);
-			this._serverNamesBox.TabIndex = 2;
-			this._serverNamesBox.Text = "";
+			_serverNamesBox.Location = new Point(88, 8);
+			_serverNamesBox.Name = "_serverNamesBox";
+			_serverNamesBox.ReadOnly = true;
+			_serverNamesBox.Size = new Size(224, 19);
+			_serverNamesBox.TabIndex = 2;
+			_serverNamesBox.Text = "";
 			// 
 			// _IPAddressLabel
 			// 
-			this._IPAddressLabel.Location = new System.Drawing.Point(8, 32);
-			this._IPAddressLabel.Name = "_IPAddressLabel";
-			this._IPAddressLabel.Size = new System.Drawing.Size(80, 16);
-			this._IPAddressLabel.TabIndex = 3;
-			this._IPAddressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_IPAddressLabel.Location = new Point(8, 32);
+			_IPAddressLabel.Name = "_IPAddressLabel";
+			_IPAddressLabel.Size = new Size(80, 16);
+			_IPAddressLabel.TabIndex = 3;
+			_IPAddressLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _IPAddressBox
 			// 
-			this._IPAddressBox.Location = new System.Drawing.Point(88, 32);
-			this._IPAddressBox.Name = "_IPAddressBox";
-			this._IPAddressBox.ReadOnly = true;
-			this._IPAddressBox.Size = new System.Drawing.Size(224, 19);
-			this._IPAddressBox.TabIndex = 4;
-			this._IPAddressBox.Text = "";
+			_IPAddressBox.Location = new Point(88, 32);
+			_IPAddressBox.Name = "_IPAddressBox";
+			_IPAddressBox.ReadOnly = true;
+			_IPAddressBox.Size = new Size(224, 19);
+			_IPAddressBox.TabIndex = 4;
+			_IPAddressBox.Text = "";
 			// 
 			// _protocolBox
 			// 
-			this._protocolBox.Location = new System.Drawing.Point(88, 56);
-			this._protocolBox.Name = "_protocolBox";
-			this._protocolBox.ReadOnly = true;
-			this._protocolBox.Size = new System.Drawing.Size(224, 19);
-			this._protocolBox.TabIndex = 5;
-			this._protocolBox.Text = "";
+			_protocolBox.Location = new Point(88, 56);
+			_protocolBox.Name = "_protocolBox";
+			_protocolBox.ReadOnly = true;
+			_protocolBox.Size = new Size(224, 19);
+			_protocolBox.TabIndex = 5;
+			_protocolBox.Text = "";
 			// 
 			// _protocolLabel
 			// 
-			this._protocolLabel.Location = new System.Drawing.Point(8, 56);
-			this._protocolLabel.Name = "_protocolLabel";
-			this._protocolLabel.Size = new System.Drawing.Size(80, 16);
-			this._protocolLabel.TabIndex = 6;
-			this._protocolLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_protocolLabel.Location = new Point(8, 56);
+			_protocolLabel.Name = "_protocolLabel";
+			_protocolLabel.Size = new Size(80, 16);
+			_protocolLabel.TabIndex = 6;
+			_protocolLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _terminalTypeBox
 			// 
-			this._terminalTypeBox.Location = new System.Drawing.Point(88, 80);
-			this._terminalTypeBox.Name = "_terminalTypeBox";
-			this._terminalTypeBox.ReadOnly = true;
-			this._terminalTypeBox.Size = new System.Drawing.Size(224, 19);
-			this._terminalTypeBox.TabIndex = 5;
-			this._terminalTypeBox.Text = "";
+			_terminalTypeBox.Location = new Point(88, 80);
+			_terminalTypeBox.Name = "_terminalTypeBox";
+			_terminalTypeBox.ReadOnly = true;
+			_terminalTypeBox.Size = new Size(224, 19);
+			_terminalTypeBox.TabIndex = 5;
+			_terminalTypeBox.Text = "";
 			// 
 			// _terminalTypeLabel
 			// 
-			this._terminalTypeLabel.Location = new System.Drawing.Point(8, 80);
-			this._terminalTypeLabel.Name = "_terminalTypeLabel";
-			this._terminalTypeLabel.Size = new System.Drawing.Size(80, 16);
-			this._terminalTypeLabel.TabIndex = 6;
-			this._terminalTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_terminalTypeLabel.Location = new Point(8, 80);
+			_terminalTypeLabel.Name = "_terminalTypeLabel";
+			_terminalTypeLabel.Size = new Size(80, 16);
+			_terminalTypeLabel.TabIndex = 6;
+			_terminalTypeLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _parameterLabel
 			// 
-			this._parameterLabel.Location = new System.Drawing.Point(8, 104);
-			this._parameterLabel.Name = "_parameterLabel";
-			this._parameterLabel.Size = new System.Drawing.Size(80, 16);
-			this._parameterLabel.TabIndex = 7;
-			this._parameterLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_parameterLabel.Location = new Point(8, 104);
+			_parameterLabel.Name = "_parameterLabel";
+			_parameterLabel.Size = new Size(80, 16);
+			_parameterLabel.TabIndex = 7;
+			_parameterLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _parameterBox
 			// 
-			this._parameterBox.Location = new System.Drawing.Point(88, 104);
-			this._parameterBox.Multiline = true;
-			this._parameterBox.Name = "_parameterBox";
-			this._parameterBox.ReadOnly = true;
-			this._parameterBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this._parameterBox.Size = new System.Drawing.Size(224, 80);
-			this._parameterBox.TabIndex = 8;
-			this._parameterBox.Text = "";
+			_parameterBox.Location = new Point(88, 104);
+			_parameterBox.Multiline = true;
+			_parameterBox.Name = "_parameterBox";
+			_parameterBox.ReadOnly = true;
+			_parameterBox.ScrollBars = ScrollBars.Vertical;
+			_parameterBox.Size = new Size(224, 80);
+			_parameterBox.TabIndex = 8;
+			_parameterBox.Text = "";
 			// 
 			// _statsLabel
 			// 
-			this._statsLabel.Location = new System.Drawing.Point(8, 224);
-			this._statsLabel.Name = "_statsLabel";
-			this._statsLabel.Size = new System.Drawing.Size(104, 16);
-			this._statsLabel.TabIndex = 9;
-			this._statsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_statsLabel.Location = new Point(8, 224);
+			_statsLabel.Name = "_statsLabel";
+			_statsLabel.Size = new Size(104, 16);
+			_statsLabel.TabIndex = 9;
+			_statsLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _transmitBytes
 			// 
-			this._transmitBytes.Location = new System.Drawing.Point(120, 224);
-			this._transmitBytes.Name = "_transmitBytes";
-			this._transmitBytes.Size = new System.Drawing.Size(184, 16);
-			this._transmitBytes.TabIndex = 10;
-			this._transmitBytes.Text = "0";
-			this._transmitBytes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			_transmitBytes.Location = new Point(120, 224);
+			_transmitBytes.Name = "_transmitBytes";
+			_transmitBytes.Size = new Size(184, 16);
+			_transmitBytes.TabIndex = 10;
+			_transmitBytes.Text = "0";
+			_transmitBytes.TextAlign = ContentAlignment.MiddleRight;
 			// 
 			// _receiveBytes
 			// 
-			this._receiveBytes.Location = new System.Drawing.Point(120, 240);
-			this._receiveBytes.Name = "_receiveBytes";
-			this._receiveBytes.Size = new System.Drawing.Size(184, 16);
-			this._receiveBytes.TabIndex = 11;
-			this._receiveBytes.Text = "0";
-			this._receiveBytes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			_receiveBytes.Location = new Point(120, 240);
+			_receiveBytes.Name = "_receiveBytes";
+			_receiveBytes.Size = new Size(184, 16);
+			_receiveBytes.TabIndex = 11;
+			_receiveBytes.Text = "0";
+			_receiveBytes.TextAlign = ContentAlignment.MiddleRight;
 			// 
 			// _logLabel
 			// 
-			this._logLabel.Location = new System.Drawing.Point(8, 192);
-			this._logLabel.Name = "_logLabel";
-			this._logLabel.Size = new System.Drawing.Size(80, 16);
-			this._logLabel.TabIndex = 13;
-			this._logLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_logLabel.Location = new Point(8, 192);
+			_logLabel.Name = "_logLabel";
+			_logLabel.Size = new Size(80, 16);
+			_logLabel.TabIndex = 13;
+			_logLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _logBox
 			// 
-			this._logBox.Location = new System.Drawing.Point(88, 192);
-			this._logBox.Name = "_logBox";
-			this._logBox.ReadOnly = true;
-			this._logBox.Size = new System.Drawing.Size(224, 19);
-			this._logBox.TabIndex = 12;
-			this._logBox.Text = "";
+			_logBox.Location = new Point(88, 192);
+			_logBox.Name = "_logBox";
+			_logBox.ReadOnly = true;
+			_logBox.Size = new Size(224, 19);
+			_logBox.TabIndex = 12;
+			_logBox.Text = "";
 			// 
 			// ServerInfo
 			// 
-			this.AcceptButton = this._okButton;
-			this.CancelButton = this._okButton;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 12);
-			this.ClientSize = new System.Drawing.Size(314, 287);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this._logLabel,
-																		  this._logBox,
-																		  this._receiveBytes,
-																		  this._transmitBytes,
-																		  this._statsLabel,
-																		  this._parameterBox,
-																		  this._parameterLabel,
-																		  this._protocolLabel,
-																		  this._protocolBox,
-																		  this._terminalTypeLabel,
-																		  this._terminalTypeBox,
-																		  this._IPAddressBox,
-																		  this._IPAddressLabel,
-																		  this._serverNamesBox,
-																		  this._serverNamesLabel,
-																		  this._okButton});
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "ServerInfo";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.ResumeLayout(false);
+			AcceptButton = _okButton;
+			CancelButton = _okButton;
+			AutoScaleBaseSize = new Size(5, 12);
+			ClientSize = new Size(314, 287);
+			Controls.AddRange(new Control[] {
+																		  _logLabel,
+																		  _logBox,
+																		  _receiveBytes,
+																		  _transmitBytes,
+																		  _statsLabel,
+																		  _parameterBox,
+																		  _parameterLabel,
+																		  _protocolLabel,
+																		  _protocolBox,
+																		  _terminalTypeLabel,
+																		  _terminalTypeBox,
+																		  _IPAddressBox,
+																		  _IPAddressLabel,
+																		  _serverNamesBox,
+																		  _serverNamesLabel,
+																		  _okButton});
+			FormBorderStyle = FormBorderStyle.FixedDialog;
+			MaximizeBox = false;
+			MinimizeBox = false;
+			Name = "ServerInfo";
+			ShowInTaskbar = false;
+			StartPosition = FormStartPosition.CenterParent;
+			ResumeLayout(false);
 
 		}
 		#endregion

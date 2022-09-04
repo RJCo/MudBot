@@ -4,7 +4,6 @@
 */
 using System;
 using System.Windows.Forms;
-using System.Diagnostics;
 using System.IO;
 using System.Drawing;
 
@@ -15,10 +14,10 @@ using Poderosa.UI;
 
 namespace Poderosa.Forms
 {
-	internal class TerminalOptionPanel : OptionDialog.CategoryPanel {
-		private System.Windows.Forms.Label _badCharLabel;
+    internal class TerminalOptionPanel : OptionDialog.CategoryPanel {
+		private Label _badCharLabel;
 		private ComboBox _badCharBox;
-		private System.Windows.Forms.Label _bufferSizeLabel;
+		private Label _bufferSizeLabel;
 		private TextBox _bufferSize;
 		private Label _disconnectNotificationLabel;
 		private ComboBox _disconnectNotification;
@@ -29,251 +28,251 @@ namespace Poderosa.Forms
 		private CheckBox _keepAliveCheck;
 		private TextBox  _keepAliveIntervalBox;
 		private Label    _keepAliveLabel;
-		private System.Windows.Forms.GroupBox _defaultLogGroup;
+		private GroupBox _defaultLogGroup;
 		private CheckBox _autoLogCheckBox;
-		private System.Windows.Forms.Label _defaultLogTypeLabel;
+		private Label _defaultLogTypeLabel;
 		private ComboBox _defaultLogTypeBox;
-		private System.Windows.Forms.Label _defaultLogDirectoryLabel;
+		private Label _defaultLogDirectoryLabel;
 		private TextBox _defaultLogDirectory;
-		private System.Windows.Forms.Button _dirSelect;
+		private Button _dirSelect;
 
 		public TerminalOptionPanel() {
 			InitializeComponent();
 			FillText();
 		}
 		private void InitializeComponent() {
-			this._badCharLabel = new System.Windows.Forms.Label();
-			this._badCharBox = new ComboBox();
-			this._bufferSizeLabel = new System.Windows.Forms.Label();
-			this._bufferSize = new TextBox();
-			this._disconnectNotificationLabel = new System.Windows.Forms.Label();
-			this._disconnectNotification = new ComboBox();
-			this._closeOnDisconnect = new System.Windows.Forms.CheckBox();
-			this._beepOnBellChar = new System.Windows.Forms.CheckBox();
-			this._adjustsTabTitleToWindowTitle = new CheckBox();
-			this._allowsScrollInAppMode = new CheckBox();
-			this._keepAliveCheck = new CheckBox();
-			this._keepAliveIntervalBox = new TextBox();
-			this._keepAliveLabel = new Label();
-			this._defaultLogGroup = new System.Windows.Forms.GroupBox();
-			this._defaultLogTypeLabel = new System.Windows.Forms.Label();
-			this._defaultLogTypeBox = new ComboBox();
-			this._defaultLogDirectoryLabel = new System.Windows.Forms.Label();
-			this._defaultLogDirectory = new TextBox();
-			this._dirSelect = new System.Windows.Forms.Button();
-			this._autoLogCheckBox = new System.Windows.Forms.CheckBox();
+			_badCharLabel = new Label();
+			_badCharBox = new ComboBox();
+			_bufferSizeLabel = new Label();
+			_bufferSize = new TextBox();
+			_disconnectNotificationLabel = new Label();
+			_disconnectNotification = new ComboBox();
+			_closeOnDisconnect = new CheckBox();
+			_beepOnBellChar = new CheckBox();
+			_adjustsTabTitleToWindowTitle = new CheckBox();
+			_allowsScrollInAppMode = new CheckBox();
+			_keepAliveCheck = new CheckBox();
+			_keepAliveIntervalBox = new TextBox();
+			_keepAliveLabel = new Label();
+			_defaultLogGroup = new GroupBox();
+			_defaultLogTypeLabel = new Label();
+			_defaultLogTypeBox = new ComboBox();
+			_defaultLogDirectoryLabel = new Label();
+			_defaultLogDirectory = new TextBox();
+			_dirSelect = new Button();
+			_autoLogCheckBox = new CheckBox();
 
-			this._defaultLogGroup.SuspendLayout();
+			_defaultLogGroup.SuspendLayout();
 
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this._badCharLabel,
-																		  this._badCharBox,
-																		  this._bufferSizeLabel,
-																		  this._bufferSize,
-																		  this._disconnectNotificationLabel,
-																		  this._disconnectNotification,
-																		  this._closeOnDisconnect,
-																		  this._beepOnBellChar,
-																		  this._adjustsTabTitleToWindowTitle,
-																		  this._allowsScrollInAppMode,
-																		  this._autoLogCheckBox,
-																		  this._keepAliveCheck,
-																		  this._keepAliveIntervalBox,
-																		  this._keepAliveLabel,
-																		  this._defaultLogGroup});
+			Controls.AddRange(new Control[] {
+																		  _badCharLabel,
+																		  _badCharBox,
+																		  _bufferSizeLabel,
+																		  _bufferSize,
+																		  _disconnectNotificationLabel,
+																		  _disconnectNotification,
+																		  _closeOnDisconnect,
+																		  _beepOnBellChar,
+																		  _adjustsTabTitleToWindowTitle,
+																		  _allowsScrollInAppMode,
+																		  _autoLogCheckBox,
+																		  _keepAliveCheck,
+																		  _keepAliveIntervalBox,
+																		  _keepAliveLabel,
+																		  _defaultLogGroup});
 			// 
 			// _badCharLabel
 			// 
-			this._badCharLabel.Location = new System.Drawing.Point(24, 8);
-			this._badCharLabel.Name = "_badCharLabel";
-			this._badCharLabel.Size = new System.Drawing.Size(160, 23);
-			this._badCharLabel.TabIndex = 0;
-			this._badCharLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_badCharLabel.Location = new Point(24, 8);
+			_badCharLabel.Name = "_badCharLabel";
+			_badCharLabel.Size = new Size(160, 23);
+			_badCharLabel.TabIndex = 0;
+			_badCharLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _badCharBox
 			// 
-			this._badCharBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._badCharBox.Location = new System.Drawing.Point(200, 8);
-			this._badCharBox.Name = "_badCharBox";
-			this._badCharBox.Size = new System.Drawing.Size(152, 20);
-			this._badCharBox.TabIndex = 1;
+			_badCharBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_badCharBox.Location = new Point(200, 8);
+			_badCharBox.Name = "_badCharBox";
+			_badCharBox.Size = new Size(152, 20);
+			_badCharBox.TabIndex = 1;
 			// 
 			// _bufferSizeLabel
 			// 
-			this._bufferSizeLabel.Location = new System.Drawing.Point(24, 32);
-			this._bufferSizeLabel.Name = "_bufferSizeLabel";
-			this._bufferSizeLabel.Size = new System.Drawing.Size(96, 23);
-			this._bufferSizeLabel.TabIndex = 2;
-			this._bufferSizeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_bufferSizeLabel.Location = new Point(24, 32);
+			_bufferSizeLabel.Name = "_bufferSizeLabel";
+			_bufferSizeLabel.Size = new Size(96, 23);
+			_bufferSizeLabel.TabIndex = 2;
+			_bufferSizeLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _bufferSize
 			// 
-			this._bufferSize.Location = new System.Drawing.Point(200, 32);
-			this._bufferSize.Name = "_bufferSize";
-			this._bufferSize.Size = new System.Drawing.Size(72, 19);
-			this._bufferSize.TabIndex = 3;
-			this._bufferSize.TextAlign = HorizontalAlignment.Left;
-			this._bufferSize.MaxLength = 4;
-			this._bufferSize.Text = "";
+			_bufferSize.Location = new Point(200, 32);
+			_bufferSize.Name = "_bufferSize";
+			_bufferSize.Size = new Size(72, 19);
+			_bufferSize.TabIndex = 3;
+			_bufferSize.TextAlign = HorizontalAlignment.Left;
+			_bufferSize.MaxLength = 4;
+			_bufferSize.Text = "";
 			// 
 			// _disconnectNotificationLabel
 			// 
-			this._disconnectNotificationLabel.Location = new System.Drawing.Point(24, 56);
-			this._disconnectNotificationLabel.Name = "_disconnectNotificationLabel";
-			this._disconnectNotificationLabel.Size = new System.Drawing.Size(160, 23);
-			this._disconnectNotificationLabel.TabIndex = 4;
-			this._disconnectNotificationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_disconnectNotificationLabel.Location = new Point(24, 56);
+			_disconnectNotificationLabel.Name = "_disconnectNotificationLabel";
+			_disconnectNotificationLabel.Size = new Size(160, 23);
+			_disconnectNotificationLabel.TabIndex = 4;
+			_disconnectNotificationLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _disconnectNotification
 			// 
-			this._disconnectNotification.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._disconnectNotification.Location = new System.Drawing.Point(200, 56);
-			this._disconnectNotification.Name = "_disconnectNotification";
-			this._disconnectNotification.Size = new System.Drawing.Size(152, 19);
-			this._disconnectNotification.TabIndex = 5;
+			_disconnectNotification.DropDownStyle = ComboBoxStyle.DropDownList;
+			_disconnectNotification.Location = new Point(200, 56);
+			_disconnectNotification.Name = "_disconnectNotification";
+			_disconnectNotification.Size = new Size(152, 19);
+			_disconnectNotification.TabIndex = 5;
 			// 
 			// _closeOnDisconnect
 			// 
-			this._closeOnDisconnect.Location = new System.Drawing.Point(24, 80);
-			this._closeOnDisconnect.Name = "_closeOnDisconnect";
-			this._closeOnDisconnect.FlatStyle = FlatStyle.System;
-			this._closeOnDisconnect.Size = new System.Drawing.Size(192, 20);
-			this._closeOnDisconnect.TabIndex = 6;
+			_closeOnDisconnect.Location = new Point(24, 80);
+			_closeOnDisconnect.Name = "_closeOnDisconnect";
+			_closeOnDisconnect.FlatStyle = FlatStyle.System;
+			_closeOnDisconnect.Size = new Size(192, 20);
+			_closeOnDisconnect.TabIndex = 6;
 			// 
 			// _beepOnBellChar
 			// 
-			this._beepOnBellChar.Location = new System.Drawing.Point(24, 102);
-			this._beepOnBellChar.Name = "_beepOnBellChar";
-			this._beepOnBellChar.FlatStyle = FlatStyle.System;
-			this._beepOnBellChar.Size = new System.Drawing.Size(288, 20);
-			this._beepOnBellChar.TabIndex = 7;
+			_beepOnBellChar.Location = new Point(24, 102);
+			_beepOnBellChar.Name = "_beepOnBellChar";
+			_beepOnBellChar.FlatStyle = FlatStyle.System;
+			_beepOnBellChar.Size = new Size(288, 20);
+			_beepOnBellChar.TabIndex = 7;
 			// 
 			// _adjustsTabTitleToWindowTitle
 			// 
-			this._adjustsTabTitleToWindowTitle.Location = new System.Drawing.Point(24, 126);
-			this._adjustsTabTitleToWindowTitle.Name = "_adjustsTabTitleToWindowTitle";
-			this._adjustsTabTitleToWindowTitle.FlatStyle = FlatStyle.System;
-			this._adjustsTabTitleToWindowTitle.Size = new System.Drawing.Size(336, 20);
-			this._adjustsTabTitleToWindowTitle.TabIndex = 8;
+			_adjustsTabTitleToWindowTitle.Location = new Point(24, 126);
+			_adjustsTabTitleToWindowTitle.Name = "_adjustsTabTitleToWindowTitle";
+			_adjustsTabTitleToWindowTitle.FlatStyle = FlatStyle.System;
+			_adjustsTabTitleToWindowTitle.Size = new Size(336, 20);
+			_adjustsTabTitleToWindowTitle.TabIndex = 8;
 			// 
 			// _allowsScrollInAppMode
 			// 
-			this._allowsScrollInAppMode.Location = new System.Drawing.Point(24, 150);
-			this._allowsScrollInAppMode.Name = "_allowsScrollInAppMode";
-			this._allowsScrollInAppMode.FlatStyle = FlatStyle.System;
-			this._allowsScrollInAppMode.Size = new System.Drawing.Size(288, 20);
-			this._allowsScrollInAppMode.TabIndex = 9;
+			_allowsScrollInAppMode.Location = new Point(24, 150);
+			_allowsScrollInAppMode.Name = "_allowsScrollInAppMode";
+			_allowsScrollInAppMode.FlatStyle = FlatStyle.System;
+			_allowsScrollInAppMode.Size = new Size(288, 20);
+			_allowsScrollInAppMode.TabIndex = 9;
 			// 
 			// _keepAliveCheck
 			// 
-			this._keepAliveCheck.Location = new System.Drawing.Point(24, 176);
-			this._keepAliveCheck.Name = "_keepAliveCheck";
-			this._keepAliveCheck.FlatStyle = FlatStyle.System;
-			this._keepAliveCheck.Size = new System.Drawing.Size(244, 20);
-			this._keepAliveCheck.TabIndex = 10;
-			this._keepAliveCheck.CheckedChanged += new EventHandler(OnKeepAliveCheckChanged);
+			_keepAliveCheck.Location = new Point(24, 176);
+			_keepAliveCheck.Name = "_keepAliveCheck";
+			_keepAliveCheck.FlatStyle = FlatStyle.System;
+			_keepAliveCheck.Size = new Size(244, 20);
+			_keepAliveCheck.TabIndex = 10;
+			_keepAliveCheck.CheckedChanged += new EventHandler(OnKeepAliveCheckChanged);
 			// 
 			// _keepAliveIntervalBox
 			// 
-			this._keepAliveIntervalBox.Location = new System.Drawing.Point(276, 176);
-			this._keepAliveIntervalBox.Name = "_keepAliveIntervalBox";
-			this._keepAliveIntervalBox.Size = new System.Drawing.Size(40, 20);
-			this._keepAliveIntervalBox.TabIndex = 11;
-			this._keepAliveIntervalBox.MaxLength = 2;
-			this._keepAliveIntervalBox.TextAlign = HorizontalAlignment.Right;
+			_keepAliveIntervalBox.Location = new Point(276, 176);
+			_keepAliveIntervalBox.Name = "_keepAliveIntervalBox";
+			_keepAliveIntervalBox.Size = new Size(40, 20);
+			_keepAliveIntervalBox.TabIndex = 11;
+			_keepAliveIntervalBox.MaxLength = 2;
+			_keepAliveIntervalBox.TextAlign = HorizontalAlignment.Right;
 			// 
 			// _keepAliveLabel
 			// 
-			this._keepAliveLabel.Location = new System.Drawing.Point(316, 176);
-			this._keepAliveLabel.Name = "_keepAliveLabel";
-			this._keepAliveLabel.Size = new System.Drawing.Size(50, 20);
-			this._keepAliveLabel.TabIndex = 12;
-			this._keepAliveLabel.TextAlign = ContentAlignment.MiddleLeft;
+			_keepAliveLabel.Location = new Point(316, 176);
+			_keepAliveLabel.Name = "_keepAliveLabel";
+			_keepAliveLabel.Size = new Size(50, 20);
+			_keepAliveLabel.TabIndex = 12;
+			_keepAliveLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _defaultLogGroup
 			// 
-			this._defaultLogGroup.Controls.AddRange(new System.Windows.Forms.Control[] {
-																						   this._defaultLogTypeLabel,
-																						   this._defaultLogTypeBox,
-																						   this._defaultLogDirectoryLabel,
-																						   this._defaultLogDirectory,
-																						   this._dirSelect});
-			this._defaultLogGroup.Location = new System.Drawing.Point(16, 204);
-			this._defaultLogGroup.Name = "_defaultLogGroup";
-			this._defaultLogGroup.FlatStyle = FlatStyle.System;
-			this._defaultLogGroup.Size = new System.Drawing.Size(392, 76);
-			this._defaultLogGroup.TabIndex = 14;
-			this._defaultLogGroup.TabStop = false;
+			_defaultLogGroup.Controls.AddRange(new Control[] {
+																						   _defaultLogTypeLabel,
+																						   _defaultLogTypeBox,
+																						   _defaultLogDirectoryLabel,
+																						   _defaultLogDirectory,
+																						   _dirSelect});
+			_defaultLogGroup.Location = new Point(16, 204);
+			_defaultLogGroup.Name = "_defaultLogGroup";
+			_defaultLogGroup.FlatStyle = FlatStyle.System;
+			_defaultLogGroup.Size = new Size(392, 76);
+			_defaultLogGroup.TabIndex = 14;
+			_defaultLogGroup.TabStop = false;
 			// 
 			// _defaultLogTypeLabel
 			// 
-			this._defaultLogTypeLabel.Location = new System.Drawing.Point(8, 20);
-			this._defaultLogTypeLabel.Name = "_defaultLogTypeLabel";
-			this._defaultLogTypeLabel.Size = new System.Drawing.Size(96, 23);
-			this._defaultLogTypeLabel.TabIndex = 15;
-			this._defaultLogTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_defaultLogTypeLabel.Location = new Point(8, 20);
+			_defaultLogTypeLabel.Name = "_defaultLogTypeLabel";
+			_defaultLogTypeLabel.Size = new Size(96, 23);
+			_defaultLogTypeLabel.TabIndex = 15;
+			_defaultLogTypeLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _defaultLogTypeBox
 			// 
-			this._defaultLogTypeBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._defaultLogTypeBox.Location = new System.Drawing.Point(128, 20);
-			this._defaultLogTypeBox.Name = "_defaultLogTypeBox";
-			this._defaultLogTypeBox.Size = new System.Drawing.Size(104, 20);
-			this._defaultLogTypeBox.TabIndex = 16;
+			_defaultLogTypeBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_defaultLogTypeBox.Location = new Point(128, 20);
+			_defaultLogTypeBox.Name = "_defaultLogTypeBox";
+			_defaultLogTypeBox.Size = new Size(104, 20);
+			_defaultLogTypeBox.TabIndex = 16;
 			// 
 			// _defaultLogDirectoryLabel
 			// 
-			this._defaultLogDirectoryLabel.Location = new System.Drawing.Point(8, 48);
-			this._defaultLogDirectoryLabel.Name = "_defaultLogDirectoryLabel";
-			this._defaultLogDirectoryLabel.Size = new System.Drawing.Size(112, 23);
-			this._defaultLogDirectoryLabel.TabIndex = 17;
-			this._defaultLogDirectoryLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_defaultLogDirectoryLabel.Location = new Point(8, 48);
+			_defaultLogDirectoryLabel.Name = "_defaultLogDirectoryLabel";
+			_defaultLogDirectoryLabel.Size = new Size(112, 23);
+			_defaultLogDirectoryLabel.TabIndex = 17;
+			_defaultLogDirectoryLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _defaultLogDirectory
 			// 
-			this._defaultLogDirectory.Location = new System.Drawing.Point(128, 48);
-			this._defaultLogDirectory.Name = "_defaultLogDirectory";
-			this._defaultLogDirectory.Size = new System.Drawing.Size(176, 19);
-			this._defaultLogDirectory.TabIndex = 18;
-			this._defaultLogDirectory.Text = "";
+			_defaultLogDirectory.Location = new Point(128, 48);
+			_defaultLogDirectory.Name = "_defaultLogDirectory";
+			_defaultLogDirectory.Size = new Size(176, 19);
+			_defaultLogDirectory.TabIndex = 18;
+			_defaultLogDirectory.Text = "";
 			// 
 			// _dirSelect
 			// 
-			this._dirSelect.Location = new System.Drawing.Point(312, 48);
-			this._dirSelect.Name = "_dirSelect";
-			this._dirSelect.FlatStyle = FlatStyle.System;
-			this._dirSelect.Size = new System.Drawing.Size(19, 19);
-			this._dirSelect.TabIndex = 19;
-			this._dirSelect.Text = "...";
-			this._dirSelect.Click += new System.EventHandler(this.OnSelectLogDirectory);
+			_dirSelect.Location = new Point(312, 48);
+			_dirSelect.Name = "_dirSelect";
+			_dirSelect.FlatStyle = FlatStyle.System;
+			_dirSelect.Size = new Size(19, 19);
+			_dirSelect.TabIndex = 19;
+			_dirSelect.Text = "...";
+			_dirSelect.Click += new EventHandler(OnSelectLogDirectory);
 			// 
 			// _autoLogCheckBox
 			// 
-			this._autoLogCheckBox.Location = new System.Drawing.Point(24, 200);
-			this._autoLogCheckBox.Name = "_autoLogCheckBox";
-			this._autoLogCheckBox.FlatStyle = FlatStyle.System;
-			this._autoLogCheckBox.Size = new System.Drawing.Size(200, 24);
-			this._autoLogCheckBox.TabIndex = 13;
-			this._autoLogCheckBox.Checked = true;
-			this._autoLogCheckBox.CheckedChanged += new System.EventHandler(this.OnAutoLogCheckBoxClick);
+			_autoLogCheckBox.Location = new Point(24, 200);
+			_autoLogCheckBox.Name = "_autoLogCheckBox";
+			_autoLogCheckBox.FlatStyle = FlatStyle.System;
+			_autoLogCheckBox.Size = new Size(200, 24);
+			_autoLogCheckBox.TabIndex = 13;
+			_autoLogCheckBox.Checked = true;
+			_autoLogCheckBox.CheckedChanged += new EventHandler(OnAutoLogCheckBoxClick);
 
-			this.BackColor = ThemeUtil.TabPaneBackColor;
-			this._defaultLogGroup.ResumeLayout();
+			BackColor = ThemeUtil.TabPaneBackColor;
+			_defaultLogGroup.ResumeLayout();
 
 		}
 		private void FillText() {
-			this._badCharLabel.Text = GApp.Strings.GetString("Form.OptionDialog._badCharLabel");
-			this._bufferSizeLabel.Text = GApp.Strings.GetString("Form.OptionDialog._bufferSizeLabel");
-			this._disconnectNotificationLabel.Text = GApp.Strings.GetString("Form.OptionDialog._disconnectNotificationLabel");
-			this._closeOnDisconnect.Text = GApp.Strings.GetString("Form.OptionDialog._closeOnDisconnect");
-			this._beepOnBellChar.Text = GApp.Strings.GetString("Form.OptionDialog._beepOnBellChar");
-			this._adjustsTabTitleToWindowTitle.Text = GApp.Strings.GetString("Form.OptionDialog._adjustsTabTitleToWindowTitle");
-			this._allowsScrollInAppMode.Text = GApp.Strings.GetString("Form.OptionDialog._allowsScrollInAppMode");
-			this._keepAliveCheck.Text = GApp.Strings.GetString("Form.OptionDialog._keepAliveCheck");
-			this._keepAliveLabel.Text = GApp.Strings.GetString("Form.OptionDialog._keepAliveLabel");
-			this._defaultLogTypeLabel.Text = GApp.Strings.GetString("Form.OptionDialog._defaultLogTypeLabel");
-			this._defaultLogDirectoryLabel.Text = GApp.Strings.GetString("Form.OptionDialog._defaultLogDirectoryLabel");
-			this._autoLogCheckBox.Text = GApp.Strings.GetString("Form.OptionDialog._autoLogCheckBox");
+			_badCharLabel.Text = "Form.OptionDialog._badCharLabel";
+			_bufferSizeLabel.Text = "Form.OptionDialog._bufferSizeLabel";
+			_disconnectNotificationLabel.Text = "Form.OptionDialog._disconnectNotificationLabel";
+			_closeOnDisconnect.Text = "Form.OptionDialog._closeOnDisconnect";
+			_beepOnBellChar.Text = "Form.OptionDialog._beepOnBellChar";
+			_adjustsTabTitleToWindowTitle.Text = "Form.OptionDialog._adjustsTabTitleToWindowTitle";
+			_allowsScrollInAppMode.Text = "Form.OptionDialog._allowsScrollInAppMode";
+			_keepAliveCheck.Text = "Form.OptionDialog._keepAliveCheck";
+			_keepAliveLabel.Text = "Form.OptionDialog._keepAliveLabel";
+			_defaultLogTypeLabel.Text = "Form.OptionDialog._defaultLogTypeLabel";
+			_defaultLogDirectoryLabel.Text = "Form.OptionDialog._defaultLogDirectoryLabel";
+			_autoLogCheckBox.Text = "Form.OptionDialog._autoLogCheckBox";
 
 			_badCharBox.Items.AddRange(EnumDescAttribute.For(typeof(WarningOption)).DescriptionCollection());
 			_disconnectNotification.Items.AddRange(EnumDescAttribute.For(typeof(DisconnectNotification)).DescriptionCollection());
@@ -304,13 +303,13 @@ namespace Poderosa.Forms
 				options.BeepOnBellChar = _beepOnBellChar.Checked;
 				options.AdjustsTabTitleToWindowTitle = _adjustsTabTitleToWindowTitle.Checked;
 				options.AllowsScrollInAppMode = _allowsScrollInAppMode.Checked;
-				itemname = GApp.Strings.GetString("Caption.OptionDialog.BufferLineCount");
+				itemname = "Caption.OptionDialog.BufferLineCount";
 				options.TerminalBufferSize = Int32.Parse(_bufferSize.Text);
-				itemname = GApp.Strings.GetString("Caption.OptionDialog.MRUCount");
+				itemname = "Caption.OptionDialog.MRUCount";
 				options.WarningOption = (WarningOption)_badCharBox.SelectedIndex;
 				options.DisconnectNotification = (DisconnectNotification)_disconnectNotification.SelectedIndex;
 				if(_keepAliveCheck.Checked) {
-					itemname = GApp.Strings.GetString("Caption.OptionDialog.KeepAliveInterval");
+					itemname = "Caption.OptionDialog.KeepAliveInterval";
 					options.KeepAliveInterval = Int32.Parse(_keepAliveIntervalBox.Text) * 60000;
 					if(options.KeepAliveInterval<=0) throw new FormatException();
 				}
@@ -319,13 +318,13 @@ namespace Poderosa.Forms
 
 				if(_autoLogCheckBox.Checked) {
 					if(_defaultLogDirectory.Text.Length==0) {
-						GUtil.Warning(this, GApp.Strings.GetString("Message.OptionDialog.EmptyLogDirectory"));
+						GUtil.Warning(this, "Message.OptionDialog.EmptyLogDirectory");
 						return false;
 					}
 					options.DefaultLogType = (LogType)EnumDescAttribute.For(typeof(LogType)).FromDescription(_defaultLogTypeBox.Text, LogType.None);
-					if(!System.IO.Directory.Exists(_defaultLogDirectory.Text)) {
-						if(GUtil.AskUserYesNo(this, String.Format(GApp.Strings.GetString("Message.OptionDialog.AskCreateDirectory"), _defaultLogDirectory.Text))==DialogResult.Yes) 
-							System.IO.Directory.CreateDirectory(_defaultLogDirectory.Text);
+					if(!Directory.Exists(_defaultLogDirectory.Text)) {
+						if(GUtil.AskUserYesNo(this, String.Format("Message.OptionDialog.AskCreateDirectory", _defaultLogDirectory.Text))==DialogResult.Yes)
+                            Directory.CreateDirectory(_defaultLogDirectory.Text);
 						else
 							return false;
 					}
@@ -337,7 +336,7 @@ namespace Poderosa.Forms
 				successful = true;
 			}
 			catch(FormatException) {
-				GUtil.Warning(this, String.Format(GApp.Strings.GetString("Message.OptionDialog.InvalidItem"), itemname));
+				GUtil.Warning(this, String.Format("Message.OptionDialog.InvalidItem", itemname));
 			}
 			catch(InvalidOptionException ex) {
 				GUtil.Warning(this, ex.Message);
@@ -346,18 +345,20 @@ namespace Poderosa.Forms
 		}
 
 		private void OnSelectLogDirectory(object sender, EventArgs e) {
-			/*
+            /*
 			 * よくみるとフォルダ選択UIは.NET1.1で追加されたようだ。CPはお勤めご苦労。
 			CP.Windows.Forms.ShellFolderBrowser br = new CP.Windows.Forms.ShellFolderBrowser();
-			br.Title = GApp.Strings.GetString("Caption.OptionDialog.DefaultLogDirectory");
+			br.Title = "Caption.OptionDialog.DefaultLogDirectory";
 			if(br.ShowDialog(this)) {
 				_defaultLogDirectory.Text = br.FolderPath;
 			}
 			*/
-			FolderBrowserDialog dlg = new FolderBrowserDialog();
-			dlg.ShowNewFolderButton = true;
-			dlg.Description = GApp.Strings.GetString("Caption.OptionDialog.DefaultLogDirectory");
-			if(_defaultLogDirectory.Text.Length>0 && Directory.Exists(_defaultLogDirectory.Text))
+            FolderBrowserDialog dlg = new FolderBrowserDialog
+            {
+                ShowNewFolderButton = true,
+                Description = "Caption.OptionDialog.DefaultLogDirectory"
+            };
+            if (_defaultLogDirectory.Text.Length>0 && Directory.Exists(_defaultLogDirectory.Text))
 				dlg.SelectedPath = _defaultLogDirectory.Text;
 			if(GCUtil.ShowModalDialog(FindForm(), dlg)==DialogResult.OK)
 				_defaultLogDirectory.Text = dlg.SelectedPath;

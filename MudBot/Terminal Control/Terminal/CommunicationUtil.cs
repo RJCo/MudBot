@@ -5,27 +5,20 @@
 using System;
 using System.Threading;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Diagnostics;
-using System.Net.Sockets;
-using System.Net;
 
 using Granados.SSHC;
 
 using Poderosa.ConnectionParam;
 using Poderosa.Connection;
-using Poderosa.Config;
-using Poderosa.Forms;
-using Poderosa.Terminal;
 using Poderosa.Toolkit;
 using Poderosa.SSH;
 using Poderosa.LocalShell;
 
 namespace Poderosa.Communication
 {
-	public class SSHConnector : SocketWithTimeout {
+    public class SSHConnector : SocketWithTimeout {
 
 		private SSHTerminalParam _param;
 		private Size _size;
@@ -44,21 +37,23 @@ namespace Poderosa.Communication
 		}
 
 		protected override void Negotiate() {
-			SSHConnectionParameter con = new SSHConnectionParameter();
-			con.Protocol = _param.Method==ConnectionMethod.SSH1? SSHProtocol.SSH1 : SSHProtocol.SSH2;
-			con.CheckMACError = GEnv.Options.SSHCheckMAC;
-			con.UserName = _param.Account;
-			con.Password = _password;
-			con.AuthenticationType = _param.AuthType==AuthType.KeyboardInteractive? AuthenticationType.KeyboardInteractive : _param.AuthType==AuthType.Password? AuthenticationType.Password : AuthenticationType.PublicKey;
-			con.IdentityFile = _param.IdentityFile;
-			con.TerminalWidth = _size.Width;
-			con.TerminalHeight = _size.Height;
-			con.TerminalName = EnumDescAttribute.For(typeof(TerminalType)).GetDescription(_param.TerminalType);
-            //con.TerminalName = "xterm";
-			con.WindowSize = GEnv.Options.SSHWindowSize;
-			con.PreferableCipherAlgorithms = LocalSSHUtil.ParseCipherAlgorithm(GEnv.Options.CipherAlgorithmOrder);
-			con.PreferableHostKeyAlgorithms = LocalSSHUtil.ParsePublicKeyAlgorithm(GEnv.Options.HostKeyAlgorithmOrder);
-			if(_keycheck!=null) con.KeyCheck += new HostKeyCheckCallback(this.CheckKey);
+            SSHConnectionParameter con = new SSHConnectionParameter
+            {
+                Protocol = _param.Method == ConnectionMethod.SSH1 ? SSHProtocol.SSH1 : SSHProtocol.SSH2,
+                CheckMACError = GEnv.Options.SSHCheckMAC,
+                UserName = _param.Account,
+                Password = _password,
+                AuthenticationType = _param.AuthType == AuthType.KeyboardInteractive ? AuthenticationType.KeyboardInteractive : _param.AuthType == AuthType.Password ? AuthenticationType.Password : AuthenticationType.PublicKey,
+                IdentityFile = _param.IdentityFile,
+                TerminalWidth = _size.Width,
+                TerminalHeight = _size.Height,
+                TerminalName = EnumDescAttribute.For(typeof(TerminalType)).GetDescription(_param.TerminalType),
+                //con.TerminalName = "xterm";
+                WindowSize = GEnv.Options.SSHWindowSize,
+                PreferableCipherAlgorithms = LocalSSHUtil.ParseCipherAlgorithm(GEnv.Options.CipherAlgorithmOrder),
+                PreferableHostKeyAlgorithms = LocalSSHUtil.ParsePublicKeyAlgorithm(GEnv.Options.HostKeyAlgorithmOrder)
+            };
+            if (_keycheck!=null) con.KeyCheck += new HostKeyCheckCallback(CheckKey);
 										
 			SSHTerminalConnection r = new SSHTerminalConnection(_param, _size.Width, _size.Height);
 			SSHConnection ssh = SSHConnection.Connect(con, r, _socket);
@@ -69,11 +64,11 @@ namespace Poderosa.Communication
 				r.FixConnection(ssh);
 				if(ssh.AuthenticationResult==AuthenticationResult.Success) r.OpenShell();
 				r.UsingSocks = _socks!=null;
-				r.SetServerInfo(_param.Host, this.IPAddress);
+				r.SetServerInfo(_param.Host, IPAddress);
 				_result = new ConnectionTag(r);
 			}
 			else {
-				throw new IOException(GEnv.Strings.GetString("Message.SSHConnector.Cancelled"));
+				throw new IOException("Message.SSHConnector.Cancelled");
 			}
 		}
 		protected override object Result {
@@ -100,9 +95,11 @@ namespace Poderosa.Communication
 		
 		protected override void Negotiate() {
 			TelnetNegotiator neg = new TelnetNegotiator(_param, _size.Width, _size.Height);
-			TelnetTerminalConnection r = new TelnetTerminalConnection(_param, neg, new PlainGuevaraSocket(_socket), _size.Width, _size.Height);
-			r.UsingSocks = _socks!=null;
-			r.SetServerInfo(_param.Host, this.IPAddress);
+            TelnetTerminalConnection r = new TelnetTerminalConnection(_param, neg, new PlainGuevaraSocket(_socket), _size.Width, _size.Height)
+            {
+                UsingSocks = _socks != null
+            };
+            r.SetServerInfo(_param.Host, IPAddress);
 			_result = new ConnectionTag(r);
 		}
 		
@@ -196,15 +193,17 @@ namespace Poderosa.Communication
 			return swt;
 		}
 		private static Socks CreateSocksParam(string dest_host, int dest_port) {
-			Socks s = new Socks();
-			s.DestName = dest_host;
-			s.DestPort = (short)dest_port;
-			s.Account = GEnv.Options.SocksAccount;
-			s.Password = GEnv.Options.SocksPassword;
-			s.ServerName = GEnv.Options.SocksServer;
-			s.ServerPort = (short)GEnv.Options.SocksPort;
-			s.ExcludingNetworks = GEnv.Options.SocksNANetworks;
-			return s;
+            Socks s = new Socks
+            {
+                DestName = dest_host,
+                DestPort = (short)dest_port,
+                Account = GEnv.Options.SocksAccount,
+                Password = GEnv.Options.SocksPassword,
+                ServerName = GEnv.Options.SocksServer,
+                ServerPort = (short)GEnv.Options.SocksPort,
+                ExcludingNetworks = GEnv.Options.SocksNANetworks
+            };
+            return s;
 		}
 
 		public static ConnectionTag CreateNewSerialConnection(IWin32Window parent, SerialTerminalParam param) {
@@ -214,10 +213,10 @@ namespace Poderosa.Communication
 				string portstr = String.Format("\\\\.\\COM{0}", param.Port);
 				IntPtr ptr = Win32.CreateFile(portstr, Win32.GENERIC_READ|Win32.GENERIC_WRITE, 0, IntPtr.Zero, Win32.OPEN_EXISTING, Win32.FILE_ATTRIBUTE_NORMAL|Win32.FILE_FLAG_OVERLAPPED, IntPtr.Zero);
 				if(ptr==Win32.INVALID_HANDLE_VALUE) {
-					string msg = GEnv.Strings.GetString("Message.CommunicationUtil.FailedToOpenSerial");
+					string msg = "Message.CommunicationUtil.FailedToOpenSerial";
 					int err = Win32.GetLastError();
-					if(err==2) msg += GEnv.Strings.GetString("Message.CommunicationUtil.NoSuchDevice");
-					else if(err==5) msg += GEnv.Strings.GetString("Message.CommunicationUtil.DeviceIsBusy");
+					if(err==2) msg += "Message.CommunicationUtil.NoSuchDevice";
+					else if(err==5) msg += "Message.CommunicationUtil.DeviceIsBusy";
 					else msg += "\nGetLastError="+ Win32.GetLastError();
 					throw new Exception(msg);
 				}						
@@ -227,7 +226,7 @@ namespace Poderosa.Communication
 				UpdateDCB(ref dcb, param);
 
 				if(!Win32.SetCommState(ptr, ref dcb))
-					throw new Exception(GEnv.Strings.GetString("Message.CommunicationUtil.FailedToConfigSerial"));
+					throw new Exception("Message.CommunicationUtil.FailedToConfigSerial");
 				Win32.COMMTIMEOUTS timeouts = new Win32.COMMTIMEOUTS();
 				Win32.GetCommTimeouts(ptr, ref timeouts);
 				timeouts.ReadIntervalTimeout = 0xFFFFFFFF;
@@ -237,7 +236,7 @@ namespace Poderosa.Communication
 				timeouts.WriteTotalTimeoutMultiplier = 100;
 				Win32.SetCommTimeouts(ptr, ref timeouts);
 				successful = true;
-				System.Drawing.Size sz = GEnv.Frame.TerminalSizeForNextConnection;
+                Size sz = GEnv.Frame.TerminalSizeForNextConnection;
 				SerialTerminalConnection r = new SerialTerminalConnection(param, ptr, sz.Width, sz.Height);
 				r.SetServerInfo("COM"+param.Port, null);
 				return new ConnectionTag(r);

@@ -6,33 +6,27 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
-using System.Text;
-using System.IO;
-using System.Threading;
 //using System.Xml;
 
 using Poderosa.Connection;
 using Poderosa.ConnectionParam;
-using Poderosa.Forms;
 using Poderosa.Text;
 using Poderosa.Config;
 using Poderosa.Communication;
 
-using Granados.SSHC;
+namespace Poderosa.Terminal
+{
 
-namespace Poderosa.Terminal {
 
-
-	/// <summary>
-	/// DocumentPane の概要の説明です。
-	/// </summary>
-	public class TerminalPane : UserControl, IPoderosaTerminalPane, IInternalTerminalPane {
+    /// <summary>
+    /// DocumentPane の概要の説明です。
+    /// </summary>
+    public class TerminalPane : UserControl, IPoderosaTerminalPane, IInternalTerminalPane {
 		private const int BORDER = 2; //
 
-		public System.Windows.Forms.VScrollBar _VScrollBar;
+		public VScrollBar _VScrollBar;
 
 		private System.Windows.Forms.Timer _caretTimer;
 		private System.Windows.Forms.Timer _sizeTipTimer;
@@ -80,7 +74,7 @@ namespace Poderosa.Terminal {
 		}
 
 		
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
     
 		public TerminalPane() {
 			// 
@@ -89,13 +83,17 @@ namespace Poderosa.Terminal {
 			// TODO: InitForm
 			SetStyle(ControlStyles.UserPaint|ControlStyles.AllPaintingInWmPaint|ControlStyles.DoubleBuffer, true);
 
-			_caretTimer = new System.Windows.Forms.Timer();
-			_caretTimer.Interval = Win32.GetCaretBlinkTime();
-			_caretTimer.Tick += new EventHandler(this.OnCaretTimer);
+            _caretTimer = new System.Windows.Forms.Timer
+            {
+                Interval = Win32.GetCaretBlinkTime()
+            };
+            _caretTimer.Tick += new EventHandler(OnCaretTimer);
 
-			_sizeTipTimer = new System.Windows.Forms.Timer();
-			_sizeTipTimer.Interval = 2000;
-			_sizeTipTimer.Tick += new EventHandler(this.OnHideSizeTip);
+            _sizeTipTimer = new System.Windows.Forms.Timer
+            {
+                Interval = 2000
+            };
+            _sizeTipTimer.Tick += new EventHandler(OnHideSizeTip);
 
 			FakeVisible = false;
 
@@ -117,7 +115,7 @@ namespace Poderosa.Terminal {
 				}
 
 				if(_fakeVisible)
-					this.BackColor = GetRenderProfile().BackColor;
+					BackColor = GetRenderProfile().BackColor;
 			}
 
 			if(!_caretTimer.Enabled) _caretTimer.Start();
@@ -141,8 +139,8 @@ namespace Poderosa.Terminal {
 			set {
 				_fakeVisible = value;
 				_VScrollBar.Visible = value;
-				this.Cursor = value? Cursors.IBeam : Cursors.Default;
-				this.BackColor = value? GetRenderProfile().BackColor : Color.FromKnownColor(KnownColor.ControlDark);
+				Cursor = value? Cursors.IBeam : Cursors.Default;
+				BackColor = value? GetRenderProfile().BackColor : Color.FromKnownColor(KnownColor.ControlDark);
 			}
 		}
 		private TerminalConnection GetConnection() {
@@ -168,50 +166,50 @@ namespace Poderosa.Terminal {
 		#region Component Designer generated code
 
 		private void InitializeComponent() {
-			this._VScrollBar = new System.Windows.Forms.VScrollBar();
-			this._sizeTip = new Label();
-			this.SuspendLayout();
+			_VScrollBar = new VScrollBar();
+			_sizeTip = new Label();
+			SuspendLayout();
 			// 
 			// _VScrollBar
 			// 
-			this._VScrollBar.Enabled = false;
-			this._VScrollBar.Dock = DockStyle.Right;
-			this._VScrollBar.LargeChange = 1;
-			this._VScrollBar.Location = new System.Drawing.Point(512, 0);
-			this._VScrollBar.Minimum = 0;
-			this._VScrollBar.Value = 0;
-			this._VScrollBar.Maximum = 2;
-			this._VScrollBar.Name = "_VScrollBar";
-			this._VScrollBar.Size = new System.Drawing.Size(16, 448);
-			this._VScrollBar.TabIndex = 0;
-			this._VScrollBar.TabStop = false;
-			this._VScrollBar.Cursor = Cursors.Default;
-			this._VScrollBar.Visible = false;
-			this._VScrollBar.ValueChanged += new System.EventHandler(this._VScrollBar_ValueChanged);
+			_VScrollBar.Enabled = false;
+			_VScrollBar.Dock = DockStyle.Right;
+			_VScrollBar.LargeChange = 1;
+			_VScrollBar.Location = new Point(512, 0);
+			_VScrollBar.Minimum = 0;
+			_VScrollBar.Value = 0;
+			_VScrollBar.Maximum = 2;
+			_VScrollBar.Name = "_VScrollBar";
+			_VScrollBar.Size = new Size(16, 448);
+			_VScrollBar.TabIndex = 0;
+			_VScrollBar.TabStop = false;
+			_VScrollBar.Cursor = Cursors.Default;
+			_VScrollBar.Visible = false;
+			_VScrollBar.ValueChanged += new EventHandler(_VScrollBar_ValueChanged);
 			// 
 			// _sizeTip
 			// 
-			this._sizeTip.Visible = false;
-			this._sizeTip.BorderStyle = BorderStyle.FixedSingle;
-			this._sizeTip.TextAlign = ContentAlignment.MiddleCenter;
-			this._sizeTip.BackColor = Color.FromKnownColor(KnownColor.Info);
-			this._sizeTip.ForeColor = Color.FromKnownColor(KnownColor.InfoText);
-			this._sizeTip.Size = new Size(64, 16);
+			_sizeTip.Visible = false;
+			_sizeTip.BorderStyle = BorderStyle.FixedSingle;
+			_sizeTip.TextAlign = ContentAlignment.MiddleCenter;
+			_sizeTip.BackColor = Color.FromKnownColor(KnownColor.Info);
+			_sizeTip.ForeColor = Color.FromKnownColor(KnownColor.InfoText);
+			_sizeTip.Size = new Size(64, 16);
 			// 
 			// TerminalPane
 			// 
-			this.BackColor = System.Drawing.SystemColors.Window;
-			this.TabStop = false;
-			this.Name = "TerminalPane";
-			this.AllowDrop = true;
-			this.Size = new System.Drawing.Size(528, 448);
-			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.OnKeyPress);
+			BackColor = SystemColors.Window;
+			TabStop = false;
+			Name = "TerminalPane";
+			AllowDrop = true;
+			Size = new Size(528, 448);
+			KeyPress += new KeyPressEventHandler(OnKeyPress);
 			
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {this._VScrollBar, this._sizeTip});
-			this.Name = "TerminalPane";
-			this.Size = new System.Drawing.Size(528, 448);
-			this.ImeMode = ImeMode.NoControl;
-			this.ResumeLayout(false);
+			Controls.AddRange(new Control[] {_VScrollBar, _sizeTip});
+			Name = "TerminalPane";
+			Size = new Size(528, 448);
+			ImeMode = ImeMode.NoControl;
+			ResumeLayout(false);
 
 		}
 		#endregion
@@ -263,7 +261,7 @@ namespace Poderosa.Terminal {
 			if(!document.InvalidatedAll) {
 				full_invalidate = false;
 				r.X = GEnv.SystemMetrics.ControlBorderWidth;
-				r.Width = this.Width-GEnv.SystemMetrics.ControlBorderWidth*2;
+				r.Width = Width-GEnv.SystemMetrics.ControlBorderWidth*2;
 				int y1 = document.InvalidatedFrom - document.TopLineNumber;
 				int y2 = document.InvalidatedTo+1 - document.TopLineNumber;
 				r.Y = GEnv.SystemMetrics.ControlBorderHeight + (int)(y1 * GetRenderProfile().Pitch.Height);
@@ -272,7 +270,7 @@ namespace Poderosa.Terminal {
 			}
 
 			//Invalidate(r);
-			if(this.InvokeRequired) {
+			if(InvokeRequired) {
 				//Debug.WriteLine("Invoke Required");
 				if(full_invalidate)
 					_tag.InvalidateParam.Set(new InvalidateDelegate1(DelInvalidate), null);
@@ -307,7 +305,7 @@ namespace Poderosa.Terminal {
 				}
 
 				if(!_fakeVisible) return;
-				if(this.DesignMode || _tag==null) return;
+				if(DesignMode || _tag==null) return;
 
 				//
 				/*if(!_thrownFlag) {
@@ -326,7 +324,7 @@ namespace Poderosa.Terminal {
 				//
 				//
 				RenderParameter param = new RenderParameter();
-				bool  caret = this.Focused;
+				bool  caret = Focused;
 				int   caret_pos_x = 0, caret_pos_y = 0;
 				ArrayList lines = new ArrayList(paneheight);
 				lock(document) {
@@ -389,8 +387,8 @@ namespace Poderosa.Terminal {
 
 			Win32.SystemMetrics sm = GEnv.SystemMetrics;
 			param.TargetRect = new Rectangle(sm.ControlBorderWidth+1, sm.ControlBorderHeight,
-				this.Width - _VScrollBar.Width - sm.ControlBorderWidth + 8, //この８がない値が正当だが、.NETの文字サイズ丸め問題のため行の最終文字が表示されないことがある。これを回避するためにちょっと増やす
-				this.Height - sm.ControlBorderHeight);
+				Width - _VScrollBar.Width - sm.ControlBorderWidth + 8, //この８がない値が正当だが、.NETの文字サイズ丸め問題のため行の最終文字が表示されないことがある。これを回避するためにちょっと増やす
+				Height - sm.ControlBorderHeight);
 
 			GLine l = document.TopLine;
 			for(int i=0; i<paneheight; i++) {
@@ -492,7 +490,7 @@ namespace Poderosa.Terminal {
 			g.DrawLine(new Pen(GEnv.Options.CaretColor==Color.Empty? profile.ForeColor : GEnv.Options.CaretColor), pt1, pt2);
 		}
 
-        protected void _VScrollBar_ValueChanged(object sender, System.EventArgs e) {
+        protected void _VScrollBar_ValueChanged(object sender, EventArgs e) {
 			if(_ignoreValueChangeEvent) return;
 			TerminalDocument document = _tag.Document;
 			lock(document) {
@@ -516,8 +514,8 @@ namespace Poderosa.Terminal {
 			int clip_bottom= clip.Bottom;
 			if(clip_left < BORDER) clip_left = BORDER;
 			if(clip_top  < BORDER) clip_top = BORDER;
-			if(clip_right >=this.Width-BORDER)  clip_right  = this.Width-BORDER;
-			if(clip_bottom>=this.Height-BORDER) clip_bottom = this.Height-BORDER;
+			if(clip_right >=Width-BORDER)  clip_right  = Width-BORDER;
+			if(clip_bottom>=Height-BORDER) clip_bottom = Height-BORDER;
 			Rectangle clip2 = new Rectangle(clip_left, clip_top, clip_right-clip_left, clip_bottom-clip_top);
 
 			if(style==ImageStyle.Scaled)
@@ -529,16 +527,16 @@ namespace Poderosa.Terminal {
         private void DrawBackgroundImage_Scaled(Graphics g, Image img, Rectangle clip) {
 			float scale;
 			int offset_x, offset_y;
-			float sw = (float)(this.Width-_VScrollBar.Width) / img.Width;
-			float sh = (float)this.Height / img.Height;
+			float sw = (float)(Width-_VScrollBar.Width) / img.Width;
+			float sh = (float)Height / img.Height;
 			if(sw < sh) {
 				scale = sw;
 				offset_x = BORDER;
-				offset_y = (int)(this.Height/2 - img.Height*scale/2);
+				offset_y = (int)(Height/2 - img.Height*scale/2);
 			}
 			else {
 				scale = sh;
-				offset_x = (int)((this.Width-_VScrollBar.Width)/2 - img.Width*scale/2);
+				offset_x = (int)((Width-_VScrollBar.Width)/2 - img.Width*scale/2);
 				offset_y = BORDER;
 			}
 
@@ -550,12 +548,12 @@ namespace Poderosa.Terminal {
 		private void DrawBackgroundImage_Normal(Graphics g, Image img, ImageStyle style, Rectangle clip) {
 			int offset_x, offset_y;
 			if(style==ImageStyle.Center) {
-				offset_x = (this.Width-_VScrollBar.Width - img.Width) / 2;
-				offset_y = (this.Height - img.Height) / 2;
+				offset_x = (Width-_VScrollBar.Width - img.Width) / 2;
+				offset_y = (Height - img.Height) / 2;
 			}
 			else {
-				offset_x = (style==ImageStyle.TopLeft || style==ImageStyle.BottomLeft)? BORDER : this.Width - _VScrollBar.Width - img.Width;
-				offset_y = (style==ImageStyle.TopLeft || style==ImageStyle.TopRight)? BORDER : this.Height - img.Height - BORDER;
+				offset_x = (style==ImageStyle.TopLeft || style==ImageStyle.BottomLeft)? BORDER : Width - _VScrollBar.Width - img.Width;
+				offset_y = (style==ImageStyle.TopLeft || style==ImageStyle.TopRight)? BORDER : Height - img.Height - BORDER;
 			}
 			//if(offset_x < BORDER) offset_x = BORDER;
 			//if(offset_y < BORDER) offset_y = BORDER;
@@ -633,7 +631,7 @@ namespace Poderosa.Terminal {
 		private bool ProcessDialogKeyInNormalMode(Keys key, Keys keybody, Keys modifiers, bool cursor) {
 			if((modifiers & Keys.Alt)!=Keys.None && _fakeVisible) {
 				//Altが来ていた場合
-				if(System.Environment.OSVersion.Platform==PlatformID.Win32NT) {
+				if(Environment.OSVersion.Platform==PlatformID.Win32NT) {
 					if(GEnv.Options.LeftAltKey!=AltKeyAction.Menu && (Win32.GetKeyState(Win32.VK_LMENU) & 0x8000)!=0) {
 						ProcessSpecialAltKey(GEnv.Options.LeftAltKey, modifiers, keybody);
 						return true;
@@ -725,9 +723,9 @@ namespace Poderosa.Terminal {
             {
                 //Console.WriteLine("Shift" + e.KeyCode.ToString());
                 string value = (string)Clipboard.GetDataObject().GetData("Text");
-                if (value == null || value.Length == 0 || this.ConnectionTag == null) return;
+                if (value == null || value.Length == 0 || ConnectionTag == null) return;
 
-                PasteProcessor p = new PasteProcessor(this.ConnectionTag, value);
+                PasteProcessor p = new PasteProcessor(ConnectionTag, value);
                 p.Perform();
             }
             #endregion
@@ -743,12 +741,12 @@ namespace Poderosa.Terminal {
 			char[] chars;
 			if(ch=='\r') {
 				chars = TerminalUtil.NewLineChars(GetConnection().Param.TransmitNL);
-				if(Control.ModifierKeys==Keys.Shift) {
+				if(ModifierKeys == Keys.Shift) {
 					EnterAutoSelectionMode(false);
 				}
 			}
 			else {
-				if(ch==' ' && Control.ModifierKeys==Keys.Control) ch = '\0'; //Ctrl+SpaceでNUL送信
+				if(ch==' ' && ModifierKeys == Keys.Control) ch = '\0'; //Ctrl+SpaceでNUL送信
 				//Debug.WriteLine((int)ch);
 				chars = new char[1] { ch };
 			}
@@ -762,7 +760,7 @@ namespace Poderosa.Terminal {
 			TerminalDocument doc = _tag.Document;
 			lock(doc) {
 				if(GEnv.TextSelection.Owner==this) {
-					if(!_autoSelectionMode || (!_autoSelectionModeFromCommand && (Control.ModifierKeys & Keys.Shift)==Keys.None)) {
+					if(!_autoSelectionMode || (!_autoSelectionModeFromCommand && (ModifierKeys & Keys.Shift)==Keys.None)) {
 						ExitAutoSelectionMode();
 						GEnv.TextSelection.Clear();
 						Invalidate();
@@ -857,7 +855,7 @@ namespace Poderosa.Terminal {
 				GetConnection().Write(data);
 			}
 			catch(Exception) {
-				GUtil.Warning(GEnv.Frame, GEnv.Strings.GetString("Message.TerminalPane.FailedToSend"));
+				GUtil.Warning(GEnv.Frame, "Message.TerminalPane.FailedToSend");
 				try {
 					GetConnection().Close();
 					GEnv.Frame.RefreshConnection(GEnv.Connections.FindTag(GetConnection()));
@@ -886,14 +884,14 @@ namespace Poderosa.Terminal {
 
 		protected override void OnLoad(EventArgs e) {
 			base.OnLoad (e);
-			_thisHWND = this.Handle;
+			_thisHWND = Handle;
 		}
 
 		protected override void OnResize(EventArgs args) {
 			base.OnResize(args);
 			Invalidate();
 			//最小化時にはなぜか自身の幅だけが０になってしまう
-			if(this.DesignMode || this.ParentForm==null || this.ParentForm.WindowState==FormWindowState.Minimized) return;
+			if(DesignMode || ParentForm==null || ParentForm.WindowState==FormWindowState.Minimized) return;
 
 			Size ts = TerminalSize;
 
@@ -919,8 +917,8 @@ namespace Poderosa.Terminal {
 
 		private Size CalcTerminalSize(SizeF charPitch) {
 			Win32.SystemMetrics sm = GEnv.SystemMetrics;
-			int width  = (int)Math.Floor(((float)this.Width - sm.ScrollBarWidth - sm.ControlBorderWidth*2) / charPitch.Width);
-			int height = (int)Math.Floor((float)(this.Height - sm.ControlBorderHeight*2) / charPitch.Height);
+			int width  = (int)Math.Floor(((float)Width - sm.ScrollBarWidth - sm.ControlBorderWidth*2) / charPitch.Width);
+			int height = (int)Math.Floor((float)(Height - sm.ControlBorderHeight*2) / charPitch.Height);
 			if(width <= 0) width = 1;
 			if(height <= 0) height = 1;
 			return new Size(width, height);
@@ -931,7 +929,7 @@ namespace Poderosa.Terminal {
 			Form form = GEnv.Frame.AsForm();
 			if(form==null || !form.Visible) return;
 
-			Point pt = new Point(this.Width-_VScrollBar.Width-_sizeTip.Width-MARGIN, this.Height-_sizeTip.Height-MARGIN);
+			Point pt = new Point(Width-_VScrollBar.Width-_sizeTip.Width-MARGIN, Height-_sizeTip.Height-MARGIN);
 
 			_sizeTip.Text = String.Format("{0} * {1}", width, height);
 			_sizeTip.Location = pt;
@@ -1027,28 +1025,30 @@ namespace Poderosa.Terminal {
 
 		private void AdjustIMEComposition(int charwidth) {
 			TerminalDocument document = _tag.Document;
-			IntPtr hIMC = Win32.ImmGetContext(this.Handle);
+			IntPtr hIMC = Win32.ImmGetContext(Handle);
 			RenderProfile prof = GetRenderProfile();
 
 			Win32.LOGFONT lf = new Win32.LOGFONT();
 			prof.CalcFont(null,CharGroup.TwoBytes).ToLogFont(lf);
 			Win32.ImmSetCompositionFont(hIMC, lf);
 
-			Win32.COMPOSITIONFORM form = new Win32.COMPOSITIONFORM();
-			form.dwStyle = Win32.CFS_POINT;
-			Win32.SystemMetrics sm = GEnv.SystemMetrics;
+            Win32.COMPOSITIONFORM form = new Win32.COMPOSITIONFORM
+            {
+                dwStyle = Win32.CFS_POINT
+            };
+            Win32.SystemMetrics sm = GEnv.SystemMetrics;
 			//Debug.WriteLine(String.Format("{0} {1} {2}", document.CaretColumn, charwidth, document.CurrentLine.CharPosToDisplayPos(document.CaretColumn)));
 			form.ptCurrentPos.x = sm.ControlBorderWidth  + (int)(prof.Pitch.Width * (document.CaretColumn + charwidth));
 			form.ptCurrentPos.y = sm.ControlBorderHeight + (int)(prof.Pitch.Height * (document.CurrentLineNumber - document.TopLineNumber));
 			bool r = Win32.ImmSetCompositionWindow(hIMC, ref form);
 			Debug.Assert(r);
-			Win32.ImmReleaseContext(this.Handle, hIMC);
+			Win32.ImmReleaseContext(Handle, hIMC);
 		}
 
 		private void ClearIMEComposition() {
-			IntPtr hIMC = Win32.ImmGetContext(this.Handle);
+			IntPtr hIMC = Win32.ImmGetContext(Handle);
 			Win32.ImmNotifyIME(hIMC, Win32.NI_COMPOSITIONSTR, Win32.CPS_CANCEL, 0);
-			Win32.ImmReleaseContext(this.Handle, hIMC);
+			Win32.ImmReleaseContext(Handle, hIMC);
 			_inIMEComposition = false;
 		}
 
@@ -1074,7 +1074,7 @@ namespace Poderosa.Terminal {
 		}
 
 		private void ShowContextMenu(Point pt) {
-			pt = GEnv.Frame.AsForm().PointToClient(this.PointToScreen(pt));
+			pt = GEnv.Frame.AsForm().PointToClient(PointToScreen(pt));
 			GEnv.Frame.ShowContextMenu(pt, _tag);
 		}
 		
@@ -1089,7 +1089,7 @@ namespace Poderosa.Terminal {
 
 		public void ApplyRenderProfile(RenderProfile prof) {
 			if(_fakeVisible) {
-				this.BackColor = prof.BackColor;
+				BackColor = prof.BackColor;
 				SizeF charPitch = prof.Pitch;
 				Size ts = CalcTerminalSize(charPitch);
 				if(!GetConnection().IsClosed && (ts.Width!=GetConnection().TerminalWidth || ts.Height!=GetConnection().TerminalHeight)) {
@@ -1193,9 +1193,9 @@ namespace Poderosa.Terminal {
 
 				//Debug.WriteLine(String.Format("MouseMove {0} {1} {2}", sel.State, sel.PivotType, args.X));
 				RangeType rt = sel.PivotType;
-				if((Control.ModifierKeys & Keys.Control)!=Keys.None)
+				if((ModifierKeys & Keys.Control)!=Keys.None)
 					rt = RangeType.Word;
-				else if((Control.ModifierKeys & Keys.Shift)!=Keys.None)
+				else if((ModifierKeys & Keys.Shift)!=Keys.None)
 					rt = RangeType.Line;
 
 				GLine tl = document.FindLine(target_id);
@@ -1303,7 +1303,7 @@ namespace Poderosa.Terminal {
 			ConnectionTag ct = args.Data.GetData(typeof(ConnectionTag)) as ConnectionTag;
 			if(ct!=null) {
 				if(ct==_tag)
-					this.Focus();
+					Focus();
 				else
 					GEnv.GlobalCommandTarget.SetConnectionLocation(ct, this);
 			}

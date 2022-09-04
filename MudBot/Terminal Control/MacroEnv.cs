@@ -3,21 +3,18 @@
 * $Id: MacroEnv.cs,v 1.2 2005/04/20 08:45:45 okajima Exp $
 */
 using System;
-using System.Diagnostics;
-using System.Windows.Forms;
 using System.Collections;
 
 using Poderosa.Macro;
 using Poderosa.Config;
 using Poderosa.Terminal;
-using Poderosa.Communication;
 using Poderosa.Connection;
 using Poderosa.ConnectionParam;
 using PConnection = Poderosa.Macro.Connection;
 
 namespace Poderosa.MacroEnv
 {
-	internal class ConnectionListImpl : ConnectionList {
+    internal class ConnectionListImpl : ConnectionList {
 		public override int Count {
 			get {
 				return GEnv.Connections.Count;
@@ -125,20 +122,20 @@ namespace Poderosa.MacroEnv
 		}
 
 		public override void SetStyleS(int width, int height) {
-			if(width<=0 || width>=256) throw new ArgumentException(GApp.Strings.GetString("Message.MacroEnv.WidthIsOutOfRange"));
-			if(height<=0 || height>=256) throw new ArgumentException(GApp.Strings.GetString("Message.MacroEnv.HeightIsOutOfRange"));
+			if(width<=0 || width>=256) throw new ArgumentException("Message.MacroEnv.WidthIsOutOfRange");
+			if(height<=0 || height>=256) throw new ArgumentException("Message.MacroEnv.HeightIsOutOfRange");
 			GApp.InterThreadUIService.SetFrameStyle(GFrameStyle.Single, width, height, -1, -1);
 		}
 		public override void SetStyleH(int width, int height1, int height2) {
-			if(width<=0 || width>=256) throw new ArgumentException(GApp.Strings.GetString("Message.MacroEnv.WidthIsOutOfRange"));
-			if(height1<=0 || height1>=256) throw new ArgumentException(GApp.Strings.GetString("Message.MacroEnv.HeightIsOutOfRange"));
-			if(height2<=0 || height2>=256) throw new ArgumentException(GApp.Strings.GetString("Message.MacroEnv.HeightIsOutOfRange"));
+			if(width<=0 || width>=256) throw new ArgumentException("Message.MacroEnv.WidthIsOutOfRange");
+			if(height1<=0 || height1>=256) throw new ArgumentException("Message.MacroEnv.HeightIsOutOfRange");
+			if(height2<=0 || height2>=256) throw new ArgumentException("Message.MacroEnv.HeightIsOutOfRange");
 			GApp.InterThreadUIService.SetFrameStyle(GFrameStyle.DivHorizontal, width, height1, width, height2);
 		}
 		public override void SetStyleV(int width1, int width2, int height) {
-			if(width1<=0 || width1>=256) throw new ArgumentException(GApp.Strings.GetString("Message.MacroEnv.WidthIsOutOfRange"));
-			if(width2<=0 || width2>=256) throw new ArgumentException(GApp.Strings.GetString("Message.MacroEnv.WidthIsOutOfRange"));
-			if(height<=0 || height>=256) throw new ArgumentException(GApp.Strings.GetString("Message.MacroEnv.HeightIsOutOfRange"));
+			if(width1<=0 || width1>=256) throw new ArgumentException("Message.MacroEnv.WidthIsOutOfRange");
+			if(width2<=0 || width2>=256) throw new ArgumentException("Message.MacroEnv.WidthIsOutOfRange");
+			if(height<=0 || height>=256) throw new ArgumentException("Message.MacroEnv.HeightIsOutOfRange");
 			GApp.InterThreadUIService.SetFrameStyle(GFrameStyle.DivVertical, width1, height, width2, height);
 		}
 	}
@@ -150,12 +147,12 @@ namespace Poderosa.MacroEnv
 		public override void ShellExecute(string verb, string filename) {
 			int r = Win32.ShellExecute(Win32.GetDesktopWindow(), verb, filename, "", "", 1).ToInt32(); //1‚ÍSW_SHOWNORMAL
 			if(r<=31) 
-				throw new ArgumentException(String.Format(GApp.Strings.GetString("Message.MacroEnv.ShellExecuteError"), verb, filename));
+				throw new ArgumentException(String.Format("Message.MacroEnv.ShellExecuteError", verb, filename));
 		}
 		public override void Exec(string command) {
 			int r = Win32.WinExec(command, 1);
 			if(r<=31) 
-				throw new ArgumentException(String.Format(GApp.Strings.GetString("Message.MacroEnv.ExecError"), command));
+				throw new ArgumentException(String.Format("Message.MacroEnv.ExecError", command));
 		}
 	}
 

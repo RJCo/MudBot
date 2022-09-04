@@ -7,18 +7,16 @@ using ThTimer = System.Threading.Timer;
 using System.Windows.Forms;
 using System.Collections;
 using System.Diagnostics;
-
-using Poderosa;
 using Poderosa.Text;
 using Poderosa.Terminal;
 using Poderosa.Communication;
 
 namespace Poderosa.Connection
 {
-	/// <summary>
-	/// アプリケーション全体でのコネクションのリストと、それがどのペインに関連付けられているかを管理する
-	/// </summary>
-	public class Connections : IEnumerable {
+    /// <summary>
+    /// アプリケーション全体でのコネクションのリストと、それがどのペインに関連付けられているかを管理する
+    /// </summary>
+    public class Connections : IEnumerable {
 		//接続を開いた順に格納されるConnectionTag配列
 		private ArrayList _connections;
 		private int _activeIndex;
@@ -53,7 +51,7 @@ namespace Poderosa.Connection
 			int i = IndexOf(con);
 			if(i==-1) return; //本当はこういうのはよろしくないが
 
-			ConnectionTag ct = this.TagAt(i);
+			ConnectionTag ct = TagAt(i);
 			_connections.RemoveAt(i);
 			_activatedOrder.Remove(ct);
 			_activeIndex = Math.Min(_activeIndex, _connections.Count-1);
@@ -331,7 +329,7 @@ namespace Poderosa.Connection
 		public string FormatTabText() {
 			string t = _connection.Param.Caption;
 			if(t==null || t.Length==0) t = _connection.Param.ShortDescription;
-			if(_connection.IsClosed) t += GEnv.Strings.GetString("Caption.ConnectionTag.Disconnected");
+			if(_connection.IsClosed) t += "Caption.ConnectionTag.Disconnected";
 			if(_modalTerminalTask!=null) t += "("+_modalTerminalTask.Caption+")";
 			return t;
 		}

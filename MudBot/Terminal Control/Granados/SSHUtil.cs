@@ -8,19 +8,13 @@
 */
 using System;
 using System.IO;
-using System.Threading;
-using System.Diagnostics;
 using System.Text;
 //using SHA1CryptoServiceProvider = System.Security.Cryptography.SHA1CryptoServiceProvider;
-using HMACSHA1 = System.Security.Cryptography.HMACSHA1;
 
-using Granados.PKI;
-using Granados.Crypto;
-using Granados.Toolkit;
+namespace Granados.SSHC
+{
 
-namespace Granados.SSHC {
-
-	/*
+    /*
 	internal class RWBuffer {
 		private byte[] _data;
 		private int _readOffset;
@@ -60,12 +54,12 @@ namespace Granados.SSHC {
 			}
 		}
 	}
-	*/		
+	*/
 
 
 
 
-	public class SSHException : Exception {
+    public class SSHException : Exception {
 		private byte[] _data;
 
 		public SSHException(string msg, byte[] data) : base(msg) {

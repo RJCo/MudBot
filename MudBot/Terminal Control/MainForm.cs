@@ -1,22 +1,9 @@
 using System;
-using System.Collections;
-using System.IO;
-using System.Diagnostics;
-using System.Text;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Xml;
-using Microsoft.Win32;
 using Poderosa.Connection;
 using Poderosa.ConnectionParam;
-using Poderosa.LocalShell;
-using Poderosa.Debugging;
-using Poderosa.Terminal;
-using Poderosa.Communication;
-using Poderosa.Text;
 using Poderosa.Config;
 using Poderosa.Forms;
-using Poderosa.Toolkit;
 
 namespace Poderosa
 {
@@ -37,7 +24,7 @@ namespace Poderosa
             InitialAction a = new InitialAction();
             //Poderosa.Forms.GFrame frame = new Poderosa.Forms.GFrame(a);
             ConnectionHistory hst = GApp.ConnectionHistory;
-            Poderosa.Forms.LoginDialog dlg = new Poderosa.Forms.LoginDialog();
+            LoginDialog dlg = new LoginDialog();
 
             TCPTerminalParam param = hst.TopTCPParam;
 
@@ -55,7 +42,7 @@ namespace Poderosa
             dlg._passphraseBox.Text = "lkmj9u";
             dlg.OnOK(null, null);
 
-            Connection.ConnectionTag ct = dlg.Result;
+            ConnectionTag ct = dlg.Result;
         }
     }
 }

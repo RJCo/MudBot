@@ -10,19 +10,19 @@ using Poderosa.ConnectionParam;
 using Poderosa.Config;
 #endif
 
-using Poderosa.Toolkit;
 
-namespace Poderosa.Macro {
+namespace Poderosa.Macro
+{
 
-	/// <summary>
-	/// <ja>マクロ機能のルートになるクラスです。</ja>
-	/// <en>This class is the root of the macro functionality.</en>
-	/// </summary>
-	/// <remarks>
-	/// <ja>マクロからこのクラスのインスタンスを作成して、各プロパティ・メソッドにアクセスしてください。</ja>
-	/// <en>Use properties and methods after the macro creates an instance of this class. </en>
-	/// </remarks>
-	public sealed class Environment : MarshalByRefObject {
+    /// <summary>
+    /// <ja>マクロ機能のルートになるクラスです。</ja>
+    /// <en>This class is the root of the macro functionality.</en>
+    /// </summary>
+    /// <remarks>
+    /// <ja>マクロからこのクラスのインスタンスを作成して、各プロパティ・メソッドにアクセスしてください。</ja>
+    /// <en>Use properties and methods after the macro creates an instance of this class. </en>
+    /// </remarks>
+    public sealed class Environment : MarshalByRefObject {
 
 		/// <summary>
 		/// <ja><see cref="ConnectionList"/>オブジェクトを取得します。</ja>

@@ -2,20 +2,16 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: SelectionKeyProcessor.cs,v 1.2 2005/04/20 08:45:47 okajima Exp $
 */
-using System;
 using System.Windows.Forms;
 using System.Diagnostics;
-
-using Poderosa;
 using Poderosa.Terminal;
-using Poderosa.Forms;
 
 namespace Poderosa.Text
 {
-	/// <summary>
-	/// テキスト選択モードに入った後でキーを処理して選択領域のコントロールを行う
-	/// </summary>
-	internal class SelectionKeyProcessor {
+    /// <summary>
+    /// テキスト選択モードに入った後でキーを処理して選択領域のコントロールを行う
+    /// </summary>
+    internal class SelectionKeyProcessor {
 		private TerminalPane _owner;
 		//現在のカーソル位置
 		private GLine _currentLine;

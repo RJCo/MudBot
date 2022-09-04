@@ -3,8 +3,6 @@
 * $Id: TerminalBase.cs,v 1.2 2005/04/20 08:45:47 okajima Exp $
 */
 using System;
-using System.Collections;
-using System.IO;
 using System.Text;
 using System.Threading;
 using System.Diagnostics;
@@ -19,11 +17,11 @@ using Poderosa.Communication;
 
 namespace Poderosa.Terminal
 {
-	/// <summary>
-	/// ターミナル
-	/// データを受信してドキュメントを操作する機能をもつ。
-	/// </summary>
-	internal abstract class AbstractTerminal : ITerminal {
+    /// <summary>
+    /// ターミナル
+    /// データを受信してドキュメントを操作する機能をもつ。
+    /// </summary>
+    internal abstract class AbstractTerminal : ITerminal {
 		public abstract void ProcessChar(char ch);
 		public abstract ProcessCharResult State { get; }
 		public abstract byte[] SequenceKeyData(Keys modifier, Keys body);
@@ -112,12 +110,12 @@ namespace Poderosa.Terminal
 				desc = new String(code, 1);
 
 			if(GEnv.Options.WarningOption!=WarningOption.Ignore) {
-				GEnv.InterThreadUIService.UnsupportedCharSetDetected(GetDocument(), String.Format(GEnv.Strings.GetString("Message.AbstractTerminal.UnsupportedCharSet"), desc));
+				GEnv.InterThreadUIService.UnsupportedCharSetDetected(GetDocument(), String.Format("Message.AbstractTerminal.UnsupportedCharSet", desc));
 			}
 		}
 		public void InvalidCharDetected(Encoding enc, byte[] buf) {
 			if(GEnv.Options.WarningOption!=WarningOption.Ignore) {
-				GEnv.InterThreadUIService.InvalidCharDetected(GetDocument(), String.Format(GEnv.Strings.GetString("Message.AbstractTerminal.UnexpectedChar"), enc.WebName));
+				GEnv.InterThreadUIService.InvalidCharDetected(GetDocument(), String.Format("Message.AbstractTerminal.UnexpectedChar", enc.WebName));
 			}
 		}
 		public void Reset() {
@@ -266,8 +264,8 @@ namespace Poderosa.Terminal
 							throw new UnknownEscapeSequenceException(String.Format("ESC {0}", new string(seq)));
 					}
 					catch(UnknownEscapeSequenceException ex) {
-						if(GEnv.Options.WarningOption!=Poderosa.Config.WarningOption.Ignore)
-							GEnv.InterThreadUIService.UnsupportedEscapeSequence(GetDocument(), GEnv.Strings.GetString("Message.EscapesequenceTerminal.UnsupportedSequence")+ex.Message);
+						if(GEnv.Options.WarningOption!= WarningOption.Ignore)
+							GEnv.InterThreadUIService.UnsupportedEscapeSequence(GetDocument(), "Message.EscapesequenceTerminal.UnsupportedSequence"+ex.Message);
 					}
 					finally {
 						_escapeSequence.Remove(0, _escapeSequence.Length);

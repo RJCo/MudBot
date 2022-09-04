@@ -51,7 +51,7 @@ namespace Poderosa.UI
 		public static void Init() {
 			Application.EnableVisualStyles();
 			_theme = Theme.Unspecified;
-			OperatingSystem os = System.Environment.OSVersion;
+			OperatingSystem os = Environment.OSVersion;
 			if(os.Platform==PlatformID.Win32NT && os.Version.CompareTo(new Version(5,1))>=0)
 				SpecifyThemeUnderWinXP();
 		}

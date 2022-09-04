@@ -8,18 +8,17 @@ using System.Windows.Forms;
 
 using Poderosa.Connection;
 using Poderosa.Communication;
-using Poderosa.ConnectionParam;
 using Poderosa.Text;
 using Poderosa.Config;
 using Poderosa.Forms;
 
 namespace Poderosa
 {
-	//受信スレッドが直接メッセージボックスなどを出しにいくのは何かとトラブルの温床なので、
-	//メインのスレッドと受け渡しをしながら処理する。
-	//たとえば、オプションダイアログを出している間にサーバが切断を切ってきたときなど、GFrameを親にMessageBoxを呼んでしまい、その後の動作がちょっと不審になった。
+    //受信スレッドが直接メッセージボックスなどを出しにいくのは何かとトラブルの温床なので、
+    //メインのスレッドと受け渡しをしながら処理する。
+    //たとえば、オプションダイアログを出している間にサーバが切断を切ってきたときなど、GFrameを親にMessageBoxを呼んでしまい、その後の動作がちょっと不審になった。
 
-	public class InterThreadUIService {
+    public class InterThreadUIService {
 		private string _msg;
 		private Exception _exception;
 		private DialogResult _dialogResult;
@@ -206,7 +205,7 @@ namespace Poderosa
 			/*
             if(!_connection.IsClosed && (_connection.Param is TCPTerminalParam)) {
 				string host = ((TCPTerminalParam)_connection.Param).Host;
-				string msg = String.Format(GEnv.Strings.GetString("Message.InterThread.Disconnected"), host);
+				string msg = String.Format("Message.InterThread.Disconnected", host);
 				if(GEnv.Options.DisconnectNotification==DisconnectNotification.MessageBox)
 					GUtil.Warning(GEnv.Frame, msg);
 				else if(GEnv.Options.DisconnectNotification==DisconnectNotification.StatusBar)

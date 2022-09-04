@@ -4,27 +4,24 @@
 */
 using System;
 using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-using Poderosa;
-
 namespace Poderosa.Forms
 {
-	/// <summary>
-	/// ThreeButtonMessageBox の概要の説明です。
-	/// </summary>
-	internal class ThreeButtonMessageBox : System.Windows.Forms.Form
-	{
-		private System.Windows.Forms.Button _button1;
-		private System.Windows.Forms.Button _button2;
-		private System.Windows.Forms.Button _button3;
-		private System.Windows.Forms.Label _message;
+    /// <summary>
+    /// ThreeButtonMessageBox の概要の説明です。
+    /// </summary>
+    internal class ThreeButtonMessageBox : Form
+    {
+		private Button _button1;
+		private Button _button2;
+		private Button _button3;
+		private Label _message;
 		/// <summary>
 		/// 必要なデザイナ変数です。
 		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 
 		public ThreeButtonMessageBox()
 		{
@@ -60,65 +57,65 @@ namespace Poderosa.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this._button1 = new System.Windows.Forms.Button();
-			this._button2 = new System.Windows.Forms.Button();
-			this._button3 = new System.Windows.Forms.Button();
-			this._message = new System.Windows.Forms.Label();
-			this.SuspendLayout();
+			_button1 = new Button();
+			_button2 = new Button();
+			_button3 = new Button();
+			_message = new Label();
+			SuspendLayout();
 			// 
 			// _button1
 			// 
-			this._button1.DialogResult = System.Windows.Forms.DialogResult.Yes;
-			this._button1.Location = new System.Drawing.Point(8, 56);
-			this._button1.Name = "_button1";
-			this._button1.FlatStyle = FlatStyle.System;
-			this._button1.Size = new System.Drawing.Size(96, 23);
-			this._button1.TabIndex = 0;
+			_button1.DialogResult = DialogResult.Yes;
+			_button1.Location = new Point(8, 56);
+			_button1.Name = "_button1";
+			_button1.FlatStyle = FlatStyle.System;
+			_button1.Size = new Size(96, 23);
+			_button1.TabIndex = 0;
 			// 
 			// _button2
 			// 
-			this._button2.DialogResult = System.Windows.Forms.DialogResult.No;
-			this._button2.Location = new System.Drawing.Point(112, 56);
-			this._button2.Name = "_button2";
-			this._button2.FlatStyle = FlatStyle.System;
-			this._button2.Size = new System.Drawing.Size(96, 23);
-			this._button2.TabIndex = 1;
+			_button2.DialogResult = DialogResult.No;
+			_button2.Location = new Point(112, 56);
+			_button2.Name = "_button2";
+			_button2.FlatStyle = FlatStyle.System;
+			_button2.Size = new Size(96, 23);
+			_button2.TabIndex = 1;
 			// 
 			// _button3
 			// 
-			this._button3.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this._button3.Location = new System.Drawing.Point(216, 56);
-			this._button3.Name = "_button3";
-			this._button3.FlatStyle = FlatStyle.System;
-			this._button3.Size = new System.Drawing.Size(96, 23);
-			this._button3.TabIndex = 2;
+			_button3.DialogResult = DialogResult.Cancel;
+			_button3.Location = new Point(216, 56);
+			_button3.Name = "_button3";
+			_button3.FlatStyle = FlatStyle.System;
+			_button3.Size = new Size(96, 23);
+			_button3.TabIndex = 2;
 			// 
 			// _message
 			// 
-			this._message.Location = new System.Drawing.Point(64, 8);
-			this._message.Name = "_message";
-			this._message.Size = new System.Drawing.Size(232, 48);
-			this._message.TabIndex = 3;
-			this._message.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+			_message.Location = new Point(64, 8);
+			_message.Name = "_message";
+			_message.Size = new Size(232, 48);
+			_message.TabIndex = 3;
+			_message.TextAlign = ContentAlignment.TopLeft;
 			// 
 			// ThreeButtonMessageBox
 			// 
-			this.AcceptButton = this._button1;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 12);
-			this.CancelButton = this._button3;
-			this.ClientSize = new System.Drawing.Size(322, 85);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this._message,
-																		  this._button3,
-																		  this._button2,
-																		  this._button1});
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "ThreeButtonMessageBox";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.ResumeLayout(false);
+			AcceptButton = _button1;
+			AutoScaleBaseSize = new Size(5, 12);
+			CancelButton = _button3;
+			ClientSize = new Size(322, 85);
+			Controls.AddRange(new Control[] {
+																		  _message,
+																		  _button3,
+																		  _button2,
+																		  _button1});
+			FormBorderStyle = FormBorderStyle.FixedDialog;
+			MaximizeBox = false;
+			MinimizeBox = false;
+			Name = "ThreeButtonMessageBox";
+			ShowInTaskbar = false;
+			StartPosition = FormStartPosition.CenterParent;
+			ResumeLayout(false);
 
 		}
 		#endregion

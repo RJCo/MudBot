@@ -2,12 +2,11 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: DebugUtil.cs,v 1.2 2005/04/20 08:45:46 okajima Exp $
 */
-using System;
 using System.Text;
 
 namespace Poderosa.Toolkit
 {
-	internal class DebugUtil
+    internal class DebugUtil
 	{
 		public static string DumpByteArray(byte[] data) {
 			return DumpByteArray(data, 0, data.Length);

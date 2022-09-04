@@ -4,37 +4,34 @@
 */
 using System;
 using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Diagnostics;
-
-using Poderosa.Communication;
 using Poderosa.Connection;
 using Poderosa.Terminal;
 
 namespace Poderosa.Forms
 {
-	/// <summary>
-	/// XModemDialog の概要の説明です。
-	/// </summary>
-	internal class XModemDialog : System.Windows.Forms.Form
-	{
+    /// <summary>
+    /// XModemDialog の概要の説明です。
+    /// </summary>
+    internal class XModemDialog : Form
+    {
 		private bool _receiving; //受信ならtrue,送信ならfalse これは表示前にのみ設定可能
 		private bool _executing;
 		private ConnectionTag _connectionTag;
 		private XModem _xmodemTask;
 
-		private System.Windows.Forms.Button _okButton;
-		private System.Windows.Forms.Button _cancelButton;
-		private System.Windows.Forms.Label _fileNameLabel;
-		private System.Windows.Forms.TextBox _fileNameBox;
-		private System.Windows.Forms.Button _selectButton;
-		private System.Windows.Forms.Label _progressText;
+		private Button _okButton;
+		private Button _cancelButton;
+		private Label _fileNameLabel;
+		private TextBox _fileNameBox;
+		private Button _selectButton;
+		private Label _progressText;
 		/// <summary>
 		/// 必要なデザイナ変数です。
 		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 
 		public XModemDialog()
 		{
@@ -72,9 +69,9 @@ namespace Poderosa.Forms
 			}
 		}
 		public void ReloadLanguage() {
-			this._okButton.Text = GApp.Strings.GetString("Form.XModemDialog._okButton");
-			this._cancelButton.Text = GApp.Strings.GetString("Common.Cancel");
-			this._fileNameLabel.Text = GApp.Strings.GetString("Form.XModemDialog._fileNameLabel");
+			_okButton.Text = "Form.XModemDialog._okButton";
+			_cancelButton.Text = "Cancel";
+			_fileNameLabel.Text = "Form.XModemDialog._fileNameLabel";
 		}
 
 
@@ -100,106 +97,110 @@ namespace Poderosa.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this._okButton = new System.Windows.Forms.Button();
-			this._cancelButton = new System.Windows.Forms.Button();
-			this._fileNameLabel = new System.Windows.Forms.Label();
-			this._fileNameBox = new System.Windows.Forms.TextBox();
-			this._selectButton = new System.Windows.Forms.Button();
-			this._progressText = new System.Windows.Forms.Label();
-			this.SuspendLayout();
+			_okButton = new Button();
+			_cancelButton = new Button();
+			_fileNameLabel = new Label();
+			_fileNameBox = new TextBox();
+			_selectButton = new Button();
+			_progressText = new Label();
+			SuspendLayout();
 			// 
 			// _okButton
 			// 
-			this._okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this._okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this._okButton.Location = new System.Drawing.Point(152, 64);
-			this._okButton.Name = "_okButton";
-			this._okButton.TabIndex = 0;
-			this._okButton.Click += new EventHandler(OnOK);
+			_okButton.DialogResult = DialogResult.OK;
+			_okButton.FlatStyle = FlatStyle.System;
+			_okButton.Location = new Point(152, 64);
+			_okButton.Name = "_okButton";
+			_okButton.TabIndex = 0;
+			_okButton.Click += new EventHandler(OnOK);
 			// 
 			// _cancelButton
 			// 
-			this._cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this._cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this._cancelButton.Location = new System.Drawing.Point(240, 64);
-			this._cancelButton.Name = "_cancelButton";
-			this._cancelButton.TabIndex = 1;
-			this._cancelButton.Click += new EventHandler(OnCancel);
+			_cancelButton.DialogResult = DialogResult.Cancel;
+			_cancelButton.FlatStyle = FlatStyle.System;
+			_cancelButton.Location = new Point(240, 64);
+			_cancelButton.Name = "_cancelButton";
+			_cancelButton.TabIndex = 1;
+			_cancelButton.Click += new EventHandler(OnCancel);
 			// 
 			// _fileNameLabel
 			// 
-			this._fileNameLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._fileNameLabel.Location = new System.Drawing.Point(8, 8);
-			this._fileNameLabel.Name = "_fileNameLabel";
-			this._fileNameLabel.Size = new System.Drawing.Size(80, 16);
-			this._fileNameLabel.TabIndex = 2;
+			_fileNameLabel.ImageAlign = ContentAlignment.MiddleLeft;
+			_fileNameLabel.Location = new Point(8, 8);
+			_fileNameLabel.Name = "_fileNameLabel";
+			_fileNameLabel.Size = new Size(80, 16);
+			_fileNameLabel.TabIndex = 2;
 			// 
 			// _fileNameBox
 			// 
-			this._fileNameBox.Location = new System.Drawing.Point(96, 8);
-			this._fileNameBox.Name = "_fileNameBox";
-			this._fileNameBox.Size = new System.Drawing.Size(192, 19);
-			this._fileNameBox.TabIndex = 3;
-			this._fileNameBox.Text = "";
+			_fileNameBox.Location = new Point(96, 8);
+			_fileNameBox.Name = "_fileNameBox";
+			_fileNameBox.Size = new Size(192, 19);
+			_fileNameBox.TabIndex = 3;
+			_fileNameBox.Text = "";
 			// 
 			// _selectButton
 			// 
-			this._selectButton.Location = new System.Drawing.Point(296, 8);
-			this._selectButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this._selectButton.Name = "_selectButton";
-			this._selectButton.Size = new System.Drawing.Size(19, 19);
-			this._selectButton.TabIndex = 4;
-			this._selectButton.Text = "...";
-			this._selectButton.Click += new EventHandler(OnSelectFile);
+			_selectButton.Location = new Point(296, 8);
+			_selectButton.FlatStyle = FlatStyle.System;
+			_selectButton.Name = "_selectButton";
+			_selectButton.Size = new Size(19, 19);
+			_selectButton.TabIndex = 4;
+			_selectButton.Text = "...";
+			_selectButton.Click += new EventHandler(OnSelectFile);
 			// 
 			// _progressText
 			// 
-			this._progressText.Location = new System.Drawing.Point(8, 28);
-			this._progressText.Name = "_progressText";
-			this._progressText.Size = new System.Drawing.Size(296, 32);
-			this._progressText.TabIndex = 5;
-			this._progressText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_progressText.Location = new Point(8, 28);
+			_progressText.Name = "_progressText";
+			_progressText.Size = new Size(296, 32);
+			_progressText.TabIndex = 5;
+			_progressText.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// XModemDialog
 			// 
-			this.AcceptButton = this._okButton;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 12);
-			this.CancelButton = this._cancelButton;
-			this.ClientSize = new System.Drawing.Size(328, 86);
-			this.Controls.Add(this._progressText);
-			this.Controls.Add(this._selectButton);
-			this.Controls.Add(this._fileNameBox);
-			this.Controls.Add(this._fileNameLabel);
-			this.Controls.Add(this._cancelButton);
-			this.Controls.Add(this._okButton);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "XModemDialog";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.ResumeLayout(false);
+			AcceptButton = _okButton;
+			AutoScaleBaseSize = new Size(5, 12);
+			CancelButton = _cancelButton;
+			ClientSize = new Size(328, 86);
+			Controls.Add(_progressText);
+			Controls.Add(_selectButton);
+			Controls.Add(_fileNameBox);
+			Controls.Add(_fileNameLabel);
+			Controls.Add(_cancelButton);
+			Controls.Add(_okButton);
+			FormBorderStyle = FormBorderStyle.FixedDialog;
+			MaximizeBox = false;
+			MinimizeBox = false;
+			Name = "XModemDialog";
+			ShowInTaskbar = false;
+			StartPosition = FormStartPosition.Manual;
+			ResumeLayout(false);
 
 		}
 		#endregion
 
 		private void FormatText() {
-			this.Text = String.Format(GApp.Strings.GetString("Caption.XModemDialog.DialogTitle"), GApp.Strings.GetString(_receiving? "Common.Reception" : "Common.Transmission"), _connectionTag.FormatTabText());
-			this._progressText.Text = String.Format(GApp.Strings.GetString("Caption.XModemDialog.InitialPrompt"), GApp.Strings.GetString(_receiving? "Common.Transmission" : "Common.Reception").ToLower());
+			Text = String.Format("Caption.XModemDialog.DialogTitle", _receiving? "Common.Reception" : "Common.Transmission", _connectionTag.FormatTabText());
+			_progressText.Text = String.Format("Caption.XModemDialog.InitialPrompt", _receiving? "Common.Transmission" : "Common.Reception".ToLower());
 		}
 		private void OnSelectFile(object sender, EventArgs args) {
 			FileDialog dlg = null;
 			if(_receiving) {
-				SaveFileDialog sf = new SaveFileDialog();
-				sf.Title = GApp.Strings.GetString("Caption.XModemDialog.ReceptionFileSelect");
-				dlg = sf;
+                SaveFileDialog sf = new SaveFileDialog
+                {
+                    Title = "Caption.XModemDialog.ReceptionFileSelect"
+                };
+                dlg = sf;
 			}
 			else {
-				OpenFileDialog of = new OpenFileDialog();
-				of.Title = GApp.Strings.GetString("Caption.XModemDialog.TransmissionFileSelect");
-				of.CheckFileExists = true;
-				of.Multiselect = false;
-				dlg = of;
+                OpenFileDialog of = new OpenFileDialog
+                {
+                    Title = "Caption.XModemDialog.TransmissionFileSelect",
+                    CheckFileExists = true,
+                    Multiselect = false
+                };
+                dlg = of;
 			}
 			dlg.Filter = "All Files(*)|*";
 			if(GCUtil.ShowModalDialog(this, dlg)==DialogResult.OK)
@@ -208,7 +209,7 @@ namespace Poderosa.Forms
 
 		private void OnOK(object sedner, EventArgs args) {
 			Debug.Assert(!_executing);
-			this.DialogResult = DialogResult.None;
+			DialogResult = DialogResult.None;
 			if(_receiving) {
 				if(!StartReceive()) return;
 			}
@@ -220,13 +221,15 @@ namespace Poderosa.Forms
 			_okButton.Enabled = false;
 			_fileNameBox.Enabled = false;
 			_selectButton.Enabled = false;
-			_progressText.Text = GApp.Strings.GetString("Caption.XModemDialog.Negotiating");
+			_progressText.Text = "Caption.XModemDialog.Negotiating";
 		}
 		private bool StartReceive() {
 			try {
-				_xmodemTask = new XModemReceiver(_connectionTag, _fileNameBox.Text);
-				_xmodemTask.NotifyTarget = this.Handle;
-				_xmodemTask.Start();
+                _xmodemTask = new XModemReceiver(_connectionTag, _fileNameBox.Text)
+                {
+                    NotifyTarget = Handle
+                };
+                _xmodemTask.Start();
 				return true;
 			}
 			catch(Exception ex) {
@@ -236,9 +239,11 @@ namespace Poderosa.Forms
 		}
 		private bool StartSend() {
 			try {
-				_xmodemTask = new XModemSender(_connectionTag, _fileNameBox.Text);
-				_xmodemTask.NotifyTarget = this.Handle;
-				_xmodemTask.Start();
+                _xmodemTask = new XModemSender(_connectionTag, _fileNameBox.Text)
+                {
+                    NotifyTarget = Handle
+                };
+                _xmodemTask.Start();
 				return true;
 			}
 			catch(Exception ex) {
@@ -273,14 +278,14 @@ namespace Poderosa.Forms
 		private void UpdateStatusText(int wparam, int lparam) {
 			if(wparam==XModem.NOTIFY_PROGRESS) {
 				if(_receiving)
-					_progressText.Text = String.Format(GApp.Strings.GetString("Caption.XModemDialog.ReceptionProgress"), lparam);
+					_progressText.Text = String.Format("Caption.XModemDialog.ReceptionProgress", lparam);
 				else
-					_progressText.Text = String.Format(GApp.Strings.GetString("Caption.XModemDialog.TransmissionProgress"), lparam);
+					_progressText.Text = String.Format("Caption.XModemDialog.TransmissionProgress", lparam);
 			}
 			else {
 				//PROGRESS以外は単に閉じる。ダイアログボックスの表示などはプロトコル実装側がやる
-				this.DialogResult = DialogResult.Abort;
-				this._progressText.Text = String.Format(GApp.Strings.GetString("Caption.XModemDialog.InitialPrompt"), GApp.Strings.GetString(_receiving? "Common.Transmission" : "Common.Reception").ToLower());
+				DialogResult = DialogResult.Abort;
+				_progressText.Text = String.Format("Caption.XModemDialog.InitialPrompt", _receiving? "Common.Transmission" : "Common.Reception".ToLower());
 				Exit();
 				if(wparam==XModem.NOTIFY_SUCCESS)
 					Close();

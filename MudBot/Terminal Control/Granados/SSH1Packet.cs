@@ -20,15 +20,13 @@
 
 using System;
 using System.Collections;
-using System.Diagnostics;
 using System.Threading;
-using Granados.Crypto;
 using Granados.SSHC;
 
 namespace Granados.SSHCV1
 {
-	
-	internal class SSH1Packet
+
+    internal class SSH1Packet
 	{
 		private byte _type;
 		private byte[] _data;
@@ -58,16 +56,20 @@ namespace Granados.SSHCV1
 		* constructs from the packet type and the body
 		*/
 		public static SSH1Packet FromPlainPayload(PacketType type, byte[] data) {
-			SSH1Packet p = new SSH1Packet();
-			p._type = (byte)type;
-			p._data = data;
-			return p;
+            SSH1Packet p = new SSH1Packet
+            {
+                _type = (byte)type,
+                _data = data
+            };
+            return p;
 		}
 		public static SSH1Packet FromPlainPayload(PacketType type) {
-			SSH1Packet p = new SSH1Packet();
-			p._type = (byte)type;
-			p._data = new byte[0];
-			return p;
+            SSH1Packet p = new SSH1Packet
+            {
+                _type = (byte)type,
+                _data = new byte[0]
+            };
+            return p;
 		}
 		/**
 		* creates a packet as the input of shell
@@ -75,7 +77,7 @@ namespace Granados.SSHCV1
 		static SSH1Packet AsStdinString(byte[] input) {
 			SSH1DataWriter w = new SSH1DataWriter();
 			w.WriteAsString(input);
-			SSH1Packet p = SSH1Packet.FromPlainPayload(PacketType.SSH_CMSG_STDIN_DATA, w.ToByteArray());
+			SSH1Packet p = FromPlainPayload(PacketType.SSH_CMSG_STDIN_DATA, w.ToByteArray());
 			return p;
 		}
 		

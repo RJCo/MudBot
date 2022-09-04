@@ -3,19 +3,16 @@
 * $Id: ContainerInterThread.cs,v 1.2 2005/04/20 08:45:44 okajima Exp $
 */
 using System;
-using System.Threading;
 using System.Windows.Forms;
 
 using Poderosa.Connection;
 using Poderosa.ConnectionParam;
 using Poderosa.Communication;
-using Poderosa.Text;
 using Poderosa.Config;
-using Poderosa.Forms;
 
 namespace Poderosa
 {
-	internal class ContainerInterThreadUIService : InterThreadUIService {
+    internal class ContainerInterThreadUIService : InterThreadUIService {
 		private TerminalParam _terminalParam;
 		private ConnectionTag _resultConnection;
 		private PanePosition _destinationPanePosition;
@@ -24,7 +21,7 @@ namespace Poderosa
 		private TerminalConnection _connection;
 
 		public enum CService {
-			ActivateConnection = InterThreadUIService.Service.End+1,
+			ActivateConnection = Service.End+1,
 			SetPanePosition,
 			SetFrameStyle,
 			CloseConnection,

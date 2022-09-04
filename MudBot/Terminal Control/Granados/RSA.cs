@@ -10,14 +10,13 @@
  $Id: RSA.cs,v 1.2 2005/04/20 08:58:56 okajima Exp $
 */
 using System;
-using System.Diagnostics;
 using System.Security.Cryptography;
 
 using Granados.SSHC;
 
 namespace Granados.PKI
 {
-	public class RSAKeyPair : KeyPair, ISigner, IVerifier {
+    public class RSAKeyPair : KeyPair, ISigner, IVerifier {
 
 		private RSAPublicKey _publickey;
 		private BigInteger _d;
@@ -115,13 +114,15 @@ namespace Granados.PKI
 		}
 
 		public RSAParameters ToRSAParameters() {
-			RSAParameters p = new RSAParameters();
-			p.D = _d.getBytes();
-			p.Exponent = _publickey.Exponent.getBytes();
-			p.Modulus = _publickey.Modulus.getBytes();
-			p.P = _p.getBytes();
-			p.Q = _q.getBytes();
-			BigInteger pe = PrimeExponent(_d, _p);
+            RSAParameters p = new RSAParameters
+            {
+                D = _d.getBytes(),
+                Exponent = _publickey.Exponent.getBytes(),
+                Modulus = _publickey.Modulus.getBytes(),
+                P = _p.getBytes(),
+                Q = _q.getBytes()
+            };
+            BigInteger pe = PrimeExponent(_d, _p);
 			BigInteger qe = PrimeExponent(_d, _q);
 			p.DP = pe.getBytes();
 			p.DQ = qe.getBytes();

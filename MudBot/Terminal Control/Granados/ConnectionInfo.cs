@@ -7,18 +7,18 @@
  $Id: ConnectionInfo.cs,v 1.2 2005/04/20 08:58:56 okajima Exp $
 */
 
-using System;
 using System.Text;
 
 using Granados.PKI;
 using Granados.Toolkit;
 
-namespace Granados.SSHC {
-	/// <summary>
-	/// ConnectionInfo describes the attributes of the host or the connection.
-	/// It is available after the connection is established without any errors.
-	/// </summary>
-	public abstract class SSHConnectionInfo {
+namespace Granados.SSHC
+{
+    /// <summary>
+    /// ConnectionInfo describes the attributes of the host or the connection.
+    /// It is available after the connection is established without any errors.
+    /// </summary>
+    public abstract class SSHConnectionInfo {
 		internal string _serverVersionString;
 		internal string _clientVersionString;
 		internal string _supportedCipherAlgorithms;
@@ -64,10 +64,11 @@ namespace Granados.SSHC {
 	}
 }
 
-namespace Granados.SSHCV1 {
-	using Granados.SSHC;
+namespace Granados.SSHCV1
+{
+    using Granados.SSHC;
 
-	public class SSH1ConnectionInfo : SSHConnectionInfo {
+    public class SSH1ConnectionInfo : SSHConnectionInfo {
 		internal SSHServerInfo _serverinfo;
 
 		public override string DumpHostKeyInKnownHostsStyle() {
@@ -102,11 +103,12 @@ namespace Granados.SSHCV1 {
 	}
 }
 
-namespace Granados.SSHCV2 {
-	using Granados.SSHC;
-	using Granados.PKI;
+namespace Granados.SSHCV2
+{
+    using Granados.SSHC;
+    using Granados.PKI;
 
-	public class SSH2ConnectionInfo : SSHConnectionInfo {
+    public class SSH2ConnectionInfo : SSHConnectionInfo {
 		internal string _supportedHostKeyAlgorithms;
 		internal PublicKeyAlgorithm _algorithmForHostKeyVerification;
 		internal string _supportedKEXAlgorithms;

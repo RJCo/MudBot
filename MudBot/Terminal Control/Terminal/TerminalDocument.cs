@@ -3,20 +3,16 @@
 * $Id: TerminalDocument.cs,v 1.2 2005/04/20 08:45:47 okajima Exp $
 */
 using System;
-using System.Collections;
-using System.Drawing;
 using System.Diagnostics;
-using Poderosa;
-using Poderosa.Text;
 
 using Poderosa.Communication;
 
 namespace Poderosa.Text
 {
-	/// <summary>
-	/// ターミナルとして動かしているときの
-	/// </summary>
-	public class TerminalDocument {
+    /// <summary>
+    /// ターミナルとして動かしているときの
+    /// </summary>
+    public class TerminalDocument {
 		private TerminalConnection _connection; //!!これは幅と高さ取得のためにのみ必要なパラメタなのでTerminalConnectionはやりすぎ
 
 		private int _caretColumn;
@@ -155,7 +151,7 @@ namespace Poderosa.Text
 			Dump(String.Format("FindLine {0}, hint_id={1}", index, hintLine.ID));
 			Debugger.Break();
 #endif
-			GEnv.InterThreadUIService.InvalidDocumentOperation(this, GEnv.Strings.GetString("Message.TerminalDocument.UnexpectedCode"));
+			GEnv.InterThreadUIService.InvalidDocumentOperation(this, "Message.TerminalDocument.UnexpectedCode");
 		}
 
 		internal void SetScrollingRegion(int top_offset, int bottom_offset) {
@@ -262,9 +258,9 @@ namespace Poderosa.Text
 			else {
 				if(_connection.TerminalHeight>1) { //極端に高さがないときはこれで変な値になってしまうのでスキップ
 					if(_currentLine.ID >= _topLine.ID + _connection.TerminalHeight - 1)
-						this.TopLineNumber = _currentLine.ID - _connection.TerminalHeight + 2; //これで次のCurrentLineNumber++と合わせて行送りになる
+						TopLineNumber = _currentLine.ID - _connection.TerminalHeight + 2; //これで次のCurrentLineNumber++と合わせて行送りになる
 				}
-				this.CurrentLineNumber++; //これでプロパティセットがなされ、必要なら行の追加もされる。
+				CurrentLineNumber++; //これでプロパティセットがなされ、必要なら行の追加もされる。
 			}
 			AssertValid();
 

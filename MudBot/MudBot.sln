@@ -1,13 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32802.440
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Terminal Control", "Terminal Control\Terminal Control.csproj", "{60BE1158-C079-4603-8BC4-1658133E8EE5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MudBot", "MudBot\MudBot.csproj", "{5C515301-3B05-4FCA-B273-F981C2EB029C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventEngines", "EventEngines\EventEngines.csproj", "{D3B6B46F-865C-476B-B14B-D074DA72DF08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MajorMUD.Interfaces", "MajorMUD.Interfaces\MajorMUD.Interfaces.csproj", "{60C00872-2B0A-4331-BE79-2A873111BDF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MajorMud.Database", "MajorMud.Database\MajorMud.Database.csproj", "{993BAA37-8230-4BCC-B966-C3CAC379F88A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,8 +31,19 @@ Global
 		{D3B6B46F-865C-476B-B14B-D074DA72DF08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3B6B46F-865C-476B-B14B-D074DA72DF08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3B6B46F-865C-476B-B14B-D074DA72DF08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60C00872-2B0A-4331-BE79-2A873111BDF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60C00872-2B0A-4331-BE79-2A873111BDF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60C00872-2B0A-4331-BE79-2A873111BDF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60C00872-2B0A-4331-BE79-2A873111BDF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{993BAA37-8230-4BCC-B966-C3CAC379F88A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{993BAA37-8230-4BCC-B966-C3CAC379F88A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{993BAA37-8230-4BCC-B966-C3CAC379F88A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{993BAA37-8230-4BCC-B966-C3CAC379F88A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BB54D41A-289C-4190-B3F3-A9ED7D8DAA2D}
 	EndGlobalSection
 EndGlobal

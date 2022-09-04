@@ -2,7 +2,6 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: TextSelection.cs,v 1.2 2005/04/20 08:45:48 okajima Exp $
 */
-using System;
 using System.Text;
 using System.Diagnostics;
 
@@ -10,7 +9,7 @@ using Poderosa.Terminal;
 
 namespace Poderosa.Text
 {
-	public enum RangeType {
+    public enum RangeType {
 		Char,
 		Word,
 		Line

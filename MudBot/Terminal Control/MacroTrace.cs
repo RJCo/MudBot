@@ -4,25 +4,24 @@
 */
 using System;
 using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace Poderosa.MacroEnv
 {
-	/// <summary>
-	/// MacroTrace の概要の説明です。
-	/// </summary>
-	internal class MacroTraceWindow : System.Windows.Forms.Form
-	{
+    /// <summary>
+    /// MacroTrace の概要の説明です。
+    /// </summary>
+    internal class MacroTraceWindow : Form
+    {
 		internal static int  _instanceCount;
 		internal static Size _lastWindowSize = new Size();
 
-		private System.Windows.Forms.TextBox _textBox;
+		private TextBox _textBox;
 		/// <summary>
 		/// 必要なデザイナ変数です。
 		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 
 		public MacroTraceWindow()
 		{
@@ -34,12 +33,12 @@ namespace Poderosa.MacroEnv
 			//
 			// TODO: InitializeComponent 呼び出しの後に、コンストラクタ コードを追加してください。
 			//
-			this.Icon = GApp.Options.GuevaraMode? GIcons.GetOldGuevaraIcon() : GIcons.GetAppIcon();
+			Icon = GApp.Options.GuevaraMode? GIcons.GetOldGuevaraIcon() : GIcons.GetAppIcon();
 
 			//位置とサイズの調整
 			int n = _instanceCount % 5;
-			this.Location = new Point(GApp.Frame.Left + 30+20*n, GApp.Frame.Top  + 30+20*n);
-			if(_instanceCount>0) this.Size = _lastWindowSize;
+			Location = new Point(GApp.Frame.Left + 30+20*n, GApp.Frame.Top  + 30+20*n);
+			if(_instanceCount>0) Size = _lastWindowSize;
 			_instanceCount++;
 
 		}
@@ -66,37 +65,37 @@ namespace Poderosa.MacroEnv
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this._textBox = new System.Windows.Forms.TextBox();
-			this.SuspendLayout();
+			_textBox = new TextBox();
+			SuspendLayout();
 			// 
 			// _textBox
 			// 
-			this._textBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._textBox.Multiline = true;
-			this._textBox.Name = "_textBox";
-			this._textBox.ReadOnly = true;
-			this._textBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this._textBox.Size = new System.Drawing.Size(352, 237);
-			this._textBox.TabIndex = 0;
-			this._textBox.Text = "";
-			this._textBox.BackColor = Color.FromKnownColor(KnownColor.Window);
+			_textBox.Dock = DockStyle.Fill;
+			_textBox.Multiline = true;
+			_textBox.Name = "_textBox";
+			_textBox.ReadOnly = true;
+			_textBox.ScrollBars = ScrollBars.Vertical;
+			_textBox.Size = new Size(352, 237);
+			_textBox.TabIndex = 0;
+			_textBox.Text = "";
+			_textBox.BackColor = Color.FromKnownColor(KnownColor.Window);
 			// 
 			// MacroTrace
 			// 
-			this.StartPosition = FormStartPosition.Manual;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 12);
-			this.ClientSize = new System.Drawing.Size(352, 237);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this._textBox});
-			this.Name = "MacroTrace";
-			this.ShowInTaskbar = false;
-			this.ResumeLayout(false);
+			StartPosition = FormStartPosition.Manual;
+			AutoScaleBaseSize = new Size(5, 12);
+			ClientSize = new Size(352, 237);
+			Controls.AddRange(new Control[] {
+																		  _textBox});
+			Name = "MacroTrace";
+			ShowInTaskbar = false;
+			ResumeLayout(false);
 
 		}
 		#endregion
 
 		public void AdjustTitle(MacroModule mod) {
-			this.Text = GApp.Strings.GetString("Caption.MacroTrace.Title") + mod.Title;
+			Text = "Caption.MacroTrace.Title" + mod.Title;
 		}
 
 		private string _lineToAdd;
@@ -104,11 +103,11 @@ namespace Poderosa.MacroEnv
 			//これはマクロスレッドから呼ばれるのでSendMessageを使う必要がある
 			if(_textBox.TextLength!=0) t = "\r\n"+t;
 			_lineToAdd = t;
-			Win32.SendMessage(this.Handle, GConst.WMG_MACRO_TRACE, IntPtr.Zero, IntPtr.Zero);
+			Win32.SendMessage(Handle, GConst.WMG_MACRO_TRACE, IntPtr.Zero, IntPtr.Zero);
 		}
 		protected override void OnClosed(EventArgs args) {
 			base.OnClosed(args);
-			_lastWindowSize = this.Size;
+			_lastWindowSize = Size;
 		}
 
 		protected override void WndProc(ref Message msg) {

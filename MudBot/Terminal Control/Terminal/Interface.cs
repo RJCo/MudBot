@@ -2,19 +2,17 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: Interface.cs,v 1.2 2005/04/20 08:45:46 okajima Exp $
 */
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 
 using Poderosa.Connection;
 using Poderosa.Config;
-using Poderosa.Text;
 using Poderosa.Communication;
 using Poderosa.Terminal;
 
 namespace Poderosa
 {
-	public interface IPoderosaTerminalPane {
+    public interface IPoderosaTerminalPane {
 		void ApplyOptions(CommonOptions opt);
 		Control AsControl();
 		void SplitterDragging(int width, int height);

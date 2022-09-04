@@ -2,21 +2,19 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: IconList.cs,v 1.2 2005/04/20 08:45:45 okajima Exp $
 */
-using System;
 using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace Poderosa
 {
-	/// <summary>
-	/// IconList の概要の説明です。
-	/// </summary>
-	internal class IconList : System.Windows.Forms.Form
-	{
-		System.Windows.Forms.ImageList _imageList;
-		private System.ComponentModel.IContainer components;
+    /// <summary>
+    /// IconList の概要の説明です。
+    /// </summary>
+    internal class IconList : Form
+    {
+        ImageList _imageList;
+		private IContainer components;
 
 		public IconList()
 		{
@@ -52,22 +50,24 @@ namespace Poderosa
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
+			components = new Container();
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(IconList));
-			this._imageList = new System.Windows.Forms.ImageList(this.components);
-			// 
-			// _imageList
-			// 
-			this._imageList.ImageSize = new System.Drawing.Size(16, 16);
-			this._imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("_imageList.ImageStream")));
-			this._imageList.TransparentColor = System.Drawing.Color.Transparent;
-			// 
-			// IconList
-			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 12);
-			this.ClientSize = new System.Drawing.Size(292, 266);
-			this.Name = "IconList";
-			this.Text = "IconList";
+            _imageList = new ImageList(components)
+            {
+                // 
+                // _imageList
+                // 
+                ImageSize = new Size(16, 16),
+                ImageStream = ((ImageListStreamer)(resources.GetObject("_imageList.ImageStream"))),
+                TransparentColor = Color.Transparent
+            };
+            // 
+            // IconList
+            // 
+            AutoScaleBaseSize = new Size(5, 12);
+			ClientSize = new Size(292, 266);
+			Name = "IconList";
+			Text = "IconList";
 
 		}
 		#endregion

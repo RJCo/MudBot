@@ -6,18 +6,16 @@ using System;
 using System.Reflection;
 using System.Text;
 using System.Diagnostics;
-using System.IO;
 using System.Collections;
 using System.Windows.Forms;
 
 using Poderosa.Config;
-using Poderosa.Communication;
 using Poderosa.Connection;
 using Poderosa.UI;
 
 namespace Poderosa.MacroEnv
 {
-	internal enum MacroType {
+    internal enum MacroType {
 		Unknown,
 		JavaScript,
 		Assembly
@@ -50,13 +48,15 @@ namespace Poderosa.MacroEnv
 		}
 
 		public object Clone() {
-			MacroModule m = new MacroModule(_index);
-			m._type = _type;
-			m._path = _path;
-			m._title = _title;
-			m._additionalAssemblies = _additionalAssemblies;
-			m._debugMode = _debugMode;
-			return m;
+            MacroModule m = new MacroModule(_index)
+            {
+                _type = _type,
+                _path = _path,
+                _title = _title,
+                _additionalAssemblies = _additionalAssemblies,
+                _debugMode = _debugMode
+            };
+            return m;
 		}
 
 		public MacroType Type {
@@ -94,7 +94,7 @@ namespace Poderosa.MacroEnv
 		}
 		public Keys ShortCut {
 			get {
-				Commands.Entry e = GApp.Options.Commands.FindMacroEntry(this.Index);
+				Commands.Entry e = GApp.Options.Commands.FindMacroEntry(Index);
 				return e==null? Keys.None : (e.Modifiers | e.Key);
 			}
 		}
@@ -132,7 +132,7 @@ namespace Poderosa.MacroEnv
 			node["path"] = _path;
 			node["title"] = _title;
 			node["debug"] = _debugMode.ToString();
-			Commands.Entry e = GApp.Options.Commands.FindMacroEntry(this.Index);
+			Commands.Entry e = GApp.Options.Commands.FindMacroEntry(Index);
 			if(e!=null)
 				node["shortcut"] = UILibUtil.KeyString(e.Modifiers, e.Key, ',');
 			node["additional-assemblies"] = Concat(_additionalAssemblies);
@@ -201,12 +201,12 @@ namespace Poderosa.MacroEnv
 
 		public void Execute(IWin32Window parent, MacroModule mod) {
 			if(_runningMacro!=null) {
-				GUtil.Warning(parent, GApp.Strings.GetString("Message.MacroModule.AlreadyRunning"));
+				GUtil.Warning(parent, "Message.MacroModule.AlreadyRunning");
 				return;
 			}
 
 			if(mod.Type==MacroType.Unknown) {
-				GUtil.Warning(parent, GApp.Strings.GetString("Message.MacroModule.UnknownModuleType"));
+				GUtil.Warning(parent, "Message.MacroModule.UnknownModuleType");
 				return;
 			}
 			else {
@@ -215,7 +215,7 @@ namespace Poderosa.MacroEnv
 					Assembly asm = MacroUtil.LoadMacroAssembly(mod);
 					MethodInfo ep = asm.EntryPoint;
 					if(ep==null)
-						throw new Exception(GApp.Strings.GetString("Message.MacroModule.NoEntryPoint"));
+						throw new Exception("Message.MacroModule.NoEntryPoint");
 
 					_runningMacro = new MacroExecutor(mod, ep);
 					IndicateMacroStarted();
@@ -316,20 +316,26 @@ namespace Poderosa.MacroEnv
 
 		private void InitSample() {
 			string b = AppDomain.CurrentDomain.BaseDirectory + "macrosample\\";
-			MacroModule hello = new MacroModule(0);
-			hello.Title = GApp.Strings.GetString("Caption.MacroModule.SampleTitleHelloWorld");
-			hello.Path = b + "helloworld.js";
-			GApp.Options.Commands.AddEntry(new Commands.MacroEntry(hello.Title, Keys.None, Keys.None, hello.Index));
+            MacroModule hello = new MacroModule(0)
+            {
+                Title = "Caption.MacroModule.SampleTitleHelloWorld",
+                Path = b + "helloworld.js"
+            };
+            GApp.Options.Commands.AddEntry(new Commands.MacroEntry(hello.Title, Keys.None, Keys.None, hello.Index));
 			_entries.Add(hello);
-			MacroModule telnet = new MacroModule(1);
-			telnet.Title = GApp.Strings.GetString("Caption.MacroModule.SampleTitleAutoTelnet");
-			telnet.Path = b + "telnet.js";
-			GApp.Options.Commands.AddEntry(new Commands.MacroEntry(telnet.Title, Keys.None, Keys.None, telnet.Index));
+            MacroModule telnet = new MacroModule(1)
+            {
+                Title = "Caption.MacroModule.SampleTitleAutoTelnet",
+                Path = b + "telnet.js"
+            };
+            GApp.Options.Commands.AddEntry(new Commands.MacroEntry(telnet.Title, Keys.None, Keys.None, telnet.Index));
 			_entries.Add(telnet);
-			MacroModule bashrc = new MacroModule(2);
-			bashrc.Title = GApp.Strings.GetString("Caption.MacroModule.SampleTitleOpenBashrc");
-			bashrc.Path = b + "bashrc.js";
-			GApp.Options.Commands.AddEntry(new Commands.MacroEntry(bashrc.Title, Keys.None, Keys.None, bashrc.Index));
+            MacroModule bashrc = new MacroModule(2)
+            {
+                Title = "Caption.MacroModule.SampleTitleOpenBashrc",
+                Path = b + "bashrc.js"
+            };
+            GApp.Options.Commands.AddEntry(new Commands.MacroEntry(bashrc.Title, Keys.None, Keys.None, bashrc.Index));
 			_entries.Add(bashrc);
 		}
 
@@ -340,11 +346,11 @@ namespace Poderosa.MacroEnv
 			string openbashrc = b + "bashrc.js";
 			foreach(MacroModule mod in _entries) {
 				if(mod.Path==helloworld)
-					mod.Title = GApp.Strings.GetString("Caption.MacroModule.SampleTitleHelloWorld");
+					mod.Title = "Caption.MacroModule.SampleTitleHelloWorld";
 				else if(mod.Path==autotelnet)
-					mod.Title = GApp.Strings.GetString("Caption.MacroModule.SampleTitleAutoTelnet");
+					mod.Title = "Caption.MacroModule.SampleTitleAutoTelnet";
 				else if(mod.Path==openbashrc)
-					mod.Title = GApp.Strings.GetString("Caption.MacroModule.SampleTitleOpenBashrc");
+					mod.Title = "Caption.MacroModule.SampleTitleOpenBashrc";
 			}
 		}
 	}

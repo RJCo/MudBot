@@ -5,7 +5,6 @@
 using System;
 using System.Xml;
 using System.Text;
-using System.IO;
 using System.Diagnostics;
 using System.Threading;
 
@@ -16,10 +15,10 @@ using Poderosa.Connection;
 //Debug namespaceだとSystem.Diagnostics.Debugとコンパイラが混同してしまう
 namespace Poderosa.Debugging
 {
-	/// <summary>
-	/// テストに必要な各種のメソッド収録
-	/// </summary>
-	public class TestUtil
+    /// <summary>
+    /// テストに必要な各種のメソッド収録
+    /// </summary>
+    public class TestUtil
 	{
 		public static void EmulateWithLog(string filename, ConnectionTag tag) {
 			_filename = filename;

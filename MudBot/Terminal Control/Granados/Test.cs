@@ -7,29 +7,21 @@
  $Id: Test.cs,v 1.2 2005/04/20 08:58:56 okajima Exp $
 */
 using System;
-using System.IO;
 using System.Text;
 using System.Threading;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-using System.Globalization;
-
-using Granados.Crypto;
 using Granados.SSHC;
-using Granados.SSHCV1;
-using Granados.SSHCV2;
-using Granados.Toolkit;
-using Granados.PKI;
 
 namespace Granados.SSHCTest
 {
-	class Reader : ISSHConnectionEventReceiver, ISSHChannelEventReceiver {
+    class Reader : ISSHConnectionEventReceiver, ISSHChannelEventReceiver {
 		public SSHConnection _conn;
 		public bool _ready;
 
 		public void OnData(byte[] data, int offset, int length) {
-			System.Console.Write(Encoding.ASCII.GetString(data, offset, length));
+            Console.Write(Encoding.ASCII.GetString(data, offset, length));
 		}
 		public void OnDebugMessage(bool always_display, byte[] data) {
 			Debug.WriteLine("DEBUG: "+ Encoding.ASCII.GetString(data));
@@ -72,10 +64,12 @@ namespace Granados.SSHCTest
 		}
 
 		public PortForwardingCheckResult CheckPortForwardingRequest(string host, int port, string originator_host, int originator_port) {
-			PortForwardingCheckResult r = new PortForwardingCheckResult();
-			r.allowed = true;
-			r.channel = this;
-			return r;
+            PortForwardingCheckResult r = new PortForwardingCheckResult
+            {
+                allowed = true,
+                channel = this
+            };
+            return r;
 		}
 		public void EstablishPortforwarding(ISSHChannelEventReceiver rec, SSHChannel channel) {
 			_pf = channel;
@@ -166,7 +160,7 @@ namespace Granados.SSHCTest
 
 			byte[] b = new byte[1];
 			while(true) {
-				int input = System.Console.Read();
+				int input = Console.Read();
 				
 				b[0] = (byte)input;
 				//Debug.WriteLine(input);

@@ -5,38 +5,38 @@
 using System;
 using System.Drawing;
 using System.Drawing.Text;
-using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 
 using Poderosa.Config;
 
-namespace Poderosa.Forms {
-	/// <summary>
-	/// GFontDialog の概要の説明です。
-	/// </summary>
-	internal class GFontDialog : System.Windows.Forms.Form {
+namespace Poderosa.Forms
+{
+    /// <summary>
+    /// GFontDialog の概要の説明です。
+    /// </summary>
+    internal class GFontDialog : Form
+    {
 
 		//このダイアログは言語によって様子が違ってくる
 		private Language _language;
 		
-		private System.Windows.Forms.ListBox _asciiFontList;
-		private System.Windows.Forms.Label _lAsciiFont;
-		private System.Windows.Forms.Label _lFontSize;
+		private ListBox _asciiFontList;
+		private Label _lAsciiFont;
+		private Label _lFontSize;
 		private ComboBox _fontSizeList;
-		private System.Windows.Forms.CheckBox _checkClearType;
-		private System.Windows.Forms.Label _lJapaneseFont;
-		private System.Windows.Forms.ListBox _japaneseFontList;
+		private CheckBox _checkClearType;
+		private Label _lJapaneseFont;
+		private ListBox _japaneseFontList;
 		private ClearTypeAwareLabel _lASCIISample;
 		private ClearTypeAwareLabel _lJapaneseSample;
-		private System.Windows.Forms.Button _okButton;
-		private System.Windows.Forms.Button _cancelButton;
+		private Button _okButton;
+		private Button _cancelButton;
 		/// <summary>
 		/// 必要なデザイナ変数です。
 		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 		
 		private bool _ignoreEvent;
 
@@ -86,15 +86,15 @@ namespace Poderosa.Forms {
 			InitializeComponent();
 			_language = GApp.Options.Language;
 
-			this._lAsciiFont.Text = GApp.Strings.GetString("Form.GFontDialog._lAsciiFont");
-			this._lJapaneseFont.Text = GApp.Strings.GetString("Form.GFontDialog._lJapaneseFont");
-			this._lFontSize.Text = GApp.Strings.GetString("Form.GFontDialog._lFontSize");
-			this._checkClearType.Text = GApp.Strings.GetString("Form.GFontDialog._checkClearType");
-			this._okButton.Text = GApp.Strings.GetString("Common.OK");
-			this._cancelButton.Text = GApp.Strings.GetString("Common.Cancel");
-			this._lASCIISample.Text = GApp.Strings.GetString("Common.FontSample");
-			this._lJapaneseSample.Text = GApp.Strings.GetString("Common.JapaneseFontSample");
-			this.Text = GApp.Strings.GetString("Form.GFontDialog.Text");
+			_lAsciiFont.Text = "Form.GFontDialog._lAsciiFont";
+			_lJapaneseFont.Text = "Form.GFontDialog._lJapaneseFont";
+			_lFontSize.Text = "Form.GFontDialog._lFontSize";
+			_checkClearType.Text = "Form.GFontDialog._checkClearType";
+			_okButton.Text = "OK";
+			_cancelButton.Text = "Cancel";
+			_lASCIISample.Text = "Common.FontSample";
+			_lJapaneseSample.Text = "Common.JapaneseFontSample";
+			Text = "Form.GFontDialog.Text";
 
 			if(_language==Language.English) {
 				_lJapaneseFont.Visible = false;
@@ -134,141 +134,141 @@ namespace Poderosa.Forms {
 		/// コード エディタで変更しないでください。
 		/// </summary>
 		private void InitializeComponent() {
-			this._asciiFontList = new System.Windows.Forms.ListBox();
-			this._lAsciiFont = new System.Windows.Forms.Label();
-			this._lFontSize = new System.Windows.Forms.Label();
-			this._fontSizeList = new ComboBox();
-			this._checkClearType = new System.Windows.Forms.CheckBox();
-			this._lJapaneseFont = new System.Windows.Forms.Label();
-			this._japaneseFontList = new System.Windows.Forms.ListBox();
-			this._lASCIISample = new Poderosa.Forms.ClearTypeAwareLabel();
-			this._lJapaneseSample = new Poderosa.Forms.ClearTypeAwareLabel();
-			this._okButton = new System.Windows.Forms.Button();
-			this._cancelButton = new System.Windows.Forms.Button();
-			this.SuspendLayout();
+			_asciiFontList = new ListBox();
+			_lAsciiFont = new Label();
+			_lFontSize = new Label();
+			_fontSizeList = new ComboBox();
+			_checkClearType = new CheckBox();
+			_lJapaneseFont = new Label();
+			_japaneseFontList = new ListBox();
+			_lASCIISample = new ClearTypeAwareLabel();
+			_lJapaneseSample = new ClearTypeAwareLabel();
+			_okButton = new Button();
+			_cancelButton = new Button();
+			SuspendLayout();
 			// 
 			// _asciiFontList
 			// 
-			this._asciiFontList.ItemHeight = 12;
-			this._asciiFontList.Location = new System.Drawing.Point(8, 88);
-			this._asciiFontList.Name = "_asciiFontList";
-			this._asciiFontList.Size = new System.Drawing.Size(128, 100);
-			this._asciiFontList.TabIndex = 4;
-			this._asciiFontList.SelectedIndexChanged += new System.EventHandler(this.OnASCIIFontChange);
+			_asciiFontList.ItemHeight = 12;
+			_asciiFontList.Location = new Point(8, 88);
+			_asciiFontList.Name = "_asciiFontList";
+			_asciiFontList.Size = new Size(128, 100);
+			_asciiFontList.TabIndex = 4;
+			_asciiFontList.SelectedIndexChanged += new EventHandler(OnASCIIFontChange);
 			// 
 			// _lAsciiFont
 			// 
-			this._lAsciiFont.Location = new System.Drawing.Point(8, 64);
-			this._lAsciiFont.Name = "_lAsciiFont";
-			this._lAsciiFont.Size = new System.Drawing.Size(120, 23);
-			this._lAsciiFont.TabIndex = 3;
-			this._lAsciiFont.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_lAsciiFont.Location = new Point(8, 64);
+			_lAsciiFont.Name = "_lAsciiFont";
+			_lAsciiFont.Size = new Size(120, 23);
+			_lAsciiFont.TabIndex = 3;
+			_lAsciiFont.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _lFontSize
 			// 
-			this._lFontSize.Location = new System.Drawing.Point(16, 12);
-			this._lFontSize.Name = "_lFontSize";
-			this._lFontSize.Size = new System.Drawing.Size(104, 16);
-			this._lFontSize.TabIndex = 0;
+			_lFontSize.Location = new Point(16, 12);
+			_lFontSize.Name = "_lFontSize";
+			_lFontSize.Size = new Size(104, 16);
+			_lFontSize.TabIndex = 0;
 			// 
 			// _fontSizeList
 			// 
-			this._fontSizeList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._fontSizeList.Location = new System.Drawing.Point(136, 8);
-			this._fontSizeList.Name = "_fontSizeList";
-			this._fontSizeList.Size = new System.Drawing.Size(121, 20);
-			this._fontSizeList.TabIndex = 1;
-			this._fontSizeList.SelectedIndexChanged += new System.EventHandler(this.UpdateFontSample);
+			_fontSizeList.DropDownStyle = ComboBoxStyle.DropDownList;
+			_fontSizeList.Location = new Point(136, 8);
+			_fontSizeList.Name = "_fontSizeList";
+			_fontSizeList.Size = new Size(121, 20);
+			_fontSizeList.TabIndex = 1;
+			_fontSizeList.SelectedIndexChanged += new EventHandler(UpdateFontSample);
 			// 
 			// _checkClearType
 			// 
-			this._checkClearType.Location = new System.Drawing.Point(24, 32);
-			this._checkClearType.Name = "_checkClearType";
-			this._checkClearType.FlatStyle = FlatStyle.System;
-			this._checkClearType.Size = new System.Drawing.Size(240, 32);
-			this._checkClearType.TabIndex = 2;
-			this._checkClearType.CheckedChanged += new System.EventHandler(this.UpdateFontSample);
+			_checkClearType.Location = new Point(24, 32);
+			_checkClearType.Name = "_checkClearType";
+			_checkClearType.FlatStyle = FlatStyle.System;
+			_checkClearType.Size = new Size(240, 32);
+			_checkClearType.TabIndex = 2;
+			_checkClearType.CheckedChanged += new EventHandler(UpdateFontSample);
 			// 
 			// _lJapaneseFont
 			// 
-			this._lJapaneseFont.Location = new System.Drawing.Point(144, 64);
-			this._lJapaneseFont.Name = "_lJapaneseFont";
-			this._lJapaneseFont.Size = new System.Drawing.Size(128, 23);
-			this._lJapaneseFont.TabIndex = 5;
-			this._lJapaneseFont.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_lJapaneseFont.Location = new Point(144, 64);
+			_lJapaneseFont.Name = "_lJapaneseFont";
+			_lJapaneseFont.Size = new Size(128, 23);
+			_lJapaneseFont.TabIndex = 5;
+			_lJapaneseFont.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _japaneseFontList
 			// 
-			this._japaneseFontList.ItemHeight = 12;
-			this._japaneseFontList.Location = new System.Drawing.Point(144, 88);
-			this._japaneseFontList.Name = "_japaneseFontList";
-			this._japaneseFontList.Size = new System.Drawing.Size(128, 100);
-			this._japaneseFontList.TabIndex = 6;
-			this._japaneseFontList.SelectedIndexChanged += new System.EventHandler(this.OnJapaneseFontChange);
+			_japaneseFontList.ItemHeight = 12;
+			_japaneseFontList.Location = new Point(144, 88);
+			_japaneseFontList.Name = "_japaneseFontList";
+			_japaneseFontList.Size = new Size(128, 100);
+			_japaneseFontList.TabIndex = 6;
+			_japaneseFontList.SelectedIndexChanged += new EventHandler(OnJapaneseFontChange);
 			// 
 			// _lASCIISample
 			// 
-			this._lASCIISample.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this._lASCIISample.ClearType = false;
-			this._lASCIISample.Location = new System.Drawing.Point(8, 192);
-			this._lASCIISample.Name = "_lASCIISample";
-			this._lASCIISample.Size = new System.Drawing.Size(128, 40);
-			this._lASCIISample.TabIndex = 7;
-			this._lASCIISample.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			_lASCIISample.BorderStyle = BorderStyle.Fixed3D;
+			_lASCIISample.ClearType = false;
+			_lASCIISample.Location = new Point(8, 192);
+			_lASCIISample.Name = "_lASCIISample";
+			_lASCIISample.Size = new Size(128, 40);
+			_lASCIISample.TabIndex = 7;
+			_lASCIISample.TextAlign = ContentAlignment.MiddleCenter;
 			// 
 			// _lJapaneseSample
 			// 
-			this._lJapaneseSample.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this._lJapaneseSample.ClearType = false;
-			this._lJapaneseSample.Location = new System.Drawing.Point(144, 192);
-			this._lJapaneseSample.Name = "_lJapaneseSample";
-			this._lJapaneseSample.Size = new System.Drawing.Size(128, 40);
-			this._lJapaneseSample.TabIndex = 8;
-			this._lJapaneseSample.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			_lJapaneseSample.BorderStyle = BorderStyle.Fixed3D;
+			_lJapaneseSample.ClearType = false;
+			_lJapaneseSample.Location = new Point(144, 192);
+			_lJapaneseSample.Name = "_lJapaneseSample";
+			_lJapaneseSample.Size = new Size(128, 40);
+			_lJapaneseSample.TabIndex = 8;
+			_lJapaneseSample.TextAlign = ContentAlignment.MiddleCenter;
 			// 
 			// _okButton
 			// 
-			this._okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this._okButton.Location = new System.Drawing.Point(112, 236);
-			this._okButton.Name = "_okButton";
-			this._okButton.FlatStyle = FlatStyle.System;
-			this._okButton.TabIndex = 9;
-			this._okButton.Click += new System.EventHandler(this.OnOK);
+			_okButton.DialogResult = DialogResult.OK;
+			_okButton.Location = new Point(112, 236);
+			_okButton.Name = "_okButton";
+			_okButton.FlatStyle = FlatStyle.System;
+			_okButton.TabIndex = 9;
+			_okButton.Click += new EventHandler(OnOK);
 			// 
 			// _cancelButton
 			// 
-			this._cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this._cancelButton.Location = new System.Drawing.Point(200, 236);
-			this._cancelButton.Name = "_cancelButton";
-			this._cancelButton.FlatStyle = FlatStyle.System;
-			this._cancelButton.TabIndex = 10;
-			this._cancelButton.Click += new System.EventHandler(this.OnCancel);
+			_cancelButton.DialogResult = DialogResult.Cancel;
+			_cancelButton.Location = new Point(200, 236);
+			_cancelButton.Name = "_cancelButton";
+			_cancelButton.FlatStyle = FlatStyle.System;
+			_cancelButton.TabIndex = 10;
+			_cancelButton.Click += new EventHandler(OnCancel);
 			// 
 			// GFontDialog
 			// 
-			this.AcceptButton = this._okButton;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 12);
-			this.CancelButton = this._cancelButton;
-			this.ClientSize = new System.Drawing.Size(282, 271);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this._cancelButton,
-																		  this._okButton,
-																		  this._lJapaneseSample,
-																		  this._lASCIISample,
-																		  this._japaneseFontList,
-																		  this._lJapaneseFont,
-																		  this._checkClearType,
-																		  this._fontSizeList,
-																		  this._lFontSize,
-																		  this._lAsciiFont,
-																		  this._asciiFontList});
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "GFontDialog";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.ResumeLayout(false);
+			AcceptButton = _okButton;
+			AutoScaleBaseSize = new Size(5, 12);
+			CancelButton = _cancelButton;
+			ClientSize = new Size(282, 271);
+			Controls.AddRange(new Control[] {
+																		  _cancelButton,
+																		  _okButton,
+																		  _lJapaneseSample,
+																		  _lASCIISample,
+																		  _japaneseFontList,
+																		  _lJapaneseFont,
+																		  _checkClearType,
+																		  _fontSizeList,
+																		  _lFontSize,
+																		  _lAsciiFont,
+																		  _asciiFontList});
+			FormBorderStyle = FormBorderStyle.FixedDialog;
+			MaximizeBox = false;
+			MinimizeBox = false;
+			Name = "GFontDialog";
+			ShowInTaskbar = false;
+			StartPosition = FormStartPosition.CenterParent;
+			ResumeLayout(false);
 
 		}
 		#endregion
@@ -361,9 +361,9 @@ namespace Poderosa.Forms {
 		}
 		private void OnOK(object sender, EventArgs args) {
 			if(!CheckFixedSizeFont("FixedSys", 14) || !CheckFixedSizeFont("Terminal", 6,10,14,17,20))
-				this.DialogResult = DialogResult.None;
+				DialogResult = DialogResult.None;
 			else {
-				this.DialogResult = DialogResult.OK;
+				DialogResult = DialogResult.OK;
 				try {
 					Close();
 				}
@@ -374,7 +374,7 @@ namespace Poderosa.Forms {
 			}
 		}
 		private void OnCancel(object sender, EventArgs args) {
-			this.DialogResult = DialogResult.Cancel;
+			DialogResult = DialogResult.Cancel;
 			Close();
 		}
 
@@ -400,7 +400,7 @@ namespace Poderosa.Forms {
 				}
 
 				if(!contained) {
-					GUtil.Warning(this, String.Format(GApp.Strings.GetString("Message.GFontDialog.NotTrueTypeWarning"), name, nearest));
+					GUtil.Warning(this, String.Format("Message.GFontDialog.NotTrueTypeWarning", name, nearest));
 					_fontSizeList.SelectedIndex = _fontSizeList.FindStringExact(nearest.ToString());
 					return false;
 				}

@@ -7,21 +7,17 @@
  $Id: SSH2Connection.cs,v 1.2 2005/04/20 08:58:56 okajima Exp $
 */
 using System;
-using System.Collections;
-using System.IO;
 using System.Threading;
 using System.Diagnostics;
-using System.Net.Sockets;
 using System.Text;
 using System.Security.Cryptography;
 
 using Granados.PKI;
 using Granados.SSHC;
-using Granados.Toolkit;
 
 namespace Granados.SSHCV2
 {
-	public sealed class SSH2Connection : SSHConnection {
+    public sealed class SSH2Connection : SSHConnection {
 	
 		//packet count for transmission and reception
 		private int _tSequence;
@@ -38,11 +34,13 @@ namespace Granados.SSHCV2
 		private KeyExchanger _asyncKeyExchanger;
 
 		public SSH2Connection(SSHConnectionParameter param, ISSHConnectionEventReceiver r, string serverversion, string clientversion) : base(param, r) {
-			_cInfo = new SSH2ConnectionInfo();
-			_cInfo._serverVersionString = serverversion;
-			_cInfo._clientVersionString = clientversion;
-			
-			_packetBuilder = new SSH2PacketBuilder(new SynchronizedSSH2PacketHandler());
+            _cInfo = new SSH2ConnectionInfo
+            {
+                _serverVersionString = serverversion,
+                _clientVersionString = clientversion
+            };
+
+            _packetBuilder = new SSH2PacketBuilder(new SynchronizedSSH2PacketHandler());
 		}
 		internal override IByteArrayHandler PacketBuilder {
 			get {
@@ -201,7 +199,7 @@ namespace Granados.SSHCV2
 			SSH2DataWriter wr = new SSH2DataWriter();
 			wr.WritePacketType(PacketType.SSH_MSG_CHANNEL_OPEN);
 			wr.Write("session");
-			int local_channel = this.RegisterChannelEventReceiver(null, receiver)._localID;
+			int local_channel = RegisterChannelEventReceiver(null, receiver)._localID;
 
 			wr.Write(local_channel);
 			wr.Write(_param.WindowSize); //initial window size

@@ -4,17 +4,14 @@
 */
 using System;
 using System.Text;
-using System.Diagnostics;
-using System.Collections;
 using System.ComponentModel;
-using System.Drawing;
 using System.Windows.Forms;
 
 using Poderosa.UI;
 
 namespace Poderosa.Forms
 {
-	/*
+    /*
 	 * ホットキーコントロール暫定版
 	 * 
 	 * キーを次の４種類に区別する。
@@ -34,15 +31,15 @@ namespace Poderosa.Forms
 	*/
 
 
-	/// <summary>
-	/// HotKey の概要の説明です。
-	/// </summary>
-	internal class HotKey : System.Windows.Forms.TextBox
-	{
+    /// <summary>
+    /// HotKey の概要の説明です。
+    /// </summary>
+    internal class HotKey : TextBox
+    {
 		/// <summary>
 		/// 必要なデザイナ変数です。
 		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 
 		private TextBox _debugTextBox;
 
@@ -98,8 +95,8 @@ namespace Poderosa.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			components = new System.ComponentModel.Container();
-			this.ImeMode = ImeMode.Disable;
+			components = new Container();
+			ImeMode = ImeMode.Disable;
 		}
 		#endregion
 
@@ -113,14 +110,14 @@ namespace Poderosa.Forms
 			Keys body = _key & Keys.KeyCode;
 			if(body==Keys.Menu || body==Keys.ShiftKey || body==Keys.ControlKey) { //modifierのみは認めない
 				_key = Keys.None;
-				this.Text = "";
+				Text = "";
 			}
 		}
 		protected override bool ProcessDialogKey(Keys key) {
 			if(_debugTextBox!=null) AppendDebugText(key.ToString()+" "+(int)key);
 			string t = FormatKey(key);
 			if(t!=null) {
-				this.Text = t;
+				Text = t;
 			}
 			else
 				_key = Keys.None;

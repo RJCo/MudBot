@@ -18,26 +18,26 @@ namespace Poderosa.Forms
 	/// <summary>
 	/// MacroList の概要の説明です。
 	/// </summary>
-	internal class MacroList : System.Windows.Forms.Form, IMacroEventListener
+	internal class MacroList : Form, IMacroEventListener
 	{
-		private System.Windows.Forms.Button _runButton;
-		private System.Windows.Forms.Button _stopButton;
-		private System.Windows.Forms.Button _propButton;
-		private System.Windows.Forms.Button _addButton;
-		private System.Windows.Forms.Button _deleteButton;
-		private System.Windows.Forms.ListView _list;
-		private System.Windows.Forms.ColumnHeader _titleHeader;
-		private System.Windows.Forms.ColumnHeader _pathHeader;
-		private System.Windows.Forms.ColumnHeader _shortCutHeader;
-		private System.Windows.Forms.ColumnHeader _infoHeader;
-		private System.Windows.Forms.Button _environmentButton;
-		private System.Windows.Forms.Button _okButton;
-		private System.Windows.Forms.Button _downButton;
-		private System.Windows.Forms.Button _upButton;
+		private Button _runButton;
+		private Button _stopButton;
+		private Button _propButton;
+		private Button _addButton;
+		private Button _deleteButton;
+		private ListView _list;
+		private ColumnHeader _titleHeader;
+		private ColumnHeader _pathHeader;
+		private ColumnHeader _shortCutHeader;
+		private ColumnHeader _infoHeader;
+		private Button _environmentButton;
+		private Button _okButton;
+		private Button _downButton;
+		private Button _upButton;
 		/// <summary>
 		/// 必要なデザイナ変数です。
 		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 
 		//通常はキーバインドはindexベースで関連づけられているが、マクロの設定時にはこれはちょっと面倒なのでこのフォームの中で別途管理する
 		private Hashtable _keyToModule;
@@ -53,20 +53,20 @@ namespace Poderosa.Forms
 			//
 			InitializeComponent();
 
-			this._titleHeader.Text = GApp.Strings.GetString("Form.MacroList._titleHeader");
-			this._pathHeader.Text = GApp.Strings.GetString("Form.MacroList._pathHeader");
-			this._shortCutHeader.Text = GApp.Strings.GetString("Form.MacroList._shortCutHeader");
-			this._infoHeader.Text = GApp.Strings.GetString("Form.MacroList._infoHeader");
-			this._runButton.Text = GApp.Strings.GetString("Form.MacroList._runButton");
-			this._stopButton.Text = GApp.Strings.GetString("Form.MacroList._stopButton");
-			this._propButton.Text = GApp.Strings.GetString("Form.MacroList._propButton");
-			this._downButton.Text = GApp.Strings.GetString("Form.MacroList._downButton");
-			this._upButton.Text = GApp.Strings.GetString("Form.MacroList._upButton");
-			this._addButton.Text = GApp.Strings.GetString("Form.MacroList._addButton");
-			this._deleteButton.Text = GApp.Strings.GetString("Form.MacroList._deleteButton");
-			this._environmentButton.Text = GApp.Strings.GetString("Form.MacroList._environmentButton");
-			this._okButton.Text = GApp.Strings.GetString("Common.OK");
-			this.Text = GApp.Strings.GetString("Form.MacroList.Text");
+			_titleHeader.Text = "Form.MacroList._titleHeader";
+			_pathHeader.Text = "Form.MacroList._pathHeader";
+			_shortCutHeader.Text = "Form.MacroList._shortCutHeader";
+			_infoHeader.Text = "Form.MacroList._infoHeader";
+			_runButton.Text = "Form.MacroList._runButton";
+			_stopButton.Text = "Form.MacroList._stopButton";
+			_propButton.Text = "Form.MacroList._propButton";
+			_downButton.Text = "Form.MacroList._downButton";
+			_upButton.Text = "Form.MacroList._upButton";
+			_addButton.Text = "Form.MacroList._addButton";
+			_deleteButton.Text = "Form.MacroList._deleteButton";
+			_environmentButton.Text = "Form.MacroList._environmentButton";
+			_okButton.Text = "OK";
+			Text = "Form.MacroList.Text";
 
 			//
 			// TODO: InitializeComponent 呼び出しの後に、コンストラクタ コードを追加してください。
@@ -112,158 +112,158 @@ namespace Poderosa.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this._list = new System.Windows.Forms.ListView();
-			this._titleHeader = new System.Windows.Forms.ColumnHeader();
-			this._pathHeader = new System.Windows.Forms.ColumnHeader();
-			this._shortCutHeader = new System.Windows.Forms.ColumnHeader();
-			this._infoHeader = new System.Windows.Forms.ColumnHeader();
-			this._runButton = new System.Windows.Forms.Button();
-			this._stopButton = new System.Windows.Forms.Button();
-			this._propButton = new System.Windows.Forms.Button();
-			this._downButton = new System.Windows.Forms.Button();
-			this._upButton = new System.Windows.Forms.Button();
-			this._addButton = new System.Windows.Forms.Button();
-			this._deleteButton = new System.Windows.Forms.Button();
-			this._environmentButton = new System.Windows.Forms.Button();
-			this._okButton = new System.Windows.Forms.Button();
-			this.SuspendLayout();
+			_list = new ListView();
+			_titleHeader = new ColumnHeader();
+			_pathHeader = new ColumnHeader();
+			_shortCutHeader = new ColumnHeader();
+			_infoHeader = new ColumnHeader();
+			_runButton = new Button();
+			_stopButton = new Button();
+			_propButton = new Button();
+			_downButton = new Button();
+			_upButton = new Button();
+			_addButton = new Button();
+			_deleteButton = new Button();
+			_environmentButton = new Button();
+			_okButton = new Button();
+			SuspendLayout();
 			// 
 			// _list
 			// 
-			this._list.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																					this._titleHeader,
-																					this._pathHeader,
-																					this._shortCutHeader,
-																					this._infoHeader});
-			this._list.FullRowSelect = true;
-			this._list.GridLines = true;
-			this._list.MultiSelect = false;
-			this._list.Name = "_list";
-			this._list.Size = new System.Drawing.Size(408, 280);
-			this._list.TabIndex = 0;
-			this._list.View = System.Windows.Forms.View.Details;
-			this._list.DoubleClick += new System.EventHandler(this.OnListDoubleClicked);
-			this._list.SelectedIndexChanged += new System.EventHandler(this.OnSelectedIndexChanged);
+			_list.Columns.AddRange(new ColumnHeader[] {
+																					_titleHeader,
+																					_pathHeader,
+																					_shortCutHeader,
+																					_infoHeader});
+			_list.FullRowSelect = true;
+			_list.GridLines = true;
+			_list.MultiSelect = false;
+			_list.Name = "_list";
+			_list.Size = new Size(408, 280);
+			_list.TabIndex = 0;
+			_list.View = View.Details;
+			_list.DoubleClick += new EventHandler(OnListDoubleClicked);
+			_list.SelectedIndexChanged += new EventHandler(OnSelectedIndexChanged);
 			// 
 			// _titleHeader
 			// 
-			this._titleHeader.Width = 90;
+			_titleHeader.Width = 90;
 			// 
 			// _pathHeader
 			// 
-			this._pathHeader.Width = 160;
+			_pathHeader.Width = 160;
 			// 
 			// _shortCutHeader
 			// 
-			this._shortCutHeader.Width = 80;
+			_shortCutHeader.Width = 80;
 			// 
 			// _infoHeader
 			// 
 			// 
 			// _runButton
 			// 
-			this._runButton.Location = new System.Drawing.Point(416, 8);
-			this._runButton.Name = "_runButton";
-			this._runButton.FlatStyle = FlatStyle.System;
-			this._runButton.Size = new System.Drawing.Size(88, 23);
-			this._runButton.TabIndex = 1;
-			this._runButton.Click += new System.EventHandler(this.OnRunButtonClicked);
+			_runButton.Location = new Point(416, 8);
+			_runButton.Name = "_runButton";
+			_runButton.FlatStyle = FlatStyle.System;
+			_runButton.Size = new Size(88, 23);
+			_runButton.TabIndex = 1;
+			_runButton.Click += new EventHandler(OnRunButtonClicked);
 			// 
 			// _stopButton
 			// 
-			this._stopButton.Location = new System.Drawing.Point(416, 40);
-			this._stopButton.Name = "_stopButton";
-			this._stopButton.FlatStyle = FlatStyle.System;
-			this._stopButton.Size = new System.Drawing.Size(88, 23);
-			this._stopButton.TabIndex = 2;
-			this._stopButton.Click += new System.EventHandler(this.OnStopButtonClicked);
+			_stopButton.Location = new Point(416, 40);
+			_stopButton.Name = "_stopButton";
+			_stopButton.FlatStyle = FlatStyle.System;
+			_stopButton.Size = new Size(88, 23);
+			_stopButton.TabIndex = 2;
+			_stopButton.Click += new EventHandler(OnStopButtonClicked);
 			// 
 			// _propButton
 			// 
-			this._propButton.Location = new System.Drawing.Point(416, 72);
-			this._propButton.Name = "_propButton";
-			this._propButton.FlatStyle = FlatStyle.System;
-			this._propButton.Size = new System.Drawing.Size(88, 23);
-			this._propButton.TabIndex = 3;
-			this._propButton.Click += new System.EventHandler(this.OnPropButtonClicked);
+			_propButton.Location = new Point(416, 72);
+			_propButton.Name = "_propButton";
+			_propButton.FlatStyle = FlatStyle.System;
+			_propButton.Size = new Size(88, 23);
+			_propButton.TabIndex = 3;
+			_propButton.Click += new EventHandler(OnPropButtonClicked);
 			// 
 			// _downButton
 			// 
-			this._downButton.Location = new System.Drawing.Point(416, 104);
-			this._downButton.Name = "_downButton";
-			this._downButton.FlatStyle = FlatStyle.System;
-			this._downButton.Size = new System.Drawing.Size(40, 23);
-			this._downButton.TabIndex = 4;
-			this._downButton.Click += new EventHandler(OnDownButtonClicked);
+			_downButton.Location = new Point(416, 104);
+			_downButton.Name = "_downButton";
+			_downButton.FlatStyle = FlatStyle.System;
+			_downButton.Size = new Size(40, 23);
+			_downButton.TabIndex = 4;
+			_downButton.Click += new EventHandler(OnDownButtonClicked);
 			// 
 			// _upButton
 			// 
-			this._upButton.Location = new System.Drawing.Point(464, 104);
-			this._upButton.Name = "_upButton";
-			this._upButton.FlatStyle = FlatStyle.System;
-			this._upButton.Size = new System.Drawing.Size(40, 23);
-			this._upButton.TabIndex = 5;
-			this._upButton.Click += new EventHandler(OnUpButtonClicked);
+			_upButton.Location = new Point(464, 104);
+			_upButton.Name = "_upButton";
+			_upButton.FlatStyle = FlatStyle.System;
+			_upButton.Size = new Size(40, 23);
+			_upButton.TabIndex = 5;
+			_upButton.Click += new EventHandler(OnUpButtonClicked);
 			// 
 			// _addButton
 			// 
-			this._addButton.Location = new System.Drawing.Point(416, 152);
-			this._addButton.Name = "_addButton";
-			this._addButton.FlatStyle = FlatStyle.System;
-			this._addButton.Size = new System.Drawing.Size(88, 23);
-			this._addButton.TabIndex = 6;
-			this._addButton.Click += new System.EventHandler(this.OnAddButtonClicked);
+			_addButton.Location = new Point(416, 152);
+			_addButton.Name = "_addButton";
+			_addButton.FlatStyle = FlatStyle.System;
+			_addButton.Size = new Size(88, 23);
+			_addButton.TabIndex = 6;
+			_addButton.Click += new EventHandler(OnAddButtonClicked);
 			// 
 			// _deleteButton
 			// 
-			this._deleteButton.Location = new System.Drawing.Point(416, 184);
-			this._deleteButton.Name = "_deleteButton";
-			this._deleteButton.FlatStyle = FlatStyle.System;
-			this._deleteButton.Size = new System.Drawing.Size(88, 23);
-			this._deleteButton.TabIndex = 7;
-			this._deleteButton.Click += new System.EventHandler(this.OnDeleteButtonClicked);
+			_deleteButton.Location = new Point(416, 184);
+			_deleteButton.Name = "_deleteButton";
+			_deleteButton.FlatStyle = FlatStyle.System;
+			_deleteButton.Size = new Size(88, 23);
+			_deleteButton.TabIndex = 7;
+			_deleteButton.Click += new EventHandler(OnDeleteButtonClicked);
 			// 
 			// _environmentButton
 			// 
-			this._environmentButton.Location = new System.Drawing.Point(416, 216);
-			this._environmentButton.Name = "_environmentButton";
-			this._environmentButton.FlatStyle = FlatStyle.System;
-			this._environmentButton.Size = new System.Drawing.Size(88, 23);
-			this._environmentButton.TabIndex = 8;
-			this._environmentButton.Click += new System.EventHandler(this.OnEnvironmentButtonClicked);
+			_environmentButton.Location = new Point(416, 216);
+			_environmentButton.Name = "_environmentButton";
+			_environmentButton.FlatStyle = FlatStyle.System;
+			_environmentButton.Size = new Size(88, 23);
+			_environmentButton.TabIndex = 8;
+			_environmentButton.Click += new EventHandler(OnEnvironmentButtonClicked);
 			// 
 			// _okButton
 			// 
-			this._okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this._okButton.Location = new System.Drawing.Point(416, 248);
-			this._okButton.Name = "_okButton";
-			this._okButton.FlatStyle = FlatStyle.System;
-			this._okButton.Size = new System.Drawing.Size(88, 23);
-			this._okButton.TabIndex = 9;
+			_okButton.DialogResult = DialogResult.Cancel;
+			_okButton.Location = new Point(416, 248);
+			_okButton.Name = "_okButton";
+			_okButton.FlatStyle = FlatStyle.System;
+			_okButton.Size = new Size(88, 23);
+			_okButton.TabIndex = 9;
 			// 
 			// MacroList
 			// 
-			this.AcceptButton = this._okButton;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 12);
-			this.ClientSize = new System.Drawing.Size(506, 279);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this._upButton,
-																		  this._downButton,
-																		  this._environmentButton,
-																		  this._okButton,
-																		  this._deleteButton,
-																		  this._addButton,
-																		  this._propButton,
-																		  this._stopButton,
-																		  this._runButton,
-																		  this._list});
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "MacroList";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.ResumeLayout(false);
+			AcceptButton = _okButton;
+			AutoScaleBaseSize = new Size(5, 12);
+			ClientSize = new Size(506, 279);
+			Controls.AddRange(new Control[] {
+																		  _upButton,
+																		  _downButton,
+																		  _environmentButton,
+																		  _okButton,
+																		  _deleteButton,
+																		  _addButton,
+																		  _propButton,
+																		  _stopButton,
+																		  _runButton,
+																		  _list});
+			FormBorderStyle = FormBorderStyle.FixedDialog;
+			MaximizeBox = false;
+			MinimizeBox = false;
+			Name = "MacroList";
+			ShowInTaskbar = false;
+			StartPosition = FormStartPosition.CenterParent;
+			ResumeLayout(false);
 
 		}
 		#endregion
@@ -419,7 +419,7 @@ namespace Poderosa.Forms
 		}
 
 		private string GetInfoString(MacroModule mod) {
-			return mod.DebugMode? GApp.Strings.GetString("Caption.MacroList.Trace") : ""; //とりあえずはデバッグかどうかだけ
+			return mod.DebugMode? "Caption.MacroList.Trace" : ""; //とりあえずはデバッグかどうかだけ
 		}
 
 	}

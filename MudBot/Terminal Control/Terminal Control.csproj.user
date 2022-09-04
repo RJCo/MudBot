@@ -10,4 +10,153 @@
     <FallbackCulture>en-US</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="ChangeLogDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="ChangePassphrase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CommandOptionPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Common\ColorButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Common\ColorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Common\GButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Common\GMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="ConnectionOptionPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Credits.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CygwinLoginDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="DisplayOptionPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="EditDisplayDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="EditEnvVariable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="EditEscapeSequenceColor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="EditRenderProfile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="EnvVariable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="GDialogBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="GenericOptionPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="GFontDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="GFrame.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="HotKey.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="IconList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="InputBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="KeyGenWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="LineFeedStyleDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="LoginDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="LogNoteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MacroList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MacroTrace.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="ModuleProperty.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MultiPaneControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="OptionDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="PeripheralOptionPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="SendingLargeText.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="SerialConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="SerialLoginDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="ServerInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="SSHOptionPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="SSHShortcutLoginDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="TabBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="TerminalControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="TerminalOptionPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Terminal\TerminalPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Terminal\WarningWithDisableOption.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="ThreeButtonMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="WelcomeDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="XModemDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

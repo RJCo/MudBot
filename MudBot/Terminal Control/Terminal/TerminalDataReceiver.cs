@@ -4,23 +4,19 @@
 */
 using System;
 using System.Diagnostics;
-using System.Threading;
-using System.Text;
 using System.Windows.Forms;
 
 using Poderosa.Connection;
-using Poderosa.Config;
-using Poderosa.Forms;
 using Poderosa.Communication;
 using Poderosa.Text;
 using Poderosa.Log;
 
 namespace Poderosa.Terminal
 {
-	/// <summary>
-	/// TerminalDataReceiver の概要の説明です。
-	/// </summary>
-	public class TerminalDataReceiver : IDataReceiver {
+    /// <summary>
+    /// TerminalDataReceiver の概要の説明です。
+    /// </summary>
+    public class TerminalDataReceiver : IDataReceiver {
 		private ConnectionTag _tag;
 		//受信スレッドでこれらの値を設定し、次のOnPaint等メインスレッドでの実行でCommitする
 		private bool _transientScrollBarDirty; //これが立っていると要設定
@@ -154,7 +150,7 @@ namespace Poderosa.Terminal
 
 			Debug.WriteLine("Closed="+_tag.Connection.IsClosed);
 			if(!_tag.Connection.IsClosed) { //閉じる指令を出した後のエラーは表示しない
-				GEnv.InterThreadUIService.Warning(String.Format(GEnv.Strings.GetString("Message.TerminalDataReceiver.GenericError"),_tag.Connection.Param.ShortDescription, msg));
+				GEnv.InterThreadUIService.Warning(String.Format("Message.TerminalDataReceiver.GenericError",_tag.Connection.Param.ShortDescription, msg));
 				try {
 					_tag.Connection.Close();
 				}

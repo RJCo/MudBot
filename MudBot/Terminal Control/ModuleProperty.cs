@@ -5,7 +5,6 @@
 using System;
 using System.IO;
 using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
@@ -14,24 +13,24 @@ using Poderosa.MacroEnv;
 
 namespace Poderosa.Forms
 {
-	/// <summary>
-	/// ModuleProperty の概要の説明です。
-	/// </summary>
-	internal class ModuleProperty : System.Windows.Forms.Form
-	{
-		private System.Windows.Forms.Label _titleLabel;
+    /// <summary>
+    /// ModuleProperty の概要の説明です。
+    /// </summary>
+    internal class ModuleProperty : Form
+    {
+		private Label _titleLabel;
 		private TextBox _title;
-		private System.Windows.Forms.Label _pathLabel;
+		private Label _pathLabel;
 		private TextBox _path;
-		private System.Windows.Forms.Button _selectFileButton;
-		private System.Windows.Forms.Label _additionalAssemblyLabel;
+		private Button _selectFileButton;
+		private Label _additionalAssemblyLabel;
 		private TextBox _additionalAssembly;
-		private System.Windows.Forms.Label _shortcutLabel;
+		private Label _shortcutLabel;
 		private HotKey _shortcut;
-		private System.Windows.Forms.CheckBox _debugOption;
+		private CheckBox _debugOption;
 
-		private System.Windows.Forms.Button _okButton;
-		private System.Windows.Forms.Button _cancelButton;
+		private Button _okButton;
+		private Button _cancelButton;
 		
 		//編集対象のMacroModule 新規作成時はnull
 		private MacroList _parent;
@@ -52,7 +51,7 @@ namespace Poderosa.Forms
 		/// <summary>
 		/// 必要なデザイナ変数です。
 		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 
 		public ModuleProperty(MacroList p, MacroModule mod, Keys shortcut) {
 			_parent = p;
@@ -63,14 +62,14 @@ namespace Poderosa.Forms
 			//
 			InitializeComponent();
 
-			this._titleLabel.Text = GApp.Strings.GetString("Form.ModuleProperty._titleLabel");
-			this._pathLabel.Text = GApp.Strings.GetString("Form.ModuleProperty._pathLabel");
-			this._additionalAssemblyLabel.Text = GApp.Strings.GetString("Form.ModuleProperty._additionalAssemblyLabel");
-			this._shortcutLabel.Text = GApp.Strings.GetString("Form.ModuleProperty._shortcutLabel");
-			this._debugOption.Text = GApp.Strings.GetString("Form.ModuleProperty._debugOption");
-			this._okButton.Text = GApp.Strings.GetString("Common.OK");
-			this._cancelButton.Text = GApp.Strings.GetString("Common.Cancel");
-			this.Text = GApp.Strings.GetString("Form.ModuleProperty.Text");
+			_titleLabel.Text = "Form.ModuleProperty._titleLabel";
+			_pathLabel.Text = "Form.ModuleProperty._pathLabel";
+			_additionalAssemblyLabel.Text = "Form.ModuleProperty._additionalAssemblyLabel";
+			_shortcutLabel.Text = "Form.ModuleProperty._shortcutLabel";
+			_debugOption.Text = "Form.ModuleProperty._debugOption";
+			_okButton.Text = "OK";
+			_cancelButton.Text = "Cancel";
+			Text = "Form.ModuleProperty.Text";
 
 			if(mod!=null) {
 				_title.Text = _module.Title;
@@ -103,175 +102,177 @@ namespace Poderosa.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this._titleLabel = new System.Windows.Forms.Label();
-			this._title = new TextBox();
-			this._pathLabel = new System.Windows.Forms.Label();
-			this._path = new TextBox();
-			this._selectFileButton = new System.Windows.Forms.Button();
-			this._additionalAssemblyLabel = new System.Windows.Forms.Label();
-			this._additionalAssembly = new TextBox();
-			this._shortcutLabel = new System.Windows.Forms.Label();
-			this._shortcut = new Poderosa.Forms.HotKey();
-			this._debugOption = new System.Windows.Forms.CheckBox();
-			this._okButton = new System.Windows.Forms.Button();
-			this._cancelButton = new System.Windows.Forms.Button();
-			this.SuspendLayout();
+			_titleLabel = new Label();
+			_title = new TextBox();
+			_pathLabel = new Label();
+			_path = new TextBox();
+			_selectFileButton = new Button();
+			_additionalAssemblyLabel = new Label();
+			_additionalAssembly = new TextBox();
+			_shortcutLabel = new Label();
+			_shortcut = new HotKey();
+			_debugOption = new CheckBox();
+			_okButton = new Button();
+			_cancelButton = new Button();
+			SuspendLayout();
 			// 
 			// _titleLabel
 			// 
-			this._titleLabel.Location = new System.Drawing.Point(8, 8);
-			this._titleLabel.Name = "_titleLabel";
-			this._titleLabel.TabIndex = 0;
-			this._titleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_titleLabel.Location = new Point(8, 8);
+			_titleLabel.Name = "_titleLabel";
+			_titleLabel.TabIndex = 0;
+			_titleLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _title
 			// 
-			this._title.Location = new System.Drawing.Point(120, 8);
-			this._title.Name = "_title";
-			this._title.Size = new System.Drawing.Size(200, 19);
-			this._title.TabIndex = 1;
-			this._title.Text = "";
+			_title.Location = new Point(120, 8);
+			_title.Name = "_title";
+			_title.Size = new Size(200, 19);
+			_title.TabIndex = 1;
+			_title.Text = "";
 			// 
 			// _pathLabel
 			// 
-			this._pathLabel.Location = new System.Drawing.Point(8, 32);
-			this._pathLabel.Name = "_pathLabel";
-			this._pathLabel.TabIndex = 2;
-			this._pathLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_pathLabel.Location = new Point(8, 32);
+			_pathLabel.Name = "_pathLabel";
+			_pathLabel.TabIndex = 2;
+			_pathLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _path
 			// 
-			this._path.Location = new System.Drawing.Point(120, 32);
-			this._path.Name = "_path";
-			this._path.Size = new System.Drawing.Size(181, 19);
-			this._path.TabIndex = 3;
-			this._path.Text = "";
+			_path.Location = new Point(120, 32);
+			_path.Name = "_path";
+			_path.Size = new Size(181, 19);
+			_path.TabIndex = 3;
+			_path.Text = "";
 			// 
 			// _selectFileButton
 			// 
-			this._selectFileButton.Location = new System.Drawing.Point(301, 32);
-			this._selectFileButton.Name = "_selectFileButton";
-			this._selectFileButton.FlatStyle = FlatStyle.System;
-			this._selectFileButton.Size = new System.Drawing.Size(19, 19);
-			this._selectFileButton.TabIndex = 4;
-			this._selectFileButton.Text = "...";
-			this._selectFileButton.Click += new System.EventHandler(this.OnSelectFile);
+			_selectFileButton.Location = new Point(301, 32);
+			_selectFileButton.Name = "_selectFileButton";
+			_selectFileButton.FlatStyle = FlatStyle.System;
+			_selectFileButton.Size = new Size(19, 19);
+			_selectFileButton.TabIndex = 4;
+			_selectFileButton.Text = "...";
+			_selectFileButton.Click += new EventHandler(OnSelectFile);
 			// 
 			// _additionalAssemblyLabel
 			// 
-			this._additionalAssemblyLabel.Location = new System.Drawing.Point(8, 56);
-			this._additionalAssemblyLabel.Name = "_additionalAssemblyLabel";
-			this._additionalAssemblyLabel.Size = new System.Drawing.Size(100, 32);
-			this._additionalAssemblyLabel.TabIndex = 5;
-			this._additionalAssemblyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_additionalAssemblyLabel.Location = new Point(8, 56);
+			_additionalAssemblyLabel.Name = "_additionalAssemblyLabel";
+			_additionalAssemblyLabel.Size = new Size(100, 32);
+			_additionalAssemblyLabel.TabIndex = 5;
+			_additionalAssemblyLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _additionalAssembly
 			// 
-			this._additionalAssembly.Location = new System.Drawing.Point(120, 64);
-			this._additionalAssembly.Name = "_additionalAssembly";
-			this._additionalAssembly.Size = new System.Drawing.Size(200, 19);
-			this._additionalAssembly.TabIndex = 6;
-			this._additionalAssembly.Text = "";
+			_additionalAssembly.Location = new Point(120, 64);
+			_additionalAssembly.Name = "_additionalAssembly";
+			_additionalAssembly.Size = new Size(200, 19);
+			_additionalAssembly.TabIndex = 6;
+			_additionalAssembly.Text = "";
 			// 
 			// _shortcutLabel
 			// 
-			this._shortcutLabel.Location = new System.Drawing.Point(8, 88);
-			this._shortcutLabel.Name = "_shortcutLabel";
-			this._shortcutLabel.TabIndex = 7;
-			this._shortcutLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_shortcutLabel.Location = new Point(8, 88);
+			_shortcutLabel.Name = "_shortcutLabel";
+			_shortcutLabel.TabIndex = 7;
+			_shortcutLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _shortcut
 			// 
-			this._shortcut.DebugTextBox = null;
-			this._shortcut.ImeMode = System.Windows.Forms.ImeMode.Disable;
-			this._shortcut.Key = System.Windows.Forms.Keys.None;
-			this._shortcut.Location = new System.Drawing.Point(120, 88);
-			this._shortcut.Name = "_shortcut";
-			this._shortcut.Size = new System.Drawing.Size(80, 19);
-			this._shortcut.TabIndex = 8;
-			this._shortcut.Text = "";
+			_shortcut.DebugTextBox = null;
+			_shortcut.ImeMode = ImeMode.Disable;
+			_shortcut.Key = Keys.None;
+			_shortcut.Location = new Point(120, 88);
+			_shortcut.Name = "_shortcut";
+			_shortcut.Size = new Size(80, 19);
+			_shortcut.TabIndex = 8;
+			_shortcut.Text = "";
 			// 
 			// _debugOption
 			// 
-			this._debugOption.Location = new System.Drawing.Point(8, 112);
-			this._debugOption.Name = "_debugOption";
-			this._debugOption.FlatStyle = FlatStyle.System;
-			this._debugOption.Size = new System.Drawing.Size(296, 24);
-			this._debugOption.TabIndex = 9;
+			_debugOption.Location = new Point(8, 112);
+			_debugOption.Name = "_debugOption";
+			_debugOption.FlatStyle = FlatStyle.System;
+			_debugOption.Size = new Size(296, 24);
+			_debugOption.TabIndex = 9;
 			// 
 			// _okButton
 			// 
-			this._okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this._okButton.Location = new System.Drawing.Point(168, 136);
-			this._okButton.Name = "_okButton";
-			this._okButton.FlatStyle = FlatStyle.System;
-			this._okButton.TabIndex = 10;
-			this._okButton.Click += new System.EventHandler(this.OnOK);
+			_okButton.DialogResult = DialogResult.OK;
+			_okButton.Location = new Point(168, 136);
+			_okButton.Name = "_okButton";
+			_okButton.FlatStyle = FlatStyle.System;
+			_okButton.TabIndex = 10;
+			_okButton.Click += new EventHandler(OnOK);
 			// 
 			// _cancelButton
 			// 
-			this._cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this._cancelButton.Location = new System.Drawing.Point(248, 136);
-			this._cancelButton.Name = "_cancelButton";
-			this._cancelButton.FlatStyle = FlatStyle.System;
-			this._cancelButton.TabIndex = 11;
+			_cancelButton.DialogResult = DialogResult.Cancel;
+			_cancelButton.Location = new Point(248, 136);
+			_cancelButton.Name = "_cancelButton";
+			_cancelButton.FlatStyle = FlatStyle.System;
+			_cancelButton.TabIndex = 11;
 			// 
 			// ModuleProperty
 			// 
-			this.AcceptButton = this._okButton;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 12);
-			this.CancelButton = this._cancelButton;
-			this.ClientSize = new System.Drawing.Size(330, 167);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this._titleLabel,
-																		  this._title,
-																		  this._pathLabel,
-																		  this._path,
-																		  this._selectFileButton,
-																		  this._additionalAssemblyLabel,
-																		  this._additionalAssembly,
-																		  this._shortcutLabel,
-																		  this._shortcut,
-																		  this._debugOption,
-																		  this._cancelButton,
-																		  this._okButton});
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "ModuleProperty";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.ResumeLayout(false);
+			AcceptButton = _okButton;
+			AutoScaleBaseSize = new Size(5, 12);
+			CancelButton = _cancelButton;
+			ClientSize = new Size(330, 167);
+			Controls.AddRange(new Control[] {
+																		  _titleLabel,
+																		  _title,
+																		  _pathLabel,
+																		  _path,
+																		  _selectFileButton,
+																		  _additionalAssemblyLabel,
+																		  _additionalAssembly,
+																		  _shortcutLabel,
+																		  _shortcut,
+																		  _debugOption,
+																		  _cancelButton,
+																		  _okButton});
+			FormBorderStyle = FormBorderStyle.FixedDialog;
+			MaximizeBox = false;
+			MinimizeBox = false;
+			Name = "ModuleProperty";
+			ShowInTaskbar = false;
+			StartPosition = FormStartPosition.CenterParent;
+			ResumeLayout(false);
 
 		}
 		#endregion
 
 		private void OnSelectFile(object sender, EventArgs args) {
-			OpenFileDialog dlg = new OpenFileDialog();
-			dlg.CheckFileExists = true;
-			dlg.Multiselect = false;
-			dlg.InitialDirectory = GApp.Options.DefaultFileDir;
-			dlg.Title = GApp.Strings.GetString("Caption.ModuleProperty.SelectMacroFile");
-			dlg.Filter = "JScript.NET Files(*.js)|*.js|.NET Executables(*.exe;*.dll)|*.exe;*.dll";
-			if(GCUtil.ShowModalDialog(this, dlg)==DialogResult.OK) {
+            OpenFileDialog dlg = new OpenFileDialog
+            {
+                CheckFileExists = true,
+                Multiselect = false,
+                InitialDirectory = GApp.Options.DefaultFileDir,
+                Title = "Caption.ModuleProperty.SelectMacroFile",
+                Filter = "JScript.NET Files(*.js)|*.js|.NET Executables(*.exe;*.dll)|*.exe;*.dll"
+            };
+            if (GCUtil.ShowModalDialog(this, dlg)==DialogResult.OK) {
 				GApp.Options.DefaultFileDir = GUtil.FileToDir(dlg.FileName);
 				_path.Text = dlg.FileName;
 				if(_title.Text.Length==0)
-					_title.Text = System.IO.Path.GetFileName(dlg.FileName); //ファイル名本体をデフォルトのタイトルにする
+					_title.Text = Path.GetFileName(dlg.FileName); //ファイル名本体をデフォルトのタイトルにする
 			}
 		}
 		private void OnOK(object sender, EventArgs args) {
-			this.DialogResult = DialogResult.None;
+			DialogResult = DialogResult.None;
 			if(!File.Exists(_path.Text)) {
-				GUtil.Warning(this, String.Format(GApp.Strings.GetString("Message.ModuleProperty.FileNotExist"), _path.Text));
+				GUtil.Warning(this, String.Format("Message.ModuleProperty.FileNotExist", _path.Text));
 			}
 			else if(_title.Text.Length>30)
-				GUtil.Warning(this, GApp.Strings.GetString("Message.ModuleProperty.TooLongTitle"));
+				GUtil.Warning(this, "Message.ModuleProperty.TooLongTitle");
 			else {
 				if(_shortcut.Key!=_prevShortCut) {
 					string n = _parent.FindCommandDescription(_shortcut.Key);
 					if(n!=null) {
-						GUtil.Warning(this, String.Format(GApp.Strings.GetString("Message.ModuleProperty.DuplicatedKey"), n));
+						GUtil.Warning(this, String.Format("Message.ModuleProperty.DuplicatedKey", n));
 						return;
 					}
 				}
@@ -280,7 +281,7 @@ namespace Poderosa.Forms
 				_module.Path = _path.Text;
 				_module.DebugMode = _debugOption.Checked;
 				_module.AdditionalAssemblies = ParseAdditionalAssemblies(_additionalAssembly.Text);
-				this.DialogResult = DialogResult.OK;
+				DialogResult = DialogResult.OK;
 			}
 		}
 

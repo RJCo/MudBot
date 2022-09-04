@@ -7,13 +7,12 @@
  * $Id: ColorDialog.cs,v 1.2 2005/04/20 08:45:46 okajima Exp $
  */
 using System;
-using System.Diagnostics;
 using System.Windows.Forms;
 using System.Drawing;
 
 namespace Poderosa.UI
 {
-	internal class ColorPaletteDialog : Form
+    internal class ColorPaletteDialog : Form
 	{
 		private bool _isClosing;
 
@@ -81,7 +80,7 @@ namespace Poderosa.UI
 			Controls.Add(cancelButton);	
 			cancelButton.TabIndex = 0;
 			cancelButton.DialogResult = DialogResult.Cancel;
-			this.CancelButton = cancelButton;
+			CancelButton = cancelButton;
 		}
 		
 		public Color Color
@@ -100,13 +99,15 @@ namespace Poderosa.UI
 			
 			for(int i = 0; i < max; i++)
 			{
-				panel[i] = new Panel();			
-				panel[i].Height = pwidth;
-				panel[i].Width = pheight;			
-				panel[i].Location = new Point(x, y);
-				toolTip.SetToolTip(panel[i], colorName[i]);
+                panel[i] = new Panel
+                {
+                    Height = pwidth,
+                    Width = pheight,
+                    Location = new Point(x, y)
+                };
+                toolTip.SetToolTip(panel[i], colorName[i]);
 						
-				this.Controls.Add(panel[i]);			
+				Controls.Add(panel[i]);			
 				
 				if(x < ( 7 * (pwidth + pdistance)))
 					x += pwidth + pdistance;
@@ -125,12 +126,14 @@ namespace Poderosa.UI
 			}
 		}
 		
-		void moreColorsButton_Click(object sender, System.EventArgs e)
-		{    
-    		ColorDialog colDialog = new ColorDialog();
-    		colDialog.FullOpen = true;
-			this.DialogResult = colDialog.ShowDialog();
-			if(this.DialogResult == DialogResult.OK)    	
+		void moreColorsButton_Click(object sender, EventArgs e)
+		{
+            ColorDialog colDialog = new ColorDialog
+            {
+                FullOpen = true
+            };
+            DialogResult = colDialog.ShowDialog();
+			if(DialogResult == DialogResult.OK)    	
     			selectedColor = colDialog.Color;
     		colDialog.Dispose();
 
@@ -138,7 +141,7 @@ namespace Poderosa.UI
 			Close();
 		}
 	    
-		void cancelButton_Click(object sender, System.EventArgs e)
+		void cancelButton_Click(object sender, EventArgs e)
 		{        	
     		Close();
 		}
@@ -212,7 +215,7 @@ namespace Poderosa.UI
 		protected override void WndProc(ref Message m) {
 			base.WndProc(ref m);
 			if(m.Msg == 0x0086/*WM_NCACTIVATE*/ && m.WParam.ToInt32() == 0 && !_isClosing) {
-				this.DialogResult = DialogResult.Cancel;
+				DialogResult = DialogResult.Cancel;
 				Close();
 			}
 		}

@@ -2,7 +2,6 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: KnownHosts.cs,v 1.2 2005/04/20 08:45:45 okajima Exp $
 */
-using System;
 using System.Collections;
 using System.IO;
 
@@ -11,10 +10,10 @@ using Poderosa.SSH;
 
 namespace Poderosa.Config
 {
-	/// <summary>
-	/// known_hosts‚Ìˆê——‚ğŠÇ—‚·‚éB
-	/// </summary>
-	public abstract class KnownHosts {
+    /// <summary>
+    /// known_hosts‚Ìˆê——‚ğŠÇ—‚·‚éB
+    /// </summary>
+    public abstract class KnownHosts {
 
 		protected string _fileName;
 

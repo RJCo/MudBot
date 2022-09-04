@@ -8,18 +8,17 @@
  * 
  * $Id: StringResource.cs,v 1.2 2005/04/20 09:00:56 okajima Exp $
  */
-using System;
 using System.Globalization;
 using System.Resources;
-using System.Diagnostics;
 using System.Reflection;
 
-namespace Granados.SSHC {
+namespace Granados.SSHC
+{
 
-	/// <summary>
-	/// StringResource の概要の説明です。
-	/// </summary>
-	internal class StringResources {
+    /// <summary>
+    /// StringResource の概要の説明です。
+    /// </summary>
+    internal class StringResources {
 		private string _resourceName;
 		private ResourceManager _resMan;
 

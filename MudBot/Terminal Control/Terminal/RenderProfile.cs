@@ -3,11 +3,7 @@
 * $Id: RenderProfile.cs,v 1.2 2005/04/20 08:45:47 okajima Exp $
 */
 using System;
-using System.IO;
-using System.Collections;
 using System.Drawing;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
 using System.Text;
 using System.Xml;
 
@@ -18,12 +14,13 @@ using Poderosa.Config;
 using Poderosa.Text;
 #endif
 
-namespace Poderosa.Terminal {
-	
-	/// <summary>
-	/// <ja>コンソールの表示方法を指定するオブジェクトです。接続前にTerminalParamのRenderProfileプロパティにセットすることで、マクロから色・フォント・背景画像を指定できます。</ja>
-	/// <en>Implements the parameters for displaying the console. By setting this object to the RenderProfile property of the TerminalParam object, the macro can control colors, fonts, and background images.</en>
-	/// </summary>
+namespace Poderosa.Terminal
+{
+
+    /// <summary>
+    /// <ja>コンソールの表示方法を指定するオブジェクトです。接続前にTerminalParamのRenderProfileプロパティにセットすることで、マクロから色・フォント・背景画像を指定できます。</ja>
+    /// <en>Implements the parameters for displaying the console. By setting this object to the RenderProfile property of the TerminalParam object, the macro can control colors, fonts, and background images.</en>
+    /// </summary>
     [Serializable]
 	public class RenderProfile : ICloneable {
 
@@ -395,7 +392,7 @@ namespace Poderosa.Terminal {
 				return _backgroundImage;
 			}
 			catch(Exception) {
-				GUtil.Warning(GEnv.Frame, String.Format(GEnv.Strings.GetString("Message.RenderProfile.FailedToLoadPicture"), _backgroundImageFileName));
+				GUtil.Warning(GEnv.Frame, String.Format("Message.RenderProfile.FailedToLoadPicture", _backgroundImageFileName));
 				return null;
 			}
 		}

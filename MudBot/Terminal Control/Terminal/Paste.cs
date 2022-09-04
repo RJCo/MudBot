@@ -31,7 +31,7 @@ namespace Poderosa.Terminal
 		}
 		public string Caption {
 			get {
-				return GEnv.Strings.GetString("Caption.ConnectionCommandTarget.DuringPaste");
+				return "Caption.ConnectionCommandTarget.DuringPaste";
 			}
 		}
 		public int LineCount {
@@ -80,7 +80,7 @@ namespace Poderosa.Terminal
 			}
 			catch(Exception ex) {
 				Debug.WriteLine(ex.StackTrace);
-				GEnv.InterThreadUIService.Warning(GEnv.Strings.GetString("Message.ConnectionCommandTarget.SendError") + ex.Message);
+				GEnv.InterThreadUIService.Warning("Message.ConnectionCommandTarget.SendError" + ex.Message);
 			}
 		}
 
@@ -95,7 +95,7 @@ namespace Poderosa.Terminal
 			for(int i=0; i<_data.Count-1; i++) {
 				SendLine((string)_data[i], true);
 				if(_abortFlag) return CommandResult.Cancelled;
-				if(this.LineProcessed!=null) LineProcessed(i);
+				if(LineProcessed!=null) LineProcessed(i);
 			}
 
 			string lastline = (string)_data[_data.Count-1];
@@ -109,7 +109,7 @@ namespace Poderosa.Terminal
 				_tag.ModalTerminalTask = null;
 				RefreshConnection();
 			}
-			if(this.LineProcessed!=null) LineProcessed(-1);
+			if(LineProcessed!=null) LineProcessed(-1);
 			return CommandResult.Success;
 		}
 		private void SendLine(string line, bool appendnl) {

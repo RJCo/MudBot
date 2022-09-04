@@ -6,7 +6,6 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Diagnostics;
@@ -16,11 +15,11 @@ using Granados.SSHCV2;
 
 namespace Poderosa.Forms
 {
-	/// <summary>
-	/// KeyGenWizard の概要の説明です。
-	/// </summary>
-	public class KeyGenWizard : System.Windows.Forms.Form
-	{
+    /// <summary>
+    /// KeyGenWizard の概要の説明です。
+    /// </summary>
+    public class KeyGenWizard : Form
+    {
 		//現在のページ
 		private enum Page {
 			Parameter,
@@ -32,30 +31,30 @@ namespace Poderosa.Forms
 		private KeyGenThread _keyGenThread;
 		private SSH2UserAuthKey _resultKey;
 
-		private System.Windows.Forms.Panel _parameterPanel;
-		private System.Windows.Forms.Button _nextButton;
-		public System.Windows.Forms.Button _cancelButton;
-		private System.Windows.Forms.Label _promptLabel1;
-		private System.Windows.Forms.Label _algorithmLabel;
-		private System.Windows.Forms.Label _bitCountLabel;
+		private Panel _parameterPanel;
+		private Button _nextButton;
+		public Button _cancelButton;
+		private Label _promptLabel1;
+		private Label _algorithmLabel;
+		private Label _bitCountLabel;
 		private ComboBox _algorithmBox;
 		private ComboBox _bitCountBox;
-		private System.Windows.Forms.Panel _generationPanel;
-		private System.Windows.Forms.Label _keygenLabel;
+		private Panel _generationPanel;
+		private Label _keygenLabel;
 		private ProgressBar _generationBar;
-		private System.Windows.Forms.Panel _storePanel;
-		private System.Windows.Forms.Label _completeLabel;
-		private System.Windows.Forms.Button _storePrivateKey;
-		private System.Windows.Forms.Button _storeSECSHPublicKeyButton;
-		private System.Windows.Forms.Button _storeOpenSSHPublicKeyButton;
-		private System.Windows.Forms.Label _passphraseLabel;
+		private Panel _storePanel;
+		private Label _completeLabel;
+		private Button _storePrivateKey;
+		private Button _storeSECSHPublicKeyButton;
+		private Button _storeOpenSSHPublicKeyButton;
+		private Label _passphraseLabel;
 		private TextBox _passphraseBox;
 		private TextBox _confirmBox;
-		private System.Windows.Forms.Label _confirmLabel;
+		private Label _confirmLabel;
 		/// <summary>
 		/// 必要なデザイナ変数です。
 		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 
 		public KeyGenWizard()
 		{
@@ -67,22 +66,22 @@ namespace Poderosa.Forms
 			//
 			// TODO: InitializeComponent 呼び出しの後に、コンストラクタ コードを追加してください。
 			//
-			if(!this.DesignMode)
-				this.Width = PanelPitch;
+			if(!DesignMode)
+				Width = PanelPitch;
 
-			this._confirmLabel.Text = GApp.Strings.GetString("Form.KeyGenWizard._confirmLabel");
-			this._passphraseLabel.Text = GApp.Strings.GetString("Form.KeyGenWizard._passphraseLabel");
-			this._bitCountLabel.Text = GApp.Strings.GetString("Form.KeyGenWizard._bitCountLabel");
-			this._algorithmLabel.Text = GApp.Strings.GetString("Form.KeyGenWizard._algorithmLabel");
-			this._promptLabel1.Text = GApp.Strings.GetString("Form.KeyGenWizard._promptLabel1");
-			this._nextButton.Text = GApp.Strings.GetString("Form.KeyGenWizard._nextButton");
-			this._cancelButton.Text = GApp.Strings.GetString("Common.Cancel");
-			this._keygenLabel.Text = GApp.Strings.GetString("Form.KeyGenWizard._keygenLabel");
-			this._storePrivateKey.Text = GApp.Strings.GetString("Form.KeyGenWizard._storePrivateKey");
-			this._storeSECSHPublicKeyButton.Text = GApp.Strings.GetString("Form.KeyGenWizard._storeSECSHPublicKeyButton");
-			this._storeOpenSSHPublicKeyButton.Text = GApp.Strings.GetString("Form.KeyGenWizard._storeOpenSSHPublicKeyButton");
-			this._completeLabel.Text = GApp.Strings.GetString("Form.KeyGenWizard._completeLabel");
-			this.Text = GApp.Strings.GetString("Form.KeyGenWizard.Text");
+			_confirmLabel.Text = "Form.KeyGenWizard._confirmLabel";
+			_passphraseLabel.Text = "Form.KeyGenWizard._passphraseLabel";
+			_bitCountLabel.Text = "Form.KeyGenWizard._bitCountLabel";
+			_algorithmLabel.Text = "Form.KeyGenWizard._algorithmLabel";
+			_promptLabel1.Text = "Form.KeyGenWizard._promptLabel1";
+			_nextButton.Text = "Form.KeyGenWizard._nextButton";
+			_cancelButton.Text = "Cancel";
+			_keygenLabel.Text = "Form.KeyGenWizard._keygenLabel";
+			_storePrivateKey.Text = "Form.KeyGenWizard._storePrivateKey";
+			_storeSECSHPublicKeyButton.Text = "Form.KeyGenWizard._storeSECSHPublicKeyButton";
+			_storeOpenSSHPublicKeyButton.Text = "Form.KeyGenWizard._storeOpenSSHPublicKeyButton";
+			_completeLabel.Text = "Form.KeyGenWizard._completeLabel";
+			Text = "Form.KeyGenWizard.Text";
 
 			_page=Page.Parameter;
 		}
@@ -118,240 +117,240 @@ namespace Poderosa.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this._parameterPanel = new System.Windows.Forms.Panel();
-			this._confirmBox = new TextBox();
-			this._confirmLabel = new System.Windows.Forms.Label();
-			this._passphraseBox = new TextBox();
-			this._passphraseLabel = new System.Windows.Forms.Label();
-			this._bitCountBox = new ComboBox();
-			this._bitCountLabel = new System.Windows.Forms.Label();
-			this._algorithmLabel = new System.Windows.Forms.Label();
-			this._promptLabel1 = new System.Windows.Forms.Label();
-			this._algorithmBox = new ComboBox();
-			this._nextButton = new System.Windows.Forms.Button();
-			this._cancelButton = new System.Windows.Forms.Button();
-			this._generationPanel = new System.Windows.Forms.Panel();
-			this._generationBar = new ProgressBar();
-			this._keygenLabel = new System.Windows.Forms.Label();
-			this._storePanel = new System.Windows.Forms.Panel();
-			this._storeSECSHPublicKeyButton = new System.Windows.Forms.Button();
-			this._storeOpenSSHPublicKeyButton = new System.Windows.Forms.Button();
-			this._storePrivateKey = new System.Windows.Forms.Button();
-			this._completeLabel = new System.Windows.Forms.Label();
-			this._parameterPanel.SuspendLayout();
-			this._generationPanel.SuspendLayout();
-			this._storePanel.SuspendLayout();
-			this.SuspendLayout();
+			_parameterPanel = new Panel();
+			_confirmBox = new TextBox();
+			_confirmLabel = new Label();
+			_passphraseBox = new TextBox();
+			_passphraseLabel = new Label();
+			_bitCountBox = new ComboBox();
+			_bitCountLabel = new Label();
+			_algorithmLabel = new Label();
+			_promptLabel1 = new Label();
+			_algorithmBox = new ComboBox();
+			_nextButton = new Button();
+			_cancelButton = new Button();
+			_generationPanel = new Panel();
+			_generationBar = new ProgressBar();
+			_keygenLabel = new Label();
+			_storePanel = new Panel();
+			_storeSECSHPublicKeyButton = new Button();
+			_storeOpenSSHPublicKeyButton = new Button();
+			_storePrivateKey = new Button();
+			_completeLabel = new Label();
+			_parameterPanel.SuspendLayout();
+			_generationPanel.SuspendLayout();
+			_storePanel.SuspendLayout();
+			SuspendLayout();
 			// 
 			// _parameterPanel
 			// 
-			this._parameterPanel.Controls.AddRange(new System.Windows.Forms.Control[] {
-																						  this._confirmBox,
-																						  this._confirmLabel,
-																						  this._passphraseBox,
-																						  this._passphraseLabel,
-																						  this._bitCountBox,
-																						  this._bitCountLabel,
-																						  this._algorithmLabel,
-																						  this._promptLabel1,
-																						  this._algorithmBox});
-			this._parameterPanel.Location = new System.Drawing.Point(0, 8);
-			this._parameterPanel.Name = "_parameterPanel";
-			this._parameterPanel.Size = new System.Drawing.Size(304, 184);
-			this._parameterPanel.TabIndex = 0;
+			_parameterPanel.Controls.AddRange(new Control[] {
+																						  _confirmBox,
+																						  _confirmLabel,
+																						  _passphraseBox,
+																						  _passphraseLabel,
+																						  _bitCountBox,
+																						  _bitCountLabel,
+																						  _algorithmLabel,
+																						  _promptLabel1,
+																						  _algorithmBox});
+			_parameterPanel.Location = new Point(0, 8);
+			_parameterPanel.Name = "_parameterPanel";
+			_parameterPanel.Size = new Size(304, 184);
+			_parameterPanel.TabIndex = 0;
 			// 
 			// _confirmBox
 			// 
-			this._confirmBox.Location = new System.Drawing.Point(128, 128);
-			this._confirmBox.Name = "_confirmBox";
-			this._confirmBox.PasswordChar = '*';
-			this._confirmBox.Size = new System.Drawing.Size(152, 19);
-			this._confirmBox.TabIndex = 8;
-			this._confirmBox.Text = "";
+			_confirmBox.Location = new Point(128, 128);
+			_confirmBox.Name = "_confirmBox";
+			_confirmBox.PasswordChar = '*';
+			_confirmBox.Size = new Size(152, 19);
+			_confirmBox.TabIndex = 8;
+			_confirmBox.Text = "";
 			// 
 			// _confirmLabel
 			// 
-			this._confirmLabel.Location = new System.Drawing.Point(16, 128);
-			this._confirmLabel.Name = "_confirmLabel";
-			this._confirmLabel.TabIndex = 7;
-			this._confirmLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_confirmLabel.Location = new Point(16, 128);
+			_confirmLabel.Name = "_confirmLabel";
+			_confirmLabel.TabIndex = 7;
+			_confirmLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _passphraseBox
 			// 
-			this._passphraseBox.Location = new System.Drawing.Point(128, 104);
-			this._passphraseBox.Name = "_passphraseBox";
-			this._passphraseBox.PasswordChar = '*';
-			this._passphraseBox.Size = new System.Drawing.Size(152, 19);
-			this._passphraseBox.TabIndex = 6;
-			this._passphraseBox.Text = "";
+			_passphraseBox.Location = new Point(128, 104);
+			_passphraseBox.Name = "_passphraseBox";
+			_passphraseBox.PasswordChar = '*';
+			_passphraseBox.Size = new Size(152, 19);
+			_passphraseBox.TabIndex = 6;
+			_passphraseBox.Text = "";
 			// 
 			// _passphraseLabel
 			// 
-			this._passphraseLabel.Location = new System.Drawing.Point(16, 104);
-			this._passphraseLabel.Name = "_passphraseLabel";
-			this._passphraseLabel.TabIndex = 5;
-			this._passphraseLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_passphraseLabel.Location = new Point(16, 104);
+			_passphraseLabel.Name = "_passphraseLabel";
+			_passphraseLabel.TabIndex = 5;
+			_passphraseLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _bitCountBox
 			// 
-			this._bitCountBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._bitCountBox.Items.AddRange(new object[] {
+			_bitCountBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_bitCountBox.Items.AddRange(new object[] {
 															  "768",
 															  "1024",
 															  "2048"});
-			this._bitCountBox.Location = new System.Drawing.Point(128, 80);
-			this._bitCountBox.SelectedIndex = 0;
-			this._bitCountBox.Name = "_bitCountBox";
-			this._bitCountBox.Size = new System.Drawing.Size(121, 20);
-			this._bitCountBox.TabIndex = 4;
+			_bitCountBox.Location = new Point(128, 80);
+			_bitCountBox.SelectedIndex = 0;
+			_bitCountBox.Name = "_bitCountBox";
+			_bitCountBox.Size = new Size(121, 20);
+			_bitCountBox.TabIndex = 4;
 			// 
 			// _bitCountLabel
 			// 
-			this._bitCountLabel.Location = new System.Drawing.Point(16, 80);
-			this._bitCountLabel.Name = "_bitCountLabel";
-			this._bitCountLabel.TabIndex = 3;
-			this._bitCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_bitCountLabel.Location = new Point(16, 80);
+			_bitCountLabel.Name = "_bitCountLabel";
+			_bitCountLabel.TabIndex = 3;
+			_bitCountLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _algorithmLabel
 			// 
-			this._algorithmLabel.Location = new System.Drawing.Point(16, 56);
-			this._algorithmLabel.Name = "_algorithmLabel";
-			this._algorithmLabel.TabIndex = 1;
-			this._algorithmLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_algorithmLabel.Location = new Point(16, 56);
+			_algorithmLabel.Name = "_algorithmLabel";
+			_algorithmLabel.TabIndex = 1;
+			_algorithmLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _promptLabel1
 			// 
-			this._promptLabel1.Location = new System.Drawing.Point(8, 8);
-			this._promptLabel1.Name = "_promptLabel1";
-			this._promptLabel1.Size = new System.Drawing.Size(288, 40);
-			this._promptLabel1.TabIndex = 0;
+			_promptLabel1.Location = new Point(8, 8);
+			_promptLabel1.Name = "_promptLabel1";
+			_promptLabel1.Size = new Size(288, 40);
+			_promptLabel1.TabIndex = 0;
 			// 
 			// _algorithmBox
 			// 
-			this._algorithmBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._algorithmBox.Items.AddRange(new object[] {
+			_algorithmBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_algorithmBox.Items.AddRange(new object[] {
 															   "DSA",
 															   "RSA"});
-			this._algorithmBox.Location = new System.Drawing.Point(128, 56);
-			this._algorithmBox.Name = "_algorithmBox";
-			this._algorithmBox.SelectedIndex = 0;
-			this._algorithmBox.Size = new System.Drawing.Size(121, 20);
-			this._algorithmBox.TabIndex = 2;
+			_algorithmBox.Location = new Point(128, 56);
+			_algorithmBox.Name = "_algorithmBox";
+			_algorithmBox.SelectedIndex = 0;
+			_algorithmBox.Size = new Size(121, 20);
+			_algorithmBox.TabIndex = 2;
 			// 
 			// _nextButton
 			// 
-			this._nextButton.Location = new System.Drawing.Point(224, 192);
-			this._nextButton.Name = "_nextButton";
-			this._nextButton.FlatStyle = FlatStyle.System;
-			this._nextButton.TabIndex = 1;
-			this._nextButton.Click += new System.EventHandler(this.OnNext);
+			_nextButton.Location = new Point(224, 192);
+			_nextButton.Name = "_nextButton";
+			_nextButton.FlatStyle = FlatStyle.System;
+			_nextButton.TabIndex = 1;
+			_nextButton.Click += new EventHandler(OnNext);
 			// 
 			// _cancelButton
 			// 
-			this._cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this._cancelButton.Location = new System.Drawing.Point(136, 192);
-			this._cancelButton.Name = "_cancelButton";
-			this._cancelButton.FlatStyle = FlatStyle.System;
-			this._cancelButton.TabIndex = 2;
+			_cancelButton.DialogResult = DialogResult.Cancel;
+			_cancelButton.Location = new Point(136, 192);
+			_cancelButton.Name = "_cancelButton";
+			_cancelButton.FlatStyle = FlatStyle.System;
+			_cancelButton.TabIndex = 2;
 			// 
 			// _generationPanel
 			// 
-			this._generationPanel.Controls.AddRange(new System.Windows.Forms.Control[] {
-																						   this._generationBar,
-																						   this._keygenLabel});
-			this._generationPanel.Location = new System.Drawing.Point(312, 8);
-			this._generationPanel.Name = "_generationPanel";
-			this._generationPanel.Size = new System.Drawing.Size(304, 184);
-			this._generationPanel.TabIndex = 5;
-			this._generationPanel.Visible = false;
+			_generationPanel.Controls.AddRange(new Control[] {
+																						   _generationBar,
+																						   _keygenLabel});
+			_generationPanel.Location = new Point(312, 8);
+			_generationPanel.Name = "_generationPanel";
+			_generationPanel.Size = new Size(304, 184);
+			_generationPanel.TabIndex = 5;
+			_generationPanel.Visible = false;
 			// 
 			// _generationBar
 			// 
-			this._generationBar.Location = new System.Drawing.Point(8, 80);
-			this._generationBar.Maximum = 200;
-			this._generationBar.Minimum = 0;
-			this._generationBar.Name = "_generationBar";
-			this._generationBar.Size = new System.Drawing.Size(288, 24);
-			this._generationBar.Step = 1;
-			this._generationBar.TabIndex = 1;
-			this._generationBar.Value = 0;
+			_generationBar.Location = new Point(8, 80);
+			_generationBar.Maximum = 200;
+			_generationBar.Minimum = 0;
+			_generationBar.Name = "_generationBar";
+			_generationBar.Size = new Size(288, 24);
+			_generationBar.Step = 1;
+			_generationBar.TabIndex = 1;
+			_generationBar.Value = 0;
 			// 
 			// _keygenLabel
 			// 
-			this._keygenLabel.Location = new System.Drawing.Point(8, 8);
-			this._keygenLabel.Name = "_keygenLabel";
-			this._keygenLabel.Size = new System.Drawing.Size(288, 40);
-			this._keygenLabel.TabIndex = 0;
+			_keygenLabel.Location = new Point(8, 8);
+			_keygenLabel.Name = "_keygenLabel";
+			_keygenLabel.Size = new Size(288, 40);
+			_keygenLabel.TabIndex = 0;
 			// 
 			// _storePanel
 			// 
-			this._storePanel.Controls.AddRange(new System.Windows.Forms.Control[] {
-																					  this._storeSECSHPublicKeyButton,
-																					  this._storeOpenSSHPublicKeyButton,
-																					  this._storePrivateKey,
-																					  this._completeLabel});
-			this._storePanel.Location = new System.Drawing.Point(624, 8);
-			this._storePanel.Name = "_storePanel";
-			this._storePanel.Size = new System.Drawing.Size(304, 184);
-			this._storePanel.TabIndex = 6;
-			this._storePanel.Visible = false;
+			_storePanel.Controls.AddRange(new Control[] {
+																					  _storeSECSHPublicKeyButton,
+																					  _storeOpenSSHPublicKeyButton,
+																					  _storePrivateKey,
+																					  _completeLabel});
+			_storePanel.Location = new Point(624, 8);
+			_storePanel.Name = "_storePanel";
+			_storePanel.Size = new Size(304, 184);
+			_storePanel.TabIndex = 6;
+			_storePanel.Visible = false;
 			// 
 			// _storePrivateKey
 			// 
-			this._storePrivateKey.Location = new System.Drawing.Point(24, 56);
-			this._storePrivateKey.Name = "_storePrivateKey";
-			this._storePrivateKey.FlatStyle = FlatStyle.System;
-			this._storePrivateKey.Size = new System.Drawing.Size(256, 23);
-			this._storePrivateKey.TabIndex = 2;
-			this._storePrivateKey.Click += new System.EventHandler(this.OnSavePrivateKey);
+			_storePrivateKey.Location = new Point(24, 56);
+			_storePrivateKey.Name = "_storePrivateKey";
+			_storePrivateKey.FlatStyle = FlatStyle.System;
+			_storePrivateKey.Size = new Size(256, 23);
+			_storePrivateKey.TabIndex = 2;
+			_storePrivateKey.Click += new EventHandler(OnSavePrivateKey);
 			// 
 			// _storeSECSHPublicKeyButton
 			// 
-			this._storeSECSHPublicKeyButton.Location = new System.Drawing.Point(24, 96);
-			this._storeSECSHPublicKeyButton.Name = "_storeSECSHPublicKeyButton";
-			this._storeSECSHPublicKeyButton.FlatStyle = FlatStyle.System;
-			this._storeSECSHPublicKeyButton.Size = new System.Drawing.Size(256, 23);
-			this._storeSECSHPublicKeyButton.TabIndex = 3;
-			this._storeSECSHPublicKeyButton.Click += new System.EventHandler(this.OnSaveSECSHPublicKey);
+			_storeSECSHPublicKeyButton.Location = new Point(24, 96);
+			_storeSECSHPublicKeyButton.Name = "_storeSECSHPublicKeyButton";
+			_storeSECSHPublicKeyButton.FlatStyle = FlatStyle.System;
+			_storeSECSHPublicKeyButton.Size = new Size(256, 23);
+			_storeSECSHPublicKeyButton.TabIndex = 3;
+			_storeSECSHPublicKeyButton.Click += new EventHandler(OnSaveSECSHPublicKey);
 			// 
 			// _storeOpenSSHPublicKeyButton
 			// 
-			this._storeOpenSSHPublicKeyButton.Location = new System.Drawing.Point(24, 136);
-			this._storeOpenSSHPublicKeyButton.Name = "_storeOpenSSHPublicKeyButton";
-			this._storeOpenSSHPublicKeyButton.FlatStyle = FlatStyle.System;
-			this._storeOpenSSHPublicKeyButton.Size = new System.Drawing.Size(256, 23);
-			this._storeOpenSSHPublicKeyButton.TabIndex = 4;
-			this._storeOpenSSHPublicKeyButton.Click += new System.EventHandler(this.OnSaveOpenSSHPublicKey);
+			_storeOpenSSHPublicKeyButton.Location = new Point(24, 136);
+			_storeOpenSSHPublicKeyButton.Name = "_storeOpenSSHPublicKeyButton";
+			_storeOpenSSHPublicKeyButton.FlatStyle = FlatStyle.System;
+			_storeOpenSSHPublicKeyButton.Size = new Size(256, 23);
+			_storeOpenSSHPublicKeyButton.TabIndex = 4;
+			_storeOpenSSHPublicKeyButton.Click += new EventHandler(OnSaveOpenSSHPublicKey);
 			// 
 			// _completeLabel
 			// 
-			this._completeLabel.Location = new System.Drawing.Point(8, 8);
-			this._completeLabel.Name = "_completeLabel";
-			this._completeLabel.Size = new System.Drawing.Size(288, 40);
-			this._completeLabel.TabIndex = 1;
+			_completeLabel.Location = new Point(8, 8);
+			_completeLabel.Name = "_completeLabel";
+			_completeLabel.Size = new Size(288, 40);
+			_completeLabel.TabIndex = 1;
 			// 
 			// KeyGenWizard
 			// 
-			this.AcceptButton = this._nextButton;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 12);
-			this.CancelButton = this._cancelButton;
-			this.ClientSize = new System.Drawing.Size(930, 223);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this._storePanel,
-																		  this._cancelButton,
-																		  this._nextButton,
-																		  this._parameterPanel,
-																		  this._generationPanel});
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "KeyGenWizard";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this._parameterPanel.ResumeLayout(false);
-			this._generationPanel.ResumeLayout(false);
-			this._storePanel.ResumeLayout(false);
-			this.ResumeLayout(false);
+			AcceptButton = _nextButton;
+			AutoScaleBaseSize = new Size(5, 12);
+			CancelButton = _cancelButton;
+			ClientSize = new Size(930, 223);
+			Controls.AddRange(new Control[] {
+																		  _storePanel,
+																		  _cancelButton,
+																		  _nextButton,
+																		  _parameterPanel,
+																		  _generationPanel});
+			FormBorderStyle = FormBorderStyle.FixedDialog;
+			MaximizeBox = false;
+			MinimizeBox = false;
+			Name = "KeyGenWizard";
+			ShowInTaskbar = false;
+			StartPosition = FormStartPosition.CenterParent;
+			_parameterPanel.ResumeLayout(false);
+			_generationPanel.ResumeLayout(false);
+			_storePanel.ResumeLayout(false);
+			ResumeLayout(false);
 
 		}
 		#endregion
@@ -371,11 +370,11 @@ namespace Poderosa.Forms
 		}
 		private bool VerifyPassphrase() {
 			if(_passphraseBox.Text!=_confirmBox.Text) {
-				GUtil.Warning(this, GApp.Strings.GetString("Message.KeyGenWizard.NotMatch"));
+				GUtil.Warning(this, "Message.KeyGenWizard.NotMatch");
 				return false;
 			}
 			else if(_passphraseBox.Text.Length==0) {
-				return DialogResult.Yes==GUtil.AskUserYesNo(this, GApp.Strings.GetString("Message.KeyGenWizard.ConfirmEmptyPassphrase"));
+				return DialogResult.Yes==GUtil.AskUserYesNo(this, "Message.KeyGenWizard.ConfirmEmptyPassphrase");
 			}
 			else
 				return true;
@@ -391,7 +390,7 @@ namespace Poderosa.Forms
 					_generationPanel.Visible = true;
 					_generationPanel.Left -= PanelPitch;
 					_keyGenThread = new KeyGenThread(this, KeyAlgorithm, Int32.Parse(_bitCountBox.Text));
-					this.MouseMove += new MouseEventHandler(_keyGenThread.OnMouseMove);
+					MouseMove += new MouseEventHandler(_keyGenThread.OnMouseMove);
 					_generationPanel.MouseMove += new MouseEventHandler(_keyGenThread.OnMouseMove);
 					_nextButton.Enabled = false;
 					_page = Page.Generation;
@@ -402,7 +401,7 @@ namespace Poderosa.Forms
 					_storePanel.Visible = true;
 					_storePanel.Left -= PanelPitch*2;
 					_page = Page.Store;
-					_nextButton.Text = GApp.Strings.GetString("Message.KeyGenWizard.Finish");
+					_nextButton.Text = "Message.KeyGenWizard.Finish";
 					break;
 				case Page.Store:
 					Close();
@@ -427,8 +426,8 @@ namespace Poderosa.Forms
 		public void SetProgressValue(int v) {
 			_generationBar.Value = v;
 			if(v==_generationBar.Maximum) {
-				_keygenLabel.Text = GApp.Strings.GetString("Message.KeyGenWizard.RandomNumberCompleted");
-				this.Cursor = Cursors.WaitCursor;
+				_keygenLabel.Text = "Message.KeyGenWizard.RandomNumberCompleted";
+				Cursor = Cursors.WaitCursor;
 				CheckGenerationComplete();
 			}
 		}
@@ -436,17 +435,19 @@ namespace Poderosa.Forms
 			//プログレスバーが終端にいくのと、鍵の生成が終わるのは両方満たさないといけない
 			if(_generationBar.Value==_generationBar.Maximum && _resultKey!=null) {
 				_nextButton.Enabled = true;
-				_keygenLabel.Text = GApp.Strings.GetString("Message.KeyGenWizard.GenerationCompleted");
-				this.Cursor = Cursors.Default;
+				_keygenLabel.Text = "Message.KeyGenWizard.GenerationCompleted";
+				Cursor = Cursors.Default;
 			}
 		}
 
 
 		private void OnSavePrivateKey(object sender, EventArgs args) {
-			SaveFileDialog dlg = new SaveFileDialog();
-			dlg.InitialDirectory = GApp.Options.DefaultKeyDir;
-			dlg.Title = GApp.Strings.GetString("Caption.KeyGenWizard.SavePrivateKey");
-			if(GCUtil.ShowModalDialog(this, dlg)==DialogResult.OK) {
+            SaveFileDialog dlg = new SaveFileDialog
+            {
+                InitialDirectory = GApp.Options.DefaultKeyDir,
+                Title = "Caption.KeyGenWizard.SavePrivateKey"
+            };
+            if (GCUtil.ShowModalDialog(this, dlg)==DialogResult.OK) {
 				GApp.Options.DefaultKeyDir = GUtil.FileToDir(dlg.FileName);
 				try {
 					string pp = _passphraseBox.Text;
@@ -455,39 +456,43 @@ namespace Poderosa.Forms
 					_resultKey.WritePrivatePartInSECSHStyleFile(new FileStream(dlg.FileName, FileMode.Create, FileAccess.Write), "", pp);
 				}
 				catch(Exception ex) {
-					GUtil.Warning(this, String.Format(GApp.Strings.GetString("Message.KeyGenWizard.KeySaveError"), ex.Message));
+					GUtil.Warning(this, String.Format("Message.KeyGenWizard.KeySaveError", ex.Message));
 				}
 			}
 		}
 		private void OnSaveSECSHPublicKey(object sender, EventArgs args) {
-			SaveFileDialog dlg = new SaveFileDialog();
-			dlg.InitialDirectory = GApp.Options.DefaultKeyDir;
-			dlg.Title = GApp.Strings.GetString("Caption.KeyGenWizard.SavePublicInSECSH");
-			dlg.DefaultExt = "pub";
-			dlg.Filter = "SSH Public Key(*.pub)|*.pub|All Files(*.*)|*.*";
-			if(GCUtil.ShowModalDialog(this, dlg)==DialogResult.OK) {
+            SaveFileDialog dlg = new SaveFileDialog
+            {
+                InitialDirectory = GApp.Options.DefaultKeyDir,
+                Title = "Caption.KeyGenWizard.SavePublicInSECSH",
+                DefaultExt = "pub",
+                Filter = "SSH Public Key(*.pub)|*.pub|All Files(*.*)|*.*"
+            };
+            if (GCUtil.ShowModalDialog(this, dlg)==DialogResult.OK) {
 				GApp.Options.DefaultKeyDir = GUtil.FileToDir(dlg.FileName);
 				try {
 					_resultKey.WritePublicPartInSECSHStyle(new FileStream(dlg.FileName, FileMode.Create, FileAccess.Write), "");
 				}
 				catch(Exception ex) {
-					GUtil.Warning(this, String.Format(GApp.Strings.GetString("Message.KeyGenWizard.KeySaveError"), ex.Message));
+					GUtil.Warning(this, String.Format("Message.KeyGenWizard.KeySaveError", ex.Message));
 				}
 			}
 		}
 		private void OnSaveOpenSSHPublicKey(object sender, EventArgs args) {
-			SaveFileDialog dlg = new SaveFileDialog();
-			dlg.InitialDirectory = GApp.Options.DefaultKeyDir;
-			dlg.Title = GApp.Strings.GetString("Caption.KeyGenWizard.SavePublicInOpenSSH");
-			dlg.DefaultExt = "pub";
-			dlg.Filter = "SSH Public Key(*.pub)|*.pub|All Files(*.*)|*.*";
-			if(GCUtil.ShowModalDialog(this, dlg)==DialogResult.OK) {
+            SaveFileDialog dlg = new SaveFileDialog
+            {
+                InitialDirectory = GApp.Options.DefaultKeyDir,
+                Title = "Caption.KeyGenWizard.SavePublicInOpenSSH",
+                DefaultExt = "pub",
+                Filter = "SSH Public Key(*.pub)|*.pub|All Files(*.*)|*.*"
+            };
+            if (GCUtil.ShowModalDialog(this, dlg)==DialogResult.OK) {
 				GApp.Options.DefaultKeyDir = GUtil.FileToDir(dlg.FileName);
 				try {
 					_resultKey.WritePublicPartInOpenSSHStyle(new FileStream(dlg.FileName, FileMode.Create, FileAccess.Write));
 				}
 				catch(Exception ex) {
-					GUtil.Warning(this, String.Format(GApp.Strings.GetString("Message.KeyGenWizard.KeySaveError"), ex.Message));
+					GUtil.Warning(this, String.Format("Message.KeyGenWizard.KeySaveError", ex.Message));
 				}
 			}
 		}
@@ -526,9 +531,9 @@ namespace Poderosa.Forms
 				_mouseMoveCount = 0;
 				KeyPair kp;
 				if(_algorithm==PublicKeyAlgorithm.DSA)
-					kp = Granados.PKI.DSAKeyPair.GenerateNew(_bitCount, _rnd);
+					kp = DSAKeyPair.GenerateNew(_bitCount, _rnd);
 				else
-					kp = Granados.PKI.RSAKeyPair.GenerateNew(_bitCount, _rnd);
+					kp = RSAKeyPair.GenerateNew(_bitCount, _rnd);
 				_parent.SetResultKey(new SSH2UserAuthKey(kp));
 				Win32.PostMessage(_parent.Handle, GConst.WMG_KEYGEN_FINISHED, IntPtr.Zero, IntPtr.Zero);
 			}
@@ -543,7 +548,7 @@ namespace Poderosa.Forms
 			
 			if(_mouseMoveCount==_parent.GenerationBar.Maximum) return;
 			
-			int n = (int)System.DateTime.Now.Ticks;
+			int n = (int)DateTime.Now.Ticks;
 			n ^= (args.X << 16);
 			n ^= args.Y;
 			n ^= (int)0x31031293; //これぐらいやれば十分ばらけるだろう

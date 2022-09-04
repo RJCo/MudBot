@@ -4,8 +4,6 @@
  */
 
 using System;
-using System.Collections;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics;
@@ -64,20 +62,20 @@ namespace Poderosa.UI
 		public GButton() {
 			SetStyle(ControlStyles.AllPaintingInWmPaint|ControlStyles.UserPaint|ControlStyles.DoubleBuffer, true);
 			_borderstyle = BorderStyle.None;
-			Debug.Assert(!this.InvokeRequired);
+			Debug.Assert(!InvokeRequired);
 		}
 
 		public void Reset() {
 			_mouseDown = false;
 			_mouseEnter = false;
-			this.Cursor = Cursors.Default;
-			Debug.Assert(!this.InvokeRequired);
+			Cursor = Cursors.Default;
+			Debug.Assert(!InvokeRequired);
 			Invalidate();
 		}
 
 		public int BodyWidth {
 			get {
-				int w = this.Width;
+				int w = Width;
 				if(_showComboStyle) w -= COMBOAREA_WIDTH;
 				return w;
 			}
@@ -90,7 +88,7 @@ namespace Poderosa.UI
 				st = DrawState.Focused;
 			else if(_mouseEnter)
 				st = DrawState.Hover;
-			else if(this.Enabled)
+			else if(Enabled)
 				st = DrawState.Normal;
 			else
 				st = DrawState.Disabled;
@@ -102,7 +100,7 @@ namespace Poderosa.UI
 			try {
 				base.OnMouseEnter(e);
 				_mouseEnter = true;
-				this.Cursor = Cursors.Hand;
+				Cursor = Cursors.Hand;
 				Invalidate();
 			}
 			catch(Exception ex) {
@@ -116,7 +114,7 @@ namespace Poderosa.UI
 			try {
 				base.OnMouseLeave(e);
 				_mouseEnter = false;
-				this.Cursor = Cursors.Default;
+				Cursor = Cursors.Default;
 				Invalidate();
 			}
 			catch(Exception ex) {
@@ -153,7 +151,7 @@ namespace Poderosa.UI
 			DrawBackground(g, state);
 			
 			bool has_text = false;
-			bool has_image = this.Image != null;
+			bool has_image = Image != null;
 			
 			int x, y;
 			if (has_text && !has_image) {
@@ -162,22 +160,22 @@ namespace Poderosa.UI
 				DrawText(g, Text, state, x, y);
 			}
 			else if (has_image && !has_text ) {
-				x = (BodyWidth - this.Image.Width)/2;
-				y = (Height - this.Image.Height)/2;
+				x = (BodyWidth - Image.Width)/2;
+				y = (Height - Image.Height)/2;
 				if(_checked) {
 					x++; y++;
 				}
-				DrawImage(g, state, this.Image, x, y);
+				DrawImage(g, state, Image, x, y);
 			}
 			else if(has_image && has_text) {
 				x = 1;
-				y = (Height - this.Image.Height)/2;
+				y = (Height - Image.Height)/2;
 				if(_checked) {
 					x++; y++;
 				}
-				DrawImage(g, state, this.Image, x, y);
-				x += this.Image.Width + 2;
-				DrawText(g, this.Text, state, x, y);
+				DrawImage(g, state, Image, x, y);
+				x += Image.Width + 2;
+				DrawText(g, Text, state, x, y);
 			}
 
 			if(_showComboStyle) {
@@ -187,7 +185,7 @@ namespace Poderosa.UI
 		}
 
 		protected void DrawBackground(Graphics g, DrawState state) {
-			Rectangle rc = this.ClientRectangle;
+			Rectangle rc = ClientRectangle;
 			if(_focusedBackgroundBrush==null) CreateBrushes();
 
 
@@ -223,15 +221,15 @@ namespace Poderosa.UI
 
 		protected void DrawText(Graphics g, string text, DrawState state, int x, int y) {
 			if (state==DrawState.Disabled)
-				g.DrawString(text, this.Font, SystemBrushes.ControlDark, new Point(x, y));
+				g.DrawString(text, Font, SystemBrushes.ControlDark, new Point(x, y));
 			else
-         		g.DrawString(text, this.Font, SystemBrushes.ControlText, new Point(x, y));
+         		g.DrawString(text, Font, SystemBrushes.ControlText, new Point(x, y));
 		}
 
 		protected void DrawComboStyleTriangle(Graphics g, DrawState state) {
 			Pen p = state==DrawState.Disabled? SystemPens.ControlDark : SystemPens.ControlText;
-			int x = this.Width - COMBOAREA_WIDTH;
-			int y = this.Height / 2;
+			int x = Width - COMBOAREA_WIDTH;
+			int y = Height / 2;
 			g.DrawLine(p, x,   y-1, x+5, y-1);
 			g.DrawLine(p, x+1, y  , x+4, y  );
 			g.DrawLine(p, x+2, y+1, x+3, y+1);
@@ -288,7 +286,7 @@ namespace Poderosa.UI
 			}
 		}
 		public TabBarButton() {
-			this.BorderStyle = BorderStyle.None;
+			BorderStyle = BorderStyle.None;
 		}
 
 		protected override void OnPaint(PaintEventArgs e) {
@@ -296,9 +294,9 @@ namespace Poderosa.UI
 			if(_selectedColors==null) CreateColor();
 			//border
 			if(_selected)
-				DrawUtil.DrawRoundRect(g, 0, 0, this.Width-1, this.Height-1, _selectedColors);
+				DrawUtil.DrawRoundRect(g, 0, 0, Width-1, Height-1, _selectedColors);
 			else if(_mouseEnter)
-				DrawUtil.DrawRoundRect(g, 0, 0, this.Width-1, this.Height-1, _hoverColors);
+				DrawUtil.DrawRoundRect(g, 0, 0, Width-1, Height-1, _hoverColors);
 
 			DrawButtonState(g);	
 		}
@@ -307,31 +305,35 @@ namespace Poderosa.UI
 		private void DrawButtonState(Graphics g) {
 			int x, y;
 			x = 2;
-			y = (this.Height - this.Image.Height) / 2;
-			DrawImage(g, DrawState.Normal, this.Image, x, y);
-			x += this.Image.Width + 2;
+			y = (Height - Image.Height) / 2;
+			DrawImage(g, DrawState.Normal, Image, x, y);
+			x += Image.Width + 2;
 			if(_headText!=null) {
 				g.DrawString(_headText, Font, SystemBrushes.ControlDark, x, y+2);
 				x += 11; //Should it be configurable?
 			}
-			DrawText(g, this.Text, _selected? DrawState.Focused : DrawState.Normal , x, y+2);
+			DrawText(g, Text, _selected? DrawState.Focused : DrawState.Normal , x, y+2);
 		}
 		private static void CreateColor() {
 			Color c = SystemColors.Control;
 			c = Color.FromArgb((c.R+255)/2, (c.G+255)/2, (c.B+255)/2); //”’‚Æ‚Ì’†ŠÔ‚ð‚Æ‚é
-			
-			_selectedColors = new DrawUtil.RoundRectColors();
-			_selectedColors.border_color = DrawUtil.ToCOLORREF(SystemColors.ControlDarkDark);
-			_selectedColors.inner_color = DrawUtil.ToCOLORREF(c);
-			_selectedColors.outer_color = DrawUtil.ToCOLORREF(SystemColors.Control);
-			_selectedColors.lightlight_color = DrawUtil.MergeColor(_selectedColors.border_color, _selectedColors.outer_color);
+
+            _selectedColors = new DrawUtil.RoundRectColors
+            {
+                border_color = DrawUtil.ToCOLORREF(SystemColors.ControlDarkDark),
+                inner_color = DrawUtil.ToCOLORREF(c),
+                outer_color = DrawUtil.ToCOLORREF(SystemColors.Control)
+            };
+            _selectedColors.lightlight_color = DrawUtil.MergeColor(_selectedColors.border_color, _selectedColors.outer_color);
 			_selectedColors.light_color = DrawUtil.MergeColor(_selectedColors.lightlight_color, _selectedColors.border_color);
 
-			_hoverColors = new DrawUtil.RoundRectColors();
-			_hoverColors.border_color = DrawUtil.ToCOLORREF(DrawUtil.DarkColor(Color.Orange));
-			_hoverColors.inner_color = DrawUtil.ToCOLORREF(SystemColors.Control);
-			_hoverColors.outer_color = DrawUtil.ToCOLORREF(SystemColors.Control);
-			_hoverColors.lightlight_color = DrawUtil.MergeColor(_hoverColors.border_color, _hoverColors.outer_color);
+            _hoverColors = new DrawUtil.RoundRectColors
+            {
+                border_color = DrawUtil.ToCOLORREF(DrawUtil.DarkColor(Color.Orange)),
+                inner_color = DrawUtil.ToCOLORREF(SystemColors.Control),
+                outer_color = DrawUtil.ToCOLORREF(SystemColors.Control)
+            };
+            _hoverColors.lightlight_color = DrawUtil.MergeColor(_hoverColors.border_color, _hoverColors.outer_color);
 			_hoverColors.light_color = DrawUtil.MergeColor(_hoverColors.lightlight_color, _hoverColors.border_color);
 		}
 

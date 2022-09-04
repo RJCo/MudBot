@@ -3,12 +3,12 @@
  * 
  * $Id: ConfigXML.cs,v 1.2 2005/04/20 09:06:03 okajima Exp $
  */
-using System;
 using System.Collections;
 using System.Xml;
 
-namespace Poderosa.Config {
-	public class DOMNodeConverter {
+namespace Poderosa.Config
+{
+    public class DOMNodeConverter {
 		public static ConfigNode Read(XmlDocument doc) {
 			return Read(doc.DocumentElement);
 		}

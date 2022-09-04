@@ -4,27 +4,25 @@
 */
 using System;
 using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
-using Poderosa;
 
 namespace Poderosa.Forms
 {
-	/// <summary>
-	/// WarningWithDisableOption の概要の説明です。
-	/// </summary>
-	internal class WarningWithDisableOption : System.Windows.Forms.Form
-	{
+    /// <summary>
+    /// WarningWithDisableOption の概要の説明です。
+    /// </summary>
+    internal class WarningWithDisableOption : Form
+    {
 		private static Icon _warningIcon;
 
-		private System.Windows.Forms.Button _okButton;
-		private System.Windows.Forms.Label _messageLabel;
+		private Button _okButton;
+		private Label _messageLabel;
 		private CheckBox _disableCheckBox;
 		/// <summary>
 		/// 必要なデザイナ変数です。
 		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 
 		public WarningWithDisableOption(string message)
 		{
@@ -37,8 +35,8 @@ namespace Poderosa.Forms
 			// TODO: InitializeComponent 呼び出しの後に、コンストラクタ コードを追加してください。
 			//
 			_messageLabel.Text = message;
-			this.Text = GEnv.Strings.GetString("Form.WarningWithDisableOption.Text");
-			this._disableCheckBox.Text = GEnv.Strings.GetString("Form.WarningWithDisableOption._disableCheckBox");
+			Text = "Form.WarningWithDisableOption.Text";
+			_disableCheckBox.Text = "Form.WarningWithDisableOption._disableCheckBox";
 		}
 
 		/// <summary>
@@ -63,53 +61,53 @@ namespace Poderosa.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this._okButton = new System.Windows.Forms.Button();
-			this._messageLabel = new System.Windows.Forms.Label();
-			this._disableCheckBox = new CheckBox();
-			this.SuspendLayout();
+			_okButton = new Button();
+			_messageLabel = new Label();
+			_disableCheckBox = new CheckBox();
+			SuspendLayout();
 			// 
 			// _okButton
 			// 
-			this._okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this._okButton.Location = new System.Drawing.Point(120, 72);
-			this._okButton.Name = "_okButton";
-			this._okButton.TabIndex = 0;
-			this._okButton.FlatStyle = FlatStyle.System;
-			this._okButton.Text = "OK";
+			_okButton.DialogResult = DialogResult.OK;
+			_okButton.Location = new Point(120, 72);
+			_okButton.Name = "_okButton";
+			_okButton.TabIndex = 0;
+			_okButton.FlatStyle = FlatStyle.System;
+			_okButton.Text = "OK";
 			// 
 			// _messageLabel
 			// 
-			this._messageLabel.Location = new System.Drawing.Point(56, 8);
-			this._messageLabel.Name = "_messageLabel";
-			this._messageLabel.Size = new System.Drawing.Size(248, 40);
-			this._messageLabel.TabIndex = 1;
-			this._messageLabel.Text = "a";
-			this._messageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_messageLabel.Location = new Point(56, 8);
+			_messageLabel.Name = "_messageLabel";
+			_messageLabel.Size = new Size(248, 40);
+			_messageLabel.TabIndex = 1;
+			_messageLabel.Text = "a";
+			_messageLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _disableCheckBox
 			// 
-			this._disableCheckBox.Location = new System.Drawing.Point(56, 48);
-			this._disableCheckBox.Name = "_disableCheckBox";
-			this._disableCheckBox.Size = new System.Drawing.Size(248, 24);
-			this._disableCheckBox.TabIndex = 2;
-			this._disableCheckBox.FlatStyle = FlatStyle.System;
+			_disableCheckBox.Location = new Point(56, 48);
+			_disableCheckBox.Name = "_disableCheckBox";
+			_disableCheckBox.Size = new Size(248, 24);
+			_disableCheckBox.TabIndex = 2;
+			_disableCheckBox.FlatStyle = FlatStyle.System;
 			// 
 			// WarningWithDisableOption
 			// 
-			this.AcceptButton = this._okButton;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 12);
-			this.ClientSize = new System.Drawing.Size(314, 103);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this._disableCheckBox,
-																		  this._messageLabel,
-																		  this._okButton});
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "WarningWithDisableOption";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.ShowInTaskbar = false;
-			this.ResumeLayout(false);
+			AcceptButton = _okButton;
+			AutoScaleBaseSize = new Size(5, 12);
+			ClientSize = new Size(314, 103);
+			Controls.AddRange(new Control[] {
+																		  _disableCheckBox,
+																		  _messageLabel,
+																		  _okButton});
+			FormBorderStyle = FormBorderStyle.FixedDialog;
+			MaximizeBox = false;
+			MinimizeBox = false;
+			Name = "WarningWithDisableOption";
+			StartPosition = FormStartPosition.CenterParent;
+			ShowInTaskbar = false;
+			ResumeLayout(false);
 
 		}
 		#endregion

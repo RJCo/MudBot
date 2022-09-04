@@ -7,13 +7,12 @@
  $Id: ConfigAttr.cs,v 1.2 2005/04/20 09:06:03 okajima Exp $
 */
 using System;
-using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 
 namespace Poderosa.Config
 {
-	[AttributeUsage(AttributeTargets.Field, AllowMultiple=false)]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple=false)]
 	public abstract class ConfigElementAttribute : Attribute {
 		protected string _externalName;
 		protected FieldInfo _fieldInfo;

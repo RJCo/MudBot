@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MajorMud.Database" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DatabaseFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">test.db</Value>
+    </Setting>
+    <Setting Name="DatabaseCommandTimeoutSeconds" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

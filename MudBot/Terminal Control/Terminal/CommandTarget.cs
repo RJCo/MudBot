@@ -3,23 +3,17 @@
 * $Id: CommandTarget.cs,v 1.2 2005/04/20 08:45:46 okajima Exp $
 */
 using System;
-using System.Collections;
-using System.IO;
 using System.Diagnostics;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 using Poderosa.Terminal;
 using Poderosa.Connection;
 using Poderosa.Communication;
 using Poderosa.Text;
-using Poderosa.Config;
-using Poderosa.Forms;
-using Poderosa.Toolkit;
 
-namespace Poderosa {
-	public enum CommandResult {
+namespace Poderosa
+{
+    public enum CommandResult {
 		Success,
 		Failed,
 		Denied,
@@ -108,7 +102,7 @@ namespace Poderosa {
 			}
 			catch(Exception ex) {
 				//ここでエラーが発生しても処理は続行してアプリ自体は実行を継続
-				GUtil.Warning(GEnv.Frame, GEnv.Strings.GetString("Message.ConnectionCommandTarget.CloseError")+ex.Message);
+				GUtil.Warning(GEnv.Frame, "Message.ConnectionCommandTarget.CloseError"+ex.Message);
 			}
 			bool active = _connection==GEnv.Connections.ActiveConnection;
 			ConnectionTag ct = GEnv.Connections.FindTag(_connection);
@@ -217,7 +211,7 @@ namespace Poderosa {
 				return CommandResult.Success;
 			}
 			catch(NotSupportedException) {
-				GUtil.Warning(GEnv.Frame, GEnv.Strings.GetString("Message.ConnectionCommandTarget.AreYouThereCondition"));
+				GUtil.Warning(GEnv.Frame, "Message.ConnectionCommandTarget.AreYouThereCondition");
 				return CommandResult.Failed;
 			}
 		}
@@ -230,7 +224,7 @@ namespace Poderosa {
 				return CommandResult.Success;
 			}
 			catch(NotSupportedException) {
-				GUtil.Warning(GEnv.Frame, GEnv.Strings.GetString("Message.ConnectionCommandTarget.BreakCondition"));
+				GUtil.Warning(GEnv.Frame, "Message.ConnectionCommandTarget.BreakCondition");
 				return CommandResult.Failed;
 			}
 		}
@@ -260,7 +254,7 @@ namespace Poderosa {
 			}
 			catch(Exception ex) {
 				Debug.WriteLine(ex.StackTrace);
-				GUtil.Warning(GEnv.Frame, GEnv.Strings.GetString("Message.ConnectionCommandTarget.SendError") + ex.Message);
+				GUtil.Warning(GEnv.Frame, "Message.ConnectionCommandTarget.SendError" + ex.Message);
 				return CommandResult.Failed;
 			}
 		}

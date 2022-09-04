@@ -3,18 +3,16 @@
 * $Id: GLine.cs,v 1.3 2005/04/27 08:48:50 okajima Exp $
 */
 using System;
-using System.Collections;
 using System.Drawing;
 using System.Diagnostics;
 using System.Text;
-using Poderosa.Forms;
 
 using Poderosa.Terminal;
 using Poderosa.UI;
 
 namespace Poderosa.Text
 {
-	internal class RenderParameter {
+    internal class RenderParameter {
 		private int _linefrom;
 		private int _linecount;
 		private Rectangle _targetRect;
@@ -171,10 +169,12 @@ namespace Poderosa.Text
 			_id = -1;
 		}
 		public GLine Clone() {
-			GLine nl = new GLine(_text, _firstWord.DeepClone());
-			nl._eolType = _eolType;
-			nl._id = _id;
-			return nl;
+            GLine nl = new GLine(_text, _firstWord.DeepClone())
+            {
+                _eolType = _eolType,
+                _id = _id
+            };
+            return nl;
 		}
 
 
@@ -303,11 +303,13 @@ namespace Poderosa.Text
 			if(_text[0]=='\0') return; //何も描かなくてよい
 			float fx = (float)param.TargetRect.Left;
 
-			RectangleF rect = new RectangleF();
-			rect.Y = param.TargetRect.Top+y;
-			rect.Height = prof.Pitch.Height;
+            RectangleF rect = new RectangleF
+            {
+                Y = param.TargetRect.Top + y,
+                Height = prof.Pitch.Height
+            };
 
-			GWord word = _firstWord;
+            GWord word = _firstWord;
 			while(word != null) {
 				
 				rect.X = fx /*- prof.CharGap*/; //Nativeな描画では不要？
@@ -388,17 +390,19 @@ namespace Poderosa.Text
 			float pitch = prof.Pitch.Width;
 			int nextoffset = WordNextOffset(word);
 			if(bkbrush!=IntPtr.Zero) { //これがないと日本語文字ピッチが小さいとき選択時のすきまができる場合がある
-				Win32.RECT rect = new Win32.RECT();
-				rect.left = (int)fx;
-				rect.top  = y;
-				rect.right = (int)(fx + pitch*display_length);
-				rect.bottom = y + (int)prof.Pitch.Height;
-				Win32.FillRect(hdc, ref rect, bkbrush);
+                Win32.RECT rect = new Win32.RECT
+                {
+                    left = (int)fx,
+                    top = y,
+                    right = (int)(fx + pitch * display_length),
+                    bottom = y + (int)prof.Pitch.Height
+                };
+                Win32.FillRect(hdc, ref rect, bkbrush);
 			}
 			for(int i=word.Offset; i<nextoffset; i++) {
 				char ch = _text[i];
 				if(ch=='\0') break;
-				if(ch==GLine.WIDECHAR_PAD) continue;
+				if(ch== WIDECHAR_PAD) continue;
 				unsafe {
 					Win32.TextOut(hdc, (int)fx, y, &ch, 1);
 				}
@@ -431,7 +435,7 @@ namespace Poderosa.Text
 					int o = word.Offset, i=0;
 					while(o < nextoffset) {
 						char ch = _text[o];
-						if(ch!=GLine.WIDECHAR_PAD) {
+						if(ch!= WIDECHAR_PAD) {
 							last_is_space = ch==' ';
 							buf[i++] = ch;
 						}
@@ -459,7 +463,7 @@ namespace Poderosa.Text
 					int o = word.Offset, i=0;
 					while(o < nextoffset) {
 						char ch = _text[o];
-						if(ch!=GLine.WIDECHAR_PAD)
+						if(ch!= WIDECHAR_PAD)
 							buf[i++] = ch;
 						o++;
 					}
@@ -503,7 +507,7 @@ namespace Poderosa.Text
 			if(_firstWord==null)
 				_firstWord = w;
 			else
-				this.LastWord.Next = w;
+				LastWord.Next = w;
 		}
 		public GWord LastWord {
 			get {
@@ -520,11 +524,13 @@ namespace Poderosa.Text
 		internal GLine InverseCaret(int index, bool inverse, bool underline) {
 			ExpandBuffer(index+1);
 			if(_text[index]==WIDECHAR_PAD) index--;
-			GLine ret = new GLine(_text, null);
-			ret.ID = _id;
-			ret.EOLType = _eolType;
-			
-			GWord w = _firstWord;
+            GLine ret = new GLine(_text, null)
+            {
+                ID = _id,
+                EOLType = _eolType
+            };
+
+            GWord w = _firstWord;
 			int nextoffset = 0;
 			while(w!=null) {
 				nextoffset = WordNextOffset(w);
@@ -579,11 +585,13 @@ namespace Poderosa.Text
 			if(from<_text.Length && _text[from]==WIDECHAR_PAD) from--;
 			if(to>0 && to-1<_text.Length && _text[to-1]==WIDECHAR_PAD) to--;
 
-			GLine ret = new GLine(_text, null);
-			ret.ID = _id;
-			ret.EOLType = _eolType;
-			//装飾の配列をセット
-			TextDecoration[] dec = new TextDecoration[_text.Length];
+            GLine ret = new GLine(_text, null)
+            {
+                ID = _id,
+                EOLType = _eolType
+            };
+            //装飾の配列をセット
+            TextDecoration[] dec = new TextDecoration[_text.Length];
 			GWord w = _firstWord;
 			while(w!=null) {
 				Debug.Assert(w.Decoration!=null);
@@ -624,9 +632,11 @@ namespace Poderosa.Text
 				if(dec[i]!=null && ch!='\0') {
 					int j = i;
 					if(ch==WIDECHAR_PAD) j++;
-					GWord ww = new GWord(dec[i], j, CalcCharGroup(ch));
-					ww.Next = w;
-					w = ww;
+                    GWord ww = new GWord(dec[i], j, CalcCharGroup(ch))
+                    {
+                        Next = w
+                    };
+                    w = ww;
 				}
 			}
 			ret.Append(w);
@@ -815,7 +825,7 @@ namespace Poderosa.Text
 
 			_eolType = line.EOLType;
 			ExpandBuffer(cc+1);
-			this.CaretColumn = cc; //' 'で埋めることもあるのでプロパティセットを使う
+			CaretColumn = cc; //' 'で埋めることもあるのでプロパティセットを使う
 		}
 		public int BufferSize {
 			get {
@@ -953,9 +963,11 @@ namespace Poderosa.Text
 		public GLine Export() {
 			GWord w = new GWord(_decorations[0]==null? TextDecoration.ClonedDefault() : _decorations[0], 0, GLine.CalcCharGroup(_text[0]));
 
-			GLine line = new GLine(_text, w);
-			line.EOLType = _eolType;
-			int m = _text.Length;
+            GLine line = new GLine(_text, w)
+            {
+                EOLType = _eolType
+            };
+            int m = _text.Length;
 			for(int offset=1; offset<m; offset++) {
 				char ch = _text[offset];
 				if(ch=='\0') break;
@@ -989,10 +1001,12 @@ namespace Poderosa.Text
 			TestPutChar(7, "あ\uFFFFあ\uFFFFz ", 1, 'い');
 		}*/
 		private static void TestPutChar(int num, string initial, int col, char ch) {
-			GLineManipulator m = new GLineManipulator(10);
-			m._text = initial.ToCharArray();
-			m.CaretColumn = col;
-			Debug.WriteLine(String.Format("Test{0}  [{1}] col={2} char={3}", num, SafeString(m._text), m.CaretColumn, ch));
+            GLineManipulator m = new GLineManipulator(10)
+            {
+                _text = initial.ToCharArray(),
+                CaretColumn = col
+            };
+            Debug.WriteLine(String.Format("Test{0}  [{1}] col={2} char={3}", num, SafeString(m._text), m.CaretColumn, ch));
 			m.PutChar(ch, TextDecoration.Default);
 			Debug.WriteLine(String.Format("Result [{0}] col={1}", SafeString(m._text), m.CaretColumn));
 		}

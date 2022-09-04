@@ -3,9 +3,7 @@
 * $Id: VT100.cs,v 1.2 2005/04/20 08:45:48 okajima Exp $
 */
 using System;
-using System.IO;
 using System.Text;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -16,7 +14,7 @@ using Poderosa.UI;
 
 namespace Poderosa.Terminal
 {
-	internal class VT100Terminal : EscapeSequenceTerminal {
+    internal class VT100Terminal : EscapeSequenceTerminal {
 
 		protected int _savedRow;
 		protected int _savedCol;

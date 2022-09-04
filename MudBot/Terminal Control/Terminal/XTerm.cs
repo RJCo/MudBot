@@ -4,10 +4,7 @@
 */
 using System;
 using System.Collections;
-using System.IO;
 using System.Text;
-using System.Diagnostics;
-using System.Drawing;
 using System.Windows.Forms;
 
 using Poderosa.Connection;
@@ -15,7 +12,7 @@ using Poderosa.Text;
 
 namespace Poderosa.Terminal
 {
-	internal class XTerm : VT100Terminal
+    internal class XTerm : VT100Terminal
 	{
 		protected bool _wrapAroundMode;
 		protected bool[] _tabStops;
@@ -129,7 +126,7 @@ namespace Poderosa.Terminal
 					//!!パラメータによって無視してよい場合と、応答を返すべき場合がある。応答の返し方がよくわからないので保留中
 					return ProcessCharResult.Processed;
 				case 'U': //これはSFUでしか確認できてない
-					base.ProcessCursorPosition(GetConnection().TerminalHeight, 1);
+                    ProcessCursorPosition(GetConnection().TerminalHeight, 1);
 					return ProcessCharResult.Processed;
 				case 'u': //SFUでのみ確認。特にbは続く文字を繰り返すらしいが、意味のある動作になっているところを見ていない
 				case 'b':

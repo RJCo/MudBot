@@ -4,32 +4,24 @@
 */
 using System;
 using System.Drawing;
-using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Diagnostics;
-using System.Text;
-using System.Net;
-using System.Net.Sockets;
 using System.IO;
-
-using Poderosa.Toolkit;
 using EnumDescAttributeT = Poderosa.Toolkit.EnumDescAttribute;
 using Poderosa.Communication;
 using Poderosa.Connection;
 using Poderosa.ConnectionParam;
-using Poderosa.Terminal;
 using Poderosa.Config;
 using Poderosa.SSH;
-using Poderosa.UI;
 
 using Granados.SSHC;
 
 
 namespace Poderosa.Forms
 {
-	internal class LoginDialog : System.Windows.Forms.Form, ISocketWithTimeoutClient
+    internal class LoginDialog : Form, ISocketWithTimeoutClient
     {
         #region fields
         private string _errorMessage;
@@ -40,40 +32,40 @@ namespace Poderosa.Forms
 		private SocketWithTimeout _connector;
 		private IntPtr _savedHWND;
 
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 
-		private System.Windows.Forms.Label _hostLabel;
+		private Label _hostLabel;
 		public ComboBox _hostBox;
-		private System.Windows.Forms.Label _portLabel;
+		private Label _portLabel;
         public ComboBox _portBox;
-		private System.Windows.Forms.Label _methodLabel;
+		private Label _methodLabel;
         public ComboBox _methodBox;
 
-		private System.Windows.Forms.GroupBox _sshGroup;
-		private System.Windows.Forms.Label _usernameLabel;
+		private GroupBox _sshGroup;
+		private Label _usernameLabel;
         public ComboBox _userNameBox;
-		private System.Windows.Forms.Label _authenticationLabel;
+		private Label _authenticationLabel;
         public ComboBox _authOptions;
-		private System.Windows.Forms.Label _passphraseLabel;
+		private Label _passphraseLabel;
         public TextBox _passphraseBox;
-		private System.Windows.Forms.Label _privateKeyLabel;
+		private Label _privateKeyLabel;
         public TextBox _privateKeyFile;
 		private Button _privateKeySelect;
 
-		private System.Windows.Forms.GroupBox _terminalGroup;
+		private GroupBox _terminalGroup;
         public ComboBox _encodingBox;
-		private System.Windows.Forms.Label _encodingLabel;
-		private System.Windows.Forms.Label _logFileLabel;
+		private Label _encodingLabel;
+		private Label _logFileLabel;
         public ComboBox _logFileBox;
 		private Button _selectLogButton;
-		private System.Windows.Forms.Label _newLineLabel;
-		private System.Windows.Forms.Label _localEchoLabel;
+		private Label _newLineLabel;
+		private Label _localEchoLabel;
         public ComboBox _localEchoBox;
         public ComboBox _newLineBox;
-		private System.Windows.Forms.Label _logTypeLabel;
+		private Label _logTypeLabel;
         public ComboBox _logTypeBox;
         public ComboBox _terminalTypeBox;
-		private System.Windows.Forms.Label _terminalTypeLabel;
+		private Label _terminalTypeLabel;
 
 		private Button _loginButton;
 		private Button _cancelButton;
@@ -109,436 +101,436 @@ namespace Poderosa.Forms
         #region Windows Form Designer generated code
 		private void InitializeComponent()
 		{
-			this._loginButton = new System.Windows.Forms.Button();
-			this._cancelButton = new System.Windows.Forms.Button();
-			this._sshGroup = new System.Windows.Forms.GroupBox();
+			_loginButton = new Button();
+			_cancelButton = new Button();
+			_sshGroup = new GroupBox();
 
-			this._hostLabel = new System.Windows.Forms.Label();
-			this._hostBox = new ComboBox();
-			this._methodLabel = new System.Windows.Forms.Label();
-			this._methodBox = new ComboBox();
-			this._portLabel = new System.Windows.Forms.Label();
-			this._portBox = new ComboBox();
+			_hostLabel = new Label();
+			_hostBox = new ComboBox();
+			_methodLabel = new Label();
+			_methodBox = new ComboBox();
+			_portLabel = new Label();
+			_portBox = new ComboBox();
 
-			this._authenticationLabel = new System.Windows.Forms.Label();
-			this._authOptions = new ComboBox();
-			this._passphraseLabel = new System.Windows.Forms.Label();
-			this._passphraseBox = new TextBox();
-			this._privateKeyLabel = new System.Windows.Forms.Label();
-			this._privateKeyFile = new TextBox();
-			this._privateKeySelect = new Button();
-			this._usernameLabel = new System.Windows.Forms.Label();
-			this._userNameBox = new ComboBox();
+			_authenticationLabel = new Label();
+			_authOptions = new ComboBox();
+			_passphraseLabel = new Label();
+			_passphraseBox = new TextBox();
+			_privateKeyLabel = new Label();
+			_privateKeyFile = new TextBox();
+			_privateKeySelect = new Button();
+			_usernameLabel = new Label();
+			_userNameBox = new ComboBox();
 
-			this._terminalGroup = new System.Windows.Forms.GroupBox();
-			this._newLineBox = new ComboBox();
-			this._localEchoBox = new ComboBox();
-			this._localEchoLabel = new System.Windows.Forms.Label();
-			this._newLineLabel = new System.Windows.Forms.Label();
-			this._logFileBox = new ComboBox();
-			this._logFileLabel = new System.Windows.Forms.Label();
-			this._encodingBox = new ComboBox();
-			this._encodingLabel = new System.Windows.Forms.Label();
-			this._selectLogButton = new Button();
-			this._logTypeLabel = new System.Windows.Forms.Label();
-			this._logTypeBox = new ComboBox();
-			this._terminalTypeBox = new ComboBox();
-			this._terminalTypeLabel = new Label();
+			_terminalGroup = new GroupBox();
+			_newLineBox = new ComboBox();
+			_localEchoBox = new ComboBox();
+			_localEchoLabel = new Label();
+			_newLineLabel = new Label();
+			_logFileBox = new ComboBox();
+			_logFileLabel = new Label();
+			_encodingBox = new ComboBox();
+			_encodingLabel = new Label();
+			_selectLogButton = new Button();
+			_logTypeLabel = new Label();
+			_logTypeBox = new ComboBox();
+			_terminalTypeBox = new ComboBox();
+			_terminalTypeLabel = new Label();
 
-			this._sshGroup.SuspendLayout();
-			this._terminalGroup.SuspendLayout();
-			this.SuspendLayout();
+			_sshGroup.SuspendLayout();
+			_terminalGroup.SuspendLayout();
+			SuspendLayout();
 			// 
 			// _hostLabel
 			// 
-			this._hostLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._hostLabel.Location = new System.Drawing.Point(16, 12);
-			this._hostLabel.Name = "_hostLabel";
-			this._hostLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._hostLabel.Size = new System.Drawing.Size(80, 16);
-			this._hostLabel.TabIndex = 0;
-			this._hostLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_hostLabel.ImeMode = ImeMode.NoControl;
+			_hostLabel.Location = new Point(16, 12);
+			_hostLabel.Name = "_hostLabel";
+			_hostLabel.RightToLeft = RightToLeft.No;
+			_hostLabel.Size = new Size(80, 16);
+			_hostLabel.TabIndex = 0;
+			_hostLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _hostBox
 			// 
-			this._hostBox.Location = new System.Drawing.Point(104, 8);
-			this._hostBox.Name = "_hostBox";
-			this._hostBox.Size = new System.Drawing.Size(208, 20);
-			this._hostBox.TabIndex = 1;
-			this._hostBox.SelectedIndexChanged += new System.EventHandler(this.OnHostIsSelected);
+			_hostBox.Location = new Point(104, 8);
+			_hostBox.Name = "_hostBox";
+			_hostBox.Size = new Size(208, 20);
+			_hostBox.TabIndex = 1;
+			_hostBox.SelectedIndexChanged += new EventHandler(OnHostIsSelected);
 			// 
 			// _methodLabel
 			// 
-			this._methodLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._methodLabel.Location = new System.Drawing.Point(16, 36);
-			this._methodLabel.Name = "_methodLabel";
-			this._methodLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._methodLabel.Size = new System.Drawing.Size(80, 16);
-			this._methodLabel.TabIndex = 2;
-			this._methodLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_methodLabel.ImeMode = ImeMode.NoControl;
+			_methodLabel.Location = new Point(16, 36);
+			_methodLabel.Name = "_methodLabel";
+			_methodLabel.RightToLeft = RightToLeft.No;
+			_methodLabel.Size = new Size(80, 16);
+			_methodLabel.TabIndex = 2;
+			_methodLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _methodBox
 			// 
-			this._methodBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._methodBox.Items.AddRange(new object[] { "Telnet",
+			_methodBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_methodBox.Items.AddRange(new object[] { "Telnet",
 															"SSH1",
 															"SSH2"
 															});
-			this._methodBox.Location = new System.Drawing.Point(104, 32);
-			this._methodBox.Name = "_methodBox";
-			this._methodBox.Size = new System.Drawing.Size(208, 20);
-			this._methodBox.TabIndex = 3;
-			this._methodBox.SelectedIndexChanged += new System.EventHandler(this.AdjustConnectionUI);
+			_methodBox.Location = new Point(104, 32);
+			_methodBox.Name = "_methodBox";
+			_methodBox.Size = new Size(208, 20);
+			_methodBox.TabIndex = 3;
+			_methodBox.SelectedIndexChanged += new EventHandler(AdjustConnectionUI);
 			// 
 			// _portLabel
 			// 
-			this._portLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._portLabel.Location = new System.Drawing.Point(16, 60);
-			this._portLabel.Name = "_portLabel";
-			this._portLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._portLabel.Size = new System.Drawing.Size(80, 16);
-			this._portLabel.TabIndex = 4;
-			this._portLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_portLabel.ImeMode = ImeMode.NoControl;
+			_portLabel.Location = new Point(16, 60);
+			_portLabel.Name = "_portLabel";
+			_portLabel.RightToLeft = RightToLeft.No;
+			_portLabel.Size = new Size(80, 16);
+			_portLabel.TabIndex = 4;
+			_portLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _portBox
 			// 
-			this._portBox.Location = new System.Drawing.Point(104, 56);
-			this._portBox.Name = "_portBox";
-			this._portBox.Size = new System.Drawing.Size(208, 20);
-			this._portBox.TabIndex = 5;
+			_portBox.Location = new Point(104, 56);
+			_portBox.Name = "_portBox";
+			_portBox.Size = new Size(208, 20);
+			_portBox.TabIndex = 5;
 			// 
 			// _sshGroup
 			// 
-			this._sshGroup.Controls.AddRange(new System.Windows.Forms.Control[] {
-																					this._privateKeyFile,
-																					this._authOptions,
-																					this._privateKeyLabel,
-																					this._passphraseBox,
-																					this._userNameBox,
-																					this._authenticationLabel,
-																					this._passphraseLabel,
-																					this._usernameLabel,
-																					this._privateKeySelect});
-			this._sshGroup.Location = new System.Drawing.Point(8, 88);
-			this._sshGroup.Name = "_sshGroup";
-			this._sshGroup.FlatStyle = FlatStyle.System;
-			this._sshGroup.Size = new System.Drawing.Size(312, 112);
-			this._sshGroup.TabIndex = 6;
-			this._sshGroup.TabStop = false;
+			_sshGroup.Controls.AddRange(new Control[] {
+																					_privateKeyFile,
+																					_authOptions,
+																					_privateKeyLabel,
+																					_passphraseBox,
+																					_userNameBox,
+																					_authenticationLabel,
+																					_passphraseLabel,
+																					_usernameLabel,
+																					_privateKeySelect});
+			_sshGroup.Location = new Point(8, 88);
+			_sshGroup.Name = "_sshGroup";
+			_sshGroup.FlatStyle = FlatStyle.System;
+			_sshGroup.Size = new Size(312, 112);
+			_sshGroup.TabIndex = 6;
+			_sshGroup.TabStop = false;
 			// 
 			// _usernameLabel
 			// 
-			this._usernameLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._usernameLabel.Location = new System.Drawing.Point(8, 16);
-			this._usernameLabel.Name = "_usernameLabel";
-			this._usernameLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._usernameLabel.Size = new System.Drawing.Size(80, 16);
-			this._usernameLabel.TabIndex = 7;
-			this._usernameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_usernameLabel.ImeMode = ImeMode.NoControl;
+			_usernameLabel.Location = new Point(8, 16);
+			_usernameLabel.Name = "_usernameLabel";
+			_usernameLabel.RightToLeft = RightToLeft.No;
+			_usernameLabel.Size = new Size(80, 16);
+			_usernameLabel.TabIndex = 7;
+			_usernameLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _userNameBox
 			// 
-			this._userNameBox.Location = new System.Drawing.Point(96, 16);
-			this._userNameBox.Name = "_userNameBox";
-			this._userNameBox.Size = new System.Drawing.Size(200, 20);
-			this._userNameBox.TabIndex = 8;
+			_userNameBox.Location = new Point(96, 16);
+			_userNameBox.Name = "_userNameBox";
+			_userNameBox.Size = new Size(200, 20);
+			_userNameBox.TabIndex = 8;
 			// 
 			// _authenticationLabel
 			// 
-			this._authenticationLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._authenticationLabel.Location = new System.Drawing.Point(8, 40);
-			this._authenticationLabel.Name = "_authenticationLabel";
-			this._authenticationLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._authenticationLabel.Size = new System.Drawing.Size(80, 16);
-			this._authenticationLabel.TabIndex = 9;
-			this._authenticationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_authenticationLabel.ImeMode = ImeMode.NoControl;
+			_authenticationLabel.Location = new Point(8, 40);
+			_authenticationLabel.Name = "_authenticationLabel";
+			_authenticationLabel.RightToLeft = RightToLeft.No;
+			_authenticationLabel.Size = new Size(80, 16);
+			_authenticationLabel.TabIndex = 9;
+			_authenticationLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _authOptions
 			// 
-			this._authOptions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._authOptions.Location = new System.Drawing.Point(96, 40);
-			this._authOptions.Name = "_authOptions";
-			this._authOptions.Size = new System.Drawing.Size(200, 20);
-			this._authOptions.TabIndex = 10;
-			this._authOptions.SelectedIndexChanged += new System.EventHandler(this.AdjustAuthenticationUI);
+			_authOptions.DropDownStyle = ComboBoxStyle.DropDownList;
+			_authOptions.Location = new Point(96, 40);
+			_authOptions.Name = "_authOptions";
+			_authOptions.Size = new Size(200, 20);
+			_authOptions.TabIndex = 10;
+			_authOptions.SelectedIndexChanged += new EventHandler(AdjustAuthenticationUI);
 			// 
 			// _passphraseLabel
 			// 
-			this._passphraseLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._passphraseLabel.Location = new System.Drawing.Point(8, 64);
-			this._passphraseLabel.Name = "_passphraseLabel";
-			this._passphraseLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._passphraseLabel.Size = new System.Drawing.Size(80, 16);
-			this._passphraseLabel.TabIndex = 11;
-			this._passphraseLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_passphraseLabel.ImeMode = ImeMode.NoControl;
+			_passphraseLabel.Location = new Point(8, 64);
+			_passphraseLabel.Name = "_passphraseLabel";
+			_passphraseLabel.RightToLeft = RightToLeft.No;
+			_passphraseLabel.Size = new Size(80, 16);
+			_passphraseLabel.TabIndex = 11;
+			_passphraseLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _passphraseBox
 			// 
-			this._passphraseBox.Location = new System.Drawing.Point(96, 64);
-			this._passphraseBox.Name = "_passphraseBox";
-			this._passphraseBox.PasswordChar = '*';
-			this._passphraseBox.Size = new System.Drawing.Size(200, 19);
-			this._passphraseBox.TabIndex = 12;
-			this._passphraseBox.Text = "";
+			_passphraseBox.Location = new Point(96, 64);
+			_passphraseBox.Name = "_passphraseBox";
+			_passphraseBox.PasswordChar = '*';
+			_passphraseBox.Size = new Size(200, 19);
+			_passphraseBox.TabIndex = 12;
+			_passphraseBox.Text = "";
 			// 
 			// _privateKeyLabel
 			// 
-			this._privateKeyLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._privateKeyLabel.Location = new System.Drawing.Point(8, 88);
-			this._privateKeyLabel.Name = "_privateKeyLabel";
-			this._privateKeyLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._privateKeyLabel.Size = new System.Drawing.Size(72, 16);
-			this._privateKeyLabel.TabIndex = 14;
-			this._privateKeyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_privateKeyLabel.ImeMode = ImeMode.NoControl;
+			_privateKeyLabel.Location = new Point(8, 88);
+			_privateKeyLabel.Name = "_privateKeyLabel";
+			_privateKeyLabel.RightToLeft = RightToLeft.No;
+			_privateKeyLabel.Size = new Size(72, 16);
+			_privateKeyLabel.TabIndex = 14;
+			_privateKeyLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _privateKeyFile
 			// 
-			this._privateKeyFile.Location = new System.Drawing.Point(96, 88);
-			this._privateKeyFile.Name = "_privateKeyFile";
-			this._privateKeyFile.Size = new System.Drawing.Size(176, 19);
-			this._privateKeyFile.TabIndex = 15;
-			this._privateKeyFile.Text = "";
+			_privateKeyFile.Location = new Point(96, 88);
+			_privateKeyFile.Name = "_privateKeyFile";
+			_privateKeyFile.Size = new Size(176, 19);
+			_privateKeyFile.TabIndex = 15;
+			_privateKeyFile.Text = "";
 			// 
 			// _privateKeySelect
 			// 
-			this._privateKeySelect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._privateKeySelect.ImageIndex = 0;
-			this._privateKeySelect.FlatStyle = FlatStyle.System;
-			this._privateKeySelect.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._privateKeySelect.Location = new System.Drawing.Point(272, 88);
-			this._privateKeySelect.Name = "_privateKeySelect";
-			this._privateKeySelect.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._privateKeySelect.Size = new System.Drawing.Size(19, 19);
-			this._privateKeySelect.TabIndex = 16;
-			this._privateKeySelect.Text = "...";
-			this._privateKeySelect.Click += new System.EventHandler(this.OnOpenPrivateKey);
+			_privateKeySelect.FlatStyle = FlatStyle.Flat;
+			_privateKeySelect.ImageIndex = 0;
+			_privateKeySelect.FlatStyle = FlatStyle.System;
+			_privateKeySelect.ImeMode = ImeMode.NoControl;
+			_privateKeySelect.Location = new Point(272, 88);
+			_privateKeySelect.Name = "_privateKeySelect";
+			_privateKeySelect.RightToLeft = RightToLeft.No;
+			_privateKeySelect.Size = new Size(19, 19);
+			_privateKeySelect.TabIndex = 16;
+			_privateKeySelect.Text = "...";
+			_privateKeySelect.Click += new EventHandler(OnOpenPrivateKey);
 			// 
 			// _terminalGroup
 			// 
-			this._terminalGroup.Controls.AddRange(new System.Windows.Forms.Control[] {
-																						 this._logTypeBox,
-																						 this._logTypeLabel,
-																						 this._newLineBox,
-																						 this._localEchoBox,
-																						 this._localEchoLabel,
-																						 this._newLineLabel,
-																						 this._logFileBox,
-																						 this._logFileLabel,
-																						 this._encodingBox,
-																						 this._encodingLabel,
-																						 this._selectLogButton, this._terminalTypeLabel, this._terminalTypeBox});
-			this._terminalGroup.Location = new System.Drawing.Point(8, 208);
-			this._terminalGroup.Name = "_terminalGroup";
-			this._terminalGroup.FlatStyle = FlatStyle.System;
-			this._terminalGroup.Size = new System.Drawing.Size(312, 168);
-			this._terminalGroup.TabIndex = 17;
-			this._terminalGroup.TabStop = false;
+			_terminalGroup.Controls.AddRange(new Control[] {
+																						 _logTypeBox,
+																						 _logTypeLabel,
+																						 _newLineBox,
+																						 _localEchoBox,
+																						 _localEchoLabel,
+																						 _newLineLabel,
+																						 _logFileBox,
+																						 _logFileLabel,
+																						 _encodingBox,
+																						 _encodingLabel,
+																						 _selectLogButton, _terminalTypeLabel, _terminalTypeBox});
+			_terminalGroup.Location = new Point(8, 208);
+			_terminalGroup.Name = "_terminalGroup";
+			_terminalGroup.FlatStyle = FlatStyle.System;
+			_terminalGroup.Size = new Size(312, 168);
+			_terminalGroup.TabIndex = 17;
+			_terminalGroup.TabStop = false;
 			// 
 			// _logTypeLabel
 			// 
-			this._logTypeLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._logTypeLabel.Location = new System.Drawing.Point(8, 16);
-			this._logTypeLabel.Name = "_logTypeLabel";
-			this._logTypeLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._logTypeLabel.Size = new System.Drawing.Size(96, 16);
-			this._logTypeLabel.TabIndex = 18;
-			this._logTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_logTypeLabel.ImeMode = ImeMode.NoControl;
+			_logTypeLabel.Location = new Point(8, 16);
+			_logTypeLabel.Name = "_logTypeLabel";
+			_logTypeLabel.RightToLeft = RightToLeft.No;
+			_logTypeLabel.Size = new Size(96, 16);
+			_logTypeLabel.TabIndex = 18;
+			_logTypeLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _logTypeBox
 			// 
-			this._logTypeBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._logTypeBox.Items.AddRange(EnumDescAttributeT.For(typeof(LogType)).DescriptionCollection());
-			this._logTypeBox.Location = new System.Drawing.Point(112, 16);
-			this._logTypeBox.Name = "_logTypeBox";
-			this._logTypeBox.Size = new System.Drawing.Size(96, 20);
-			this._logTypeBox.TabIndex = 19;
-			this._logTypeBox.SelectionChangeCommitted += new EventHandler(OnLogTypeChanged);
+			_logTypeBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_logTypeBox.Items.AddRange(EnumDescAttributeT.For(typeof(LogType)).DescriptionCollection());
+			_logTypeBox.Location = new Point(112, 16);
+			_logTypeBox.Name = "_logTypeBox";
+			_logTypeBox.Size = new Size(96, 20);
+			_logTypeBox.TabIndex = 19;
+			_logTypeBox.SelectionChangeCommitted += new EventHandler(OnLogTypeChanged);
 			// 
 			// _logFileLabel
 			// 
-			this._logFileLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._logFileLabel.Location = new System.Drawing.Point(8, 40);
-			this._logFileLabel.Name = "_logFileLabel";
-			this._logFileLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._logFileLabel.Size = new System.Drawing.Size(88, 16);
-			this._logFileLabel.TabIndex = 20;
-			this._logFileLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_logFileLabel.ImeMode = ImeMode.NoControl;
+			_logFileLabel.Location = new Point(8, 40);
+			_logFileLabel.Name = "_logFileLabel";
+			_logFileLabel.RightToLeft = RightToLeft.No;
+			_logFileLabel.Size = new Size(88, 16);
+			_logFileLabel.TabIndex = 20;
+			_logFileLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _logFileBox
 			// 
-			this._logFileBox.Location = new System.Drawing.Point(112, 40);
-			this._logFileBox.Name = "_logFileBox";
-			this._logFileBox.Size = new System.Drawing.Size(160, 20);
-			this._logFileBox.TabIndex = 21;
+			_logFileBox.Location = new Point(112, 40);
+			_logFileBox.Name = "_logFileBox";
+			_logFileBox.Size = new Size(160, 20);
+			_logFileBox.TabIndex = 21;
 			// 
 			// _selectLogButton
 			// 
-			this._selectLogButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._selectLogButton.ImageIndex = 0;
-			this._selectLogButton.FlatStyle = FlatStyle.System;
-			this._selectLogButton.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._selectLogButton.Location = new System.Drawing.Point(272, 40);
-			this._selectLogButton.Name = "_selectLogButton";
-			this._selectLogButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._selectLogButton.Size = new System.Drawing.Size(19, 19);
-			this._selectLogButton.TabIndex = 22;
-			this._selectLogButton.Text = "...";
-			this._selectLogButton.Click += new System.EventHandler(this.SelectLog);
+			_selectLogButton.FlatStyle = FlatStyle.Flat;
+			_selectLogButton.ImageIndex = 0;
+			_selectLogButton.FlatStyle = FlatStyle.System;
+			_selectLogButton.ImeMode = ImeMode.NoControl;
+			_selectLogButton.Location = new Point(272, 40);
+			_selectLogButton.Name = "_selectLogButton";
+			_selectLogButton.RightToLeft = RightToLeft.No;
+			_selectLogButton.Size = new Size(19, 19);
+			_selectLogButton.TabIndex = 22;
+			_selectLogButton.Text = "...";
+			_selectLogButton.Click += new EventHandler(SelectLog);
 			// 
 			// _encodingLabel
 			// 
-			this._encodingLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._encodingLabel.Location = new System.Drawing.Point(8, 64);
-			this._encodingLabel.Name = "_encodingLabel";
-			this._encodingLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._encodingLabel.Size = new System.Drawing.Size(96, 16);
-			this._encodingLabel.TabIndex = 23;
-			this._encodingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_encodingLabel.ImeMode = ImeMode.NoControl;
+			_encodingLabel.Location = new Point(8, 64);
+			_encodingLabel.Name = "_encodingLabel";
+			_encodingLabel.RightToLeft = RightToLeft.No;
+			_encodingLabel.Size = new Size(96, 16);
+			_encodingLabel.TabIndex = 23;
+			_encodingLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _encodingBox
 			// 
-			this._encodingBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._encodingBox.Items.AddRange(EnumDescAttributeT.For(typeof(EncodingType)).DescriptionCollection());
-			this._encodingBox.Location = new System.Drawing.Point(112, 64);
-			this._encodingBox.Name = "_encodingBox";
-			this._encodingBox.Size = new System.Drawing.Size(96, 20);
-			this._encodingBox.TabIndex = 24;
+			_encodingBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_encodingBox.Items.AddRange(EnumDescAttributeT.For(typeof(EncodingType)).DescriptionCollection());
+			_encodingBox.Location = new Point(112, 64);
+			_encodingBox.Name = "_encodingBox";
+			_encodingBox.Size = new Size(96, 20);
+			_encodingBox.TabIndex = 24;
 			// 
 			// _localEchoLabel
 			// 
-			this._localEchoLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._localEchoLabel.Location = new System.Drawing.Point(8, 88);
-			this._localEchoLabel.Name = "_localEchoLabel";
-			this._localEchoLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._localEchoLabel.Size = new System.Drawing.Size(96, 16);
-			this._localEchoLabel.TabIndex = 25;
-			this._localEchoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_localEchoLabel.ImeMode = ImeMode.NoControl;
+			_localEchoLabel.Location = new Point(8, 88);
+			_localEchoLabel.Name = "_localEchoLabel";
+			_localEchoLabel.RightToLeft = RightToLeft.No;
+			_localEchoLabel.Size = new Size(96, 16);
+			_localEchoLabel.TabIndex = 25;
+			_localEchoLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _localEchoBox
 			// 
-			this._localEchoBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._localEchoBox.Items.AddRange(new object[] {
-															   GApp.Strings.GetString("Common.DoNot"),
-															   GApp.Strings.GetString("Common.Do")});
-			this._localEchoBox.Location = new System.Drawing.Point(112, 88);
-			this._localEchoBox.Name = "_localEchoBox";
-			this._localEchoBox.Size = new System.Drawing.Size(96, 20);
-			this._localEchoBox.TabIndex = 26;
+			_localEchoBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_localEchoBox.Items.AddRange(new object[] {
+															   "Common.DoNot",
+															   "Common.Do"});
+			_localEchoBox.Location = new Point(112, 88);
+			_localEchoBox.Name = "_localEchoBox";
+			_localEchoBox.Size = new Size(96, 20);
+			_localEchoBox.TabIndex = 26;
 			// 
 			// _newLineLabel
 			// 
-			this._newLineLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._newLineLabel.Location = new System.Drawing.Point(8, 112);
-			this._newLineLabel.Name = "_newLineLabel";
-			this._newLineLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._newLineLabel.Size = new System.Drawing.Size(96, 16);
-			this._newLineLabel.TabIndex = 27;
-			this._newLineLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_newLineLabel.ImeMode = ImeMode.NoControl;
+			_newLineLabel.Location = new Point(8, 112);
+			_newLineLabel.Name = "_newLineLabel";
+			_newLineLabel.RightToLeft = RightToLeft.No;
+			_newLineLabel.Size = new Size(96, 16);
+			_newLineLabel.TabIndex = 27;
+			_newLineLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _newLineBox
 			// 
-			this._newLineBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._newLineBox.Items.AddRange(EnumDescAttributeT.For(typeof(NewLine)).DescriptionCollection());
-			this._newLineBox.Location = new System.Drawing.Point(112, 112);
-			this._newLineBox.Name = "_newLineBox";
-			this._newLineBox.Size = new System.Drawing.Size(96, 20);
-			this._newLineBox.TabIndex = 28;
+			_newLineBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_newLineBox.Items.AddRange(EnumDescAttributeT.For(typeof(NewLine)).DescriptionCollection());
+			_newLineBox.Location = new Point(112, 112);
+			_newLineBox.Name = "_newLineBox";
+			_newLineBox.Size = new Size(96, 20);
+			_newLineBox.TabIndex = 28;
 			// 
 			// _terminalTypeLabel
 			// 
-			this._terminalTypeLabel.Location = new System.Drawing.Point(8, 136);
-			this._terminalTypeLabel.Name = "_terminalTypeLabel";
-			this._terminalTypeLabel.Size = new System.Drawing.Size(96, 23);
-			this._terminalTypeLabel.TabIndex = 29;
-			this._terminalTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_terminalTypeLabel.Location = new Point(8, 136);
+			_terminalTypeLabel.Name = "_terminalTypeLabel";
+			_terminalTypeLabel.Size = new Size(96, 23);
+			_terminalTypeLabel.TabIndex = 29;
+			_terminalTypeLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _terminalTypeBox
 			// 
-			this._terminalTypeBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._terminalTypeBox.Items.AddRange(EnumDescAttributeT.For(typeof(TerminalType)).DescriptionCollection());
-			this._terminalTypeBox.Location = new System.Drawing.Point(112, 136);
-			this._terminalTypeBox.Name = "_terminalType";
-			this._terminalTypeBox.Size = new System.Drawing.Size(96, 20);
-			this._terminalTypeBox.TabIndex = 30;
+			_terminalTypeBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_terminalTypeBox.Items.AddRange(EnumDescAttributeT.For(typeof(TerminalType)).DescriptionCollection());
+			_terminalTypeBox.Location = new Point(112, 136);
+			_terminalTypeBox.Name = "_terminalType";
+			_terminalTypeBox.Size = new Size(96, 20);
+			_terminalTypeBox.TabIndex = 30;
 			// 
 			// _loginButton
 			// 
-			this._loginButton.ImageIndex = 0;
-			this._loginButton.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._loginButton.Location = new System.Drawing.Point(160, 384);
-			this._loginButton.Name = "_loginButton";
-			this._loginButton.FlatStyle = FlatStyle.System;
-			this._loginButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._loginButton.Size = new System.Drawing.Size(72, 25);
-			this._loginButton.TabIndex = 29;
-			this._loginButton.Click += new System.EventHandler(this.OnOK);
+			_loginButton.ImageIndex = 0;
+			_loginButton.ImeMode = ImeMode.NoControl;
+			_loginButton.Location = new Point(160, 384);
+			_loginButton.Name = "_loginButton";
+			_loginButton.FlatStyle = FlatStyle.System;
+			_loginButton.RightToLeft = RightToLeft.No;
+			_loginButton.Size = new Size(72, 25);
+			_loginButton.TabIndex = 29;
+			_loginButton.Click += new EventHandler(OnOK);
 			// 
 			// _cancelButton
 			// 
-			this._cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this._cancelButton.ImageIndex = 0;
-			this._cancelButton.FlatStyle = FlatStyle.System;
-			this._cancelButton.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._cancelButton.Location = new System.Drawing.Point(248, 384);
-			this._cancelButton.Name = "_cancelButton";
-			this._cancelButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._cancelButton.Size = new System.Drawing.Size(72, 25);
-			this._cancelButton.TabIndex = 30;
+			_cancelButton.DialogResult = DialogResult.Cancel;
+			_cancelButton.ImageIndex = 0;
+			_cancelButton.FlatStyle = FlatStyle.System;
+			_cancelButton.ImeMode = ImeMode.NoControl;
+			_cancelButton.Location = new Point(248, 384);
+			_cancelButton.Name = "_cancelButton";
+			_cancelButton.RightToLeft = RightToLeft.No;
+			_cancelButton.Size = new Size(72, 25);
+			_cancelButton.TabIndex = 30;
 			// 
 			// LoginDialog
 			// 
-			this.AcceptButton = this._loginButton;
-			this.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 12);
-			this.CancelButton = this._cancelButton;
-			this.ClientSize = new System.Drawing.Size(330, 415);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this._terminalGroup,
-																		  this._sshGroup,
-																		  this._hostBox,
-																		  this._methodBox,
-																		  this._portBox,
-																		  this._cancelButton,
-																		  this._loginButton,
-																		  this._methodLabel,
-																		  this._portLabel,
-																		  this._hostLabel});
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "LoginDialog";
-			this.ShowInTaskbar = false;
+			AcceptButton = _loginButton;
+			Anchor = AnchorStyles.None;
+			AutoScaleBaseSize = new Size(5, 12);
+			CancelButton = _cancelButton;
+			ClientSize = new Size(330, 415);
+			Controls.AddRange(new Control[] {
+																		  _terminalGroup,
+																		  _sshGroup,
+																		  _hostBox,
+																		  _methodBox,
+																		  _portBox,
+																		  _cancelButton,
+																		  _loginButton,
+																		  _methodLabel,
+																		  _portLabel,
+																		  _hostLabel});
+			FormBorderStyle = FormBorderStyle.FixedDialog;
+			MaximizeBox = false;
+			MinimizeBox = false;
+			Name = "LoginDialog";
+			ShowInTaskbar = false;
 			//this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this._sshGroup.ResumeLayout(false);
-			this._terminalGroup.ResumeLayout(false);
-			this.ResumeLayout(false);
+            StartPosition = FormStartPosition.CenterScreen;
+			_sshGroup.ResumeLayout(false);
+			_terminalGroup.ResumeLayout(false);
+			ResumeLayout(false);
 
 		}
 		#endregion
 		private void InitializeText() {
-			this._hostLabel.Text = GApp.Strings.GetString("Form.LoginDialog._hostLabel");
-			this._portLabel.Text = GApp.Strings.GetString("Form.LoginDialog._portLabel");
-			this._methodLabel.Text = GApp.Strings.GetString("Form.LoginDialog._methodLabel");
-			this._sshGroup.Text = GApp.Strings.GetString("Form.LoginDialog._sshGroup");
-			this._privateKeyLabel.Text = GApp.Strings.GetString("Form.LoginDialog._privateKeyLabel");
-			this._authenticationLabel.Text = GApp.Strings.GetString("Form.LoginDialog._authenticationLabel");
-			this._passphraseLabel.Text = GApp.Strings.GetString("Form.LoginDialog._passphraseLabel");
-			this._usernameLabel.Text = GApp.Strings.GetString("Form.LoginDialog._usernameLabel");
-			this._terminalGroup.Text = GApp.Strings.GetString("Form.LoginDialog._terminalGroup");
-			this._localEchoLabel.Text = GApp.Strings.GetString("Form.LoginDialog._localEchoLabel");
-			this._newLineLabel.Text = GApp.Strings.GetString("Form.LoginDialog._newLineLabel");
-			this._logFileLabel.Text = GApp.Strings.GetString("Form.LoginDialog._logFileLabel");
-			this._encodingLabel.Text = GApp.Strings.GetString("Form.LoginDialog._encodingLabel");
-			this._logTypeLabel.Text = GApp.Strings.GetString("Form.LoginDialog._logTypeLabel");
-			this._terminalTypeLabel.Text = GApp.Strings.GetString("Form.LoginDialog._terminalTypeLabel");
-			this._loginButton.Text = GApp.Strings.GetString("Common.OK");
-			this._cancelButton.Text = GApp.Strings.GetString("Common.Cancel");
-			this.Text = GApp.Strings.GetString("Form.LoginDialog.Text");
+			_hostLabel.Text = "Form.LoginDialog._hostLabel";
+			_portLabel.Text = "Form.LoginDialog._portLabel";
+			_methodLabel.Text = "Form.LoginDialog._methodLabel";
+			_sshGroup.Text = "Form.LoginDialog._sshGroup";
+			_privateKeyLabel.Text = "Form.LoginDialog._privateKeyLabel";
+			_authenticationLabel.Text = "Form.LoginDialog._authenticationLabel";
+			_passphraseLabel.Text = "Form.LoginDialog._passphraseLabel";
+			_usernameLabel.Text = "Form.LoginDialog._usernameLabel";
+			_terminalGroup.Text = "Form.LoginDialog._terminalGroup";
+			_localEchoLabel.Text = "Form.LoginDialog._localEchoLabel";
+			_newLineLabel.Text = "Form.LoginDialog._newLineLabel";
+			_logFileLabel.Text = "Form.LoginDialog._logFileLabel";
+			_encodingLabel.Text = "Form.LoginDialog._encodingLabel";
+			_logTypeLabel.Text = "Form.LoginDialog._logTypeLabel";
+			_terminalTypeLabel.Text = "Form.LoginDialog._terminalTypeLabel";
+			_loginButton.Text = "OK";
+			_cancelButton.Text = "Cancel";
+			Text = "Form.LoginDialog.Text";
 
 			_authOptions.Items.AddRange(EnumDescAttributeT.For(typeof(AuthType)).DescriptionCollection());
 		}
-		private void AdjustConnectionUI(object sender, System.EventArgs e) {
+		private void AdjustConnectionUI(object sender, EventArgs e) {
 			if(_initializing) return;
 			if(_methodBox.Text=="Telnet") {
 				_portBox.SelectedIndex = 0; //Telnet:23
@@ -549,7 +541,7 @@ namespace Poderosa.Forms
 			}
 			EnableValidControls();
 		}
-		private void AdjustAuthenticationUI(object sender, System.EventArgs e) {
+		private void AdjustAuthenticationUI(object sender, EventArgs e) {
 			EnableValidControls();
 		}
 		private void InitializeLoginParams() {
@@ -630,7 +622,7 @@ namespace Poderosa.Forms
 			}
 		}
 
-		private void OnHostIsSelected(object sender, System.EventArgs e) {
+		private void OnHostIsSelected(object sender, EventArgs e) {
 			if(_initializing) return;
 			string host = _hostBox.Text;
 			TCPTerminalParam param = _history.SearchByHost(host);
@@ -649,7 +641,7 @@ namespace Poderosa.Forms
 				return Int32.Parse(text);
 			}
 			catch(FormatException) {
-				throw new FormatException(String.Format(GApp.Strings.GetString("Message.LoginDialog.InvalidPort"), text));
+				throw new FormatException(String.Format("Message.LoginDialog.InvalidPort", text));
 			}
 		}
 		private static ConnectionMethod ParseMethod(string text) {
@@ -673,22 +665,22 @@ namespace Poderosa.Forms
 		}
 
 
-		private void OnOpenPrivateKey(object sender, System.EventArgs e) {
+		private void OnOpenPrivateKey(object sender, EventArgs e) {
 			string fn = GCUtil.SelectPrivateKeyFileByDialog(this);
 			if(fn!=null) _privateKeyFile.Text = fn;
 			_privateKeySelect.Focus(); //どっちにしても次のフォーカスは鍵選択ボタンへ
 		}
 
-		public void OnOK(object sender, System.EventArgs e) {
-			this.DialogResult = DialogResult.None;
+		public void OnOK(object sender, EventArgs e) {
+			DialogResult = DialogResult.None;
 			TCPTerminalParam param = ValidateContent();
 			if(param==null) return;  //パラメータに誤りがあれば即脱出
 
 			_loginButton.Enabled = false;
 			_cancelButton.Enabled = false;
-			this.Cursor = Cursors.WaitCursor;
-			this.Text = GApp.Strings.GetString("Caption.LoginDialog.Connecting");
-			_savedHWND = this.Handle;
+			Cursor = Cursors.WaitCursor;
+			Text = "Caption.LoginDialog.Connecting";
+			_savedHWND = Handle;
 
 			HostKeyCheckCallback checker = null;
 			if(param.IsSSH)
@@ -722,7 +714,7 @@ namespace Poderosa.Forms
 				}
 
 				if(_hostBox.Text.Length==0)
-					msg = GApp.Strings.GetString("Message.LoginDialog.HostIsEmpty");
+					msg = "Message.LoginDialog.HostIsEmpty";
 
 				p.LogType = (LogType)EnumDescAttributeT.For(typeof(LogType)).FromDescription(_logTypeBox.Text, LogType.None);
 
@@ -739,7 +731,7 @@ namespace Poderosa.Forms
 					sp.AuthType = (AuthType)_authOptions.SelectedIndex;
 					if(sp.AuthType==AuthType.PublicKey) {
 						if(!File.Exists(_privateKeyFile.Text))
-							msg = GApp.Strings.GetString("Message.LoginDialog.KeyFileNotExist");
+							msg = "Message.LoginDialog.KeyFileNotExist";
 						else
 							sp.IdentityFile = _privateKeyFile.Text;
 					}
@@ -771,11 +763,11 @@ namespace Poderosa.Forms
 			}
 		}
 
-		private void SelectLog(object sender, System.EventArgs e) {
+		private void SelectLog(object sender, EventArgs e) {
 			string fn = GCUtil.SelectLogFileByDialog(this);
 			if(fn!=null) _logFileBox.Text = fn;
 		}
-		private void OnLogTypeChanged(object sender, System.EventArgs e) {
+		private void OnLogTypeChanged(object sender, EventArgs e) {
 			if(_initializing) return;
 			EnableValidControls();
 		}
@@ -792,20 +784,20 @@ namespace Poderosa.Forms
 		private void ClearConnectingState() {
 			_loginButton.Enabled = true;
 			_cancelButton.Enabled = true;
-			this.Cursor = Cursors.Default;
-			this.Text = GApp.Strings.GetString("Form.LoginDialog.Text");
+			Cursor = Cursors.Default;
+			Text = "Form.LoginDialog.Text";
 			_connector = null;
 		}
 
 		private void ShowError(string msg) {
-			GUtil.Warning(this, msg, GApp.Strings.GetString("Caption.LoginDialog.ConnectionError"));
+			GUtil.Warning(this, msg, "Caption.LoginDialog.ConnectionError");
 		}
 
 		protected override void WndProc(ref Message msg) {
 			base.WndProc(ref msg);
 			if(msg.Msg==GConst.WMG_ASYNCCONNECT) {
 				if(msg.LParam.ToInt32()==1) {
-					this.DialogResult = DialogResult.OK;
+					DialogResult = DialogResult.OK;
 					Close();
 				}
 				else {

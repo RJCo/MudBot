@@ -497,11 +497,12 @@ public class BigInteger
 
         public static BigInteger operator +(BigInteger bi1, BigInteger bi2)
         {
-                BigInteger result = new BigInteger();
+        BigInteger result = new BigInteger
+        {
+            dataLength = (bi1.dataLength > bi2.dataLength) ? bi1.dataLength : bi2.dataLength
+        };
 
-                result.dataLength = (bi1.dataLength > bi2.dataLength) ? bi1.dataLength : bi2.dataLength;
-
-                long carry = 0;
+        long carry = 0;
                 for(int i = 0; i < result.dataLength; i++)
                 {
                         long sum = (long)bi1.data[i] + (long)bi2.data[i] + carry;
@@ -582,11 +583,12 @@ public class BigInteger
 
         public static BigInteger operator -(BigInteger bi1, BigInteger bi2)
         {
-                BigInteger result = new BigInteger();
+        BigInteger result = new BigInteger
+        {
+            dataLength = (bi1.dataLength > bi2.dataLength) ? bi1.dataLength : bi2.dataLength
+        };
 
-                result.dataLength = (bi1.dataLength > bi2.dataLength) ? bi1.dataLength : bi2.dataLength;
-
-                long carryIn = 0;
+        long carryIn = 0;
                 for(int i = 0; i < result.dataLength; i++)
                 {
                         long diff;
@@ -964,7 +966,7 @@ public class BigInteger
 
         public static bool operator ==(BigInteger bi1, BigInteger bi2)
         {
-			if(Object.Equals(bi1, bi2))
+			if(Equals(bi1, bi2))
 				return true;
 			else
 				return bi1.Equals(bi2);
@@ -973,7 +975,7 @@ public class BigInteger
 
         public static bool operator !=(BigInteger bi1, BigInteger bi2)
         {
-			if(Object.Equals(bi1, bi2))
+			if(Equals(bi1, bi2))
 				return false;
 			else
 				return !(bi1.Equals(bi2));
@@ -985,12 +987,12 @@ public class BigInteger
 				if(o==null || !(o is BigInteger)) return false;
 				BigInteger bi = (BigInteger)o;
 
-                if(this.dataLength != bi.dataLength)
+                if(dataLength != bi.dataLength)
                         return false;
 
-                for(int i = 0; i < this.dataLength; i++)
+                for(int i = 0; i < dataLength; i++)
                 {
-                        if(this.data[i] != bi.data[i])
+                        if(data[i] != bi.data[i])
                                 return false;
                 }
                 return true;
@@ -999,7 +1001,7 @@ public class BigInteger
 
         public override int GetHashCode()
         {
-                return this.ToString().GetHashCode();
+                return ToString().GetHashCode();
         }
 
 
@@ -1460,7 +1462,7 @@ public class BigInteger
 
         public BigInteger abs()
         {
-                if((this.data[maxLength - 1] & 0x80000000) != 0)
+                if((data[maxLength - 1] & 0x80000000) != 0)
                         return (-this);
                 else
                         return (new BigInteger(this));
@@ -1577,7 +1579,7 @@ public class BigInteger
 	        BigInteger tempNum;
 	        bool thisNegative = false;
 
-	        if((this.data[maxLength-1] & 0x80000000) != 0)   // negative this
+	        if((data[maxLength-1] & 0x80000000) != 0)   // negative this
 	        {
 	                tempNum = -this % n;
 	                thisNegative = true;
@@ -1847,7 +1849,7 @@ public class BigInteger
         public bool FermatLittleTest(int confidence)
         {
                 BigInteger thisVal;
-                if((this.data[maxLength-1] & 0x80000000) != 0)        // negative
+                if((data[maxLength-1] & 0x80000000) != 0)        // negative
                         thisVal = -this;
                 else
                         thisVal = this;
@@ -1937,7 +1939,7 @@ public class BigInteger
         public bool RabinMillerTest(int confidence)
         {
                 BigInteger thisVal;
-                if((this.data[maxLength-1] & 0x80000000) != 0)        // negative
+                if((data[maxLength-1] & 0x80000000) != 0)        // negative
                         thisVal = -this;
                 else
                         thisVal = this;
@@ -2062,7 +2064,7 @@ public class BigInteger
         public bool SolovayStrassenTest(int confidence)
         {
                 BigInteger thisVal;
-                if((this.data[maxLength-1] & 0x80000000) != 0)        // negative
+                if((data[maxLength-1] & 0x80000000) != 0)        // negative
                         thisVal = -this;
                 else
                         thisVal = this;
@@ -2151,7 +2153,7 @@ public class BigInteger
         public bool LucasStrongTest()
         {
                 BigInteger thisVal;
-                if((this.data[maxLength-1] & 0x80000000) != 0)        // negative
+                if((data[maxLength-1] & 0x80000000) != 0)        // negative
                         thisVal = -this;
                 else
                         thisVal = this;
@@ -2184,7 +2186,7 @@ public class BigInteger
 
                 while(!done)
                 {
-                        int Jresult = BigInteger.Jacobi(D, thisVal);
+                        int Jresult = Jacobi(D, thisVal);
 
                         if(Jresult == -1)
                                 done = true;    // J(D, this) = 1
@@ -2288,7 +2290,7 @@ public class BigInteger
                                 if((lucas[2].data[maxLength-1] & 0x80000000) != 0)
                                         lucas[2] += thisVal;
 
-                                BigInteger temp = (Q * BigInteger.Jacobi(Q, thisVal)) % thisVal;
+                                BigInteger temp = (Q * Jacobi(Q, thisVal)) % thisVal;
                                 if((temp.data[maxLength-1] & 0x80000000) != 0)
                                         temp += thisVal;
 
@@ -2312,7 +2314,7 @@ public class BigInteger
         public bool isProbablePrime(int confidence)
         {
                 BigInteger thisVal;
-                if((this.data[maxLength-1] & 0x80000000) != 0)        // negative
+                if((data[maxLength-1] & 0x80000000) != 0)        // negative
                         thisVal = -this;
                 else
                         thisVal = this;
@@ -2372,7 +2374,7 @@ public class BigInteger
         public bool isProbablePrime()
         {
                 BigInteger thisVal;
-                if((this.data[maxLength-1] & 0x80000000) != 0)        // negative
+                if((data[maxLength-1] & 0x80000000) != 0)        // negative
                         thisVal = -this;
                 else
                         thisVal = this;
@@ -2717,10 +2719,10 @@ public class BigInteger
                 byte bitPos = (byte)(bitNum & 0x1F);    // get the lowest 5 bits
 
                 uint mask = (uint)1 << bitPos;
-                this.data[bytePos] |= mask;
+                data[bytePos] |= mask;
 
-                if(bytePos >= this.dataLength)
-                        this.dataLength = (int)bytePos + 1;
+                if(bytePos >= dataLength)
+                        dataLength = (int)bytePos + 1;
         }
 
 
@@ -2733,17 +2735,17 @@ public class BigInteger
         {
                 uint bytePos = bitNum >> 5;
 
-                if(bytePos < this.dataLength)
+                if(bytePos < dataLength)
                 {
                         byte bitPos = (byte)(bitNum & 0x1F);
 
                         uint mask = (uint)1 << bitPos;
                         uint mask2 = 0xFFFFFFFF ^ mask;
 
-                        this.data[bytePos] &= mask2;
+                        data[bytePos] &= mask2;
 
-                        if(this.dataLength > 1 && this.data[this.dataLength - 1] == 0)
-                                this.dataLength--;
+                        if(dataLength > 1 && data[dataLength - 1] == 0)
+                                dataLength--;
                 }
         }
 
@@ -2759,7 +2761,7 @@ public class BigInteger
 
         public BigInteger sqrt()
         {
-                uint numBits = (uint)this.bitCount();
+                uint numBits = (uint)bitCount();
 
                 if((numBits & 0x1) != 0)        // odd number of bits
                         numBits = (numBits >> 1) + 1;
@@ -3335,7 +3337,7 @@ public class BigInteger
 
                 Console.Write("\nGenerating 512-bits random pseudoprime. . .");
                 Random rand = new Random();
-                BigInteger prime = BigInteger.genPseudoPrime(512, 5, rand);
+                BigInteger prime = genPseudoPrime(512, 5, rand);
                 Console.WriteLine("\n" + prime);
 
                 //int dwStart = System.Environment.TickCount;

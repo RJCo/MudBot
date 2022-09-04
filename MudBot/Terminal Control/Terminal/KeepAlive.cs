@@ -2,15 +2,13 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: KeepAlive.cs,v 1.2 2005/04/20 08:45:46 okajima Exp $
 */
-using System;
 using System.Threading;
-using System.Diagnostics;
 
 using Poderosa.Connection;
 
 namespace Poderosa.Terminal
 {
-	internal class KeepAlive
+    internal class KeepAlive
 	{
 		public KeepAlive() {
 		}

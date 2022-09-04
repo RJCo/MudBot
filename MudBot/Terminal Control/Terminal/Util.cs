@@ -3,24 +3,19 @@
 * $Id: Util.cs,v 1.2 2005/04/20 08:45:48 okajima Exp $
 */
 using System;
-using System.Collections;
 using System.Drawing;
 using System.Diagnostics;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.IO;
 using System.Globalization;
 using System.Threading;
 
 using Poderosa.Config;
-using Granados.SSHC;
-using Granados.PKI;
 
 namespace Poderosa
 {
-	public class GUtil {
+    public class GUtil {
 		public static bool ParseBool(string value, bool defaultvalue) {
 			try {
 				return Boolean.Parse(value);
@@ -55,7 +50,7 @@ namespace Poderosa
 		}
 		public static int ParseHexInt(string value, int defaultvalue) {
 			try {
-				return Int32.Parse(value, System.Globalization.NumberStyles.HexNumber);
+				return Int32.Parse(value, NumberStyles.HexNumber);
 			}
 			catch(Exception) {
 				return defaultvalue;
@@ -67,7 +62,7 @@ namespace Poderosa
 			else {
 				if(t.Length==8) { //16進で保存されていることもある。窮余の策でこのように
 					try {
-						int v = Int32.Parse(t, System.Globalization.NumberStyles.HexNumber);
+						int v = Int32.Parse(t, NumberStyles.HexNumber);
 						return Color.FromArgb(v);
 					}
 					catch(Exception) {
@@ -134,16 +129,16 @@ namespace Poderosa
 			MessageBox.Show(owner, msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 		}
 		public static void Warning(IWin32Window owner, string msg, MessageBoxIcon icon) {
-			MessageBox.Show(owner, msg, GEnv.Strings.GetString("Common.MessageBoxTitle"), MessageBoxButtons.OK, icon);
+			MessageBox.Show(owner, msg, "Common.MessageBoxTitle", MessageBoxButtons.OK, icon);
 		}
 		public static void Warning(IWin32Window owner, string msg) {
-			MessageBox.Show(owner, msg, GEnv.Strings.GetString("Common.MessageBoxTitle"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+			MessageBox.Show(owner, msg, "Common.MessageBoxTitle", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 		}
 		public static DialogResult AskUserYesNo(IWin32Window owner, string msg) {
-			return MessageBox.Show(owner, msg, GEnv.Strings.GetString("Common.MessageBoxTitle"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			return MessageBox.Show(owner, msg, "Common.MessageBoxTitle", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 		}
 		public static DialogResult AskUserYesNo(IWin32Window owner, string msg, MessageBoxIcon icon) {
-			return MessageBox.Show(owner, msg, GEnv.Strings.GetString("Common.MessageBoxTitle"), MessageBoxButtons.YesNo, icon);
+			return MessageBox.Show(owner, msg, "Common.MessageBoxTitle", MessageBoxButtons.YesNo, icon);
 		}
 		public static void ReportCriticalError(Exception ex) {
 			InternalReportCriticalError(" [regular] ", ex);
@@ -175,8 +170,8 @@ namespace Poderosa
 			//Win32のメッセージボックスを出しても同じ。ステータスバーなら大丈夫のようだ
 			//...しかし、それでもNullReferenceExceptionあるいはExecutionEngineException(!)が発生する場合がある。Win32呼び出しでもだめだともう手出しできんな。あきらめてコメントアウト
 			try {
-				string msg = String.Format(GEnv.Strings.GetString("Message.GUtil.InternalError"), dir, ex.Message);
-				//MessageBox.Show(GEnv.Frame, String.Format(GEnv.Strings.GetString("Message.GUtil.InternalError"), dir, ex.Message), "Poderosa", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+				string msg = String.Format("Message.GUtil.InternalError", dir, ex.Message);
+				//MessageBox.Show(GEnv.Frame, String.Format("Message.GUtil.InternalError", dir, ex.Message), "Poderosa", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 				//Win32.MessageBox(IntPtr.Zero, msg, "Poderosa", 0x00000010/*MB_HAND*/);
 				GEnv.Frame.SetStatusBarText(msg);
 			}
@@ -286,7 +281,7 @@ namespace Poderosa
 				else if(m=="Ctrl")  modifier |= Keys.Control;
 				else throw new Exception(m + " is unknown modifier");
 			}
-			return modifier | GUtil.ParseKey(value[value.Length-1]);
+			return modifier | ParseKey(value[value.Length-1]);
 		}
 
 		//キーから対応するコントロールコード(ASCII 0 から 31まで)に変換する。対応するものがなければ-1

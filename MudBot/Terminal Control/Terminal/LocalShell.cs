@@ -15,11 +15,10 @@ using Poderosa.Connection;
 using Poderosa.ConnectionParam;
 using Poderosa.Config;
 using Poderosa.Communication;
-using Poderosa.Toolkit;
 
 namespace Poderosa.LocalShell
 {
-	public abstract class LocalShellUtil {
+    public abstract class LocalShellUtil {
 
 		public static EncodingType DefaultEncoding {
 			get {
@@ -40,7 +39,7 @@ namespace Poderosa.LocalShell
 			}
 			catch(Exception ex) {
 				string key = IsCygwin(param)? "Message.CygwinUtil.FailedToConnect" : "Message.SFUUtil.FailedToConnect";
-				GUtil.Warning(parent, GEnv.Strings.GetString(key)+ex.Message);
+				GUtil.Warning(parent, key+ex.Message);
 				return null;
 			}
 		}
@@ -97,22 +96,26 @@ namespace Poderosa.LocalShell
 				string connectionName = IsCygwin(_param)? "Cygwin" : "SFU";
 
 				string args = String.Format("-p {0} -v HOME=\"{1}\" -s \"{2}\"", _localPort, _param.Home, _param.Shell);
-				ProcessStartInfo psi = new ProcessStartInfo(cygtermPath, args);
-				psi.CreateNoWindow = true;
-				psi.ErrorDialog = true;
-				psi.UseShellExecute = false;
-				psi.WindowStyle = ProcessWindowStyle.Hidden;
+                ProcessStartInfo psi = new ProcessStartInfo(cygtermPath, args)
+                {
+                    CreateNoWindow = true,
+                    ErrorDialog = true,
+                    UseShellExecute = false,
+                    WindowStyle = ProcessWindowStyle.Hidden
+                };
 
-				_process = Process.Start(psi);
+                _process = Process.Start(psi);
 				if(_interrupted) return null;
 				Socket sock = _listener.Accept();
 				if(_interrupted) return null;
 
 				Size sz = GEnv.Frame.TerminalSizeForNextConnection;
 				TelnetNegotiator neg = new TelnetNegotiator(_param, sz.Width, sz.Height);
-				TelnetTerminalConnection r = new TelnetTerminalConnection(_param, neg, new PlainGuevaraSocket(sock), sz.Width, sz.Height);
-				r.UsingSocks = false;
-				r.SetServerInfo(connectionName, null);
+                TelnetTerminalConnection r = new TelnetTerminalConnection(_param, neg, new PlainGuevaraSocket(sock), sz.Width, sz.Height)
+                {
+                    UsingSocks = false
+                };
+                r.SetServerInfo(connectionName, null);
 				return new ConnectionTag(r);
 			}
 
@@ -177,7 +180,7 @@ namespace Poderosa.LocalShell
 			string keyname = "SOFTWARE\\Microsoft\\Services for UNIX";
 			reg = Registry.LocalMachine.OpenSubKey(keyname);
 			if(reg==null) {
-				GUtil.Warning(GEnv.Frame, String.Format(GEnv.Strings.GetString("Message.SFUUtil.KeyNotFound"), keyname));
+				GUtil.Warning(GEnv.Frame, String.Format("Message.SFUUtil.KeyNotFound", keyname));
 				return "";
 			}
 			string t = (string)reg.GetValue("InstallPath");
@@ -207,7 +210,7 @@ namespace Poderosa.LocalShell
 			if(reg==null) {
 				reg = Registry.LocalMachine.OpenSubKey(keyname);
 				if(reg==null) {
-					GUtil.Warning(GEnv.Frame, String.Format(GEnv.Strings.GetString("Message.CygwinUtil.KeyNotFound"), keyname));
+					GUtil.Warning(GEnv.Frame, String.Format("Message.CygwinUtil.KeyNotFound", keyname));
 					return "";
 				}
 			}

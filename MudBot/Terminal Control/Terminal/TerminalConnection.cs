@@ -8,7 +8,6 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 using System.IO;
 
 using Poderosa.ConnectionParam;
@@ -16,14 +15,13 @@ using Poderosa.Connection;
 using Poderosa.Log;
 using Poderosa.SSH;
 using Poderosa.Toolkit;
-using Poderosa.Terminal;
 using Poderosa.Text;
 
 using Granados.SSHC;
 
 namespace Poderosa.Communication
 {
-	public interface IDataReceiver {
+    public interface IDataReceiver {
 		void DataArrived(byte[] buf, int offset, int count);
 		void DisconnectedFromServer();
 		void ErrorOccurred(string msg);
@@ -184,7 +182,7 @@ namespace Poderosa.Communication
 		public void OnChannelError(Exception ex, string msg) {
 			EnsureHandler();
 			if(!_ready)
-				msg = GEnv.Strings.GetString("Message.ChannelPoderosaSocket.FailedToPortforward") + msg;
+				msg = "Message.ChannelPoderosaSocket.FailedToPortforward" + msg;
 			_callback.ErrorOccurred(msg);
 		}
 
@@ -228,8 +226,8 @@ namespace Poderosa.Communication
 		public void OnMiscPacket(byte type, byte[] data, int offset, int length) {
 		}
 
-		public Granados.SSHC.PortForwardingCheckResult CheckPortForwardingRequest(string host, int port, string originator, int originator_port) {
-			return new Granados.SSHC.PortForwardingCheckResult();
+		public PortForwardingCheckResult CheckPortForwardingRequest(string host, int port, string originator, int originator_port) {
+			return new PortForwardingCheckResult();
 		}
 		public void EstablishPortforwarding(ISSHChannelEventReceiver receiver, SSHChannel channel) {
 		}
@@ -559,7 +557,7 @@ namespace Poderosa.Communication
 		public override string ProtocolDescription {
 			get {
 				string s = _param.MethodName;
-				if(_usingSocks) s += GEnv.Strings.GetString("Caption.TCPTerminalConnection.UsingSOCKS");
+				if(_usingSocks) s += "Caption.TCPTerminalConnection.UsingSOCKS";
 				return s;
 			}
 		}
@@ -591,7 +589,7 @@ namespace Poderosa.Communication
 			else
 				sshp.LogType = LogType.None;
 
-			if(sshp.Method==ConnectionMethod.SSH2 && !this.IsClosed) { //SSH2のときはコネクションを共有してマルチチャネルを使用
+			if(sshp.Method==ConnectionMethod.SSH2 && !IsClosed) { //SSH2のときはコネクションを共有してマルチチャネルを使用
 				System.Drawing.Size sz = GEnv.Frame.TerminalSizeForNextConnection;
 				SSHTerminalConnection newcon = new SSHTerminalConnection(sshp, sz.Width, sz.Height);
 				newcon.FixConnection(_connection);
@@ -602,9 +600,9 @@ namespace Poderosa.Communication
 			else { 
 				bool pp_found = (sshp.Passphrase!=null && sshp.Passphrase.Length>0);
 				if(sshp.Method==ConnectionMethod.SSH1 && !pp_found)
-					throw new ApplicationException(GEnv.Strings.GetString("Message.SSHTerminalConnection.ReproduceErrorOnSSH1"));
-				if(sshp.Method==ConnectionMethod.SSH2 && !pp_found && this.IsClosed)
-					throw new ApplicationException(GEnv.Strings.GetString("Message.SSHTerminalConnection.ReproduceErrorOnSSH2"));
+					throw new ApplicationException("Message.SSHTerminalConnection.ReproduceErrorOnSSH1");
+				if(sshp.Method==ConnectionMethod.SSH2 && !pp_found && IsClosed)
+					throw new ApplicationException("Message.SSHTerminalConnection.ReproduceErrorOnSSH2");
 				HostKeyChecker checker = new HostKeyChecker(GEnv.Frame, sshp);
 				return CommunicationUtil.CreateNewConnection(sshp, new HostKeyCheckCallback(checker.CheckHostKeyCallback));
 			}
@@ -639,7 +637,7 @@ namespace Poderosa.Communication
 				}
 			}
 			catch(Exception ex) {
-				GUtil.Warning(GEnv.Frame, GEnv.Strings.GetString("Message.SSHTerminalConnection.CloseError")+ex.Message);
+				GUtil.Warning(GEnv.Frame, "Message.SSHTerminalConnection.CloseError"+ex.Message);
 			}
 		}
 
@@ -765,7 +763,7 @@ namespace Poderosa.Communication
 			if(_waitingSendBreakReply) {
 				_waitingSendBreakReply = false;
 				if(type==(byte)Granados.SSHCV2.PacketType.SSH_MSG_CHANNEL_FAILURE)
-					GEnv.InterThreadUIService.Warning(GEnv.Strings.GetString("Message.SSHTerminalconnection.BreakError"));
+					GEnv.InterThreadUIService.Warning("Message.SSHTerminalconnection.BreakError");
 			}
 		}
 		public void OnConnectionClosed() {
@@ -800,8 +798,8 @@ namespace Poderosa.Communication
 			}
 		}
 
-		public Granados.SSHC.PortForwardingCheckResult CheckPortForwardingRequest(string host, int port, string originator, int originator_port) {
-			return new Granados.SSHC.PortForwardingCheckResult();
+		public PortForwardingCheckResult CheckPortForwardingRequest(string host, int port, string originator, int originator_port) {
+			return new PortForwardingCheckResult();
 		}
 		public void EstablishPortforwarding(ISSHChannelEventReceiver receiver, SSHChannel channel) {
 		}
@@ -828,7 +826,7 @@ namespace Poderosa.Communication
 				_socket.Close();
 			}
 			catch(Exception ex) {
-				GUtil.Warning(GEnv.Frame, GEnv.Strings.GetString("Message.SSHTerminalConnection.CloseError")+ex.Message);
+				GUtil.Warning(GEnv.Frame, "Message.SSHTerminalConnection.CloseError"+ex.Message);
 			}
 		}
 		internal override void Disconnect() {
@@ -997,7 +995,7 @@ namespace Poderosa.Communication
 			//Debug.WriteLine("COM connection termingating...");
 		}
 		public override ConnectionTag Reproduce() {
-			throw new NotSupportedException(GEnv.Strings.GetString("Message.SerialTerminalConnection.ReproduceError"));
+			throw new NotSupportedException("Message.SerialTerminalConnection.ReproduceError");
 		}
 
 		internal override void Disconnect() {
@@ -1136,7 +1134,7 @@ namespace Poderosa.Communication
 		}
 		public override void SendBreak() {
 			Win32.SetCommBreak(_fileHandle);
-			System.Threading.Thread.Sleep(500); //500ms待機
+            Thread.Sleep(500); //500ms待機
 			Win32.ClearCommBreak(_fileHandle);
 		}
 
@@ -1147,7 +1145,7 @@ namespace Poderosa.Communication
 			CommunicationUtil.UpdateDCB(ref dcb, param);
 
 			if(!Win32.SetCommState(_fileHandle, ref dcb))
-				throw new ArgumentException(GEnv.Strings.GetString("Message.SerialTerminalConnection.ConfigError"));
+				throw new ArgumentException("Message.SerialTerminalConnection.ConfigError");
 
 			_param = param; //SetCommStateが成功したら更新
 		}

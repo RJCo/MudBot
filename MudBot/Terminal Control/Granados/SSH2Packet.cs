@@ -11,15 +11,13 @@
 
 using System;
 using System.Collections;
-using System.IO;
 using System.Threading;
-using System.Diagnostics;
 
 using Granados.SSHC;
 
 namespace Granados.SSHCV2
 {
-	/* SSH2 Packet Structure
+    /* SSH2 Packet Structure
 	 * 
 	 * uint32    packet_length
      * byte      padding_length
@@ -30,7 +28,7 @@ namespace Granados.SSHCV2
 	 * 4+1+n1+n2 must be a multiple of the cipher block size
 	 */
 
-	internal class SSH2Packet
+    internal class SSH2Packet
 	{
 		private int _packetLength;
 		private byte[] _payload;
@@ -87,9 +85,11 @@ namespace Granados.SSHCV2
 		}
 		//no decryption, no mac
 		public static SSH2Packet FromPlainStream(byte[] buffer, int offset) {
-			SSH2Packet p = new SSH2Packet();
-			p._packetLength = SSHUtil.ReadInt32(buffer, offset);
-			if(p._packetLength<=0 || p._packetLength>=MAX_PACKET_LENGTH) throw new SSHException(String.Format("packet size {0} is invalid", p._packetLength));
+            SSH2Packet p = new SSH2Packet
+            {
+                _packetLength = SSHUtil.ReadInt32(buffer, offset)
+            };
+            if (p._packetLength<=0 || p._packetLength>=MAX_PACKET_LENGTH) throw new SSHException(String.Format("packet size {0} is invalid", p._packetLength));
 			offset += 4;
 
 			byte pl = buffer[offset++];
@@ -101,9 +101,11 @@ namespace Granados.SSHCV2
 
 		public static SSH2Packet FromDecryptedHead(byte[] head, byte[] buffer, int offset, Cipher cipher, int sequence, MAC mac) {
 
-			SSH2Packet p = new SSH2Packet();
-			p._packetLength = SSHUtil.ReadInt32(head, 0);
-			if(p._packetLength<=0 || p._packetLength>=MAX_PACKET_LENGTH) throw new SSHException(String.Format("packet size {0} is invalid", p._packetLength));
+            SSH2Packet p = new SSH2Packet
+            {
+                _packetLength = SSHUtil.ReadInt32(head, 0)
+            };
+            if (p._packetLength<=0 || p._packetLength>=MAX_PACKET_LENGTH) throw new SSHException(String.Format("packet size {0} is invalid", p._packetLength));
 			SSH2DataWriter buf = new SSH2DataWriter();
 			buf.Write(sequence);
 			buf.Write(head);

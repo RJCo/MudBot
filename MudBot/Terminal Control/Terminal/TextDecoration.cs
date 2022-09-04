@@ -3,19 +3,13 @@
 * $Id: TextDecoration.cs,v 1.2 2005/04/20 08:45:48 okajima Exp $
 */
 using System;
-using System.IO;
-using System.Collections;
 using System.Drawing;
-using System.Diagnostics;
 using System.Text;
-
-using Poderosa.Config;
-using Poderosa.Toolkit;
 
 namespace Poderosa.Text
 {
-	//TextDecorationで色を指定するのか、外部で定義された色を使うのかの区別につかう。ColorのAプロパティの値で代用すればちょっと効率は上がりそうだが...
-	internal enum ColorType {
+    //TextDecorationで色を指定するのか、外部で定義された色を使うのかの区別につかう。ColorのAプロパティの値で代用すればちょっと効率は上がりそうだが...
+    internal enum ColorType {
 		DefaultBack,
 		DefaultText,
 		Custom
@@ -43,14 +37,16 @@ namespace Poderosa.Text
 		}
 
 		public object Clone() {
-			TextDecoration t = new TextDecoration();
-			t._bgColorType = _bgColorType;
-			t._bgColor = _bgColor;
-			t._textColorType = _textColorType;
-			t._textColor = _textColor;
-			t._bold = _bold;
-			t._underline = _underline;
-			return t;
+            TextDecoration t = new TextDecoration
+            {
+                _bgColorType = _bgColorType,
+                _bgColor = _bgColor,
+                _textColorType = _textColorType,
+                _textColor = _textColor,
+                _bold = _bold,
+                _underline = _underline
+            };
+            return t;
 		}
 		private TextDecoration() {} //Clone()から使うためのコンストラクタ
 

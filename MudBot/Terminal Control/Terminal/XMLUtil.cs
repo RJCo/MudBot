@@ -2,29 +2,32 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: XMLUtil.cs,v 1.2 2005/04/20 08:45:48 okajima Exp $
 */
-using System;
 using System.Collections;
 using System.Xml;
 using System.Text;
 
 namespace Poderosa.Toolkit
 {
-	public class XMLUtil
+    public class XMLUtil
 	{
 		public static XmlWriter CreateDefaultWriter(string filename) {
-			XmlTextWriter wr = new XmlTextWriter(filename, Encoding.Default);
-			wr.Formatting = Formatting.Indented;
-			wr.Indentation = 2;
-			wr.IndentChar = ' ';
-			wr.Namespaces = true;
-			wr.WriteStartDocument(); //XML PI
+            XmlTextWriter wr = new XmlTextWriter(filename, Encoding.Default)
+            {
+                Formatting = Formatting.Indented,
+                Indentation = 2,
+                IndentChar = ' ',
+                Namespaces = true
+            };
+            wr.WriteStartDocument(); //XML PI
 			return wr;
 		}
 
 		public static XmlReader CreateDefaultReader(string filename) {
-			XmlTextReader re = new XmlTextReader(filename);
-			re.WhitespaceHandling = WhitespaceHandling.Significant;
-			return re;
+            XmlTextReader re = new XmlTextReader(filename)
+            {
+                WhitespaceHandling = WhitespaceHandling.Significant
+            };
+            return re;
 		}
 
 		public static XmlDocument FileToDOM(string filename) {

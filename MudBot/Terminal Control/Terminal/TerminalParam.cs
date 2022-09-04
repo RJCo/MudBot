@@ -4,36 +4,30 @@
 */
 using System;
 using System.Diagnostics;
-using System.Collections;
-using System.IO;
-using System.Text;
-using System.Windows.Forms;
-using System.Net;
-using System.Net.Sockets;
 
 using Poderosa.Terminal;
 #if !MACRODOC
 using Poderosa.Config;
 using Poderosa.Communication;
-using Poderosa.Text;
 using Poderosa.LocalShell;
 #endif
 using Poderosa.Toolkit;
 
-namespace Poderosa.ConnectionParam {
+namespace Poderosa.ConnectionParam
+{
 
-	/*
+    /*
 	 * TerminalParamはマクロからもフルにアクセス可能にするためpublicにする
 	 * 公開する必要のないメソッドをinternalにする
-	 */ 
+	 */
 
-	//Granados内のAuthenticationTypeと同一だが、起動の高速化のため使わない
-	
-	/// <summary>
-	/// <ja>SSHでの認証方法を示します。</ja>
-	/// <en>Specifies the authemtication method of SSH.</en>
-	/// </summary>
-	[EnumDesc(typeof(AuthType))]
+    //Granados内のAuthenticationTypeと同一だが、起動の高速化のため使わない
+
+    /// <summary>
+    /// <ja>SSHでの認証方法を示します。</ja>
+    /// <en>Specifies the authemtication method of SSH.</en>
+    /// </summary>
+    [EnumDesc(typeof(AuthType))]
 	public enum AuthType {
 		/// <summary>
 		/// <ja>パスワード認証</ja>
@@ -435,7 +429,7 @@ namespace Poderosa.ConnectionParam {
 #if !MACRODOC
 			_logtype = GEnv.Options.DefaultLogType;
 			if(_logtype!=LogType.None)
-				_logpath = GUtil.CreateLogFileName(this.ShortDescription);
+				_logpath = GUtil.CreateLogFileName(ShortDescription);
 			else
 				_logpath = "";
 #endif
@@ -513,7 +507,7 @@ namespace Poderosa.ConnectionParam {
 		public void FeedLogOption() {
 			if(GEnv.Options.DefaultLogType!=LogType.None) {
 				_logtype = GEnv.Options.DefaultLogType;
-				_logpath = GUtil.CreateLogFileName(this.ShortDescription);
+				_logpath = GUtil.CreateLogFileName(ShortDescription);
 			}
 		}
 		public static TerminalParam CreateFromConfigNode(ConfigNode sec) {
@@ -640,7 +634,7 @@ namespace Poderosa.ConnectionParam {
 			}
 			set {
 #if !MACRODOC
-				throw new ArgumentException(GEnv.Strings.GetString("Message.TCPTerminalParam.PropCannotBeSet"));
+				throw new ArgumentException("Message.TCPTerminalParam.PropCannotBeSet");
 #endif
 			}
 		}
@@ -683,9 +677,11 @@ namespace Poderosa.ConnectionParam {
 
 		public static TCPTerminalParam Fake {
 			get {
-				TelnetTerminalParam p = new TelnetTerminalParam();
-				p.EncodingProfile = EncodingProfile.Get(EncodingType.EUC_JP);
-				return p;
+                TelnetTerminalParam p = new TelnetTerminalParam
+                {
+                    EncodingProfile = EncodingProfile.Get(EncodingType.EUC_JP)
+                };
+                return p;
 			}
 		}
 		public override string ShortDescription {
@@ -710,28 +706,28 @@ namespace Poderosa.ConnectionParam {
 	[Serializable()]
 	public class TelnetTerminalParam : TCPTerminalParam {
 
-		/// <summary>
-		/// <ja>ホスト名を指定して作成します。</ja>
-		/// <en>Initializes with the host name.</en>
-		/// <seealso cref="Poderosa.Macro.ConnectionList.Open"/>
-		/// </summary>
-		/// <remarks>
-		/// <ja>ポートは23に設定されます。</ja>
-		/// <en>The port number is set to 23.</en>
-		/// <ja>他のパラメータは次のように初期化されます。</ja>
-		/// <en>Other parameters are initialized as following:</en>
-		/// <list type="table">
-		///   <item><term><ja>エンコーディング</ja><en>Encoding</en></term><description><ja>EUC-JP</ja><en>iso-8859-1</en></description></item>　
-		///   <item><term><ja>ターミナルタイプ</ja><en>Terminal Type</en></term><description>xterm</description></item>  
-		///   <item><term><ja>ログ</ja><en>Log</en></term><description><ja>取得しない</ja><en>None</en></description></item>　　　　　　　
-		///   <item><term><ja>ローカルエコー</ja><en>Local echo</en></term><description><ja>しない</ja><en>Don't</en></description></item>　　
-		///   <item><term><ja>送信時改行</ja><en>New line</en></term><description>CR</description></item>　　　　
-		/// </list>
-		/// <ja>接続を開くには、<see cref="Poderosa.Macro.ConnectionList.Open"/>メソッドの引数としてTelnetTerminalParamオブジェクトを渡します。</ja>
-		/// <en>To open a new connection, pass the TelnetTerminalParam object to the <see cref="Poderosa.Macro.ConnectionList.Open"/> method.</en>
-		/// </remarks>
-		/// <param name="host"><ja>ホスト名</ja><en>The host name.</en></param>
-		public TelnetTerminalParam(string host) {
+        /// <summary>
+        /// <ja>ホスト名を指定して作成します。</ja>
+        /// <en>Initializes with the host name.</en>
+        /// <seealso cref="Macro.ConnectionList.Open"/>
+        /// </summary>
+        /// <remarks>
+        /// <ja>ポートは23に設定されます。</ja>
+        /// <en>The port number is set to 23.</en>
+        /// <ja>他のパラメータは次のように初期化されます。</ja>
+        /// <en>Other parameters are initialized as following:</en>
+        /// <list type="table">
+        ///   <item><term><ja>エンコーディング</ja><en>Encoding</en></term><description><ja>EUC-JP</ja><en>iso-8859-1</en></description></item>　
+        ///   <item><term><ja>ターミナルタイプ</ja><en>Terminal Type</en></term><description>xterm</description></item>  
+        ///   <item><term><ja>ログ</ja><en>Log</en></term><description><ja>取得しない</ja><en>None</en></description></item>　　　　　　　
+        ///   <item><term><ja>ローカルエコー</ja><en>Local echo</en></term><description><ja>しない</ja><en>Don't</en></description></item>　　
+        ///   <item><term><ja>送信時改行</ja><en>New line</en></term><description>CR</description></item>　　　　
+        /// </list>
+        /// <ja>接続を開くには、<see cref="Macro.ConnectionList.Open"/>メソッドの引数としてTelnetTerminalParamオブジェクトを渡します。</ja>
+        /// <en>To open a new connection, pass the TelnetTerminalParam object to the <see cref="Macro.ConnectionList.Open"/> method.</en>
+        /// </remarks>
+        /// <param name="host"><ja>ホスト名</ja><en>The host name.</en></param>
+        public TelnetTerminalParam(string host) {
 			_method = ConnectionMethod.Telnet;
 			_host = host;
 			_port = 23;
@@ -774,32 +770,32 @@ namespace Poderosa.ConnectionParam {
 		internal AuthType _auth;
 		internal string _identityfile;
 
-		/// <summary>
-		/// <ja>ホスト名、アカウント、パスワードを指定して作成します。</ja>
-		/// <en>Initializes with the host name, the account, and the password.</en>
-		/// <seealso cref="Poderosa.Macro.ConnectionList.Open"/>
-		/// </summary>
-		/// <remarks>
-		/// <ja>ポートは22に設定されます。</ja>
-		/// <en>The port number is set to 22.</en>
-		/// <ja>他のパラメータは次のように初期化されます。</ja>
-		/// <en>Other parameters are initialized as following:</en>
-		/// <list type="table">
-		///   <item><term><ja>エンコーディング</ja><en>Encoding</en></term><description><ja>EUC-JP</ja><en>iso-8859-1</en></description></item>　
-		///   <item><term><ja>ターミナルタイプ</ja><en>Terminal Type</en></term><description>xterm</description></item>  
-		///   <item><term><ja>ログ</ja><en>Log</en></term><description><ja>取得しない</ja><en>None</en></description></item>　　　　　　　
-		///   <item><term><ja>ローカルエコー</ja><en>Local echo</en></term><description><ja>しない</ja><en>Don't</en></description></item>　　
-		///   <item><term><ja>送信時改行</ja><en>New line</en></term><description>CR</description></item>　　　　
-		///   <item><term><ja>認証方法</ja><en>Authentication Method</en></term><description><ja>パスワード</ja><en>Password</en></description></item>　　　　
-		/// </list>
-		/// <ja>接続を開くには、ConnectionListオブジェクトの<see cref="Poderosa.Macro.ConnectionList.Open"/>メソッドの引数としてSSHTerminalParamオブジェクトを渡します。</ja>
-		/// <en>To open a new connection, pass the SSHTerminalParam object to the <see cref="Poderosa.Macro.ConnectionList.Open"/> method of the ConnectionList object.</en>
-		/// </remarks>
-		/// <param name="method"><ja>SSH1またはSSH2</ja><en>SSH1 or SSH2.</en></param>
-		/// <param name="host"><ja>ホスト名</ja><en>The host name.</en></param>
-		/// <param name="account"><ja>アカウント名</ja><en>The account</en></param>
-		/// <param name="password"><ja>パスワードまたは秘密鍵のパスフレーズ</ja><en>The password or the passphrase of the private key.</en></param>
-		public SSHTerminalParam(ConnectionMethod method, string host, string account, string password) {
+        /// <summary>
+        /// <ja>ホスト名、アカウント、パスワードを指定して作成します。</ja>
+        /// <en>Initializes with the host name, the account, and the password.</en>
+        /// <seealso cref="Macro.ConnectionList.Open"/>
+        /// </summary>
+        /// <remarks>
+        /// <ja>ポートは22に設定されます。</ja>
+        /// <en>The port number is set to 22.</en>
+        /// <ja>他のパラメータは次のように初期化されます。</ja>
+        /// <en>Other parameters are initialized as following:</en>
+        /// <list type="table">
+        ///   <item><term><ja>エンコーディング</ja><en>Encoding</en></term><description><ja>EUC-JP</ja><en>iso-8859-1</en></description></item>　
+        ///   <item><term><ja>ターミナルタイプ</ja><en>Terminal Type</en></term><description>xterm</description></item>  
+        ///   <item><term><ja>ログ</ja><en>Log</en></term><description><ja>取得しない</ja><en>None</en></description></item>　　　　　　　
+        ///   <item><term><ja>ローカルエコー</ja><en>Local echo</en></term><description><ja>しない</ja><en>Don't</en></description></item>　　
+        ///   <item><term><ja>送信時改行</ja><en>New line</en></term><description>CR</description></item>　　　　
+        ///   <item><term><ja>認証方法</ja><en>Authentication Method</en></term><description><ja>パスワード</ja><en>Password</en></description></item>　　　　
+        /// </list>
+        /// <ja>接続を開くには、ConnectionListオブジェクトの<see cref="Macro.ConnectionList.Open"/>メソッドの引数としてSSHTerminalParamオブジェクトを渡します。</ja>
+        /// <en>To open a new connection, pass the SSHTerminalParam object to the <see cref="Macro.ConnectionList.Open"/> method of the ConnectionList object.</en>
+        /// </remarks>
+        /// <param name="method"><ja>SSH1またはSSH2</ja><en>SSH1 or SSH2.</en></param>
+        /// <param name="host"><ja>ホスト名</ja><en>The host name.</en></param>
+        /// <param name="account"><ja>アカウント名</ja><en>The account</en></param>
+        /// <param name="password"><ja>パスワードまたは秘密鍵のパスフレーズ</ja><en>The password or the passphrase of the private key.</en></param>
+        public SSHTerminalParam(ConnectionMethod method, string host, string account, string password) {
 			if(method==ConnectionMethod.Telnet) throw new ArgumentException("Telnet is specified in the constructor of SSHTerminalParam");
 			_method = method;
 			_host = host;
@@ -864,7 +860,7 @@ namespace Poderosa.ConnectionParam {
 			set {
 #if !MACRODOC
 				if(value==ConnectionMethod.Telnet)
-					throw new ArgumentException(GEnv.Strings.GetString("Mesage.SSHTerminalParam.MethodSetError"));
+					throw new ArgumentException("Mesage.SSHTerminalParam.MethodSetError");
 				_method = value;
 #endif
 			}
@@ -950,7 +946,7 @@ namespace Poderosa.ConnectionParam {
 		public override void Import(ConfigNode data) {
 			base.Import(data);
 			_method = ParseMethod(data["method"]);
-			Debug.Assert(this.IsSSH);
+			Debug.Assert(IsSSH);
 			_account = data["account"];
 			_auth = ParseAuth(data["auth"]);
 			if(_auth==AuthType.PublicKey)
@@ -1057,30 +1053,30 @@ namespace Poderosa.ConnectionParam {
 		internal int _transmitDelayPerChar;
 		internal int _transmitDelayPerLine;
 
-		/// <summary>
-		/// <ja>デフォルト設定で初期化します。</ja>
-		/// <en>Initializes with default values.</en>
-		/// <seealso cref="Poderosa.Macro.ConnectionList.Open"/>
-		/// </summary>
-		/// <remarks>
-		/// <ja>パラメータは次のように初期化されます。</ja>
-		/// <en>The parameters are set as following:</en>
-		/// <list type="table">
-		///   <item><term><ja>エンコーディング</ja><en>Encoding</en></term><description><ja>EUC-JP</ja><en>iso-8859-1</en></description></item>　
-		///   <item><term><ja>ログ</ja><en>Log</en></term><description><ja>取得しない</ja><en>None</en></description></item>　　　　　　　
-		///   <item><term><ja>ローカルエコー</ja><en>Local echo</en></term><description><ja>しない</ja><en>Don't</en></description></item>　　
-		///   <item><term><ja>送信時改行</ja><en>New line</en></term><description>CR</description></item>　　　　
-		///   <item><term><ja>ポート</ja><en>Port</en></term><description>COM1</description></item>
-		///   <item><term><ja>ボーレート</ja><en>Baud Rate</en></term><description>9600</description></item>
-		///   <item><term><ja>データ</ja><en>Data Bits</en></term><description><ja>8ビット</ja><en>8 bits</en></description></item>
-		///   <item><term><ja>パリティ</ja><en>Parity</en></term><description><ja>なし</ja><en>None</en></description></item>
-		///   <item><term><ja>ストップビット</ja><en>Stop Bits</en></term><description><ja>１ビット</ja><en>1 bit</en></description></item>
-		///   <item><term><ja>フローコントロール</ja><en>Flow Control</en></term><description><ja>なし</ja><en>None</en></description></item>
-		/// </list>
-		/// <ja>接続を開くには、<see cref="Poderosa.Macro.ConnectionList.Open"/>メソッドの引数としてSerialTerminalParamオブジェクトを渡します。</ja>
-		/// <en>To open a new connection, pass the SerialTerminalParam object to the <see cref="Poderosa.Macro.ConnectionList.Open"/> method.</en>
-		/// </remarks>
-		public SerialTerminalParam() {
+        /// <summary>
+        /// <ja>デフォルト設定で初期化します。</ja>
+        /// <en>Initializes with default values.</en>
+        /// <seealso cref="Macro.ConnectionList.Open"/>
+        /// </summary>
+        /// <remarks>
+        /// <ja>パラメータは次のように初期化されます。</ja>
+        /// <en>The parameters are set as following:</en>
+        /// <list type="table">
+        ///   <item><term><ja>エンコーディング</ja><en>Encoding</en></term><description><ja>EUC-JP</ja><en>iso-8859-1</en></description></item>　
+        ///   <item><term><ja>ログ</ja><en>Log</en></term><description><ja>取得しない</ja><en>None</en></description></item>　　　　　　　
+        ///   <item><term><ja>ローカルエコー</ja><en>Local echo</en></term><description><ja>しない</ja><en>Don't</en></description></item>　　
+        ///   <item><term><ja>送信時改行</ja><en>New line</en></term><description>CR</description></item>　　　　
+        ///   <item><term><ja>ポート</ja><en>Port</en></term><description>COM1</description></item>
+        ///   <item><term><ja>ボーレート</ja><en>Baud Rate</en></term><description>9600</description></item>
+        ///   <item><term><ja>データ</ja><en>Data Bits</en></term><description><ja>8ビット</ja><en>8 bits</en></description></item>
+        ///   <item><term><ja>パリティ</ja><en>Parity</en></term><description><ja>なし</ja><en>None</en></description></item>
+        ///   <item><term><ja>ストップビット</ja><en>Stop Bits</en></term><description><ja>１ビット</ja><en>1 bit</en></description></item>
+        ///   <item><term><ja>フローコントロール</ja><en>Flow Control</en></term><description><ja>なし</ja><en>None</en></description></item>
+        /// </list>
+        /// <ja>接続を開くには、<see cref="Macro.ConnectionList.Open"/>メソッドの引数としてSerialTerminalParamオブジェクトを渡します。</ja>
+        /// <en>To open a new connection, pass the SerialTerminalParam object to the <see cref="Macro.ConnectionList.Open"/> method.</en>
+        /// </remarks>
+        public SerialTerminalParam() {
 			_port = 1;
 			_baudRate = 9600;
 			_byteSize = 8;
@@ -1255,7 +1251,7 @@ namespace Poderosa.ConnectionParam {
 			}
 			set {
 #if !MACRODOC
-				if(value<0) throw new ArgumentException(GEnv.Strings.GetString("Message.SerialPTerminalParam.TransmitDelayRange"));
+				if(value<0) throw new ArgumentException("Message.SerialPTerminalParam.TransmitDelayRange");
 				_transmitDelayPerChar = value;
 #endif
 			}
@@ -1270,7 +1266,7 @@ namespace Poderosa.ConnectionParam {
 			}
 			set {
 #if !MACRODOC
-				if(value<0) throw new ArgumentException(GEnv.Strings.GetString("Message.SerialPTerminalParam.TransmitDelayRange"));
+				if(value<0) throw new ArgumentException("Message.SerialPTerminalParam.TransmitDelayRange");
 				_transmitDelayPerLine = value;
 #endif
 			}
@@ -1357,10 +1353,12 @@ namespace Poderosa.ConnectionParam {
 		}
 
 		public override object Clone() {
-			CygwinTerminalParam p = new CygwinTerminalParam();
-			p.Home = _home;
-			p.Shell = _shell;
-			return p;
+            CygwinTerminalParam p = new CygwinTerminalParam
+            {
+                Home = _home,
+                Shell = _shell
+            };
+            return p;
 		}
 		public override bool Equals(object t_) {
 			CygwinTerminalParam t = t_ as CygwinTerminalParam;
@@ -1407,10 +1405,12 @@ namespace Poderosa.ConnectionParam {
 		}
 
 		public override object Clone() {
-			SFUTerminalParam p = new SFUTerminalParam();
-			p.Home = _home;
-			p.Shell = _shell;
-			return p;
+            SFUTerminalParam p = new SFUTerminalParam
+            {
+                Home = _home,
+                Shell = _shell
+            };
+            return p;
 		}
 		public override bool Equals(object t_) {
 			SFUTerminalParam t = t_ as SFUTerminalParam;

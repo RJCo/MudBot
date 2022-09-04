@@ -9,17 +9,14 @@
 
 using System;
 using System.Collections;
-using System.IO;
 using System.Net.Sockets;
 using System.Text;
-using Granados.Crypto;
-using Granados.PKI;
 using Granados.SSHCV1;
 using Granados.SSHCV2;
 
 namespace Granados.SSHC
 {
-	public abstract class SSHConnection {
+    public abstract class SSHConnection {
 
 		internal AbstractSocket _stream;
 		internal ISSHConnectionEventReceiver _eventReceiver;
@@ -138,7 +135,7 @@ namespace Granados.SSHC
 
 			SSHChannel ch = ForwardPort(s, host, port, "localhost", 0);
 			s.SSHChennal = ch;
-			return SSHConnection.Connect(param, receiver, pnh, s);
+			return Connect(param, receiver, pnh, s);
 		}
 
 		//channel id support
@@ -159,12 +156,14 @@ namespace Granados.SSHC
 		}
 		protected ChannelEntry RegisterChannelEventReceiver(SSHChannel ch, ISSHChannelEventReceiver r) {
 			lock(this) {
-				ChannelEntry e = new ChannelEntry();
-				e._channel = ch;
-				e._receiver = r;
-				e._localID = _channel_sequence++;
+                ChannelEntry e = new ChannelEntry
+                {
+                    _channel = ch,
+                    _receiver = r,
+                    _localID = _channel_sequence++
+                };
 
-				for(int i=0; i<_channel_entries.Count; i++) {
+                for (int i=0; i<_channel_entries.Count; i++) {
 					if(_channel_entries[i]==null) {
 						_channel_entries[i] = e;
 						return e;
@@ -185,7 +184,7 @@ namespace Granados.SSHC
 						break;
 					}
 				}
-				if(this.ChannelCount==0 && _autoDisconnect) Disconnect(""); //auto close
+				if(ChannelCount==0 && _autoDisconnect) Disconnect(""); //auto close
 			}
 		}
 		public virtual int ChannelCount {

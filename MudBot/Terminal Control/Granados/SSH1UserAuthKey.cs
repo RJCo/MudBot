@@ -10,16 +10,15 @@ using System;
 using System.IO;
 using System.Text;
 using System.Security.Cryptography;
-using System.Diagnostics;
 
 using Granados.SSHC;
 
 namespace Granados.SSHCV1
 {
-	/// <summary>
-	/// private key for user authentication
-	/// </summary>
-	public class SSH1UserAuthKey
+    /// <summary>
+    /// private key for user authentication
+    /// </summary>
+    public class SSH1UserAuthKey
 	{
 		private BigInteger _modulus;
 		private BigInteger _publicExponent;

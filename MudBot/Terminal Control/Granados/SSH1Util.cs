@@ -6,12 +6,11 @@
 
  $Id: SSH1Util.cs,v 1.2 2005/04/20 08:58:56 okajima Exp $
 */
-using System;
 using Granados.SSHC;
 
 namespace Granados.SSHCV1
 {
-	public class SSHServerInfo {
+    public class SSHServerInfo {
 		public byte[] anti_spoofing_cookie;
 		public int    server_key_bits;
 		public BigInteger server_key_public_exponent;

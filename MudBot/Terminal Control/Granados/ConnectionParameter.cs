@@ -147,23 +147,25 @@ namespace Granados.SSHC
 		}
 
 		public object Clone() {
-			SSHConnectionParameter n = new SSHConnectionParameter();
-			n._authtype = _authtype;
-			n._cipherAlgorithms = _cipherAlgorithms;
-			n._height = _height;
-			n._hostkeyAlgorithms = _hostkeyAlgorithms;
-			n._identityFile = _identityFile;
-			n._keycheck = _keycheck;
-			n._maxpacketsize = _maxpacketsize;
-			n._password = _password;
-			n._protocol = _protocol;
-			n._random = _random;
-			n._terminalname = _terminalname;
-			n._username = _username;
-			n._width = _width;
-			n._windowsize = _windowsize;
-			n._checkMACError = _checkMACError;
-			return n;
+            SSHConnectionParameter n = new SSHConnectionParameter
+            {
+                _authtype = _authtype,
+                _cipherAlgorithms = _cipherAlgorithms,
+                _height = _height,
+                _hostkeyAlgorithms = _hostkeyAlgorithms,
+                _identityFile = _identityFile,
+                _keycheck = _keycheck,
+                _maxpacketsize = _maxpacketsize,
+                _password = _password,
+                _protocol = _protocol,
+                _random = _random,
+                _terminalname = _terminalname,
+                _username = _username,
+                _width = _width,
+                _windowsize = _windowsize,
+                _checkMACError = _checkMACError
+            };
+            return n;
 		}
 	}
 }

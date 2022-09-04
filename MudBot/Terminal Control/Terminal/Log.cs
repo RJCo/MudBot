@@ -8,12 +8,12 @@ using System.Xml;
 using System.Text;
 
 using Poderosa.ConnectionParam;
-using Poderosa.Communication;
 using Poderosa.Text;
 
-namespace Poderosa.Log {
-	
-	public interface ITerminalLogger {
+namespace Poderosa.Log
+{
+
+    public interface ITerminalLogger {
 		void Comment(string comment);
 		void Flush();
 		void Close();

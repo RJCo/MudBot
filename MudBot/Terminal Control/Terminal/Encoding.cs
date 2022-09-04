@@ -6,12 +6,11 @@ using System;
 using System.Text;
 
 using Poderosa.ConnectionParam;
-using Poderosa.Toolkit;
 
 namespace Poderosa.Communication
 {
-	//encodingŠÖŒW
-	public abstract class EncodingProfile {
+    //encodingŠÖŒW
+    public abstract class EncodingProfile {
 		
 		private Encoding _encoding;
 		private EncodingType _type;

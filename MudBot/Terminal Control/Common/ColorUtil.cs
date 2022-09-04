@@ -2,12 +2,11 @@
  * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
  * $Id: ColorUtil.cs,v 1.2 2005/04/20 08:45:46 okajima Exp $
  */
-using System;
 using System.Drawing;
 
 namespace Poderosa.UI
 {
-	public class ColorUtil {
+    public class ColorUtil {
 
 		static public Color VSNetBackgroundColor {
 			get {

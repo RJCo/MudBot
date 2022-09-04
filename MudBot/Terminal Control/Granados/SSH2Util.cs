@@ -8,13 +8,12 @@
  * 
  * $Id: SSH2Util.cs,v 1.2 2005/04/20 09:00:56 okajima Exp $
  */
-using System;
 using Granados.SSHC;
 using Granados.PKI;
 
 namespace Granados.SSHCV2
 {
-	public enum PacketType {
+    public enum PacketType {
 		SSH_MSG_DISCONNECT          =   1,
 		SSH_MSG_IGNORE              =   2,
 		SSH_MSG_UNIMPLEMENTED       =   3,

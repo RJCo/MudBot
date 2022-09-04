@@ -3,19 +3,15 @@
 * $Id: Options.cs,v 1.2 2005/04/20 08:45:46 okajima Exp $
 */
 using System;
-using System.IO;
 using System.Diagnostics;
 using System.Collections;
 using System.Drawing;
-using System.Text;
 using System.Reflection;
 using System.Windows.Forms;
 
 using Poderosa.ConnectionParam;
-using Poderosa.Communication;
 using Poderosa.Terminal;
 using Poderosa.Toolkit;
-using Poderosa.SSH;
 
 //起動の高速化のため、ここではGranadosを呼ばないように注意する
 
@@ -23,7 +19,7 @@ using Poderosa.SSH;
 
 namespace Poderosa.Config
 {
-	public class CommonOptions : ICloneable {
+    public class CommonOptions : ICloneable {
 
 		//言語設定 (このメンバは最初であること！）
 		[ConfigEnumElement(typeof(Language))] protected Language _language;
@@ -226,7 +222,7 @@ namespace Poderosa.Config
 			}
 			set {
 				if(value<1 || value>99)
-					throw new InvalidOptionException(GEnv.Strings.GetString("Message.Options.WheelAmountRange"));
+					throw new InvalidOptionException("Message.Options.WheelAmountRange");
 				_wheelAmount = value;
 			}
 		}
@@ -237,7 +233,7 @@ namespace Poderosa.Config
 			}
 			set {
 				if(value<0 || value>9999)
-					throw new InvalidOptionException(GEnv.Strings.GetString("Message.Options.BufferSizeRange"));
+					throw new InvalidOptionException("Message.Options.BufferSizeRange");
 				_terminalBufferSize = value;
 			}
 		}

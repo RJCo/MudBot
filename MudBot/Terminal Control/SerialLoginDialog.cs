@@ -3,56 +3,53 @@
 * $Id: SerialLoginDialog.cs,v 1.2 2005/04/20 08:45:45 okajima Exp $
 */
 using System;
-using System.IO;
-using System.Text;
 using System.Drawing;
-using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows.Forms;
-
-using Poderosa.Toolkit;
 using EnumDescAttributeT = Poderosa.Toolkit.EnumDescAttribute;
 using Poderosa.Connection;
 using Poderosa.ConnectionParam;
 using Poderosa.Communication;
 using Poderosa.Terminal;
 
-namespace Poderosa.Forms {
-	/// <summary>
-	/// SerialLoginDialog の概要の説明です。
-	/// </summary>
-	internal class SerialLoginDialog : System.Windows.Forms.Form {
+namespace Poderosa.Forms
+{
+    /// <summary>
+    /// SerialLoginDialog の概要の説明です。
+    /// </summary>
+    internal class SerialLoginDialog : Form
+    {
 		
 		private ConnectionTag _result;
 
-		private System.Windows.Forms.Button _loginButton;
-		private System.Windows.Forms.Button _cancelButton;
-		private System.Windows.Forms.GroupBox _terminalGroup;
+		private Button _loginButton;
+		private Button _cancelButton;
+		private GroupBox _terminalGroup;
 		private ComboBox _logTypeBox;
-		private System.Windows.Forms.Label _logTypeLabel;
+		private Label _logTypeLabel;
 		private ComboBox _newLineBox;
 		private ComboBox _localEchoBox;
-		private System.Windows.Forms.Label _localEchoLabel;
-		private System.Windows.Forms.Label _newLineLabel;
+		private Label _localEchoLabel;
+		private Label _newLineLabel;
 		private ComboBox _logFileBox;
-		private System.Windows.Forms.Label _logFileLabel;
+		private Label _logFileLabel;
 		private ComboBox _encodingBox;
-		private System.Windows.Forms.Label _encodingLabel;
+		private Label _encodingLabel;
 		private Button _selectLogButton;
-		private System.Windows.Forms.GroupBox _serialGroup;
+		private GroupBox _serialGroup;
 		private ComboBox _flowControlBox;
-		private System.Windows.Forms.Label _flowControlLabel;
+		private Label _flowControlLabel;
 		private ComboBox _stopBitsBox;
-		private System.Windows.Forms.Label _stopBitsLabel;
+		private Label _stopBitsLabel;
 		private ComboBox _parityBox;
-		private System.Windows.Forms.Label _parityLabel;
+		private Label _parityLabel;
 		private ComboBox _dataBitsBox;
-		private System.Windows.Forms.Label _dataBitsLabel;
+		private Label _dataBitsLabel;
 		private ComboBox _baudRateBox;
-		private System.Windows.Forms.Label _baudRateLabel;
+		private Label _baudRateLabel;
 		private ComboBox _portBox;
-		private System.Windows.Forms.Label _portLabel;
+		private Label _portLabel;
 		private Label _transmitDelayPerCharLabel;
 		private TextBox _transmitDelayPerCharBox;
 		private Label _transmitDelayPerLineLabel;
@@ -60,7 +57,7 @@ namespace Poderosa.Forms {
 		/// <summary>
 		/// 必要なデザイナ変数です。
 		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 
 		public SerialLoginDialog() {
 			//
@@ -68,35 +65,35 @@ namespace Poderosa.Forms {
 			//
 			InitializeComponent();
 
-			this._serialGroup.Text = GApp.Strings.GetString("Form.SerialLoginDialog._serialGroup");
+			_serialGroup.Text = "Form.SerialLoginDialog._serialGroup";
 			//以下、SerialConfigとテキストを共用
-			this._portLabel.Text = GApp.Strings.GetString("Form.SerialConfig._portLabel");
-			this._baudRateLabel.Text = GApp.Strings.GetString("Form.SerialConfig._baudRateLabel");
-			this._dataBitsLabel.Text = GApp.Strings.GetString("Form.SerialConfig._dataBitsLabel");
-			this._parityLabel.Text = GApp.Strings.GetString("Form.SerialConfig._parityLabel");
-			this._stopBitsLabel.Text = GApp.Strings.GetString("Form.SerialConfig._stopBitsLabel");
-			this._flowControlLabel.Text = GApp.Strings.GetString("Form.SerialConfig._flowControlLabel");
-			this._transmitDelayPerLineLabel.Text = "Transmit Delay(msec/line)";
-			this._transmitDelayPerCharLabel.Text = "Transmit Delay(msec/char)";
-			string bits = GApp.Strings.GetString("Caption.SerialConfig.Bits");
-			this._dataBitsBox.Items.AddRange(new object[] {
+			_portLabel.Text = "Form.SerialConfig._portLabel";
+			_baudRateLabel.Text = "Form.SerialConfig._baudRateLabel";
+			_dataBitsLabel.Text = "Form.SerialConfig._dataBitsLabel";
+			_parityLabel.Text = "Form.SerialConfig._parityLabel";
+			_stopBitsLabel.Text = "Form.SerialConfig._stopBitsLabel";
+			_flowControlLabel.Text = "Form.SerialConfig._flowControlLabel";
+			_transmitDelayPerLineLabel.Text = "Transmit Delay(msec/line)";
+			_transmitDelayPerCharLabel.Text = "Transmit Delay(msec/char)";
+			string bits = "Caption.SerialConfig.Bits";
+			_dataBitsBox.Items.AddRange(new object[] {
 															  String.Format("{0}{1}", 7, bits),
 															  String.Format("{0}{1}", 8, bits)});
 
-			this._terminalGroup.Text = GApp.Strings.GetString("Form.SerialLoginDialog._terminalGroup");
+			_terminalGroup.Text = "Form.SerialLoginDialog._terminalGroup";
 			
 			//以下、LoginDialogとテキスト共用
-			this._localEchoLabel.Text = GApp.Strings.GetString("Form.LoginDialog._localEchoLabel");
-			this._newLineLabel.Text = GApp.Strings.GetString("Form.LoginDialog._newLineLabel");
-			this._logFileLabel.Text = GApp.Strings.GetString("Form.LoginDialog._logFileLabel");
-			this._encodingLabel.Text = GApp.Strings.GetString("Form.LoginDialog._encodingLabel");
-			this._logTypeLabel.Text = GApp.Strings.GetString("Form.LoginDialog._logTypeLabel");
-			this._localEchoBox.Items.AddRange(new object[] {
-															   GApp.Strings.GetString("Common.DoNot"),
-															   GApp.Strings.GetString("Common.Do")});
-			this._loginButton.Text = GApp.Strings.GetString("Common.OK");
-			this._cancelButton.Text = GApp.Strings.GetString("Common.Cancel");
-			this.Text = GApp.Strings.GetString("Form.SerialLoginDialog.Text");
+			_localEchoLabel.Text = "Form.LoginDialog._localEchoLabel";
+			_newLineLabel.Text = "Form.LoginDialog._newLineLabel";
+			_logFileLabel.Text = "Form.LoginDialog._logFileLabel";
+			_encodingLabel.Text = "Form.LoginDialog._encodingLabel";
+			_logTypeLabel.Text = "Form.LoginDialog._logTypeLabel";
+			_localEchoBox.Items.AddRange(new object[] {
+															   "Common.DoNot",
+															   "Common.Do"});
+			_loginButton.Text = "OK";
+			_cancelButton.Text = "Cancel";
+			Text = "Form.SerialLoginDialog.Text";
 
 			//
 			// TODO: InitializeComponent 呼び出しの後に、コンストラクタ コードを追加してください。
@@ -129,366 +126,366 @@ namespace Poderosa.Forms {
 		///this._baudRateBox.Items.AddRange(TerminalUtil.BaudRates);
 		/// </summary>
 		private void InitializeComponent() {
-			this._serialGroup = new System.Windows.Forms.GroupBox();
-			this._portLabel = new System.Windows.Forms.Label();
-			this._portBox = new ComboBox();
-			this._baudRateLabel = new System.Windows.Forms.Label();
-			this._baudRateBox = new ComboBox();
-			this._dataBitsLabel = new System.Windows.Forms.Label();
-			this._dataBitsBox = new ComboBox();
-			this._parityLabel = new System.Windows.Forms.Label();
-			this._parityBox = new ComboBox();
-			this._stopBitsLabel = new System.Windows.Forms.Label();
-			this._stopBitsBox = new ComboBox();
-			this._flowControlLabel = new System.Windows.Forms.Label();
-			this._flowControlBox = new ComboBox();
-			this._transmitDelayPerCharLabel = new Label();
-			this._transmitDelayPerCharBox = new TextBox();
-			this._transmitDelayPerLineLabel = new Label();
-			this._transmitDelayPerLineBox = new TextBox();
+			_serialGroup = new GroupBox();
+			_portLabel = new Label();
+			_portBox = new ComboBox();
+			_baudRateLabel = new Label();
+			_baudRateBox = new ComboBox();
+			_dataBitsLabel = new Label();
+			_dataBitsBox = new ComboBox();
+			_parityLabel = new Label();
+			_parityBox = new ComboBox();
+			_stopBitsLabel = new Label();
+			_stopBitsBox = new ComboBox();
+			_flowControlLabel = new Label();
+			_flowControlBox = new ComboBox();
+			_transmitDelayPerCharLabel = new Label();
+			_transmitDelayPerCharBox = new TextBox();
+			_transmitDelayPerLineLabel = new Label();
+			_transmitDelayPerLineBox = new TextBox();
 			
-			this._terminalGroup = new System.Windows.Forms.GroupBox();
-			this._logTypeBox = new ComboBox();
-			this._logTypeLabel = new System.Windows.Forms.Label();
-			this._newLineBox = new ComboBox();
-			this._localEchoBox = new ComboBox();
-			this._localEchoLabel = new System.Windows.Forms.Label();
-			this._newLineLabel = new System.Windows.Forms.Label();
-			this._logFileBox = new ComboBox();
-			this._logFileLabel = new System.Windows.Forms.Label();
-			this._encodingBox = new ComboBox();
-			this._encodingLabel = new System.Windows.Forms.Label();
-			this._selectLogButton = new Button();
+			_terminalGroup = new GroupBox();
+			_logTypeBox = new ComboBox();
+			_logTypeLabel = new Label();
+			_newLineBox = new ComboBox();
+			_localEchoBox = new ComboBox();
+			_localEchoLabel = new Label();
+			_newLineLabel = new Label();
+			_logFileBox = new ComboBox();
+			_logFileLabel = new Label();
+			_encodingBox = new ComboBox();
+			_encodingLabel = new Label();
+			_selectLogButton = new Button();
 
-			this._terminalGroup.SuspendLayout();
-			this._serialGroup.SuspendLayout();
-			this._loginButton = new System.Windows.Forms.Button();
-			this._cancelButton = new System.Windows.Forms.Button();
-			this.SuspendLayout();
+			_terminalGroup.SuspendLayout();
+			_serialGroup.SuspendLayout();
+			_loginButton = new Button();
+			_cancelButton = new Button();
+			SuspendLayout();
 			// 
 			// _serialGroup
 			// 
-			this._serialGroup.Controls.AddRange(new System.Windows.Forms.Control[] {
-																					   this._transmitDelayPerCharBox,
-																					   this._transmitDelayPerCharLabel,
-																					   this._transmitDelayPerLineBox,
-																					   this._transmitDelayPerLineLabel,
-																					   this._flowControlBox,
-																					   this._flowControlLabel,
-																					   this._stopBitsBox,
-																					   this._stopBitsLabel,
-																					   this._parityBox,
-																					   this._parityLabel,
-																					   this._dataBitsBox,
-																					   this._dataBitsLabel,
-																					   this._baudRateBox,
-																					   this._baudRateLabel,
-																					   this._portBox,
-																					   this._portLabel});
-			this._serialGroup.Location = new System.Drawing.Point(8, 8);
-			this._serialGroup.Name = "_serialGroup";
-			this._serialGroup.FlatStyle = FlatStyle.System;
-			this._serialGroup.Size = new System.Drawing.Size(296, 224);
-			this._serialGroup.TabIndex = 0;
-			this._serialGroup.TabStop = false;
+			_serialGroup.Controls.AddRange(new Control[] {
+																					   _transmitDelayPerCharBox,
+																					   _transmitDelayPerCharLabel,
+																					   _transmitDelayPerLineBox,
+																					   _transmitDelayPerLineLabel,
+																					   _flowControlBox,
+																					   _flowControlLabel,
+																					   _stopBitsBox,
+																					   _stopBitsLabel,
+																					   _parityBox,
+																					   _parityLabel,
+																					   _dataBitsBox,
+																					   _dataBitsLabel,
+																					   _baudRateBox,
+																					   _baudRateLabel,
+																					   _portBox,
+																					   _portLabel});
+			_serialGroup.Location = new Point(8, 8);
+			_serialGroup.Name = "_serialGroup";
+			_serialGroup.FlatStyle = FlatStyle.System;
+			_serialGroup.Size = new Size(296, 224);
+			_serialGroup.TabIndex = 0;
+			_serialGroup.TabStop = false;
 			// 
 			// _portLabel
 			// 
-			this._portLabel.Location = new System.Drawing.Point(8, 16);
-			this._portLabel.Name = "_portLabel";
-			this._portLabel.Size = new System.Drawing.Size(88, 23);
-			this._portLabel.TabIndex = 1;
-			this._portLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_portLabel.Location = new Point(8, 16);
+			_portLabel.Name = "_portLabel";
+			_portLabel.Size = new Size(88, 23);
+			_portLabel.TabIndex = 1;
+			_portLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _portBox
 			// 
-			this._portBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._portBox.Location = new System.Drawing.Point(112, 16);
-			this._portBox.Name = "_portBox";
-			this._portBox.Size = new System.Drawing.Size(120, 20);
-			this._portBox.TabIndex = 2;
+			_portBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_portBox.Location = new Point(112, 16);
+			_portBox.Name = "_portBox";
+			_portBox.Size = new Size(120, 20);
+			_portBox.TabIndex = 2;
 			// 
 			// _baudRateLabel
 			// 
-			this._baudRateLabel.Location = new System.Drawing.Point(8, 40);
-			this._baudRateLabel.Name = "_baudRateLabel";
-			this._baudRateLabel.Size = new System.Drawing.Size(88, 23);
-			this._baudRateLabel.TabIndex = 3;
-			this._baudRateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_baudRateLabel.Location = new Point(8, 40);
+			_baudRateLabel.Name = "_baudRateLabel";
+			_baudRateLabel.Size = new Size(88, 23);
+			_baudRateLabel.TabIndex = 3;
+			_baudRateLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _baudRateBox
 			// 
-			this._baudRateBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._baudRateBox.Items.AddRange(TerminalUtil.BaudRates);
-			this._baudRateBox.Location = new System.Drawing.Point(112, 40);
-			this._baudRateBox.Name = "_baudRateBox";
-			this._baudRateBox.Size = new System.Drawing.Size(120, 20);
-			this._baudRateBox.TabIndex = 4;
+			_baudRateBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_baudRateBox.Items.AddRange(TerminalUtil.BaudRates);
+			_baudRateBox.Location = new Point(112, 40);
+			_baudRateBox.Name = "_baudRateBox";
+			_baudRateBox.Size = new Size(120, 20);
+			_baudRateBox.TabIndex = 4;
 			// 
 			// _dataBitsLabel
 			// 
-			this._dataBitsLabel.Location = new System.Drawing.Point(8, 64);
-			this._dataBitsLabel.Name = "_dataBitsLabel";
-			this._dataBitsLabel.Size = new System.Drawing.Size(88, 23);
-			this._dataBitsLabel.TabIndex = 5;
-			this._dataBitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_dataBitsLabel.Location = new Point(8, 64);
+			_dataBitsLabel.Name = "_dataBitsLabel";
+			_dataBitsLabel.Size = new Size(88, 23);
+			_dataBitsLabel.TabIndex = 5;
+			_dataBitsLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _dataBitsBox
 			// 
-			this._dataBitsBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._dataBitsBox.Location = new System.Drawing.Point(112, 64);
-			this._dataBitsBox.Name = "_dataBitsBox";
-			this._dataBitsBox.Size = new System.Drawing.Size(120, 20);
-			this._dataBitsBox.TabIndex = 6;
+			_dataBitsBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_dataBitsBox.Location = new Point(112, 64);
+			_dataBitsBox.Name = "_dataBitsBox";
+			_dataBitsBox.Size = new Size(120, 20);
+			_dataBitsBox.TabIndex = 6;
 			// 
 			// _parityLabel
 			// 
-			this._parityLabel.Location = new System.Drawing.Point(8, 88);
-			this._parityLabel.Name = "_parityLabel";
-			this._parityLabel.Size = new System.Drawing.Size(88, 23);
-			this._parityLabel.TabIndex = 7;
-			this._parityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_parityLabel.Location = new Point(8, 88);
+			_parityLabel.Name = "_parityLabel";
+			_parityLabel.Size = new Size(88, 23);
+			_parityLabel.TabIndex = 7;
+			_parityLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _parityBox
 			// 
-			this._parityBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._parityBox.Items.AddRange(EnumDescAttributeT.For(typeof(Parity)).DescriptionCollection());
-			this._parityBox.Location = new System.Drawing.Point(112, 88);
-			this._parityBox.Name = "_parityBox";
-			this._parityBox.Size = new System.Drawing.Size(120, 20);
-			this._parityBox.TabIndex = 8;
+			_parityBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_parityBox.Items.AddRange(EnumDescAttributeT.For(typeof(Parity)).DescriptionCollection());
+			_parityBox.Location = new Point(112, 88);
+			_parityBox.Name = "_parityBox";
+			_parityBox.Size = new Size(120, 20);
+			_parityBox.TabIndex = 8;
 			// 
 			// _stopBitsLabel
 			// 
-			this._stopBitsLabel.Location = new System.Drawing.Point(8, 112);
-			this._stopBitsLabel.Name = "_stopBitsLabel";
-			this._stopBitsLabel.Size = new System.Drawing.Size(88, 23);
-			this._stopBitsLabel.TabIndex = 9;
-			this._stopBitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_stopBitsLabel.Location = new Point(8, 112);
+			_stopBitsLabel.Name = "_stopBitsLabel";
+			_stopBitsLabel.Size = new Size(88, 23);
+			_stopBitsLabel.TabIndex = 9;
+			_stopBitsLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _stopBitsBox
 			// 
-			this._stopBitsBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._stopBitsBox.Items.AddRange(EnumDescAttributeT.For(typeof(StopBits)).DescriptionCollection());
-			this._stopBitsBox.Location = new System.Drawing.Point(112, 112);
-			this._stopBitsBox.Name = "_stopBitsBox";
-			this._stopBitsBox.Size = new System.Drawing.Size(120, 20);
-			this._stopBitsBox.TabIndex = 10;
+			_stopBitsBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_stopBitsBox.Items.AddRange(EnumDescAttributeT.For(typeof(StopBits)).DescriptionCollection());
+			_stopBitsBox.Location = new Point(112, 112);
+			_stopBitsBox.Name = "_stopBitsBox";
+			_stopBitsBox.Size = new Size(120, 20);
+			_stopBitsBox.TabIndex = 10;
 			// 
 			// _flowControlLabel
 			// 
-			this._flowControlLabel.Location = new System.Drawing.Point(8, 136);
-			this._flowControlLabel.Name = "_flowControlLabel";
-			this._flowControlLabel.Size = new System.Drawing.Size(88, 23);
-			this._flowControlLabel.TabIndex = 11;
-			this._flowControlLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_flowControlLabel.Location = new Point(8, 136);
+			_flowControlLabel.Name = "_flowControlLabel";
+			_flowControlLabel.Size = new Size(88, 23);
+			_flowControlLabel.TabIndex = 11;
+			_flowControlLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _flowControlBox
 			// 
-			this._flowControlBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._flowControlBox.Location = new System.Drawing.Point(112, 136);
-			this._flowControlBox.Name = "_flowControlBox";
-			this._flowControlBox.Size = new System.Drawing.Size(120, 20);
-			this._flowControlBox.Items.AddRange(EnumDescAttributeT.For(typeof(FlowControl)).DescriptionCollection());
-			this._flowControlBox.TabIndex = 12;
+			_flowControlBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_flowControlBox.Location = new Point(112, 136);
+			_flowControlBox.Name = "_flowControlBox";
+			_flowControlBox.Size = new Size(120, 20);
+			_flowControlBox.Items.AddRange(EnumDescAttributeT.For(typeof(FlowControl)).DescriptionCollection());
+			_flowControlBox.TabIndex = 12;
 			// 
 			// _transmitDelayPerCharLabel
 			// 
-			this._transmitDelayPerCharLabel.Location = new System.Drawing.Point(8, 160);
-			this._transmitDelayPerCharLabel.Name = "_transmitDelayPerCharLabel";
-			this._transmitDelayPerCharLabel.Size = new System.Drawing.Size(88, 23);
-			this._transmitDelayPerCharLabel.TabIndex = 13;
-			this._transmitDelayPerCharLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_transmitDelayPerCharLabel.Location = new Point(8, 160);
+			_transmitDelayPerCharLabel.Name = "_transmitDelayPerCharLabel";
+			_transmitDelayPerCharLabel.Size = new Size(88, 23);
+			_transmitDelayPerCharLabel.TabIndex = 13;
+			_transmitDelayPerCharLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _transmitDelayPerCharBox
 			// 
-			this._transmitDelayPerCharBox.Location = new System.Drawing.Point(112, 160);
-			this._transmitDelayPerCharBox.Name = "_transmitDelayPerCharBox";
-			this._transmitDelayPerCharBox.Size = new System.Drawing.Size(120, 20);
-			this._transmitDelayPerCharBox.TabIndex = 14;
-			this._transmitDelayPerCharBox.MaxLength = 3;
+			_transmitDelayPerCharBox.Location = new Point(112, 160);
+			_transmitDelayPerCharBox.Name = "_transmitDelayPerCharBox";
+			_transmitDelayPerCharBox.Size = new Size(120, 20);
+			_transmitDelayPerCharBox.TabIndex = 14;
+			_transmitDelayPerCharBox.MaxLength = 3;
 			// 
 			// _transmitDelayPerLineLabel
 			// 
-			this._transmitDelayPerLineLabel.Location = new System.Drawing.Point(8, 184);
-			this._transmitDelayPerLineLabel.Name = "_transmitDelayPerLineLabel";
-			this._transmitDelayPerLineLabel.Size = new System.Drawing.Size(88, 23);
-			this._transmitDelayPerLineLabel.TabIndex = 15;
-			this._transmitDelayPerLineLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_transmitDelayPerLineLabel.Location = new Point(8, 184);
+			_transmitDelayPerLineLabel.Name = "_transmitDelayPerLineLabel";
+			_transmitDelayPerLineLabel.Size = new Size(88, 23);
+			_transmitDelayPerLineLabel.TabIndex = 15;
+			_transmitDelayPerLineLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _transmitDelayPerLineBox
 			// 
-			this._transmitDelayPerLineBox.Location = new System.Drawing.Point(112, 184);
-			this._transmitDelayPerLineBox.Name = "_transmitDelayPerLineBox";
-			this._transmitDelayPerLineBox.Size = new System.Drawing.Size(120, 20);
-			this._transmitDelayPerLineBox.TabIndex = 16;
-			this._transmitDelayPerLineBox.MaxLength = 3;
+			_transmitDelayPerLineBox.Location = new Point(112, 184);
+			_transmitDelayPerLineBox.Name = "_transmitDelayPerLineBox";
+			_transmitDelayPerLineBox.Size = new Size(120, 20);
+			_transmitDelayPerLineBox.TabIndex = 16;
+			_transmitDelayPerLineBox.MaxLength = 3;
 			// 
 			// _terminalGroup
 			// 
-			this._terminalGroup.Controls.AddRange(new System.Windows.Forms.Control[] {
-																						 this._logTypeBox,
-																						 this._logTypeLabel,
-																						 this._newLineBox,
-																						 this._localEchoBox,
-																						 this._localEchoLabel,
-																						 this._newLineLabel,
-																						 this._logFileBox,
-																						 this._logFileLabel,
-																						 this._encodingBox,
-																						 this._encodingLabel,
-																						 this._selectLogButton});
-			this._terminalGroup.Location = new System.Drawing.Point(8, 240);
-			this._terminalGroup.Name = "_terminalGroup";
-			this._terminalGroup.FlatStyle = FlatStyle.System;
-			this._terminalGroup.Size = new System.Drawing.Size(296, 144);
-			this._terminalGroup.TabIndex = 17;
-			this._terminalGroup.TabStop = false;
+			_terminalGroup.Controls.AddRange(new Control[] {
+																						 _logTypeBox,
+																						 _logTypeLabel,
+																						 _newLineBox,
+																						 _localEchoBox,
+																						 _localEchoLabel,
+																						 _newLineLabel,
+																						 _logFileBox,
+																						 _logFileLabel,
+																						 _encodingBox,
+																						 _encodingLabel,
+																						 _selectLogButton});
+			_terminalGroup.Location = new Point(8, 240);
+			_terminalGroup.Name = "_terminalGroup";
+			_terminalGroup.FlatStyle = FlatStyle.System;
+			_terminalGroup.Size = new Size(296, 144);
+			_terminalGroup.TabIndex = 17;
+			_terminalGroup.TabStop = false;
 			// 
 			// _logTypeLabel
 			// 
-			this._logTypeLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._logTypeLabel.Location = new System.Drawing.Point(8, 16);
-			this._logTypeLabel.Name = "_logTypeLabel";
-			this._logTypeLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._logTypeLabel.Size = new System.Drawing.Size(120, 16);
-			this._logTypeLabel.TabIndex = 18;
-			this._logTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_logTypeLabel.ImeMode = ImeMode.NoControl;
+			_logTypeLabel.Location = new Point(8, 16);
+			_logTypeLabel.Name = "_logTypeLabel";
+			_logTypeLabel.RightToLeft = RightToLeft.No;
+			_logTypeLabel.Size = new Size(120, 16);
+			_logTypeLabel.TabIndex = 18;
+			_logTypeLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _logTypeBox
 			// 
-			this._logTypeBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._logTypeBox.Items.AddRange(EnumDescAttributeT.For(typeof(LogType)).DescriptionCollection());
-			this._logTypeBox.Location = new System.Drawing.Point(112, 16);
-			this._logTypeBox.Name = "_logTypeBox";
-			this._logTypeBox.Size = new System.Drawing.Size(120, 20);
-			this._logTypeBox.TabIndex = 19;
-			this._logTypeBox.SelectedIndexChanged += new System.EventHandler(this.OnLogTypeChanged);
+			_logTypeBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_logTypeBox.Items.AddRange(EnumDescAttributeT.For(typeof(LogType)).DescriptionCollection());
+			_logTypeBox.Location = new Point(112, 16);
+			_logTypeBox.Name = "_logTypeBox";
+			_logTypeBox.Size = new Size(120, 20);
+			_logTypeBox.TabIndex = 19;
+			_logTypeBox.SelectedIndexChanged += new EventHandler(OnLogTypeChanged);
 			// 
 			// _logFileLabel
 			// 
-			this._logFileLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._logFileLabel.Location = new System.Drawing.Point(8, 40);
-			this._logFileLabel.Name = "_logFileLabel";
-			this._logFileLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._logFileLabel.Size = new System.Drawing.Size(88, 16);
-			this._logFileLabel.TabIndex = 20;
-			this._logFileLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_logFileLabel.ImeMode = ImeMode.NoControl;
+			_logFileLabel.Location = new Point(8, 40);
+			_logFileLabel.Name = "_logFileLabel";
+			_logFileLabel.RightToLeft = RightToLeft.No;
+			_logFileLabel.Size = new Size(88, 16);
+			_logFileLabel.TabIndex = 20;
+			_logFileLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _logFileBox
 			// 
-			this._logFileBox.Location = new System.Drawing.Point(112, 40);
-			this._logFileBox.Name = "_logFileBox";
-			this._logFileBox.Size = new System.Drawing.Size(144, 20);
-			this._logFileBox.TabIndex = 21;
+			_logFileBox.Location = new Point(112, 40);
+			_logFileBox.Name = "_logFileBox";
+			_logFileBox.Size = new Size(144, 20);
+			_logFileBox.TabIndex = 21;
 			// 
 			// _selectLogButton
 			// 
-			this._selectLogButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._selectLogButton.ImageIndex = 0;
-			this._selectLogButton.FlatStyle = FlatStyle.System;
-			this._selectLogButton.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._selectLogButton.Location = new System.Drawing.Point(256, 40);
-			this._selectLogButton.Name = "_selectLogButton";
-			this._selectLogButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._selectLogButton.Size = new System.Drawing.Size(19, 19);
-			this._selectLogButton.TabIndex = 22;
-			this._selectLogButton.Text = "...";
-			this._selectLogButton.Click += new System.EventHandler(this.SelectLog);
+			_selectLogButton.FlatStyle = FlatStyle.Flat;
+			_selectLogButton.ImageIndex = 0;
+			_selectLogButton.FlatStyle = FlatStyle.System;
+			_selectLogButton.ImeMode = ImeMode.NoControl;
+			_selectLogButton.Location = new Point(256, 40);
+			_selectLogButton.Name = "_selectLogButton";
+			_selectLogButton.RightToLeft = RightToLeft.No;
+			_selectLogButton.Size = new Size(19, 19);
+			_selectLogButton.TabIndex = 22;
+			_selectLogButton.Text = "...";
+			_selectLogButton.Click += new EventHandler(SelectLog);
 			// 
 			// _encodingLabel
 			// 
-			this._encodingLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._encodingLabel.Location = new System.Drawing.Point(8, 64);
-			this._encodingLabel.Name = "_encodingLabel";
-			this._encodingLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._encodingLabel.Size = new System.Drawing.Size(96, 16);
-			this._encodingLabel.TabIndex = 23;
-			this._encodingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_encodingLabel.ImeMode = ImeMode.NoControl;
+			_encodingLabel.Location = new Point(8, 64);
+			_encodingLabel.Name = "_encodingLabel";
+			_encodingLabel.RightToLeft = RightToLeft.No;
+			_encodingLabel.Size = new Size(96, 16);
+			_encodingLabel.TabIndex = 23;
+			_encodingLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _encodingBox
 			// 
-			this._encodingBox.Items.AddRange(EnumDescAttributeT.For(typeof(EncodingType)).DescriptionCollection());
-			this._encodingBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._encodingBox.Location = new System.Drawing.Point(112, 64);
-			this._encodingBox.Name = "_encodingBox";
-			this._encodingBox.Size = new System.Drawing.Size(120, 20);
-			this._encodingBox.TabIndex = 24;
+			_encodingBox.Items.AddRange(EnumDescAttributeT.For(typeof(EncodingType)).DescriptionCollection());
+			_encodingBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_encodingBox.Location = new Point(112, 64);
+			_encodingBox.Name = "_encodingBox";
+			_encodingBox.Size = new Size(120, 20);
+			_encodingBox.TabIndex = 24;
 			// 
 			// _localEchoLabel
 			// 
-			this._localEchoLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._localEchoLabel.Location = new System.Drawing.Point(8, 88);
-			this._localEchoLabel.Name = "_localEchoLabel";
-			this._localEchoLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._localEchoLabel.Size = new System.Drawing.Size(96, 16);
-			this._localEchoLabel.TabIndex = 25;
-			this._localEchoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_localEchoLabel.ImeMode = ImeMode.NoControl;
+			_localEchoLabel.Location = new Point(8, 88);
+			_localEchoLabel.Name = "_localEchoLabel";
+			_localEchoLabel.RightToLeft = RightToLeft.No;
+			_localEchoLabel.Size = new Size(96, 16);
+			_localEchoLabel.TabIndex = 25;
+			_localEchoLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _localEchoBox
 			// 
-			this._localEchoBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._localEchoBox.Location = new System.Drawing.Point(112, 88);
-			this._localEchoBox.Name = "_localEchoBox";
-			this._localEchoBox.Size = new System.Drawing.Size(120, 20);
-			this._localEchoBox.TabIndex = 26;
+			_localEchoBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_localEchoBox.Location = new Point(112, 88);
+			_localEchoBox.Name = "_localEchoBox";
+			_localEchoBox.Size = new Size(120, 20);
+			_localEchoBox.TabIndex = 26;
 			// 
 			// _newLineLabel
 			// 
-			this._newLineLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this._newLineLabel.Location = new System.Drawing.Point(8, 112);
-			this._newLineLabel.Name = "_newLineLabel";
-			this._newLineLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this._newLineLabel.Size = new System.Drawing.Size(96, 16);
-			this._newLineLabel.TabIndex = 27;
-			this._newLineLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			_newLineLabel.ImeMode = ImeMode.NoControl;
+			_newLineLabel.Location = new Point(8, 112);
+			_newLineLabel.Name = "_newLineLabel";
+			_newLineLabel.RightToLeft = RightToLeft.No;
+			_newLineLabel.Size = new Size(96, 16);
+			_newLineLabel.TabIndex = 27;
+			_newLineLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// _newLineBox
 			// 
-			this._newLineBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._newLineBox.Items.AddRange(EnumDescAttributeT.For(typeof(NewLine)).DescriptionCollection());
-			this._newLineBox.Location = new System.Drawing.Point(112, 112);
-			this._newLineBox.Name = "_newLineBox";
-			this._newLineBox.Size = new System.Drawing.Size(120, 20);
-			this._newLineBox.TabIndex = 28;
+			_newLineBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			_newLineBox.Items.AddRange(EnumDescAttributeT.For(typeof(NewLine)).DescriptionCollection());
+			_newLineBox.Location = new Point(112, 112);
+			_newLineBox.Name = "_newLineBox";
+			_newLineBox.Size = new Size(120, 20);
+			_newLineBox.TabIndex = 28;
 			// 
 			// _loginButton
 			// 
-			this._loginButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this._loginButton.Location = new System.Drawing.Point(136, 392);
-			this._loginButton.Name = "_loginButton";
-			this._loginButton.FlatStyle = FlatStyle.System;
-			this._loginButton.TabIndex = 29;
-			this._loginButton.Click += new System.EventHandler(this.OnOK);
+			_loginButton.DialogResult = DialogResult.OK;
+			_loginButton.Location = new Point(136, 392);
+			_loginButton.Name = "_loginButton";
+			_loginButton.FlatStyle = FlatStyle.System;
+			_loginButton.TabIndex = 29;
+			_loginButton.Click += new EventHandler(OnOK);
 			// 
 			// _cancelButton
 			// 
-			this._cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this._cancelButton.Location = new System.Drawing.Point(224, 392);
-			this._cancelButton.Name = "_cancelButton";
-			this._cancelButton.FlatStyle = FlatStyle.System;
-			this._cancelButton.TabIndex = 30;
+			_cancelButton.DialogResult = DialogResult.Cancel;
+			_cancelButton.Location = new Point(224, 392);
+			_cancelButton.Name = "_cancelButton";
+			_cancelButton.FlatStyle = FlatStyle.System;
+			_cancelButton.TabIndex = 30;
 			// 
 			// SerialLoginDialog
 			// 
-			this.AcceptButton = this._loginButton;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 12);
-			this.CancelButton = this._cancelButton;
-			this.ClientSize = new System.Drawing.Size(314, 423);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this._serialGroup,
-																		  this._terminalGroup,
-																		  this._cancelButton,
-																		  this._loginButton});
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "SerialLoginDialog";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this._terminalGroup.ResumeLayout(false);
-			this._serialGroup.ResumeLayout(false);
-			this.ResumeLayout(false);
+			AcceptButton = _loginButton;
+			AutoScaleBaseSize = new Size(5, 12);
+			CancelButton = _cancelButton;
+			ClientSize = new Size(314, 423);
+			Controls.AddRange(new Control[] {
+																		  _serialGroup,
+																		  _terminalGroup,
+																		  _cancelButton,
+																		  _loginButton});
+			FormBorderStyle = FormBorderStyle.FixedDialog;
+			MaximizeBox = false;
+			MinimizeBox = false;
+			Name = "SerialLoginDialog";
+			ShowInTaskbar = false;
+			StartPosition = FormStartPosition.CenterParent;
+			_terminalGroup.ResumeLayout(false);
+			_serialGroup.ResumeLayout(false);
+			ResumeLayout(false);
 
 		}
 		#endregion
@@ -543,7 +540,7 @@ namespace Poderosa.Forms {
 
 		private void OnOK(object sender, EventArgs args) {
 			_result = null;
-			this.DialogResult = DialogResult.None;
+			DialogResult = DialogResult.None;
 
 			SerialTerminalParam param = ValidateParam();
 			if(param==null) return;
@@ -551,7 +548,7 @@ namespace Poderosa.Forms {
 			try {
 				_result = CommunicationUtil.CreateNewSerialConnection(this, param);
 				if(_result!=null)
-					this.DialogResult = DialogResult.OK;
+					DialogResult = DialogResult.OK;
 			}
 			catch(Exception ex) {
 				GUtil.Warning(this, ex.Message);
@@ -594,11 +591,11 @@ namespace Poderosa.Forms {
 			}
 
 		}
-		private void SelectLog(object sender, System.EventArgs e) {
+		private void SelectLog(object sender, EventArgs e) {
 			string fn = GCUtil.SelectLogFileByDialog(this);
 			if(fn!=null) _logFileBox.Text = fn;
 		}
-		private void OnLogTypeChanged(object sender, System.EventArgs args) {
+		private void OnLogTypeChanged(object sender, EventArgs args) {
 			AdjustUI();
 		}
 	}

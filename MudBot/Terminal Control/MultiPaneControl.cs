@@ -5,7 +5,6 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
@@ -13,14 +12,13 @@ using Poderosa.Connection;
 using Poderosa.Communication;
 using Poderosa.Terminal;
 using Poderosa.Config;
-using Poderosa.Text;
 
 namespace Poderosa.Forms
 {
-	/// <summary>
-	/// 複数個のTerminalPaneをホストするコントロール
-	/// </summary>
-	internal class MultiPaneControl : UserControl
+    /// <summary>
+    /// 複数個のTerminalPaneをホストするコントロール
+    /// </summary>
+    internal class MultiPaneControl : UserControl
 	{
 		private Splitter[] _splitters;
 		public TerminalPane[] _panes;
@@ -31,7 +29,7 @@ namespace Poderosa.Forms
 		/// <summary>
 		/// 必要なデザイナ変数です。
 		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 
 		public MultiPaneControl() {
 			//
@@ -77,8 +75,8 @@ namespace Poderosa.Forms
 			// 
 			// MultiPaneControl
 			// 
-			this.BackColor = System.Drawing.SystemColors.AppWorkspace;
-			this.Name = "MultiPaneControl";
+			BackColor = SystemColors.AppWorkspace;
+			Name = "MultiPaneControl";
 		
 		}
 		#endregion
@@ -100,15 +98,15 @@ namespace Poderosa.Forms
 			bool is_vertical = style==GFrameStyle.DivVertical || style==GFrameStyle.DivVertical3;
 
 			//Controlの初期化
-			this.SuspendLayout();
+			SuspendLayout();
 			for(int i = pane_count-1; i>=0; i--) {
 				TerminalPane p = new TerminalPane();
 				_panes[i] = p;
 				p.Visible = true;
 				p.Dock = i==pane_count-1? DockStyle.Fill : is_vertical? DockStyle.Left : DockStyle.Top;
 				if(i<pane_count-1) {
-					int a = (int)((is_vertical? this.Width : this.Height) * (i==0? 0 : _splitterRatio[pane_count-2][i-1]));
-					int b = (int)((is_vertical? this.Width : this.Height) * (_splitterRatio[pane_count-2][i] - (i==0? 0 : _splitterRatio[pane_count-2][i-1])));
+					int a = (int)((is_vertical? Width : Height) * (i==0? 0 : _splitterRatio[pane_count-2][i-1]));
+					int b = (int)((is_vertical? Width : Height) * (_splitterRatio[pane_count-2][i] - (i==0? 0 : _splitterRatio[pane_count-2][i-1])));
 					if(is_vertical) {
 						p.Left = a;
 						p.Width = b;
@@ -118,21 +116,21 @@ namespace Poderosa.Forms
 						p.Height = b;
 					}
 				}
-				this.Controls.Add(p);
+				Controls.Add(p);
 
 				if(i>0) {
 					Splitter s = new Splitter();
 					_splitters[i-1] = s;
-					s.SplitterMoving += new SplitterEventHandler(this.OnSplitterMoving);
-					s.SplitterMoved  += new SplitterEventHandler(this.OnSplitterMoved);
+					s.SplitterMoving += new SplitterEventHandler(OnSplitterMoving);
+					s.SplitterMoved  += new SplitterEventHandler(OnSplitterMoved);
 					s.Dock = is_vertical? DockStyle.Left : DockStyle.Top;
 					s.BorderStyle = BorderStyle.Fixed3D;
 					s.MinSize = 8;
-					s.SplitPosition = (int)((is_vertical? this.Width : this.Height) * _splitterRatio[pane_count-2][i-1]);
-					this.Controls.Add(s);
+					s.SplitPosition = (int)((is_vertical? Width : Height) * _splitterRatio[pane_count-2][i-1]);
+					Controls.Add(s);
 				}
 			}
-			this.ResumeLayout(true);
+			ResumeLayout(true);
 
 
 			//必要なものをAttach
@@ -279,7 +277,7 @@ namespace Poderosa.Forms
 		//次にターミナルを開くとどのサイズになるかを返す
 		public Size TerminalSizeForNextConnection {
 			get {
-				return GetPane(this.PositionForNextConnection).TerminalSize;
+				return GetPane(PositionForNextConnection).TerminalSize;
 			}
 		}
 		public int PositionForNextConnection {
@@ -341,9 +339,9 @@ namespace Poderosa.Forms
 			for(int i=0; i<_panes.Length; i++) {
 				if(_panes[i]==null) break;
 				if(is_vertical)
-					_panes[i].SplitterDragging(ws[i], this.Height);
+					_panes[i].SplitterDragging(ws[i], Height);
 				else
-					_panes[i].SplitterDragging(this.Width, ws[i]);
+					_panes[i].SplitterDragging(Width, ws[i]);
 			}
 		}
 
@@ -369,7 +367,7 @@ namespace Poderosa.Forms
 				}
 			}
 
-			double r = (double)(total) / (is_vertical? this.Width : this.Height);
+			double r = (double)(total) / (is_vertical? Width : Height);
 			//Debug.WriteLine("Ratio="+r);
 			_splitterRatio[pane_count-2][splitter_index] = r;
 		}
@@ -395,21 +393,21 @@ namespace Poderosa.Forms
 				double next = _splitterRatio[pane_count-2][i];	
 				if(is_vertical) {
 					//Debug.WriteLine(String.Format("{0} {1}", i, (int)(this.Width * next)));
-					_splitters[i].SplitPosition = (int)(this.Width * (next-offset));
-					_panes[i].SplitterDragging((int)(this.Width * (next-offset)), this.Height);
+					_splitters[i].SplitPosition = (int)(Width * (next-offset));
+					_panes[i].SplitterDragging((int)(Width * (next-offset)), Height);
 				}
 				else {
-					_splitters[i].SplitPosition = (int)(this.Height * (next-offset));
-					_panes[i].SplitterDragging(this.Width, (int)(this.Height * (next-offset)));
+					_splitters[i].SplitPosition = (int)(Height * (next-offset));
+					_panes[i].SplitterDragging(Width, (int)(Height * (next-offset)));
 				}
 				offset = next;
 			}
 			//ラスト
 			if(is_vertical) {
-				_panes[pane_count-1].SplitterDragging((int)(this.Width * (1-offset)), this.Height);
+				_panes[pane_count-1].SplitterDragging((int)(Width * (1-offset)), Height);
 			}
 			else {
-				_panes[pane_count-1].SplitterDragging(this.Width, (int)(this.Height * (1-offset)));
+				_panes[pane_count-1].SplitterDragging(Width, (int)(Height * (1-offset)));
 			}
 			_ignoreSplitterMoveFlag = false;
 		}
@@ -419,7 +417,7 @@ namespace Poderosa.Forms
 			ConnectionTag ct = GEnv.Connections.ActiveTag;
 			RenderProfile prof = ct==null? GEnv.DefaultRenderProfile : ct.RenderProfile;
 			if(prof==null) prof = GEnv.DefaultRenderProfile;
-			double diff = IsVerticalFrameStyle(GApp.Options.FrameStyle)? prof.Pitch.Width / this.Width : prof.Pitch.Height / this.Height;
+			double diff = IsVerticalFrameStyle(GApp.Options.FrameStyle)? prof.Pitch.Width / Width : prof.Pitch.Height / Height;
 			
 
 			int active_index = 0; //アクティブなのがなくてもnull
@@ -452,7 +450,7 @@ namespace Poderosa.Forms
 		public void ResizeByChar(int width1, int height1, int width2, int height2) {
 			_ignoreSplitterMoveFlag = true;
 			_ignoreResize = true;
-			this.SuspendLayout();
+			SuspendLayout();
 
 			/*
 			TerminalPane p1 = GetPane(0);
@@ -501,7 +499,7 @@ namespace Poderosa.Forms
 
 			_ignoreSplitterMoveFlag = false;
 			_ignoreResize = false;
-			this.ResumeLayout(true);
+			ResumeLayout(true);
 		}
 
 		protected override bool IsInputKey(Keys key) {

@@ -8,14 +8,12 @@
 */
 using System;
 using System.Text;
-using System.IO;
 using System.Net.Sockets;
 using System.Threading;
-using System.Diagnostics;
 
 namespace Granados.SSHC
 {
-	internal enum ReceiverState {
+    internal enum ReceiverState {
 		Ready,
 		Closed,
 		Error
@@ -126,7 +124,7 @@ namespace Granados.SSHC
 					if(major>=3 || major<=0 || (major==1 && minor!=99)) throw new SSHException("The protocol version of server is not compatible with SSH2");
 				}
 
-				this.SetReady();
+				SetReady();
 			}
 			catch(Exception ex) {
 				OnError(ex, ex.Message);

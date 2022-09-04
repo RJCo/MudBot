@@ -5,25 +5,20 @@
 using System;
 using System.Drawing;
 using System.Collections;
-using System.ComponentModel;
 using System.Windows.Forms;
 using Poderosa.UI;
 using Poderosa.Config;
 
+
 namespace Poderosa.Forms
 {
-	/// <summary>
-	/// Credits の概要の説明です。
-	/// </summary>
-	internal class Credits : System.Windows.Forms.Form
-	{
-		private System.Windows.Forms.PictureBox _pictureBox;
-		private System.Windows.Forms.Label _subtitle;
-		private System.Windows.Forms.Button _okButton;
-		private System.Windows.Forms.Label _mainPanel;
-		/// <summary>
-		/// 必要なデザイナ変数です。
-		/// </summary>
+	internal class Credits : Form
+    {
+		private PictureBox _pictureBox;
+		private Label _subtitle;
+		private Button _okButton;
+		private Label _mainPanel;
+
 		private System.ComponentModel.Container components = null;
 
 		public Credits()
@@ -32,14 +27,14 @@ namespace Poderosa.Forms
 			// Windows フォーム デザイナ サポートに必要です。
 			//
 			InitializeComponent();
-			_okButton.Text = GApp.Strings.GetString("Common.OK");
+			_okButton.Text = "OK";
 
 			//
 			// TODO: InitializeComponent 呼び出しの後に、コンストラクタ コードを追加してください。
 			//
 			//AboutBoxから借りる
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(AboutBox));
-			this._pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("_pictureBox.Image")));
+			_pictureBox.Image = ((Image)(resources.GetObject("_pictureBox.Image")));
 		}
 
 		/// <summary>
@@ -65,68 +60,68 @@ namespace Poderosa.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this._pictureBox = new System.Windows.Forms.PictureBox();
-			this._subtitle = new System.Windows.Forms.Label();
-			this._okButton = new System.Windows.Forms.Button();
-			this._mainPanel = new System.Windows.Forms.Label();
-			this.SuspendLayout();
+			_pictureBox = new PictureBox();
+			_subtitle = new Label();
+			_okButton = new Button();
+			_mainPanel = new Label();
+			SuspendLayout();
 			// 
 			// _pictureBox
 			// 
-			this._pictureBox.BackColor = System.Drawing.SystemColors.Window;
-			this._pictureBox.Location = new System.Drawing.Point(0, 0);
-			this._pictureBox.Name = "_pictureBox";
-			this._pictureBox.Size = new System.Drawing.Size(288, 80);
-			this._pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-			this._pictureBox.TabIndex = 0;
-			this._pictureBox.TabStop = false;
+			_pictureBox.BackColor = SystemColors.Window;
+			_pictureBox.Location = new Point(0, 0);
+			_pictureBox.Name = "_pictureBox";
+			_pictureBox.Size = new Size(288, 80);
+			_pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+			_pictureBox.TabIndex = 0;
+			_pictureBox.TabStop = false;
 			// 
 			// _subtitle
 			// 
-			this._subtitle.BackColor = System.Drawing.SystemColors.Window;
-			this._subtitle.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this._subtitle.Location = new System.Drawing.Point(0, 80);
-			this._subtitle.Name = "_subtitle";
-			this._subtitle.Size = new System.Drawing.Size(288, 24);
-			this._subtitle.TabIndex = 1;
-			this._subtitle.Text = "The Terminal, Reloaded";
-			this._subtitle.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			_subtitle.BackColor = SystemColors.Window;
+			_subtitle.Font = new Font("Arial", 11.25F, FontStyle.Italic, GraphicsUnit.Point, ((System.Byte)(0)));
+			_subtitle.Location = new Point(0, 80);
+			_subtitle.Name = "_subtitle";
+			_subtitle.Size = new Size(288, 24);
+			_subtitle.TabIndex = 1;
+			_subtitle.Text = "The Terminal, Reloaded";
+			_subtitle.TextAlign = ContentAlignment.MiddleRight;
 			// 
 			// _okButton
 			// 
-			this._okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this._okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this._okButton.Location = new System.Drawing.Point(104, 240);
-			this._okButton.Name = "_okButton";
-			this._okButton.TabIndex = 2;
+			_okButton.DialogResult = DialogResult.OK;
+			_okButton.FlatStyle = FlatStyle.System;
+			_okButton.Location = new Point(104, 240);
+			_okButton.Name = "_okButton";
+			_okButton.TabIndex = 2;
 			// 
 			// _mainPanel
 			// 
-			this._mainPanel.BackColor = System.Drawing.SystemColors.Window;
-			this._mainPanel.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(128)));
-			this._mainPanel.Location = new System.Drawing.Point(0, 104);
-			this._mainPanel.Name = "_mainPanel";
-			this._mainPanel.Size = new System.Drawing.Size(288, 128);
-			this._mainPanel.TabIndex = 3;
-			this._mainPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaintCredit);
+			_mainPanel.BackColor = SystemColors.Window;
+			_mainPanel.Font = new Font("MS UI Gothic", 11.25F, FontStyle.Regular, GraphicsUnit.Point, ((System.Byte)(128)));
+			_mainPanel.Location = new Point(0, 104);
+			_mainPanel.Name = "_mainPanel";
+			_mainPanel.Size = new Size(288, 128);
+			_mainPanel.TabIndex = 3;
+			_mainPanel.Paint += new PaintEventHandler(OnPaintCredit);
 			// 
 			// Credits
 			// 
-			this.AcceptButton = this._okButton;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 12);
-			this.BackColor = System.Drawing.SystemColors.Control;
-			this.ClientSize = new System.Drawing.Size(290, 266);
-			this.ControlBox = false;
-			this.Controls.Add(this._mainPanel);
-			this.Controls.Add(this._okButton);
-			this.Controls.Add(this._subtitle);
-			this.Controls.Add(this._pictureBox);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Name = "Credits";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Poderosa";
-			this.ResumeLayout(false);
+			AcceptButton = _okButton;
+			AutoScaleBaseSize = new Size(5, 12);
+			BackColor = SystemColors.Control;
+			ClientSize = new Size(290, 266);
+			ControlBox = false;
+			Controls.Add(_mainPanel);
+			Controls.Add(_okButton);
+			Controls.Add(_subtitle);
+			Controls.Add(_pictureBox);
+			FormBorderStyle = FormBorderStyle.FixedDialog;
+			Name = "Credits";
+			ShowInTaskbar = false;
+			StartPosition = FormStartPosition.CenterParent;
+			Text = "Poderosa";
+			ResumeLayout(false);
 
 		}
 		#endregion
@@ -179,7 +174,7 @@ namespace Poderosa.Forms
 		
 		protected override void OnLoad(EventArgs e) {
 			base.OnLoad (e);
-			if(!this.DesignMode) {
+			if(!DesignMode) {
 				CreateCreditData();
 				_creditIndex = 0;
 				_creditStep = 0;
@@ -236,7 +231,7 @@ namespace Poderosa.Forms
 			SizeF name_size = g.MeasureString(grp._name, _boldFont);
 			Brush br = new SolidBrush(col);
 			float y = (_mainPanel.Height - (name_size.Height*(1+grp._credits.Length))) / 2;
-			float width = this.Width;
+			float width = Width;
 			DrawString(g, grp._name, _boldFont, br, y);
 			y += name_size.Height;
 			foreach(Entry e in grp._credits) {

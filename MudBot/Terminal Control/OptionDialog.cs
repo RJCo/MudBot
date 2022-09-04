@@ -4,7 +4,6 @@
 */
 using System;
 using System.Drawing;
-using System.Collections;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -14,8 +13,8 @@ using Poderosa.UI;
 
 namespace Poderosa.Forms
 {
-	internal class OptionDialog : System.Windows.Forms.Form
-	{
+    internal class OptionDialog : Form
+    {
 		private enum PageID {
 			NotSelected = -1,
 			Display = 0,
@@ -38,11 +37,11 @@ namespace Poderosa.Forms
 
 		private ContainerOptions _options;
 
-		private System.Windows.Forms.ImageList _imageList;
-		private System.Windows.Forms.Panel _categoryItems;
-		private System.Windows.Forms.Button _okButton;
-		private System.Windows.Forms.Button _cancelButton;
-		private System.ComponentModel.IContainer components;
+		private ImageList _imageList;
+		private Panel _categoryItems;
+		private Button _okButton;
+		private Button _cancelButton;
+		private IContainer components;
 
 		public OptionDialog()
 		{
@@ -51,7 +50,7 @@ namespace Poderosa.Forms
 			//
 			InitializeComponent();
 
-			if(!this.DesignMode) {
+			if(!DesignMode) {
 				FillText();
 				InitItems();
 				_options = (ContainerOptions)GApp.Options.Clone();
@@ -81,79 +80,81 @@ namespace Poderosa.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
+			components = new Container();
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(OptionDialog));
-			this._imageList = new System.Windows.Forms.ImageList(this.components);
-			this._categoryItems = new System.Windows.Forms.Panel();
-			this._okButton = new System.Windows.Forms.Button();
-			this._cancelButton = new System.Windows.Forms.Button();
-			this.SuspendLayout();
+			_imageList = new ImageList(components);
+			_categoryItems = new Panel();
+			_okButton = new Button();
+			_cancelButton = new Button();
+			SuspendLayout();
 			// 
 			// _imageList
 			// 
-			this._imageList.ImageSize = new System.Drawing.Size(32, 32);
-			this._imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("_imageList.ImageStream")));
-			this._imageList.TransparentColor = System.Drawing.Color.Teal;
+			_imageList.ImageSize = new Size(32, 32);
+			_imageList.ImageStream = ((ImageListStreamer)(resources.GetObject("_imageList.ImageStream")));
+			_imageList.TransparentColor = Color.Teal;
 			// 
 			// _categoryItems
 			// 
-			this._categoryItems.BackColor = System.Drawing.SystemColors.Window;
-			this._categoryItems.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this._categoryItems.Location = new System.Drawing.Point(4, 0);
-			this._categoryItems.Name = "_categoryItems";
-			this._categoryItems.Size = new System.Drawing.Size(72, 376);
-			this._categoryItems.TabIndex = 3;
+			_categoryItems.BackColor = SystemColors.Window;
+			_categoryItems.BorderStyle = BorderStyle.FixedSingle;
+			_categoryItems.Location = new Point(4, 0);
+			_categoryItems.Name = "_categoryItems";
+			_categoryItems.Size = new Size(72, 376);
+			_categoryItems.TabIndex = 3;
 			// 
 			// _okButton
 			// 
-			this._okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this._okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this._okButton.Location = new System.Drawing.Point(336, 384);
-			this._okButton.Name = "_okButton";
-			this._okButton.TabIndex = 1;
-			this._okButton.Click += new System.EventHandler(this.OnOK);
+			_okButton.DialogResult = DialogResult.OK;
+			_okButton.FlatStyle = FlatStyle.System;
+			_okButton.Location = new Point(336, 384);
+			_okButton.Name = "_okButton";
+			_okButton.TabIndex = 1;
+			_okButton.Click += new EventHandler(OnOK);
 			// 
 			// _cancelButton
 			// 
-			this._cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this._cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this._cancelButton.Location = new System.Drawing.Point(432, 384);
-			this._cancelButton.Name = "_cancelButton";
-			this._cancelButton.TabIndex = 2;
+			_cancelButton.DialogResult = DialogResult.Cancel;
+			_cancelButton.FlatStyle = FlatStyle.System;
+			_cancelButton.Location = new Point(432, 384);
+			_cancelButton.Name = "_cancelButton";
+			_cancelButton.TabIndex = 2;
 			// 
 			// OptionDialog
 			// 
-			this.AcceptButton = this._okButton;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 12);
-			this.CancelButton = this._cancelButton;
-			this.ClientSize = new System.Drawing.Size(528, 414);
-			this.Controls.Add(this._cancelButton);
-			this.Controls.Add(this._okButton);
-			this.Controls.Add(this._categoryItems);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "OptionDialog";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "OptionDialog";
-			this.ResumeLayout(false);
+			AcceptButton = _okButton;
+			AutoScaleBaseSize = new Size(5, 12);
+			CancelButton = _cancelButton;
+			ClientSize = new Size(528, 414);
+			Controls.Add(_cancelButton);
+			Controls.Add(_okButton);
+			Controls.Add(_categoryItems);
+			FormBorderStyle = FormBorderStyle.FixedDialog;
+			MaximizeBox = false;
+			MinimizeBox = false;
+			Name = "OptionDialog";
+			ShowInTaskbar = false;
+			StartPosition = FormStartPosition.CenterParent;
+			Text = "OptionDialog";
+			ResumeLayout(false);
 
 		}
 
 		#endregion
 
 		private void FillText() {
-			this._okButton.Text = GApp.Strings.GetString("Common.OK");
-			this._cancelButton.Text = GApp.Strings.GetString("Common.Cancel");
-			this.Text = GApp.Strings.GetString("Form.OptionDialog.Text");
+			_okButton.Text = "OK";
+			_cancelButton.Text = "Cancel";
+			Text = "Form.OptionDialog.Text";
 		}
 		private void InitItems() {
 			int y = 8;
 			for(int i=0; i<(int)PageID.COUNT; i++) {
-				PanelItem item = new PanelItem(this, i, _imageList.Images[i], GApp.Strings.GetString(GetStringIDFor(i)));
-				item.Location = new Point(4, y);
-				_categoryItems.Controls.Add(item);
+                PanelItem item = new PanelItem(this, i, _imageList.Images[i], GetStringIDFor(i))
+                {
+                    Location = new Point(4, y)
+                };
+                _categoryItems.Controls.Add(item);
 
 				y += 52;
 			}
@@ -183,7 +184,7 @@ namespace Poderosa.Forms
 		private bool ClosePage() {
 			CategoryPanel cp = _pages[(int)_currentPageID];
 			if(!cp.Commit(_options)) return false;
-			this.Controls.Remove(cp);
+			Controls.Remove(cp);
 			PanelItemAt(_currentPageID).Selected = false;
 			_categoryItems.Invalidate(true);
 			return true;
@@ -196,7 +197,7 @@ namespace Poderosa.Forms
 			_currentPageID = p;
 			CategoryPanel cp = _pages[(int)p];
 			cp.InitUI(_options);
-			this.Controls.Add(cp);
+			Controls.Add(cp);
 			PanelItemAt(p).Selected = true;
 			_categoryItems.Invalidate(true);
 		}
@@ -230,7 +231,7 @@ namespace Poderosa.Forms
 			Debug.Assert(panel!=null);
 			panel.BorderStyle = BorderStyle.FixedSingle;
 			panel.Location = new Point(_categoryItems.Right + 4, _categoryItems.Top);
-			panel.Size = new Size(this.Width - _categoryItems.Width - 16, _categoryItems.Height);
+			panel.Size = new Size(Width - _categoryItems.Width - 16, _categoryItems.Height);
 			return panel;
 		}
 
@@ -290,8 +291,8 @@ namespace Poderosa.Forms
 			_index = index;
 			_image = image;
 			_caption = caption;
-			this.Size = _defaultSize;
-			this.TabStop = true;
+			Size = _defaultSize;
+			TabStop = true;
 			AdjustBackColor();
 		}
 		public int Index {
@@ -347,37 +348,41 @@ namespace Poderosa.Forms
 			Graphics g = e.Graphics;
 
 			if(_selected)
-				DrawUtil.DrawRoundRect(g, 0, 0, this.Width-1, this.Height-1, _selectedColors);
+				DrawUtil.DrawRoundRect(g, 0, 0, Width-1, Height-1, _selectedColors);
 			else if(_hilight)
-				DrawUtil.DrawRoundRect(g, 0, 0, this.Width-1, this.Height-1, _hilightColors);
-			g.DrawImage(_image, (this.Width - image_size)/2, 0);
-			SizeF sz = g.MeasureString(_caption, this.Font);
-			g.DrawString(_caption, this.Font, _textBrush, (int)(this.Width-sz.Width)/2, image_size);
+				DrawUtil.DrawRoundRect(g, 0, 0, Width-1, Height-1, _hilightColors);
+			g.DrawImage(_image, (Width - image_size)/2, 0);
+			SizeF sz = g.MeasureString(_caption, Font);
+			g.DrawString(_caption, Font, _textBrush, (int)(Width-sz.Width)/2, image_size);
 		}
 
 		private void AdjustBackColor() {
 			if(_selected)
-				this.BackColor = Color.Orange;
+				BackColor = Color.Orange;
 			else if(_hilight)
-				this.BackColor = DrawUtil.LightColor(Color.Orange);
+				BackColor = DrawUtil.LightColor(Color.Orange);
 			else
-				this.BackColor = SystemColors.Window;
+				BackColor = SystemColors.Window;
 		}
 
 
 		private static void CreateColor() {
-			_selectedColors = new DrawUtil.RoundRectColors();
-			_selectedColors.border_color = DrawUtil.ToCOLORREF(Color.DarkRed);
-			_selectedColors.inner_color = DrawUtil.ToCOLORREF(Color.Orange);
-			_selectedColors.outer_color = DrawUtil.ToCOLORREF(SystemColors.Window);
-			_selectedColors.lightlight_color = DrawUtil.MergeColor(_selectedColors.border_color, _selectedColors.outer_color);
+            _selectedColors = new DrawUtil.RoundRectColors
+            {
+                border_color = DrawUtil.ToCOLORREF(Color.DarkRed),
+                inner_color = DrawUtil.ToCOLORREF(Color.Orange),
+                outer_color = DrawUtil.ToCOLORREF(SystemColors.Window)
+            };
+            _selectedColors.lightlight_color = DrawUtil.MergeColor(_selectedColors.border_color, _selectedColors.outer_color);
 			_selectedColors.light_color = DrawUtil.MergeColor(_selectedColors.lightlight_color, _selectedColors.border_color);
 
-			_hilightColors = new DrawUtil.RoundRectColors();
-			_hilightColors.border_color = DrawUtil.ToCOLORREF(Color.Pink);
-			_hilightColors.inner_color = DrawUtil.ToCOLORREF(DrawUtil.LightColor(Color.Orange));
-			_hilightColors.outer_color = DrawUtil.ToCOLORREF(SystemColors.Window);
-			_hilightColors.lightlight_color = DrawUtil.MergeColor(_hilightColors.border_color, _hilightColors.outer_color);
+            _hilightColors = new DrawUtil.RoundRectColors
+            {
+                border_color = DrawUtil.ToCOLORREF(Color.Pink),
+                inner_color = DrawUtil.ToCOLORREF(DrawUtil.LightColor(Color.Orange)),
+                outer_color = DrawUtil.ToCOLORREF(SystemColors.Window)
+            };
+            _hilightColors.lightlight_color = DrawUtil.MergeColor(_hilightColors.border_color, _hilightColors.outer_color);
 			_hilightColors.light_color = DrawUtil.MergeColor(_hilightColors.lightlight_color, _hilightColors.border_color);
 		}
 	}

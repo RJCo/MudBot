@@ -141,7 +141,7 @@ namespace Poderosa.Terminal
 					break;
 				case NEGOTIATION_TIMEOUT:
 					_tag.Connection.Write(new byte[] { CAN });
-					GEnv.InterThreadUIService.Warning(GEnv.Strings.GetString("Message.XModem.StartTimedOut"));
+					GEnv.InterThreadUIService.Warning("Message.XModem.StartTimedOut");
 					NotifyStatus(NOTIFY_TIMEOUT, 0);
 					Exit();
 					break;
@@ -172,7 +172,7 @@ namespace Poderosa.Terminal
 			byte head = data[offset];
 			if(head==EOT) { //successfully exit
 				_tag.Connection.Write(new byte[] { ACK });
-				GEnv.InterThreadUIService.Information(GEnv.Strings.GetString("Message.XModem.ReceiveComplete"));
+				GEnv.InterThreadUIService.Information("Message.XModem.ReceiveComplete");
 				NotifyStatus(NOTIFY_SUCCESS, 0);
 				//_debugStream.Close();
 				Exit();
@@ -189,7 +189,7 @@ namespace Poderosa.Terminal
 				byte neg  = data[offset+2];
 				if(seq!=_sequenceNumber || seq+neg!=255) {
 					Abort();
-					GEnv.InterThreadUIService.Warning(GEnv.Strings.GetString("Message.XModem.SequenceError"));
+					GEnv.InterThreadUIService.Warning("Message.XModem.SequenceError");
 					NotifyStatus(NOTIFY_ERROR, 0);
 				}
 				else {
@@ -227,7 +227,7 @@ namespace Poderosa.Terminal
 						//_debugStream.Close();
 						if(++_retryCount==3) { //‚à‚¤‚ ‚«‚ç‚ß‚é
 							Abort();
-							GEnv.InterThreadUIService.Warning(GEnv.Strings.GetString("Message.XModem.CheckSumError"));
+							GEnv.InterThreadUIService.Warning("Message.XModem.CheckSumError");
 							NotifyStatus(NOTIFY_ERROR, 0);
 						}
 						else {
@@ -291,7 +291,7 @@ namespace Poderosa.Terminal
 			_timer = null;
 			switch((int)state){ 
 				case NEGOTIATION_TIMEOUT:
-					GEnv.InterThreadUIService.Warning(GEnv.Strings.GetString("Message.XModem.StartTimedOut"));
+					GEnv.InterThreadUIService.Warning("Message.XModem.StartTimedOut");
 					NotifyStatus(NOTIFY_TIMEOUT, 0);
 					Exit();
 					break;
@@ -333,7 +333,7 @@ namespace Poderosa.Terminal
 					_retryCount = 0;
 					if(_offset==_body.Length) { //successfully exit
 						Exit();
-						GEnv.InterThreadUIService.Information(GEnv.Strings.GetString("Message.XModem.SendComplete"));
+						GEnv.InterThreadUIService.Information("Message.XModem.SendComplete");
 						NotifyStatus(NOTIFY_SUCCESS, 0);
 						return;
 					}
@@ -341,7 +341,7 @@ namespace Poderosa.Terminal
 				}
 				else if(t!=NAK || (++_retryCount==3)) {
 					Abort();
-					GEnv.InterThreadUIService.Warning(GEnv.Strings.GetString("Message.XModem.BlockStartError"));
+					GEnv.InterThreadUIService.Warning("Message.XModem.BlockStartError");
 					NotifyStatus(NOTIFY_ERROR, 0);
 					return;
 				}

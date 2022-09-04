@@ -3,23 +3,13 @@
 * $Id: TerminalUtil.cs,v 1.2 2005/04/20 08:45:48 okajima Exp $
 */
 using System;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
 using System.Windows.Forms;
-
-using Granados.SSHC;
-
-using Poderosa.Config;
 using Poderosa.ConnectionParam;
-using Poderosa.Toolkit;
-using Poderosa.Communication;
-using Poderosa.SSH;
 
-namespace Poderosa.Terminal {
+namespace Poderosa.Terminal
+{
 
-	public enum TerminalMode { Normal, Application }
+    public enum TerminalMode { Normal, Application }
 
 
 	public class TerminalUtil {

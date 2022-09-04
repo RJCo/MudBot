@@ -2,22 +2,17 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: ConnectionHistory.cs,v 1.2 2005/04/20 08:45:44 okajima Exp $
 */
-using System;
-using System.IO;
 using System.Collections;
 using System.Collections.Specialized;
-using System.Text;
 
 using Poderosa.ConnectionParam;
-using Poderosa.Toolkit;
-using Poderosa.Communication;
-using Granados.SSHC;
 
-namespace Poderosa.Config {
-	/// <summary>
-	/// 過去の接続履歴の保持。シリアライズ機能も含む。
-	/// </summary>
-	internal class ConnectionHistory : IEnumerable {	
+namespace Poderosa.Config
+{
+    /// <summary>
+    /// 過去の接続履歴の保持。シリアライズ機能も含む。
+    /// </summary>
+    internal class ConnectionHistory : IEnumerable {	
 
 		protected ArrayList _history; //TCPTerminalParamのコレクション
 
@@ -181,24 +176,24 @@ namespace Poderosa.Config {
 		//TCPTerminalParam各要素ごとのコレクション
 		public StringCollection Hosts {
 			get {
-				return CollectString(new StrProp(this.ReturnHost));
+				return CollectString(new StrProp(ReturnHost));
 			}
 		}
 		public int[] Ports {
 			get {
 				ArrayList a = new ArrayList();
 				a.Add(23); a.Add(22); //Telnetを先に表示する
-				return CollectInt(new IntProp(this.ReturnPort), a);
+				return CollectInt(new IntProp(ReturnPort), a);
 			}
 		}
 		public StringCollection Accounts {
 			get {
-				return CollectString(new StrProp(this.ReturnAccount));
+				return CollectString(new StrProp(ReturnAccount));
 			}
 		}
 		public StringCollection LogPaths {
 			get {
-				return CollectString(new StrProp(this.ReturnLogPath));
+				return CollectString(new StrProp(ReturnLogPath));
 			}
 		}
 	}

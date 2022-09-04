@@ -2,13 +2,12 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: ConfigParser.cs,v 1.2 2005/04/20 08:45:46 okajima Exp $
 */
-using System;
 using System.IO;
 using System.Collections;
 
 namespace Poderosa.Config
 {
-	public class ConfigNode {
+    public class ConfigNode {
 		private string _name;
 		private Hashtable _data;
 		private ArrayList _childConfigNodes;
@@ -144,9 +143,11 @@ namespace Poderosa.Config
 		}
 
 		public static ConfigNode CreateIndirect(string name, Hashtable values) {
-			ConfigNode n = new ConfigNode(name);
-			n._data = (Hashtable)values.Clone();
-			return n;
+            ConfigNode n = new ConfigNode(name)
+            {
+                _data = (Hashtable)values.Clone()
+            };
+            return n;
 		}
 	}
 			

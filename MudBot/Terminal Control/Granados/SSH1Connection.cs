@@ -11,17 +11,14 @@
 using System;
 using System.IO;
 using System.Security.Cryptography;
-using System.Net.Sockets;
 using System.Text;
-using System.Diagnostics;
 
 using Granados.PKI;
 using Granados.SSHC;
-using Granados.Toolkit;
 
 namespace Granados.SSHCV1
 {
-	public sealed class SSH1Connection : SSHConnection {
+    public sealed class SSH1Connection : SSHConnection {
 	
 		private const int AUTH_NOT_REQUIRED = 0;
 		private const int AUTH_REQUIRED = 1;
@@ -34,10 +31,12 @@ namespace Granados.SSHCV1
 		
 
 		public SSH1Connection(SSHConnectionParameter param, ISSHConnectionEventReceiver er, string serverversion, string clientversion) : base(param, er) {
-			_cInfo = new SSH1ConnectionInfo();
-			_cInfo._serverVersionString = serverversion;
-			_cInfo._clientVersionString = clientversion;
-			_shellID = -1;
+            _cInfo = new SSH1ConnectionInfo
+            {
+                _serverVersionString = serverversion,
+                _clientVersionString = clientversion
+            };
+            _shellID = -1;
 			_packetBuilder = new SSH1PacketBuilder(new SynchronizedSSH1PacketHandler());
 		}
 		public override SSHConnectionInfo ConnectionInfo {
@@ -353,7 +352,7 @@ namespace Granados.SSHCV1
 				_shellID = RegisterChannelEventReceiver(null, new SSH1DummyReceiver())._localID;
 			}
  
-			int local_id = this.RegisterChannelEventReceiver(null, receiver)._localID;
+			int local_id = RegisterChannelEventReceiver(null, receiver)._localID;
 
 			SSH1DataWriter writer = new SSH1DataWriter();
 			writer.Write(local_id); //channel id is fixed to 0
@@ -394,7 +393,7 @@ namespace Granados.SSHCV1
 			SSH1DataWriter writer = new SSH1DataWriter();
 			PortForwardingCheckResult result = receiver.CheckPortForwardingRequest(host, port, "", 0);
 			if(result.allowed) {
-				int local_id = this.RegisterChannelEventReceiver(null, result.channel)._localID;
+				int local_id = RegisterChannelEventReceiver(null, result.channel)._localID;
 				_eventReceiver.EstablishPortforwarding(result.channel, new SSH1Channel(this, ChannelType.ForwardedRemoteToLocal, local_id, server_channel));
 
 				writer.Write(server_channel);
@@ -480,7 +479,7 @@ namespace Granados.SSHCV1
 						FindChannelEntry(channel)._receiver.OnData(p.Data, 8, len);
 						break;
 					case PacketType.SSH_MSG_PORT_OPEN:
-						this.ProcessPortforwardingRequest(_eventReceiver, p);
+						ProcessPortforwardingRequest(_eventReceiver, p);
 						break;
 					case PacketType.SSH_MSG_CHANNEL_CLOSE: {
 						channel = SSHUtil.ReadInt32(p.Data, 0);
@@ -517,7 +516,7 @@ namespace Granados.SSHCV1
 					case PacketType.SSH_SMSG_SUCCESS:
 						if(_executingShell) {
 							ExecShell();
-							this.FindChannelEntry(_shellID)._receiver.OnChannelReady();
+							FindChannelEntry(_shellID)._receiver.OnChannelReady();
 							_executingShell = false;
 						}
 						break;

@@ -8,20 +8,19 @@ using System.Text;
 using System.Collections;
 using System.Diagnostics;
 using Poderosa.Toolkit;
-using Poderosa.Terminal;
 
 using Poderosa.ConnectionParam;
 
 namespace Poderosa.Communication
 {
 
-	/// <summary>
-	/// TelnetOptionの送受信をする。あまり複雑なサポートをするつもりはない。
-	/// Guevaraで必要なのはSuppressGoAhead(双方向), TerminalType, NAWSの３つだけで、これらが成立しなければ例外を投げる。
-	/// それ以外のTelnetOptionは拒否するが、拒否が成立しなくても_refusedOptionに格納するだけでエラーにはしない。
-	/// オプションのネゴシエーションが終了したら、最後に受信したパケットはもうシェル本体であるので、呼び出し側はこれを使うようにしないといけない。
-	/// </summary>
-	internal class TelnetNegotiator
+    /// <summary>
+    /// TelnetOptionの送受信をする。あまり複雑なサポートをするつもりはない。
+    /// Guevaraで必要なのはSuppressGoAhead(双方向), TerminalType, NAWSの３つだけで、これらが成立しなければ例外を投げる。
+    /// それ以外のTelnetOptionは拒否するが、拒否が成立しなくても_refusedOptionに格納するだけでエラーにはしない。
+    /// オプションのネゴシエーションが終了したら、最後に受信したパケットはもうシェル本体であるので、呼び出し側はこれを使うようにしないといけない。
+    /// </summary>
+    internal class TelnetNegotiator
 	{
 		//必要ならここから情報を読む
 		private TerminalParam _param;
@@ -144,17 +143,17 @@ namespace Poderosa.Communication
 					if(_state==TelnetCode.DO)
 						_optionWriter.Write(TelnetCode.WILL, option);
 					else
-						_warnings.Add(GEnv.Strings.GetString("Message.Telnet.FailedToSendTerminalType"));
+						_warnings.Add("Message.Telnet.FailedToSendTerminalType");
 					break;
 				case TelnetOption.NAWS:
 					if(_state==TelnetCode.DO)
 						_optionWriter.WriteTerminalSize(_width, _height);
 					else
-						_warnings.Add(GEnv.Strings.GetString("Message.Telnet.FailedToSendWidnowSize"));
+						_warnings.Add("Message.Telnet.FailedToSendWidnowSize");
 					break;
 				case TelnetOption.SuppressGoAhead:
 					if(_state!=TelnetCode.WILL && _state!=TelnetCode.DO) //!!両方が来たことを確認する
-						_warnings.Add(GEnv.Strings.GetString("Message.Telnet.FailedToSendSuppressGoAhead"));
+						_warnings.Add("Message.Telnet.FailedToSendSuppressGoAhead");
 					break;
 				case TelnetOption.LocalEcho:
 					if(_state==TelnetCode.DO)
