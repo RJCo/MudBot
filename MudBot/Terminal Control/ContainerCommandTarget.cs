@@ -469,19 +469,7 @@ namespace Poderosa
             GCUtil.ShowModalDialog(_frame, dlg);
             return CommandResult.Success;
         }
-        public CommandResult ShowKeyGenWizard()
-        {
-            KeyGenWizard dlg = new KeyGenWizard();
-            GCUtil.ShowModalDialog(_frame, dlg);
-            return CommandResult.Success;
-        }
-        public CommandResult ShowChangePassphraseDialog()
-        {
-            ChangePassphrase dlg = new ChangePassphrase();
-            GCUtil.ShowModalDialog(_frame, dlg);
-            return CommandResult.Success;
-        }
-
+        
         public CommandResult ShowReceiveFileDialog()
         {
             if (_frame.XModemDialog != null)
@@ -723,10 +711,6 @@ namespace Poderosa
                     return ToggleAutoSelectionMode();
                 case CID.OptionDialog:
                     return ShowOptionDialog();
-                case CID.KeyGen:
-                    return ShowKeyGenWizard();
-                case CID.ChangePassphrase:
-                    return ShowChangePassphraseDialog();
                 case CID.Portforwarding:
                     return LaunchPortforwarding();
                 case CID.MacroConfig:

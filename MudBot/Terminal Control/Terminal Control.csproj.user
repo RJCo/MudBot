@@ -17,9 +17,6 @@
     <Compile Update="ChangeLogDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="ChangePassphrase.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="CommandOptionPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -78,9 +75,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="InputBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="KeyGenWizard.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="LineFeedStyleDialog.cs">

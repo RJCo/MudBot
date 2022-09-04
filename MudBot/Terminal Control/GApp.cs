@@ -384,10 +384,9 @@ namespace Poderosa
             _frame.AdjustMRUMenu();
 
             if (_options.Language != opt.Language)
-            { //言語のリロードが必要なとき
-                Thread.CurrentThread.CurrentUICulture = opt.Language == Language.Japanese ? new CultureInfo("ja") : CultureInfo.InvariantCulture;
+            {
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
                 ReloadStringResource();
-                Granados.SSHC.Strings.Reload();
                 MacroManager.ReloadLanguage();
                 _frame.ReloadLanguage(opt.Language);
             }
