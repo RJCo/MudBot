@@ -4,9 +4,9 @@ using static MajorMUD.Interfaces.Common;
 
 namespace MajorMUD.Interfaces
 {
-    public class IRace
+    public interface IRace
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public short MinimumStrength { get; set; }
         public int MaximumStrength { get; set; }
@@ -22,7 +22,7 @@ namespace MajorMUD.Interfaces
         public int MaximumCharm { get; set; }
         public int HitpointModifierPerLevel { get; set; }
         public int ExperiencePercentage { get; set; }
-        public IReadOnlyDictionary<Abilities, short> AbilitiesAndMods { get; set; }
+        public Dictionary<Abilities, short> AbilitiesAndMods { get; set; }
 
     }
 }

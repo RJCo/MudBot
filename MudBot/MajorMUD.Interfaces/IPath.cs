@@ -4,7 +4,7 @@ using static MajorMUD.Interfaces.Common;
 
 namespace MajorMUD.Interfaces
 {
-    public class IPath
+    public interface IPath
     {
         public string Name { get; set; }
         public string Author { get; set; }
@@ -17,7 +17,7 @@ namespace MajorMUD.Interfaces
         public int RequiredGold { get; set; }
         public int LastExpRate { get; set; }
         public int StepCount { get; set; }
-        public IReadOnlyList<IRoom> Rooms { get; set; }
-        public IReadOnlyList<PathFlags> PathFlags { get; set; }
+        public List<IRoom> Rooms { get; set; }
+        public List<PathFlags> PathFlags { get; set; }
     }
 }

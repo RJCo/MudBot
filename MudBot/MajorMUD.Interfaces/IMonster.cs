@@ -4,10 +4,10 @@ using static MajorMUD.Interfaces.Common;
 
 namespace MajorMUD.Interfaces
 {
-    public class IMonster
+    public interface IMonster
     {
-        public int MonsterId { get; set; }
-        public string MonsterName { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
         public Priority AttackPriority { get; set; }
         public MegamudFlags Flags { get; set; }
         public MonsterAlignment Alignment { get; set; }
@@ -31,43 +31,30 @@ namespace MajorMUD.Interfaces
         public int RegenInHours { get; set; }
         public int LocationMap { get; set; }
         public int LocationRoom { get; set; }
-        public int ItemDrop1_ItemID { get; set; }
-        public int ItemDrop2_ItemID { get; set; }
-        public int ItemDrop3_ItemID { get; set; }
-        public int ItemDrop4_ItemID { get; set; }
-        public int ItemDrop5_ItemID { get; set; }
-        public int ItemDrop1_DropRate { get; set; }
-        public int ItemDrop2_DropRate { get; set; }
-        public int ItemDrop3_DropRate { get; set; }
-        public int ItemDrop4_DropRate { get; set; }
-        public int ItemDrop5_DropRate { get; set; }
-        public int CashDrop_Runic { get; set; }
-        public int CashDrop_Platinum { get; set; }
-        public int CashDrop_Gold { get; set; }
-        public int CashDrop_Silver { get; set; }
-        public int CashDrop_Copper { get; set; }
+        public HashSet<(int /* ItemId */, int /* DropRate */)> ItemDrops { get; set; }
+        public long CashDrop { get; set; }
         public int Experience { get; set; }
 
         // TODO:  Fill in the rest of Monsters info here.  
-        public int BSDefense;                   // BS defense
-        public int CharmResist;                 // Charm resist
-        public int FollowChance;                // Monster follow% (agility?)
-        public int sLevelUnknown;               // HP regen? Monster level?
-        public int Undead;                      // Undead?
-        public IReadOnlyDictionary<Abilities, short> Abilities = new Dictionary<Abilities, short>();      // max 10   // Monster abilities
-        public int AbilityValues;               // max 10   // Monster abil values
-        public IItem Weapon;                    // Weapon used
-        public AttackType Attack;               // max 5    // Attack type (0=None,1=Normal,2=Spell,3=Rob3?)
-        public int AttackChance;                // max 5    // Attack chance     (only 5 used now)
-        public int AttackAccuracy;              // max 5    // Attack accuracy/spell#
-        public int AttackMinimumDamage;         // max 5    // Attack min damage/cast%
-        public int AttackMaxDamage;             // max 5    // Attack max damage/cast level
-        public int AttackEnergyCost;            // max 5    // Attack energy used
-        public int AlternateAttackHitSpells;    // max 5    // Alternate attack hit spells
-        public ISpell OnDeathSpell;             // Death spell
-        public ISpell OnRegenSpell;             // Regen spell
-        public ISpell InBetweenRoundSpell;      // max 5    // In-between round spells
-        public int InBetweenRoundSpellChange;   // max 5    // In-between round chance %
-        public int InBetweenRoundSpellLevel;    // max 5    // In-between rount cast level
+        public int BSDefense { get; set; }                   // BS defense
+        public int CharmResist { get; set; }                 // Charm resist
+        public int FollowChance { get; set; }                // Monster follow% (agility?)
+        public int sLevelUnknown { get; set; }               // HP regen? Monster level?
+        public int Undead { get; set; }                      // Undead?
+        public IReadOnlyDictionary<Abilities, short> Abilities { get; set; }  // max 10   // Monster abilities
+        public int AbilityValues { get; set; }               // max 10   // Monster ability values
+        public IItem Weapon { get; set; }                    // Weapon used
+        public AttackType Attack { get; set; }               // max 5    // Attack type (0=None,1=Normal,2=Spell,3=Rob3?)
+        public int AttackChance { get; set; }                // max 5    // Attack chance     (only 5 used now)
+        public int AttackAccuracy { get; set; }              // max 5    // Attack accuracy/spell#
+        public int AttackMinimumDamage { get; set; }         // max 5    // Attack min damage/cast%
+        public int AttackMaxDamage { get; set; }             // max 5    // Attack max damage/cast level
+        public int AttackEnergyCost { get; set; }            // max 5    // Attack energy used
+        public int AlternateAttackHitSpells { get; set; }    // max 5    // Alternate attack hit spells
+        public ISpell OnDeathSpell { get; set; }             // Death spell
+        public ISpell OnRegenSpell { get; set; }             // Regen spell
+        public ISpell InBetweenRoundSpell { get; set; }      // max 5    // In-between round spells
+        public int InBetweenRoundSpellChange { get; set; }   // max 5    // In-between round chance %
+        public int InBetweenRoundSpellLevel { get; set; }    // max 5    // In-between round cast level
     }
 }

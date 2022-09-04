@@ -4,7 +4,7 @@ using static MajorMUD.Interfaces.Common;
 
 namespace MajorMUD.Interfaces
 {
-    public class IMessage
+    public interface IMessage
     {
         public int Id { get; set; }
         public string Name { get; set; }

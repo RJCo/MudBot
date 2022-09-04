@@ -3,7 +3,7 @@
 
 namespace MajorMUD.Interfaces
 {
-    public class IRoom
+    public interface IRoom
     {
         public string Code { get; set; }
         public string Checksum { get; set; }
@@ -16,6 +16,6 @@ namespace MajorMUD.Interfaces
         public Exits AvailableExits { get; set; }
         public int MinimumLevel { get; set; }
         public int MaximumLevel { get; set; }
-        public int RestrictedToClassID { get; set; }
+        public int RestrictedToClassId { get; set; }
     }
 }

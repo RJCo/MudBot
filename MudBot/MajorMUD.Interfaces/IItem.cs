@@ -4,7 +4,7 @@ using static MajorMUD.Interfaces.Common;
 
 namespace MajorMUD.Interfaces
 {
-    public class IItem
+    public interface IItem
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -27,15 +27,15 @@ namespace MajorMUD.Interfaces
         public int Speed { get; set; }
         public int ArmorClass { get; set; }
         public int DamageReduction { get; set; }
-        public Dictionary<Abilities, short> Abilities = new Dictionary<Abilities, short>(10); // Max 10
+        public Dictionary<Abilities, short> Abilities { get; set; } // Max 10
         public int WeaponNumberOfHandsNeeded { get; set; }
         public int Material { get; set; }                   // TODO:  What is this?  WeaponType and ArmorType?
         public int Body { get; set; }
-        public HashSet<int> NegatesSpells = new HashSet<int>();   // Max 5 spell IDs
-        public HashSet<int> Classes { get; set; } = new HashSet<int>();   // Allowed classes, max 10
-        public HashSet<int> Races { get; set; } = new HashSet<int>();     // Allowed races, max 10
-        public HashSet<int> Casts { get; set; } = new HashSet<int>();
-        public HashSet<int> LinkToSpell { get; set; } = new HashSet<int>();  // `black tome` teaches two spells, so we create a collection
+        public HashSet<int> NegatesSpells { get; set; }    // Max 5 spell IDs
+        public HashSet<int> Classes { get; set; }    // Allowed classes, max 10
+        public HashSet<int> Races { get; set; }      // Allowed races, max 10
+        public HashSet<int> Casts { get; set; } 
+        public HashSet<int> LinkToSpell { get; set; }  // `black tome` teaches two spells, so we create a collection
 
         public int DroppedBy { get; set; }
         public int FromItem { get; set; }

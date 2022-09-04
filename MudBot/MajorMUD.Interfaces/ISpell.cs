@@ -3,7 +3,7 @@
 
 namespace MajorMUD.Interfaces
 {
-    public class ISpell
+    public interface ISpell
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -20,11 +20,11 @@ namespace MajorMUD.Interfaces
         public int Duration { get; set; }
         public int Chance { get; set; }
         public bool AreaOfEffect { get; set; }
-        public int MaximumLevel;                    // Max. level
-        public int LevelDivider;                    // Level divider?
-        public int UseLevel;                        // Use level range?
-        public int IncEvery;                        // ?
-        public CastType CastingType;                // Cast type
+        public int MaximumLevel { get; set; }                    // Max. level
+        public int LevelDivider { get; set; }                    // Level divider?
+        public int UseLevel { get; set; }                        // Use level range?
+        public int IncEvery { get; set; }                        // ?
+        public CastType CastingType { get; set; }                // Cast type
         public IItem LearnedFromItem { get; set; }
     }
 }

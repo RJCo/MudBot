@@ -4,7 +4,7 @@ using static MajorMUD.Interfaces.Common;
 
 namespace MajorMUD.Interfaces
 {
-    public class IClass
+    public interface IClass
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -16,6 +16,6 @@ namespace MajorMUD.Interfaces
         public ArmorClasses ArmorType { get; set; }
         public int MagicLevel { get; set; }
         public MagicTypes MagicType { get; set; }
-        public Dictionary<Abilities, short> AbilitiesAndMods { get; set; } = new Dictionary<Abilities, short>();
+        public Dictionary<Abilities, short> AbilitiesAndMods { get; set; }
     }
 }
