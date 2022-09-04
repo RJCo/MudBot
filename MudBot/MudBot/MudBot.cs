@@ -1,3 +1,4 @@
+using MajorMud.Database;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -7,12 +8,13 @@ namespace MudBot
     public partial class MudBot : Form
     {
         DebugForm dform = null;
-        //private static Database _database = new MajorMud.Database.Database();
+        private static Database _database = new Database();
 
 
         public MudBot()
         {
             InitializeComponent();
+            _database.Bootstrap();
         }
 
         private void button1_Click(object sender, EventArgs e)
