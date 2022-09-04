@@ -2,13 +2,12 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: ChangePassphrase.cs,v 1.2 2005/04/20 08:45:44 okajima Exp $
 */
-using System;
-using System.Drawing;
-using System.ComponentModel;
-using System.Windows.Forms;
-using System.IO;
-
 using Granados.SSHCV2;
+using System;
+using System.ComponentModel;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 
 namespace Poderosa.Forms
 {

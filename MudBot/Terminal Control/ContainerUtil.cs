@@ -2,11 +2,10 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: ContainerUtil.cs,v 1.2 2005/04/20 08:45:44 okajima Exp $
 */
+using Poderosa.Forms;
 using System;
 using System.IO;
 using System.Windows.Forms;
-
-using Poderosa.Forms;
 
 namespace Poderosa
 {

@@ -2,12 +2,11 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: ConnectionOptionPanel.cs,v 1.2 2005/04/20 08:45:44 okajima Exp $
 */
-using System;
-using System.Windows.Forms;
-
 using Poderosa.Communication;
 using Poderosa.Config;
 using Poderosa.UI;
+using System;
+using System.Windows.Forms;
 
 namespace Poderosa.Forms
 {

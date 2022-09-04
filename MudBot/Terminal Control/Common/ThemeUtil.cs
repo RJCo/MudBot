@@ -13,56 +13,67 @@ using System.Windows.Forms;
 
 namespace Poderosa.UI
 {
-	//Look & Feelを変更するための仕組み
-	public class ThemeUtil {
-		public enum Theme {
-			Unspecified,
-			Luna
-		}
+    //Look & Feelを変更するための仕組み
+    public class ThemeUtil
+    {
+        public enum Theme
+        {
+            Unspecified,
+            Luna
+        }
 
-		private static Theme _theme;
+        private static Theme _theme;
 
-		public static Theme CurrentTheme {
-			get {
-				return _theme;
-			}
-		}
-		
-		[DllImport("uxtheme.dll", CharSet=CharSet.Unicode)]
-		private static extern int GetCurrentThemeName(char[] filename, int filenamelen, char[] colorbuff, int colornamelen, char[] sizebuff, int sizebufflen);
+        public static Theme CurrentTheme
+        {
+            get
+            {
+                return _theme;
+            }
+        }
 
-		private static void SpecifyThemeUnderWinXP() {
-			try {
-				char[] fn = new char[256];
-				char[] cb = new char[256];
-				char[] sz = new char[256];
-				int r = GetCurrentThemeName(fn, 256, cb, 256, sz, 256);
-				if(r==0) {
-					string theme_name = new string(fn);
-					if(theme_name.IndexOf("Luna")!=-1)
-						_theme = Theme.Luna;
-				}
-				//Debug.WriteLine(String.Format("FN={0} Color={1} Size={2}", new string(fn), new string(cb), new string(sz)));
-			}
-			catch(Exception) {
-			}
-		}
-		
-		public static void Init() {
-			Application.EnableVisualStyles();
-			_theme = Theme.Unspecified;
-			OperatingSystem os = Environment.OSVersion;
-			if(os.Platform==PlatformID.Win32NT && os.Version.CompareTo(new Version(5,1))>=0)
-				SpecifyThemeUnderWinXP();
-		}
+        [DllImport("uxtheme.dll", CharSet = CharSet.Unicode)]
+        private static extern int GetCurrentThemeName(char[] filename, int filenamelen, char[] colorbuff, int colornamelen, char[] sizebuff, int sizebufflen);
 
-		public static Color TabPaneBackColor {
-			get {
-				if(_theme==Theme.Luna)
-					return Color.FromKnownColor(KnownColor.ControlLightLight);
-				else
-					return Color.FromKnownColor(KnownColor.Control);
-			}
-		}
-	}
+        private static void SpecifyThemeUnderWinXP()
+        {
+            try
+            {
+                char[] fn = new char[256];
+                char[] cb = new char[256];
+                char[] sz = new char[256];
+                int r = GetCurrentThemeName(fn, 256, cb, 256, sz, 256);
+                if (r == 0)
+                {
+                    string theme_name = new string(fn);
+                    if (theme_name.IndexOf("Luna") != -1)
+                        _theme = Theme.Luna;
+                }
+                //Debug.WriteLine(String.Format("FN={0} Color={1} Size={2}", new string(fn), new string(cb), new string(sz)));
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public static void Init()
+        {
+            Application.EnableVisualStyles();
+            _theme = Theme.Unspecified;
+            OperatingSystem os = Environment.OSVersion;
+            if (os.Platform == PlatformID.Win32NT && os.Version.CompareTo(new Version(5, 1)) >= 0)
+                SpecifyThemeUnderWinXP();
+        }
+
+        public static Color TabPaneBackColor
+        {
+            get
+            {
+                if (_theme == Theme.Luna)
+                    return Color.FromKnownColor(KnownColor.ControlLightLight);
+                else
+                    return Color.FromKnownColor(KnownColor.Control);
+            }
+        }
+    }
 }

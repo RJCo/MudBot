@@ -2,12 +2,12 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: Command.cs,v 1.2 2005/04/20 08:45:44 okajima Exp $
 */
-using System;
-using System.Diagnostics;
-using System.Collections;
-using System.Windows.Forms;
 using Poderosa.Toolkit;
 using Poderosa.UI;
+using System;
+using System.Collections;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace Poderosa.Config
 {
@@ -594,7 +594,7 @@ namespace Poderosa.Config
             else
             {
                 ContainerConnectionCommandTarget t = GApp.GetConnectionCommandTarget();
-                if (t == null) 
+                if (t == null)
                     return CommandResult.Ignored;
                 return t.Exec(e.CID);
             }

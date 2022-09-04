@@ -1,14 +1,13 @@
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-
+using Granados.SSHC;
 using Poderosa;
-using Poderosa.Toolkit;
+using Poderosa.Communication;
 using Poderosa.Connection;
 using Poderosa.ConnectionParam;
 using Poderosa.Terminal;
-using Poderosa.Communication;
-using Granados.SSHC;
+using Poderosa.Toolkit;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace WalburySoftware
 {
@@ -59,8 +58,8 @@ namespace WalburySoftware
 
         #region methods
         public void ApplyNewDisplayDialog()
-        { 
-        
+        {
+
         }
 
         public void Connect()
@@ -107,7 +106,7 @@ namespace WalburySoftware
                 SocketWithTimeout swt = null;
                 CommunicationUtil.SilentClient s = new CommunicationUtil.SilentClient();
                 Size sz = Size;
-                
+
                 if (Method == ConnectionMethod.Telnet)
                 {
                     connParam = new TelnetTerminalParam(Host)
@@ -195,7 +194,7 @@ namespace WalburySoftware
             // make sure directory exists
             string dir = File.Substring(0, File.LastIndexOf(@"\"));
             if (!System.IO.Directory.Exists(dir))
-              System.IO.Directory.CreateDirectory(dir);
+                System.IO.Directory.CreateDirectory(dir);
 
             TerminalPane.Connection.ResetLog((Poderosa.ConnectionParam.LogType)logType, File, append);
             //this.TerminalPane.Connection.ResetLog(Poderosa.ConnectionParam.LogType.Default, File, append);
@@ -224,7 +223,7 @@ namespace WalburySoftware
             RenderProfile prof = TerminalPane.ConnectionTag.RenderProfile;
             prof.BackColor = BackColor;
             prof.ForeColor = TextColor;
-            
+
             TerminalPane.ApplyRenderProfile(prof);
         }
 
@@ -237,18 +236,18 @@ namespace WalburySoftware
             string t = GEnv.TextSelection.GetSelectedText();
             if (t.Length > 0)
                 Clipboard.SetDataObject(t, false);
-            
+
         }
 
         public void PasteTextFromClipboard()
         {
             //GApp.GetConnectionCommandTarget().Paste();
             string value = (string)Clipboard.GetDataObject().GetData("Text");
-            if (value == null || value.Length == 0 || TerminalPane == null || TerminalPane.ConnectionTag == null) return ;
+            if (value == null || value.Length == 0 || TerminalPane == null || TerminalPane.ConnectionTag == null) return;
 
             PasteProcessor p = new PasteProcessor(TerminalPane.ConnectionTag, value);
             p.Perform();
-            
+
         }
         #endregion
 
@@ -321,7 +320,8 @@ namespace WalburySoftware
             }
         }
 
-        public int Port {
+        public int Port
+        {
             get { return _port; }
             set { _port = value; }
         }
@@ -347,7 +347,7 @@ namespace WalburySoftware
             set
             {
                 GApp.Options.TerminalBufferSize = value;
-             }
+            }
         }
         #endregion
 
@@ -413,6 +413,6 @@ namespace WalburySoftware
         /// </summary>
         [EnumValue(Description = "Enum.LogType.Xml")]
         Xml
-    }    
+    }
     #endregion
 }

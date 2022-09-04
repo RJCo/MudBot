@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MudBot.Locations {
-    class Room {
+﻿namespace MudBot.Locations
+{
+    class Room
+    {
         int MapID;
         int RoomID;
         string Name;
@@ -13,7 +11,8 @@ namespace MudBot.Locations {
         string Lair;
         string Placed;
 
-        private enum Commands {
+        private enum Commands
+        {
             goPortal,
             goPath
         };

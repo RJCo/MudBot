@@ -2,13 +2,12 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: EditEscapeSequenceColor.cs,v 1.2 2005/04/20 08:45:44 okajima Exp $
 */
-using System;
-using System.Drawing;
-using System.ComponentModel;
-using System.Windows.Forms;
-
 using Poderosa.Terminal;
 using Poderosa.UI;
+using System;
+using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace Poderosa.Forms
 {

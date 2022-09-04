@@ -9,8 +9,8 @@
  * $Id: StringResource.cs,v 1.2 2005/04/20 09:00:56 okajima Exp $
  */
 using System.Globalization;
-using System.Resources;
 using System.Reflection;
+using System.Resources;
 
 namespace Granados.SSHC
 {
@@ -18,26 +18,30 @@ namespace Granados.SSHC
     /// <summary>
     /// StringResource の概要の説明です。
     /// </summary>
-    internal class StringResources {
-		private string _resourceName;
-		private ResourceManager _resMan;
+    internal class StringResources
+    {
+        private string _resourceName;
+        private ResourceManager _resMan;
 
-		public StringResources(string name, Assembly asm) {
-			_resourceName = name;
-			LoadResourceManager(name, asm);
-		}
+        public StringResources(string name, Assembly asm)
+        {
+            _resourceName = name;
+            LoadResourceManager(name, asm);
+        }
 
-		public string GetString(string id) {
-			return _resMan.GetString(id); //もしこれが遅いようならこのクラスでキャッシュでもつくればいいだろう
-		}
+        public string GetString(string id)
+        {
+            return _resMan.GetString(id); //もしこれが遅いようならこのクラスでキャッシュでもつくればいいだろう
+        }
 
-		private void LoadResourceManager(string name, Assembly asm) {
-			//当面は英語・日本語しかしない
-			CultureInfo ci = System.Threading.Thread.CurrentThread.CurrentUICulture;
-			if(ci.Name.StartsWith("ja"))
-				_resMan = new ResourceManager(name+"_ja", asm);
-			else
-				_resMan = new ResourceManager(name, asm);
-		}
-	}
+        private void LoadResourceManager(string name, Assembly asm)
+        {
+            //当面は英語・日本語しかしない
+            CultureInfo ci = System.Threading.Thread.CurrentThread.CurrentUICulture;
+            if (ci.Name.StartsWith("ja"))
+                _resMan = new ResourceManager(name + "_ja", asm);
+            else
+                _resMan = new ResourceManager(name, asm);
+        }
+    }
 }

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MudBot.Locations {
-    internal class Exits {
+﻿namespace MudBot.Locations
+{
+    internal class Exits
+    {
 
     }
 }

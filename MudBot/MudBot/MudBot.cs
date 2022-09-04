@@ -8,7 +8,7 @@ namespace MudBot
     {
         DebugForm dform = null;
         //private static Database _database = new MajorMud.Database.Database();
-        
+
 
         public MudBot()
         {
@@ -33,10 +33,12 @@ namespace MudBot
             //this.terminalControl.TerminalPane.
         }
 
-        private void terminalControl_TextChanged(object sender, EventArgs e) {
+        private void terminalControl_TextChanged(object sender, EventArgs e)
+        {
             var tb = sender as WalburySoftware.TerminalControl;
 
-            if (dform != null && tb != null) {
+            if (dform != null && tb != null)
+            {
                 dform.UpdateDebug(tb.GetLastLine());
             }
         }
@@ -47,7 +49,7 @@ namespace MudBot
                 return;
 
             Poderosa.Forms.EditRenderProfile dlg = new Poderosa.Forms.EditRenderProfile(this.terminalControl.TerminalPane.ConnectionTag.RenderProfile);
-            
+
             if (dlg.ShowDialog() != DialogResult.OK)
                 return;
 
@@ -55,14 +57,16 @@ namespace MudBot
             this.terminalControl.TerminalPane.ApplyRenderProfile(dlg.Result);
         }
 
-        private void DebugButton_Click(object sender, EventArgs e) {
-            if (dform == null) {
+        private void DebugButton_Click(object sender, EventArgs e)
+        {
+            if (dform == null)
+            {
                 dform = new DebugForm();
                 dform.Closed += (sendr, args) => dform = null;
                 dform.Show();
             }
         }
-        
+
     }
 
 }

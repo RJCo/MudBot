@@ -2,23 +2,22 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: ContainerCommandTarget.cs,v 1.2 2005/04/20 08:45:44 okajima Exp $
 */
-using System;
-using System.IO;
-using System.Diagnostics;
-using System.Text;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
-using System.Xml;
-using Poderosa.Connection;
-using Poderosa.ConnectionParam;
-using Poderosa.LocalShell;
-using Poderosa.Debugging;
-using Poderosa.Terminal;
 using Poderosa.Communication;
 using Poderosa.Config;
+using Poderosa.Connection;
+using Poderosa.ConnectionParam;
+using Poderosa.Debugging;
 using Poderosa.Forms;
+using Poderosa.LocalShell;
+using Poderosa.Terminal;
 using Poderosa.Toolkit;
-
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Windows.Forms;
+using System.Xml;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
 
@@ -462,7 +461,7 @@ namespace Poderosa
         public CommandResult SetFocusToActiveConnection()
         {
             ConnectionTag tag = GEnv.Connections.ActiveTag;
-            if (tag == null || tag.AttachedPane == null) 
+            if (tag == null || tag.AttachedPane == null)
                 return CommandResult.Ignored;
             return CommandResult.Success;
         }
@@ -1061,7 +1060,7 @@ namespace Poderosa
                 Filter = "All Files(*.*)|*.*"
             };
             ConnectionTag ct = GEnv.Connections.FindTag(_connection);
-            if (ct.ModalTerminalTask != null) 
+            if (ct.ModalTerminalTask != null)
                 return CommandResult.Denied;
 
             if (GCUtil.ShowModalDialog(GApp.Frame, dlg) == DialogResult.OK)

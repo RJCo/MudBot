@@ -6,12 +6,12 @@
 */
 
 using System;
-using System.Windows.Forms;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Drawing.Text;
 using System.Text;
+using System.Windows.Forms;
 
 
 namespace Poderosa.UI

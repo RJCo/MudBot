@@ -2,21 +2,20 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: GFrame.cs,v 1.2 2005/04/20 08:45:45 okajima Exp $
 */
-using System;
-using System.IO;
-using System.Drawing;
-using System.Diagnostics;
-using System.ComponentModel;
-using System.Windows.Forms;
-using System.Collections;
-
-using Poderosa.UI;
 using Poderosa.Communication;
+using Poderosa.Config;
 using Poderosa.Connection;
 using Poderosa.ConnectionParam;
-using Poderosa.Config;
 using Poderosa.MacroEnv;
 using Poderosa.Toolkit;
+using Poderosa.UI;
+using System;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 
 
 namespace Poderosa.Forms

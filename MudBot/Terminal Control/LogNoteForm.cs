@@ -2,12 +2,11 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: LogNoteForm.cs,v 1.2 2005/04/20 08:45:45 okajima Exp $
 */
-using System;
-using System.Drawing;
-using System.ComponentModel;
-using System.Windows.Forms;
-
 using Poderosa.UI;
+using System;
+using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace Poderosa.Forms
 {
@@ -55,7 +54,7 @@ namespace Poderosa.Forms
             _cancelButton = new Button();
             _insertButton = new Button();
             SuspendLayout();
-            
+
             // 
             // _textBox
             // 
@@ -64,7 +63,7 @@ namespace Poderosa.Forms
             _textBox.Size = new Size(336, 19);
             _textBox.TabIndex = 0;
             _textBox.Text = "";
-            
+
             // 
             // _okButton
             // 
@@ -74,7 +73,7 @@ namespace Poderosa.Forms
             _okButton.Name = "_okButton";
             _okButton.Size = new Size(64, 24);
             _okButton.TabIndex = 1;
-            
+
             // 
             // _cancelButton
             // 
@@ -94,7 +93,7 @@ namespace Poderosa.Forms
             _insertButton.Size = new Size(72, 23);
             _insertButton.TabIndex = 3;
             _insertButton.Click += new EventHandler(OnClickInsertButton);
-            
+
             // 
             // LogNoteForm
             // 
@@ -165,7 +164,7 @@ namespace Poderosa.Forms
         {
             InsertText(DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString());
         }
-        
+
         private void InsertText(string t)
         {
             for (int i = 0; i < t.Length; i++)

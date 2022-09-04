@@ -2,13 +2,12 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: ContainerOptions.cs,v 1.2 2005/04/20 08:45:44 okajima Exp $
 */
+using Poderosa.Toolkit;
 using System;
 using System.Collections;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
-
-using Poderosa.Toolkit;
 
 namespace Poderosa.Config
 {

@@ -2,17 +2,16 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: CygwinLoginDialog.cs,v 1.2 2005/04/20 08:45:44 okajima Exp $
 */
-using System;
-using System.Drawing;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Windows.Forms;
-
+using Poderosa.Communication;
 using Poderosa.Connection;
 using Poderosa.ConnectionParam;
-using EnumDescAttributeT = Poderosa.Toolkit.EnumDescAttribute;
-using Poderosa.Communication;
 using Poderosa.LocalShell;
+using System;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms;
+using EnumDescAttributeT = Poderosa.Toolkit.EnumDescAttribute;
 
 namespace Poderosa.Forms
 {

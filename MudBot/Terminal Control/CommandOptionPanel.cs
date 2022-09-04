@@ -2,14 +2,13 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: CommandOptionPanel.cs,v 1.2 2005/04/20 08:45:44 okajima Exp $
 */
-using System;
-using System.Windows.Forms;
-using System.Diagnostics;
-using System.Collections;
-
-using Poderosa.Toolkit;
 using Poderosa.Config;
+using Poderosa.Toolkit;
 using Poderosa.UI;
+using System;
+using System.Collections;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace Poderosa.Forms
 {

@@ -7,17 +7,20 @@ using System.Text;
 namespace Poderosa.Toolkit
 {
     internal class DebugUtil
-	{
-		public static string DumpByteArray(byte[] data) {
-			return DumpByteArray(data, 0, data.Length);
-		}
-		public static string DumpByteArray(byte[] data, int offset, int length) {
-			StringBuilder bld = new StringBuilder();
-			for(int i=0; i<length; i++) {
-				bld.Append(data[offset+i].ToString("X2"));
-				if((i % 4)==3) bld.Append(' ');
-			}
-			return bld.ToString();
-		}
-	}
+    {
+        public static string DumpByteArray(byte[] data)
+        {
+            return DumpByteArray(data, 0, data.Length);
+        }
+        public static string DumpByteArray(byte[] data, int offset, int length)
+        {
+            StringBuilder bld = new StringBuilder();
+            for (int i = 0; i < length; i++)
+            {
+                bld.Append(data[offset + i].ToString("X2"));
+                if ((i % 4) == 3) bld.Append(' ');
+            }
+            return bld.ToString();
+        }
+    }
 }

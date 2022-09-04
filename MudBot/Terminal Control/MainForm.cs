@@ -1,9 +1,9 @@
-using System;
-using System.Windows.Forms;
+using Poderosa.Config;
 using Poderosa.Connection;
 using Poderosa.ConnectionParam;
-using Poderosa.Config;
 using Poderosa.Forms;
+using System;
+using System.Windows.Forms;
 
 namespace Poderosa
 {

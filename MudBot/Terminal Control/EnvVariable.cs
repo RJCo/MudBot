@@ -3,9 +3,9 @@
 * $Id: EnvVariable.cs,v 1.2 2005/04/20 08:45:45 okajima Exp $
 */
 using System;
-using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Poderosa.Forms

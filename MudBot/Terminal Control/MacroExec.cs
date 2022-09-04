@@ -3,10 +3,9 @@
 * $Id: MacroExec.cs,v 1.2 2005/04/20 08:45:45 okajima Exp $
 */
 using System;
-using System.Threading;
-using System.Reflection;
 using System.Diagnostics;
-
+using System.Reflection;
+using System.Threading;
 using MacroEnvironment = Poderosa.Macro.Environment;
 
 namespace Poderosa.MacroEnv

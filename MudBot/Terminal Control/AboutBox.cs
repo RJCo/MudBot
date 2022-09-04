@@ -3,9 +3,9 @@
 * $Id: AboutBox.cs,v 1.2 2005/04/20 08:44:12 okajima Exp $
 */
 using System;
-using System.Reflection;
-using System.Drawing;
 using System.ComponentModel;
+using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace Poderosa.Forms

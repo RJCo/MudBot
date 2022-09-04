@@ -2,14 +2,13 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: GEnv.cs,v 1.2 2005/04/20 08:45:46 okajima Exp $
 */
-using Poderosa.Terminal;
-using Poderosa.Connection;
 using Poderosa.Communication;
 using Poderosa.Config;
-using Poderosa.Toolkit;
-using Poderosa.Text;
-using Poderosa.SSH;
+using Poderosa.Connection;
 using Poderosa.LocalShell;
+using Poderosa.SSH;
+using Poderosa.Terminal;
+using Poderosa.Text;
 
 namespace Poderosa
 {
@@ -53,7 +52,7 @@ namespace Poderosa
                 return _connections;
             }
         }
-        
+
         public static IPoderosaContainer Frame
         {
             get

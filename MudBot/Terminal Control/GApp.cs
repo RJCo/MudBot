@@ -2,25 +2,24 @@
 * Copyright (c) 2005 Poderosa Project, All Rights Reserved.
 * $Id: GApp.cs,v 1.2 2005/04/20 08:45:45 okajima Exp $
 */
-using System;
-using System.Text;
-using System.Drawing;
-using System.Collections;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Windows.Forms;
-using System.Threading;
 using Microsoft.Win32;
-
-using Poderosa.Toolkit;
-using Poderosa.Connection;
-using Poderosa.Terminal;
-using Poderosa.Forms;
 using Poderosa.Communication;
 using Poderosa.Config;
+using Poderosa.Connection;
+using Poderosa.Forms;
 using Poderosa.MacroEnv;
+using Poderosa.Terminal;
+using Poderosa.Toolkit;
 using Poderosa.UI;
+using System;
+using System.Collections;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace Poderosa
 {
