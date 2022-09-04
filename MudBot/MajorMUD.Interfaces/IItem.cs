@@ -27,7 +27,7 @@ namespace MajorMUD.Interfaces
         public int Speed { get; set; }
         public int ArmorClass { get; set; }
         public int DamageReduction { get; set; }
-        public IReadOnlyDictionary<Abilities, short> Abilities = new Dictionary<Abilities, short>(10); // Max 10
+        public Dictionary<Abilities, short> Abilities = new Dictionary<Abilities, short>(10); // Max 10
         public int WeaponNumberOfHandsNeeded { get; set; }
         public int Material { get; set; }                   // TODO:  What is this?  WeaponType and ArmorType?
         public int Body { get; set; }

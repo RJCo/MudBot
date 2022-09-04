@@ -10,12 +10,12 @@ namespace MajorMUD.Interfaces
         public string Name { get; set; }
         public int ExperiencePercentage { get; set; }
         public int Combat { get; set; }
-        public int HitpointPerLevelMinimum { get; set; }
-        public int HitpointPerLevelMaximum { get; set; }
+        public int HitpointsPerLevelMinimum { get; set; }
+        public int HitpointsPerLevelMaximum { get; set; }
         public WeaponClasses WeaponType { get; set; }
         public ArmorClasses ArmorType { get; set; }
         public int MagicLevel { get; set; }
         public MagicTypes MagicType { get; set; }
-        public IReadOnlyDictionary<Abilities, short> AbilitiesAndMods { get; set; } = new Dictionary<Abilities, short>(10);  // MajorMud only has at most 10 abilities/mods for Classes
+        public Dictionary<Abilities, short> AbilitiesAndMods { get; set; } = new Dictionary<Abilities, short>();
     }
 }

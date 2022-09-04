@@ -11,8 +11,8 @@ namespace MajorMUD.Interfaces
         public string MessageText { get; set; }
         public string EndsWith { get; set; }
         public string Reply { get; set; }
-        public IReadOnlyList<MessageFlag> MessageFlags { get; set; }
-        public IReadOnlyList<Effect> Effects { get; set; }
+        public List<MessageFlag> MessageFlags { get; set; }  // TODO:  Why is this a list of flags?
+        public List<Effect> Effects { get; set; }
         public ActionToTake Action { get; set; }
     }
 }

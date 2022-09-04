@@ -1,9 +1,12 @@
 ﻿
+using System;
+
 namespace MajorMUD.Interfaces
 {
     public class Common
     {
         #region Path related enums
+        [Flags]
         public enum PathFlags
         {
             None = 0x00000000,
@@ -27,6 +30,7 @@ namespace MajorMUD.Interfaces
         #endregion
 
         #region Message related enums
+        [Flags]
         public enum Effect
         {
             None = 0x00000000,
@@ -48,6 +52,7 @@ namespace MajorMUD.Interfaces
         }
 
         // Not sure here
+        [Flags]
         public enum MessageFlag
         {
             None = 0x00000000,
@@ -79,6 +84,7 @@ namespace MajorMUD.Interfaces
             Unknown = 0x07,
         }
 
+        [Flags]
         public enum Priority
         {
             Normal = 0x00,
@@ -89,6 +95,7 @@ namespace MajorMUD.Interfaces
             First = 0x80,
         }
 
+        [Flags]
         public enum MegamudFlags
         {
             NotHostile = 0x02,
@@ -161,6 +168,7 @@ namespace MajorMUD.Interfaces
             Rob3 = 3,
         }
 
+        [Flags]
         public enum Flags
         {
             NoFlags = 0x0000,
@@ -173,6 +181,7 @@ namespace MajorMUD.Interfaces
             SpecialRoom = 0x8000
         }
 
+        [Flags]
         public enum PathRoomFlags
         {
             None = 0x0000,
@@ -189,6 +198,7 @@ namespace MajorMUD.Interfaces
             CycledUNKNOWN = 0x8000,
         }
 
+        [Flags]
         public enum Exits
         {
             North = 0x00001,
@@ -268,6 +278,7 @@ namespace MajorMUD.Interfaces
             MYSTIC = 11,
         }
 
+        [Flags]
         public enum SpellFlag
         {
             NONE = 0x0000,
@@ -371,6 +382,7 @@ namespace MajorMUD.Interfaces
             Platemail = 9,
         }
 
+        [Flags]
         public enum ItemFlags
         {
             None = 0x00000000,
